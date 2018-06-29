@@ -7,6 +7,16 @@ from dero.manager.config.logic.write import dict_as_local_definitions_str
 
 class Config(dict):
 
+    def __init__(self, d: dict, name: str=None, **kwargs):
+        super().__init__(d, **kwargs)
+        self.name = name
+
+    def __getattr__(self, attr):
+        return self[attr]
+
+    def __dir__(self):
+        return self.keys()
+
     def update(self, __m: Mapping[_KT, _VT], **kwargs: _VT):
         super().update(__m, **kwargs)
         self._update_file_str()
