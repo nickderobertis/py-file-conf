@@ -2,7 +2,7 @@ from typing import Callable, Any
 import inspect
 import os
 
-from dero.manager.config.logic.load.file import get_user_defined_dict_from_module, load_file_as_module
+from dero.manager.config.logic.load.file import get_user_defined_dict_from_filepath
 from dero.manager.config.logic.load.func import function_args_as_dict
 from dero.manager.config.logic.write import dict_as_local_definitions_str
 from dero.manager.pipelines.models.interfaces import PipelineOrFunction
@@ -39,8 +39,7 @@ class Config(dict):
 
     @classmethod
     def from_file(cls, filepath: str, name: str=None):
-        module = load_file_as_module(filepath)
-        config_dict = get_user_defined_dict_from_module(module)
+        config_dict = get_user_defined_dict_from_filepath(filepath)
         if name is None:
             name = _strip_py(os.path.basename(filepath))
 
