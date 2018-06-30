@@ -9,6 +9,10 @@ from dero.manager.pipelines.models.pipeline import Pipeline
 
 class Config(dict):
 
+    def __repr__(self):
+        dict_repr = super().__repr__()
+        return f'<Config(name={self.name}, {dict_repr})>'
+
     def __init__(self, d: dict, name: str=None, **kwargs):
         super().__init__(d, **kwargs)
         self.name = name

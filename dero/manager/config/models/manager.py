@@ -1,11 +1,13 @@
 from typing import List, Union
 
+from dero.mixins.repr import ReprMixin
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.config.models.interfaces import ConfigSectionOrConfig
 from dero.manager.config.models.section import ConfigSection, Config
 from dero.manager.sectionpath.sectionpath import SectionPath
 
-class ConfigManager:
+class ConfigManager(ReprMixin):
+    repr_cols = ['basepath', 'section']
 
     def __init__(self, basepath: str, main_section: ConfigSection=None):
         self.section = main_section

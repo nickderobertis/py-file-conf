@@ -1,5 +1,6 @@
 from typing import Callable
 
+from dero.mixins.repr import ReprMixin
 from dero.manager.config.models.manager import ConfigManager, Config
 from dero.manager.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from dero.manager.logic.get import _get_public_name_or_special_name
@@ -14,7 +15,8 @@ from dero.manager.pipelines.models.interfaces import (
 )
 from dero.manager.sectionpath.sectionpath import SectionPath
 
-class Runner:
+class Runner(ReprMixin):
+    repr_cols = ['config', 'pipelines']
 
     def __init__(self, config: ConfigManager, pipelines: PipelineRegistrar):
         self.config = config

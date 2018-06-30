@@ -1,5 +1,6 @@
 import os
 
+from dero.mixins.repr import ReprMixin
 from dero.manager.config.models.config import Config
 from dero.manager.basemodels.container import Container
 from dero.manager.logic.get import _get_public_name_or_special_name
@@ -10,7 +11,8 @@ from dero.manager.pipelines.models.interfaces import (
     PipelineDictsOrPipelinesOrFunctions
 )
 
-class PipelineCollection(Container):
+class PipelineCollection(Container, ReprMixin):
+    repr_cols = ['name', 'basepath', 'items']
 
     def __init__(self, basepath: str, items: PipelinesOrFunctionsOrCollections, name: str=None):
         self.basepath = basepath

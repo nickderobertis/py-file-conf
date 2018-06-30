@@ -1,4 +1,5 @@
 
+from dero.mixins.repr import ReprMixin
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.pipelines.models.collection import PipelineCollection
 from dero.manager.sectionpath.sectionpath import SectionPath
@@ -7,7 +8,8 @@ from dero.manager.pipelines.models.interfaces import (
     PipelineOrFunctionOrCollection
 )
 
-class PipelineRegistrar:
+class PipelineRegistrar(ReprMixin):
+    repr_cols = ['name', 'basepath', 'collection']
 
     def __init__(self, collection: PipelineCollection, basepath: str, name=None):
         self.collection = collection

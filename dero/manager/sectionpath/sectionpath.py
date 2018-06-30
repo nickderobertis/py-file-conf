@@ -1,9 +1,12 @@
 from typing import List, Union
 import os
 
+from dero.mixins.repr import ReprMixin
+
 SectionPathOrStr = Union[str, 'SectionPath']
 
-class SectionPath:
+class SectionPath(ReprMixin):
+    repr_cols = ['path_str', 'sections']
 
     def __init__(self, section_path: str):
         self.path_str = section_path

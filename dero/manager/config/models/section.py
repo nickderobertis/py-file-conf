@@ -2,12 +2,13 @@ from typing import List, Union
 import os
 import warnings
 
+from dero.mixins.repr import ReprMixin
 from dero.manager.basemodels.container import Container
 from dero.manager.config.models.config import Config
-from dero.manager.pipelines.models.interfaces import PipelineOrFunction
 
 
-class ConfigSection(Container):
+class ConfigSection(Container, ReprMixin):
+    repr_cols = ['name', 'config', 'items']
 
     def __init__(self, configs: List[Union[Config, 'ConfigSection']], section_config: Config=None, name: str=None):
         self.config = section_config
