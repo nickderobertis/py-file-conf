@@ -25,25 +25,26 @@ class PipelineCollection(Container, ReprMixin):
     def __dir__(self):
         return self.pipeline_map.keys()
 
-    @property
-    def pipeline_map(self):
-        if hasattr(self, '_pipeline_map'):
-            return self._pipeline_map
-
-        self._set_pipeline_map()
-        return self._pipeline_map
-
     def _set_pipeline_map(self):
         pipeline_map = {}
         for pipeline_or_collection in self:
             pipeline_name = _get_public_name_or_special_name(pipeline_or_collection)
             pipeline_map[pipeline_name] = pipeline_or_collection
-        self._pipeline_map = pipeline_map
+        self.pipeline_map = pipeline_map
+
+    @property
+    def items(self):
+        return self._items
+
+    @items.setter
+    def items(self, items):
+        self._items = items
+        self._set_pipeline_map() # need to recreate pipeline map when items change
 
     @classmethod
     def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None):
         items = []
-        for section_name, dict_or_list in pipeline_dict:
+        for section_name, dict_or_list in pipeline_dict.items():
             section_basepath = os.path.join(basepath, section_name)
             if isinstance(dict_or_list, dict):
                 # Got another pipeline dict. Recursively process
@@ -74,6 +75,7 @@ class PipelineCollection(Container, ReprMixin):
 
 
     def _output_config_files(self):
+        self._output_section_config_file()
         [self._output_config_file(item) for item in self]
 
     def _output_config_file(self, item: PipelineOrFunctionOrCollection):
@@ -92,6 +94,19 @@ class PipelineCollection(Container, ReprMixin):
 
         item_config = Config.from_pipeline_or_function(item)
         item_config.to_file(item_filepath)
+
+    def _output_section_config_file(self):
+        """
+        creates a blank config file for the section
+        """
+        outpath = os.path.join(self.basepath, 'section.py')
+
+        if os.path.exists(outpath):
+            # Never overwrite section config.
+            return
+
+        with open(outpath, 'w') as f:
+            f.write('\n')
 
 
 

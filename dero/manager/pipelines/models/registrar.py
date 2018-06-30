@@ -17,10 +17,14 @@ class PipelineRegistrar(ReprMixin):
         self.name = name
 
     def __getattr__(self, item):
-        return self.collection[item]
+        return getattr(self.collection, item)
 
     def __dir__(self):
-        return self.collection.keys()
+        exposed_methods = [
+            'scaffold_config',
+            'get'
+        ]
+        return exposed_methods + list(self.collection.pipeline_map.keys())
 
     @classmethod
     def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None):
