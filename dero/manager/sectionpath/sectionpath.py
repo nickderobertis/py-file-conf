@@ -1,5 +1,7 @@
-from typing import List
+from typing import List, Union
 import os
+
+SectionPathOrStr = Union[str, 'SectionPath']
 
 class SectionPath:
 
@@ -20,6 +22,19 @@ class SectionPath:
         section_path = _relative_filepath_to_section_path(relative_path)
         return cls(section_path)
 
+    @classmethod
+    def from_section_str_list(cls, section_strs: List[str]):
+        section_path = _section_strs_to_section_path_str(section_strs)
+        return cls(section_path)
+
+    @classmethod
+    def join(cls, section_path_1: SectionPathOrStr, section_path_2: SectionPathOrStr):
+        section_path_1 = _convert_to_section_path_if_necessary(section_path_1)
+        section_path_2 = _convert_to_section_path_if_necessary(section_path_2)
+
+        output_path_sections = section_path_1.sections + section_path_2.sections
+        return cls.from_section_str_list(output_path_sections)
+
 
 def _section_path_str_to_section_strs(section_path_str: str) -> List[str]:
     return section_path_str.split('.')
@@ -38,3 +53,11 @@ def _strip_py(filename_str: str) -> str:
         return filename_str
 
     return filename_str[:-3]
+
+def _convert_to_section_path_if_necessary(section_path: SectionPathOrStr) -> SectionPath:
+    if isinstance(section_path, SectionPath):
+        return section_path
+    elif isinstance(section_path, str):
+        return SectionPath(section_path)
+    else:
+        raise ValueError(f'expected SectionPath or str. got {section_path} of type {type(section_path)}')
