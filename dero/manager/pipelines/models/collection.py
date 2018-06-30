@@ -75,6 +75,10 @@ class PipelineCollection(Container, ReprMixin):
 
 
     def _output_config_files(self):
+
+        if not os.path.exists(self.basepath):
+            os.makedirs(self.basepath)
+
         self._output_section_config_file()
         [self._output_config_file(item) for item in self]
 
@@ -84,7 +88,7 @@ class PipelineCollection(Container, ReprMixin):
             return item._output_config_files()
 
         # Dealing with Pipeline or function
-        item_name = _get_public_name_or_special_name(item)
+        item_name = _get_public_name_or_special_name(item) + '.py'
         item_filepath = os.path.join(self.basepath, item_name)
 
         if os.path.exists(item_filepath):

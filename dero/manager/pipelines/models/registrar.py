@@ -24,7 +24,11 @@ class PipelineRegistrar(ReprMixin):
             'scaffold_config',
             'get'
         ]
-        return exposed_methods + list(self.collection.pipeline_map.keys())
+        exposed_attrs = [
+            'basepath',
+            'name'
+        ]
+        return exposed_methods + exposed_attrs + list(self.collection.pipeline_map.keys())
 
     @classmethod
     def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None):

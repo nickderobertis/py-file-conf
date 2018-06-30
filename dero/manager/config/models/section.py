@@ -48,6 +48,10 @@ class ConfigSection(Container, ReprMixin):
         # Get section name by name of folder
         name = os.path.basename(os.path.abspath(basepath))
 
+        # Config folder doesn't exist, return empty config
+        if not os.path.exists(basepath):
+            return cls([], name=name)
+
         config_file_list = [file for file in next(os.walk(basepath))[2] if file.endswith('.py')]
 
         # Ignore folders starting with . or _
@@ -60,7 +64,7 @@ class ConfigSection(Container, ReprMixin):
         # Special handling for section config
         try:
             config_file_list.remove('section.py')
-            section_config = Config.from_file(os.path.join(basepath, 'section.py'))
+            section_config = Config.from_file(os.path.join(basepath, 'section.py'), name=name)
         except ValueError:
             # Didn't find section config
             section_config = None

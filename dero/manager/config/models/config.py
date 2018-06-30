@@ -1,11 +1,14 @@
 from typing import Callable, Any
 import inspect
+import os
 
 from dero.manager.config.logic.load.file import get_user_defined_dict_from_module, load_file_as_module
 from dero.manager.config.logic.load.func import function_args_as_dict
 from dero.manager.config.logic.write import dict_as_local_definitions_str
 from dero.manager.pipelines.models.interfaces import PipelineOrFunction
 from dero.manager.pipelines.models.pipeline import Pipeline
+from dero.manager.sectionpath.sectionpath import _strip_py
+from dero.manager.logic.get import _get_public_name_or_special_name
 
 class Config(dict):
 
@@ -33,40 +36,38 @@ class Config(dict):
 
     @property
     def file_str(self):
-        try:
-            return self._file_str
-        except AttributeError:
-            self._file_str = dict_as_local_definitions_str(self)
-
-        return self._file_str
+        return dict_as_local_definitions_str(self)
 
     @classmethod
-    def from_file(cls, filepath: str):
+    def from_file(cls, filepath: str, name: str=None):
         module = load_file_as_module(filepath)
         config_dict = get_user_defined_dict_from_module(module)
+        if name is None:
+            name = _strip_py(os.path.basename(filepath))
 
-        return cls(config_dict)
+        return cls(config_dict, name=name)
 
     @classmethod
-    def from_function(cls, func: Callable):
+    def from_function(cls, func: Callable, name: str=None):
         config_dict = function_args_as_dict(func)
+        if name is None:
+            name = _get_public_name_or_special_name(func)
 
-        return cls(config_dict)
-
-    def _update_file_str(self):
-        # only update if already set
-        if hasattr(self, '_file_str'):
-            self._file_str = dict_as_local_definitions_str(self)
+        return cls(config_dict, name=name)
 
     @classmethod
-    def from_pipeline(cls, item: PipelineOrFunction):
+    def from_pipeline(cls, item: PipelineOrFunction, name: str=None):
         init_func = _pipeline_class_or_instance_or_method_to_init_func(item)
-        return cls.from_function(init_func)
+        if name is None:
+            name = _get_public_name_or_special_name(item)
+        return cls.from_function(init_func, name=name)
 
     @classmethod
-    def from_pipeline_or_function(cls, item: PipelineOrFunction):
+    def from_pipeline_or_function(cls, item: PipelineOrFunction, name: str=None):
         func = _function_or_pipeline_to_function(item)
-        return cls.from_function(func)
+        if name is None:
+            name = _get_public_name_or_special_name(item)
+        return cls.from_function(func, name=name)
 
 
 def _function_or_pipeline_to_function(obj_or_class: Any) -> Callable:
