@@ -33,6 +33,20 @@ class Config(dict):
         with open(filepath, 'w') as f:
             f.write(self.file_str)
 
+    def for_function(self, func: Callable) -> dict:
+        """
+        Strips out items of config which are not applicable to function. Returns dictionary
+        of config items for passing to the function.
+
+        Args:
+            func: func for which to filter out config items
+
+        Returns: dict, applicable config for func
+        """
+        # Only pass items in config which are arguments of function
+        func_kwargs = function_args_as_dict(func)
+        return {key: value for key, value in self.items() if key in func_kwargs}
+
     @property
     def file_str(self):
         return dict_as_local_definitions_str(self)
