@@ -2,6 +2,7 @@ import os
 
 from dero.manager.config.models.config import Config
 from dero.manager.basemodels.container import Container
+from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.pipelines.models.interfaces import (
     PipelineDict,
     PipelinesOrFunctionsOrCollections,
@@ -89,16 +90,6 @@ class PipelineCollection(Container):
 
         item_config = Config.from_pipeline_or_function(item)
         item_config.to_file(item_filepath)
-
-
-def _get_public_name_or_special_name(obj):
-    if hasattr(obj, 'name'):
-        return obj.name
-
-    if hasattr(obj, '__name__'):
-        return obj.__name__
-
-    raise ValueError(f'could not get .name or .__name__ from {obj} of type {type(obj)}')
 
 
 
