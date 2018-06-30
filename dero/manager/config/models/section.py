@@ -57,8 +57,12 @@ class ConfigSection(Container):
         ]
 
         # Special handling for section config
-        config_file_list.remove('section.py')
-        section_config = Config.from_file(os.path.join(basepath, 'section.py'))
+        try:
+            config_file_list.remove('section.py')
+            section_config = Config.from_file(os.path.join(basepath, 'section.py'))
+        except ValueError:
+            # Didn't find section config
+            section_config = None
 
         configs = [Config.from_file(os.path.join(basepath, file)) for file in config_file_list]
         # Recursively calling section creation to create individual config files
