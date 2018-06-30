@@ -1,5 +1,6 @@
 from typing import List, Union
 
+from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.config.models.interfaces import ConfigSectionOrConfig
 from dero.manager.config.models.section import ConfigSection, Config
 from dero.manager.sectionpath.sectionpath import SectionPath
@@ -65,11 +66,7 @@ class ConfigManager:
         section_path = SectionPath(section_path_str)
 
         # Goes into nested sections, until it pulls the final config or section
-        obj = self
-        for section in section_path:
-            obj = getattr(obj, section)
-
-        return obj
+        return _get_from_nested_obj_by_section_path(self, section_path)
 
 
 
