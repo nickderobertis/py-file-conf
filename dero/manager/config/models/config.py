@@ -28,7 +28,6 @@ class Config(dict):
 
     def update(self, d: dict, **kwargs):
         super().update(d, **kwargs)
-        self._update_file_str()
 
     def to_file(self, filepath: str):
         with open(filepath, 'w') as f:

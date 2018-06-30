@@ -13,6 +13,20 @@ class ConfigManager(ReprMixin):
         self.section = main_section
         self.basepath = basepath
 
+    def __getattr__(self, item):
+        return getattr(self.section, item)
+
+    def __dir__(self):
+        exposed_methods = [
+            'load',
+            'get',
+            'update'
+        ]
+        exposed_attrs = [
+            'basepath',
+        ]
+        return exposed_methods + exposed_attrs + list(self.section.config_map.keys())
+
     def load(self):
         self.section = ConfigSection.from_files(self.basepath)
 
@@ -50,7 +64,7 @@ class ConfigManager(ReprMixin):
 
         return config
 
-    def _get_func_or_section_config(self, section_path_str: str=None) -> ConfigSectionOrConfig:
+    def _get_func_or_section_config(self, section_path_str: str=None) -> Config:
         """
         This get method is used to get only the config for the section path, without handling
         multiple levels of config and overriding. To get the active config for a function,
@@ -68,8 +82,16 @@ class ConfigManager(ReprMixin):
         section_path = SectionPath(section_path_str)
 
         # Goes into nested sections, until it pulls the final config or section
-        return _get_from_nested_obj_by_section_path(self, section_path)
+        config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
+        return _get_config_from_config_or_section(config_or_section)
 
 
 
-
+def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Config:
+    # Pull Config from ConfigSection
+    if isinstance(config_or_section, ConfigSection):
+        return config_or_section.config
+    elif isinstance(config_or_section, Config):
+        return config_or_section
+    else:
+        raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')

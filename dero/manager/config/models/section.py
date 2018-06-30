@@ -22,11 +22,16 @@ class ConfigSection(Container, ReprMixin):
         return self.config_map.keys()
 
     @property
-    def config_map(self):
-        if hasattr(self, '_config_map'):
-            return self._config_map
+    def items(self):
+        return self._items
 
-        self._set_config_map()
+    @items.setter
+    def items(self, items):
+        self._items = items
+        self._set_config_map() # recreate config map on setting items
+
+    @property
+    def config_map(self):
         return self._config_map
 
     def _set_config_map(self):
