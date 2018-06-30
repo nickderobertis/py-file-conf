@@ -1,9 +1,14 @@
 
-def dict_as_local_definitions_str(d: dict):
+def dict_as_local_definitions_str(d: dict) -> str:
     # TODO: add necessary import statements to output
     lines = [_key_value_pair_to_assignment_str(key, value) for key, value in d.items()]
 
     return '\n' + '\n'.join(lines) +'\n'
+
+def dict_as_function_kwarg_str(d: dict) -> str:
+    lines = [_key_value_pair_to_assignment_str(key, value) for key, value in d.items()]
+
+    return '\n\t' + ',\n\t'.join(lines) + '\n'
 
 
 def _key_value_pair_to_assignment_str(key: str, value: any):

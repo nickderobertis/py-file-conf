@@ -14,6 +14,7 @@ from dero.manager.pipelines.models.interfaces import (
     PipelineOrFunctionOrCollection,
 )
 from dero.manager.sectionpath.sectionpath import SectionPath
+from dero.manager.config.logic.write import dict_as_function_kwarg_str
 
 class Runner(ReprMixin):
     repr_cols = ['config', 'pipelines']
@@ -92,10 +93,15 @@ class Runner(ReprMixin):
     def _run_one_func(self, section_path_str: str) -> Result:
         config = self._get_config(section_path_str)
         func = self._get_func_or_collection(section_path_str)
-        name = _get_public_name_or_special_name(func)
 
-        print(f'Running function {name}({config})')
-        return func(**config)
+        # Only pass items in config which are arguments of function
+        config_dict = config.for_function(func)
+
+        print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+        result = func(**config_dict)
+        print(f'Result:\n{result}\n')
+
+        return result
 
     def _get_config(self, section_path_str: str) -> Config:
         return self.config.get(section_path_str)
