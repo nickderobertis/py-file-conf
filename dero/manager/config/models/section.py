@@ -4,6 +4,7 @@ import warnings
 
 from dero.manager.basemodels.container import Container
 from dero.manager.config.models.config import Config
+from dero.manager.pipelines.models.interfaces import PipelineOrFunction
 
 
 class ConfigSection(Container):
@@ -66,3 +67,4 @@ class ConfigSection(Container):
         configs += config_sections
 
         return cls(configs, section_config=section_config, name=name)
+
