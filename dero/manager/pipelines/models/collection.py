@@ -16,6 +16,27 @@ class PipelineCollection(Container):
         self.items = items
         self.name = name
 
+    def __getattr__(self, item):
+        return self.pipeline_map[item]
+
+    def __dir__(self):
+        return self.pipeline_map.keys()
+
+    @property
+    def pipeline_map(self):
+        if hasattr(self, '_pipeline_map'):
+            return self._pipeline_map
+
+        self._set_pipeline_map()
+        return self._pipeline_map
+
+    def _set_pipeline_map(self):
+        pipeline_map = {}
+        for pipeline_or_collection in self:
+            pipeline_name = _get_public_name_or_special_name(pipeline_or_collection)
+            pipeline_map[pipeline_name] = pipeline_or_collection
+        self._pipeline_map = pipeline_map
+
     @classmethod
     def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None):
         items = []
