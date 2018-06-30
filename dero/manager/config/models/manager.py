@@ -46,17 +46,26 @@ class ConfigManager(ReprMixin):
         """
         config = self._get_func_or_section_config(section_path_str)
 
+        # First override for function defaults is global project config
+        section_configs = [self.section.config]
+
         # Get configs, in order of highest level to lowest level. Will go from project to highest section,
         # down to lowest section.
         section_path = SectionPath(section_path_str)
         full_section = ''
-        section_configs = []
-        for section in section_path:
+        for section in section_path[:-1]: # skip the last section or function for special handling at end
             full_section += section # rebuilding full section path str
             section_configs.append(
                 self._get_func_or_section_config(full_section)
             )
             full_section += '.'
+
+        # Last item of section_path may be another section, or the function/Pipeline itself. If it's a section,
+        # must add config for override, but if is function, it is already the base config so should not update.
+        full_section += section_path[-1]
+        if not self._is_function_or_pipeline_path(full_section):
+            # if is a section, not function/pipeline
+            section_configs.append(self._get_func_or_section_config(full_section))
 
         # Override configs. Default config is base config, then gets updated by project, then high
         # level sections to low level sections
@@ -85,6 +94,19 @@ class ConfigManager(ReprMixin):
         config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
         return _get_config_from_config_or_section(config_or_section)
 
+
+    def _is_function_or_pipeline_path(self, section_path_str: str) -> bool:
+        section_path = SectionPath(section_path_str)
+        # Goes into nested sections, until it pulls the final config or section
+        config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
+        if isinstance(config_or_section, ConfigSection):
+            # must be section, not individual pipeline or function
+            return False
+        elif isinstance(config_or_section, Config):
+            # must be individual function as Config is returned
+            return True
+        else:
+            raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
 
 
 def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Config:
