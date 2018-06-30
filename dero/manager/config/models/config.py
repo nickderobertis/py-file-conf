@@ -1,4 +1,4 @@
-from typing import Callable, Mapping, _KT, _VT, Any
+from typing import Callable, Any
 import inspect
 
 from dero.manager.config.logic.load.file import get_user_defined_dict_from_module, load_file_as_module
@@ -19,8 +19,8 @@ class Config(dict):
     def __dir__(self):
         return self.keys()
 
-    def update(self, __m: Mapping[_KT, _VT], **kwargs: _VT):
-        super().update(__m, **kwargs)
+    def update(self, d: dict, **kwargs):
+        super().update(d, **kwargs)
         self._update_file_str()
 
     def to_file(self, filepath: str):

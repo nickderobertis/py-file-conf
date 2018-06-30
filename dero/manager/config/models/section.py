@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 import os
 import warnings
 
@@ -9,7 +9,7 @@ from dero.manager.pipelines.models.interfaces import PipelineOrFunction
 
 class ConfigSection(Container):
 
-    def __init__(self, configs: List[Config, 'ConfigSection'], section_config: Config=None, name: str=None):
+    def __init__(self, configs: List[Union[Config, 'ConfigSection']], section_config: Config=None, name: str=None):
         self.config = section_config
         self.items = configs
         self.name = name
