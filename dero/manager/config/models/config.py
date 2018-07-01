@@ -36,8 +36,9 @@ class Config(dict):
         super().update(d, **kwargs)
 
     def to_file(self, filepath: str):
+        to_write = self.file_str # access before opening file, so if causing error, won't delete contents of file
         with open(filepath, 'w') as f:
-            f.write(self.file_str)
+            f.write(to_write)
 
     def for_function(self, func: Callable) -> dict:
         """

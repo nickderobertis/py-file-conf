@@ -103,11 +103,13 @@ class PipelineCollection(Container, ReprMixin):
         item_filepath = os.path.join(self.basepath, item_name)
 
         if os.path.exists(item_filepath):
-            # TODO: update existing config file if arguments for function have changed.
-            # must be able to do this without overriding the user's default arguments for the function
-            return
+            # if config file already exists, load confguration from file, use to update function defaults
+            existing_config = Config.from_file(item_filepath)
+        else:
+            existing_config = Config()
 
         item_config = Config.from_pipeline_or_function(item, loaded_modules=self._loaded_modules)
+        item_config.update(existing_config) # override function defaults with any settings from file
         item_config.to_file(item_filepath)
 
     def _output_section_config_file(self):

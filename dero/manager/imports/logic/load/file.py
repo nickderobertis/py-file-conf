@@ -2,9 +2,22 @@ import importlib.util
 from types import ModuleType
 import sys
 
-def get_user_defined_dict_from_filepath(filepath: str, module_name: str=None) -> dict:
+from dero.manager.imports.logic.load.name import is_imported_name
+from dero.manager.imports.models.tracker import ImportTracker
+
+def get_user_defined_dict_from_filepath(filepath: str, module_name: str=None, remove_imports=False,
+                                        import_tracker: ImportTracker=None) -> dict:
     module = _load_file_as_module(filepath, name=module_name)
-    return _get_user_defined_dict_from_module(module)
+    user_defined_dict = _get_user_defined_dict_from_module(module)
+    if remove_imports:
+        if import_tracker is None:
+            raise ValueError('must pass ImportTracker when passing remove_imports=True')
+        return {
+            key: value for key, value in user_defined_dict.items() \
+            if not is_imported_name(key, import_tracker.imported_modules)
+        }
+    else:
+        return user_defined_dict
 
 def _get_user_defined_dict_from_module(module: ModuleType) -> dict:
     out_dict = {}

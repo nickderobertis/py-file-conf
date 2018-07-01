@@ -2,11 +2,20 @@ import warnings
 import builtins
 from typing import List
 
-from dero.manager.imports.logic.load.name import get_imported_obj_variable_name, get_module_and_name_imported_from
+from dero.manager.imports.logic.load.name import (
+    get_imported_obj_variable_name,
+    get_module_and_name_imported_from,
+    is_imported_name
+)
 
 def dict_as_local_definitions_str(d: dict, module_strs: List[str]=None) -> str:
-    # TODO: add necessary import statements to output
-    lines = [_key_value_pair_to_assignment_str(key, value, module_strs=module_strs) for key, value in d.items()]
+    lines = []
+    for key, value in d.items():
+        if is_imported_name(key, module_strs):
+            continue # don't need to create assignment strs for imported names
+        lines.append(
+            _key_value_pair_to_assignment_str(key, value, module_strs=module_strs)
+        )
 
     return '\n' + '\n'.join(lines) +'\n'
 
@@ -20,9 +29,15 @@ def modules_and_items_as_imports_str(module_strs: List[str], config_dict: dict) 
 
         module, module_name = get_module_and_name_imported_from(value, module_strs)
         variable_name = get_imported_obj_variable_name(value, module)
-        lines.append(
-            _module_str_and_variable_to_import_statement(module_name, variable_name)
-        )
+        line = _module_str_and_variable_to_import_statement(module_name, variable_name)
+        if line not in lines:
+            # TODO: better handling for imports
+            # Was having a problem where imported items are represented twice in the user_defined_dict.
+            # Once for assignment to the function, and once for assignment to the name from the import statement
+            # Was having trouble removing one from the dictionary
+            # This led to the import statement being printed twice. Instead, just don't print a line of it's already
+            # been printed.
+            lines.append(line)
 
     return '\n'.join(lines) + '\n'
 
@@ -36,7 +51,7 @@ def _module_str_and_variable_to_import_statement(module_str: str, variable_name:
 
 def _key_value_pair_to_assignment_str(key: str, value: any, module_strs: List[str]=None):
     value = _assignment_output_repr(value, module_strs=module_strs)
-    return f'{key}={value}'
+    return f'{key} = {value}'
 
 
 def _assignment_output_repr(value: any, module_strs: List[str]=None):
@@ -77,7 +92,7 @@ def _is_builtin(value: any) -> bool:
 
 def _assignment_output_repr_for_builtins(value: any) -> any:
     if isinstance(value, str):
-        return f"'{value}'"
+        return f"r'{value}'"
 
     # Other builtins, output as is
     return value
