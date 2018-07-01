@@ -1,6 +1,6 @@
 import warnings
 import builtins
-from typing import List
+from typing import List, Union
 
 from dero.manager.imports.logic.load.name import (
     get_imported_obj_variable_name,
@@ -27,8 +27,15 @@ def modules_and_items_as_imports_str(module_strs: List[str], config_dict: dict) 
         if _is_builtin(value):
             continue
 
-        module, module_name = get_module_and_name_imported_from(value, module_strs)
+        module_and_module_name_or_none = get_module_and_name_imported_from(value, module_strs)
+        if module_and_module_name_or_none is None:
+            warnings.warn(f'could not find import module for {value}\n will not generate import statement. '
+                          f'likely, the configuration file will need to be manually updated.')
+            continue
+
+        module, module_name = module_and_module_name_or_none
         variable_name = get_imported_obj_variable_name(value, module)
+
         line = _module_str_and_variable_to_import_statement(module_name, variable_name)
         if line not in lines:
             # TODO: better handling for imports
@@ -73,7 +80,13 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
 
     # All others, try to get variable name and import
     if module_strs is not None:
-        module, module_name = get_module_and_name_imported_from(value, module_strs)
+        module_and_module_name_or_none = get_module_and_name_imported_from(value, module_strs)
+        if module_and_module_name_or_none is None:
+            warnings.warn(f'could not find import module for {value}\n will generate assignment statement. '
+                          f'likely, the configuration file will need to be manually updated.')
+            return None
+
+        module, module_name = module_and_module_name_or_none
         variable_name = get_imported_obj_variable_name(value, module)
     else:
         variable_name = value
