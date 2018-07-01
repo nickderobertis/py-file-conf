@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Any
 
 from dero.mixins.repr import ReprMixin
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
@@ -12,6 +12,7 @@ class ConfigManager(ReprMixin):
     def __init__(self, basepath: str, main_section: ConfigSection=None):
         self.section = main_section
         self.basepath = basepath
+        self.local_config = Config()
 
     def __getattr__(self, item):
         return getattr(self.section, item)
@@ -30,9 +31,13 @@ class ConfigManager(ReprMixin):
     def load(self):
         self.section = ConfigSection.from_files(self.basepath)
 
-    def update(self, d: dict, section_path_str: str=None, **kwargs) -> None:
-        config_obj = self._get_func_or_section_config(section_path_str)
+    def update(self, d: dict=None, section_path_str: str=None, **kwargs) -> None:
+        config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         config_obj.update(d, **kwargs)
+
+    def pop(self, key: str, section_path_str: str=None) -> Any:
+        config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
+        return config_obj.pop(key)
 
     def get(self, section_path_str: str=None) -> Config:
         """
@@ -71,6 +76,9 @@ class ConfigManager(ReprMixin):
         # level sections to low level sections
         [config.update(section_config) for section_config in section_configs]
 
+        # Last, override with local config
+        config.update(self.local_config)
+
         return config
 
     def _get_func_or_section_config(self, section_path_str: str=None) -> Config:
@@ -107,6 +115,15 @@ class ConfigManager(ReprMixin):
             return True
         else:
             raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
+
+    def _get_project_config_or_local_config_by_section_path(self, section_path_str: str) -> Config:
+        if section_path_str is not None:
+            config_obj = self._get_func_or_section_config(section_path_str)
+        else:
+            # If no section passed, update local config
+            config_obj = self.local_config
+
+        return config_obj
 
 
 def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Config:

@@ -9,11 +9,16 @@ def _get_from_nested_obj_by_section_path(obj, section_path: SectionPath):
     return obj
 
 
-def _get_public_name_or_special_name(obj):
-    if hasattr(obj, 'name'):
-        return obj.name
-
-    if hasattr(obj, '__name__'):
-        return obj.__name__
+def _get_public_name_or_special_name(obj) -> str:
+    for name_var in ['name', '__name__']:
+        if hasattr(obj, name_var):
+            return getattr(obj, name_var)
 
     raise ValueError(f'could not get .name or .__name__ from {obj} of type {type(obj)}')
+
+def _has_public_name_or_special_name(obj) -> bool:
+    for name_var in ['name', '__name__']:
+        if hasattr(obj, name_var):
+            return True
+
+    return False

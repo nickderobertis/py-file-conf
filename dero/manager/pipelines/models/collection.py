@@ -8,16 +8,19 @@ from dero.manager.pipelines.models.interfaces import (
     PipelineDict,
     PipelinesOrFunctionsOrCollections,
     PipelineOrFunctionOrCollection,
-    PipelineDictsOrPipelinesOrFunctions
+    PipelineDictsOrPipelinesOrFunctions,
+    StrList
 )
 
 class PipelineCollection(Container, ReprMixin):
     repr_cols = ['name', 'basepath', 'items']
 
-    def __init__(self, basepath: str, items: PipelinesOrFunctionsOrCollections, name: str=None):
+    def __init__(self, basepath: str, items: PipelinesOrFunctionsOrCollections, name: str=None,
+                 loaded_modules: StrList=None):
         self.basepath = basepath
         self.items = items
         self.name = name
+        self._loaded_modules = loaded_modules
 
     def __getattr__(self, item):
         return self.pipeline_map[item]
@@ -42,36 +45,44 @@ class PipelineCollection(Container, ReprMixin):
         self._set_pipeline_map() # need to recreate pipeline map when items change
 
     @classmethod
-    def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None):
+    def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None,
+                           loaded_modules: StrList=None):
         items = []
         for section_name, dict_or_list in pipeline_dict.items():
             section_basepath = os.path.join(basepath, section_name)
             if isinstance(dict_or_list, dict):
                 # Got another pipeline dict. Recursively process
                 items.append(
-                    PipelineCollection.from_pipeline_dict(dict_or_list, basepath=section_basepath, name=section_name)
+                    PipelineCollection.from_pipeline_dict(
+                        dict_or_list, basepath=section_basepath, name=section_name, loaded_modules=loaded_modules
+                    )
                 )
             elif isinstance(dict_or_list, list):
                 # Got a list of functions or pipelines. Create a collection directly from items
                 items.append(
-                    PipelineCollection.from_pipeline_list(dict_or_list, basepath=section_basepath, name=section_name)
+                    PipelineCollection.from_pipeline_list(
+                        dict_or_list, basepath=section_basepath, name=section_name, loaded_modules=loaded_modules
+                    )
                 )
 
         return cls(basepath=basepath, items=items, name=name)
 
     @classmethod
-    def from_pipeline_list(cls, pipeline_list: PipelineDictsOrPipelinesOrFunctions, basepath: str, name: str=None):
+    def from_pipeline_list(cls, pipeline_list: PipelineDictsOrPipelinesOrFunctions, basepath: str, name: str=None,
+                           loaded_modules: StrList=None):
         items = []
         for dict_or_item in pipeline_list:
             if isinstance(dict_or_item, dict):
                 items.append(
-                    PipelineCollection.from_pipeline_dict(dict_or_item, basepath=basepath, name=name)
+                    PipelineCollection.from_pipeline_dict(
+                        dict_or_item, basepath=basepath, name=name, loaded_modules=loaded_modules
+                    )
                 )
             else:
                 # pipeline or function
                 items.append(dict_or_item)
 
-        return cls(basepath=basepath, items=items, name=name)
+        return cls(basepath=basepath, items=items, name=name, loaded_modules=loaded_modules)
 
 
     def _output_config_files(self):
@@ -96,7 +107,7 @@ class PipelineCollection(Container, ReprMixin):
             # must be able to do this without overriding the user's default arguments for the function
             return
 
-        item_config = Config.from_pipeline_or_function(item)
+        item_config = Config.from_pipeline_or_function(item, loaded_modules=self._loaded_modules)
         item_config.to_file(item_filepath)
 
     def _output_section_config_file(self):

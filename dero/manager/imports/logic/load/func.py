@@ -22,6 +22,8 @@ def function_args_as_dict(func: Callable):
 
     return out_dict
 
+def get_variable_name_of_obj(obj: any) -> str:
+    return [key for key, value in globals().items() if value == obj][0]
 
 def _get_length_of_arg_section(section):
     if section is None:

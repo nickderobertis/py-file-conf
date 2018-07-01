@@ -5,7 +5,8 @@ from dero.manager.pipelines.models.collection import PipelineCollection
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.pipelines.models.interfaces import (
     PipelineDict,
-    PipelineOrFunctionOrCollection
+    PipelineOrFunctionOrCollection,
+    StrList
 )
 
 class PipelineRegistrar(ReprMixin):
@@ -31,8 +32,11 @@ class PipelineRegistrar(ReprMixin):
         return exposed_methods + exposed_attrs + list(self.collection.pipeline_map.keys())
 
     @classmethod
-    def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None):
-        collection = PipelineCollection.from_pipeline_dict(pipeline_dict, basepath=basepath, name=name)
+    def from_pipeline_dict(cls, pipeline_dict: PipelineDict, basepath: str, name: str=None,
+                           loaded_modules: StrList=None):
+        collection = PipelineCollection.from_pipeline_dict(
+            pipeline_dict, basepath=basepath, name=name, loaded_modules=loaded_modules
+        )
 
         return cls(collection, basepath=basepath, name=name)
 

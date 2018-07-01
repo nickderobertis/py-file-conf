@@ -34,7 +34,11 @@ class Runner(ReprMixin):
         section will result in a nested list structure of results.
 
         Args:
-            section_path_str_or_list:
+            section_path_str_or_list: . separated name of path of function or section, or list thereof.
+                similar to how a function would be imported. e.g. 'main.data.summarize.summary_func1'
+                or when running multiple functions/sections, e.g.
+                    ['main.data', 'main.analysis.reg.1']
+                These sections/functions are based on the structure of your pipeline_dict
 
         Returns: result or list of results
 

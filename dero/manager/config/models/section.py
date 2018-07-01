@@ -16,6 +16,11 @@ class ConfigSection(Container, ReprMixin):
         self.name = name
 
     def __getattr__(self, item):
+
+        # Handle if trying to get this section's config
+        if item == self.config.name:
+            return self.config
+
         return self.config_map[item]
 
     def __dir__(self):
@@ -43,8 +48,9 @@ class ConfigSection(Container, ReprMixin):
             config_map[config.name] = config
         self._config_map = config_map
 
-    def update(self, d: dict, **kwargs):
-        self.config.update(d)
+    def update(self, d: dict=None, **kwargs):
+        if d is not None:
+            self.config.update(d)
         self.config.update(kwargs)
 
     @classmethod
