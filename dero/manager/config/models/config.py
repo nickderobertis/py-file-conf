@@ -1,15 +1,12 @@
 from typing import Callable, Any, List
 import inspect
-import os
+from copy import deepcopy
 
-from dero.manager.imports.logic.load.file import get_user_defined_dict_from_filepath
 from dero.manager.imports.logic.load.func import function_args_as_dict
-from dero.manager.config.logic.write import dict_as_local_definitions_str, modules_and_items_as_imports_str
 from dero.manager.pipelines.models.interfaces import PipelineOrFunction
 from dero.manager.pipelines.models.pipeline import Pipeline
-from dero.manager.sectionpath.sectionpath import _strip_py
 from dero.manager.logic.get import _get_public_name_or_special_name
-from dero.manager.imports.models.tracker import ImportTracker
+from dero.manager.config.models.file import ConfigFile
 
 class Config(dict):
 
@@ -17,12 +14,14 @@ class Config(dict):
         dict_repr = super().__repr__()
         return f'<Config(name={self.name}, {dict_repr})>'
 
-    def __init__(self, d: dict=None, name: str=None, loaded_modules:  List[str]=None, **kwargs):
+    def __init__(self, d: dict=None, name: str=None, _loaded_modules:  List[str]=None,
+                 _file: ConfigFile=None, **kwargs):
         if d is None:
             d = {}
         super().__init__(d, **kwargs)
         self.name = name
-        self._loaded_modules = loaded_modules
+        self._loaded_modules = _loaded_modules
+        self._file = _file
 
     def __getattr__(self, attr):
         return self[attr]
@@ -36,9 +35,15 @@ class Config(dict):
         super().update(d, **kwargs)
 
     def to_file(self, filepath: str):
-        to_write = self.file_str # access before opening file, so if causing error, won't delete contents of file
-        with open(filepath, 'w') as f:
-            f.write(to_write)
+
+        if self._file is None:
+            output_file = ConfigFile(filepath, name=self.name, loaded_modules=self._loaded_modules)
+        else:
+            # In case this is a new filepath for the same config, copy old file contents for use in new filepath
+            output_file = deepcopy(self._file)
+            output_file.filepath = filepath
+
+        output_file.save(self)
 
     def for_function(self, func: Callable) -> dict:
         """
@@ -54,33 +59,10 @@ class Config(dict):
         func_kwargs = function_args_as_dict(func)
         return {key: value for key, value in self.items() if key in func_kwargs}
 
-    @property
-    def file_str(self):
-
-        # Deal with imports as well as variable assignment
-        if hasattr(self, '_loaded_modules'):
-            variable_assignment_section = dict_as_local_definitions_str(self, self._loaded_modules)
-            imports_str = modules_and_items_as_imports_str(self._loaded_modules, self)
-            return imports_str + variable_assignment_section
-
-        # no loaded modules, just variable assignment
-        variable_assignment_section = dict_as_local_definitions_str(self)
-
-        return variable_assignment_section
-
-
     @classmethod
     def from_file(cls, filepath: str, name: str=None):
-        import_manager = ImportTracker()
-        config_dict = get_user_defined_dict_from_filepath(filepath)
-        if name is None:
-            name = _strip_py(os.path.basename(filepath))
-
-        obj = cls(config_dict, name=name)
-
-        obj._loaded_modules = import_manager.imported_modules
-
-        return obj
+        file = ConfigFile(filepath, name=name)
+        return file.load()
 
     @classmethod
     def from_function(cls, func: Callable, name: str=None, loaded_modules: List[str]=None):
@@ -88,7 +70,7 @@ class Config(dict):
         if name is None:
             name = _get_public_name_or_special_name(func)
 
-        return cls(config_dict, name=name, loaded_modules=loaded_modules)
+        return cls(config_dict, name=name, _loaded_modules=loaded_modules)
 
     @classmethod
     def from_pipeline(cls, item: PipelineOrFunction, name: str=None, loaded_modules: List[str]=None):
