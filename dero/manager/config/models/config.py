@@ -1,6 +1,7 @@
 from typing import Callable, Any, List
 import inspect
 from copy import deepcopy
+import os
 
 from dero.manager.imports.logic.load.func import function_args_as_dict
 from dero.manager.pipelines.models.interfaces import PipelineOrFunction
@@ -42,6 +43,9 @@ class Config(dict):
             # In case this is a new filepath for the same config, copy old file contents for use in new filepath
             output_file = deepcopy(self._file)
             output_file.filepath = filepath
+
+        if os.path.exists(filepath):
+            output_file.load() # load any existing config saved in the file, for preserving of user-saved inputs
 
         output_file.save(self)
 

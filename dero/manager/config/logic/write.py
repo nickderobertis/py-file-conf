@@ -8,7 +8,7 @@ from dero.manager.imports.logic.load.name import (
     is_imported_name
 )
 
-def dict_as_local_definitions_str(d: dict, module_strs: List[str]=None) -> str:
+def dict_as_local_definitions_lines(d: dict, module_strs: List[str]=None) -> List[str]:
     lines = []
     for key, value in d.items():
         if is_imported_name(key, module_strs):
@@ -17,9 +17,12 @@ def dict_as_local_definitions_str(d: dict, module_strs: List[str]=None) -> str:
             _key_value_pair_to_assignment_str(key, value, module_strs=module_strs)
         )
 
+    return lines
+
+def assignment_lines_as_str(lines: List[str]) -> str:
     return '\n' + '\n'.join(lines) +'\n'
 
-def modules_and_items_as_imports_str(module_strs: List[str], config_dict: dict) -> str:
+def modules_and_items_as_imports_lines(module_strs: List[str], config_dict: dict) -> List[str]:
 
     lines = []
     for arg_name, value in config_dict.items():
@@ -46,7 +49,12 @@ def modules_and_items_as_imports_str(module_strs: List[str], config_dict: dict) 
             # been printed.
             lines.append(line)
 
+    return lines
+
+
+def import_lines_as_str(lines: List[str]) -> str:
     return '\n'.join(lines) + '\n'
+
 
 def dict_as_function_kwarg_str(d: dict) -> str:
     lines = [_key_value_pair_to_assignment_str(key, value) for key, value in d.items()]
