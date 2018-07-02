@@ -6,12 +6,18 @@ TwoStrTuple = Tuple[str, str]
 TwoTupleNoneOrStr = Union[TwoStrTuple, TwoNoneTuple]
 
 def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True) -> Tuple[ListOfStrs, ListOfStrs]:
-    # TODO: deal with whitespace lines
     # TODO: deal with later imports
     # TODO: deal with use of import other than the word import
     import_section = []
     assignment_section = []
-    in_import_section = True  # start the file in the import section, then after import statements, not in import section
+    # We can have three cases for the following two booleans:
+    # The file starts in the import section (in_import_section=True, in_assignment_section=False).
+    # Then, we enter the whitespace section between import and assignments.
+    # This will be ignored (in_import_section=False, in_assignment_section=False)
+    # Finally, once text is detected again after import section,
+    # assignment section starts (in_import_section=False, in_assignment_section=True)
+    in_import_section = True
+    in_assignment_section = False
     for line in lines:
 
         if strip_lines:
@@ -24,8 +30,15 @@ def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True)
             else:
                 in_import_section = False  # no longer dealing with imports
 
-        # didn't use else, as in_import_section may change during that block
-        if not in_import_section:
+        # Handle whitespace section in between import and assignment, and switching to assignment
+        if not in_import_section and not in_assignment_section:
+            if _is_whitespace_line(line):
+                continue # skip whitespace inbetween import and assignment, but not between assignments or between imports
+            else: # finished import section, found something other than whitespace. Must be in assignment section
+                in_assignment_section = True
+
+        # Assignment section, just output
+        if in_assignment_section:
             assignment_section.append(line)
 
     return import_section, assignment_section
@@ -38,3 +51,6 @@ def _split_assignment_line_into_variable_name_and_assignment(line: str) -> TwoTu
 
     variable, value = tuple(item.strip() for item in line.split('='))
     return variable, value
+
+def _is_whitespace_line(line: str) -> bool:
+    return line.strip() == ''
