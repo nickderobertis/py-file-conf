@@ -1,7 +1,9 @@
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 ListOfStrs = List[str]
-
+TwoNoneTuple = Tuple[None, None]
+TwoStrTuple = Tuple[str, str]
+TwoTupleNoneOrStr = Union[TwoStrTuple, TwoNoneTuple]
 
 def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True) -> Tuple[ListOfStrs, ListOfStrs]:
     # TODO: deal with whitespace lines
@@ -27,3 +29,12 @@ def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True)
             assignment_section.append(line)
 
     return import_section, assignment_section
+
+def _split_assignment_line_into_variable_name_and_assignment(line: str) -> TwoTupleNoneOrStr:
+
+    # handle whitespace lines
+    if '=' not in line:
+        return None, None
+
+    variable, value = tuple(item.strip() for item in line.split('='))
+    return variable, value

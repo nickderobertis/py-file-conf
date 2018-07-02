@@ -5,7 +5,10 @@ from typing import List, TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from dero.manager.config.models.config import Config
 
-from dero.manager.config.logic.load import _split_lines_into_import_and_assignment
+from dero.manager.config.logic.load import (
+    _split_lines_into_import_and_assignment,
+    _split_assignment_line_into_variable_name_and_assignment
+)
 from dero.manager.config.logic.write import (
     dict_as_local_definitions_lines,
     modules_and_items_as_imports_lines,
@@ -28,7 +31,7 @@ class ConfigFile:
             name = _strip_py(os.path.basename(filepath))
 
         self.name = name
-        self._imports = []
+        self.imports = []
         self._assigns = []
         self._loaded_modules = loaded_modules
 
@@ -46,7 +49,7 @@ class ConfigFile:
             lines = f.readlines()
 
         self._lines = lines
-        self._imports, self._assigns = _split_lines_into_import_and_assignment(lines)
+        self.imports, self.assigns = _split_lines_into_import_and_assignment(lines)
 
         return Config(config_dict, _loaded_modules=self._loaded_modules, _file=self, name=self.name)
 
@@ -69,15 +72,51 @@ class ConfigFile:
 
     @property
     def _import_section(self) -> str:
-        return import_lines_as_str(self._imports)
+        return import_lines_as_str(self.imports)
 
     @property
     def _assignment_section(self) -> str:
         return assignment_lines_as_str(self._assigns)
 
+    @property
+    def assigned_variables(self) -> List[str]:
+
+        if hasattr(self, '_assigned_variables'):
+            return self._assigned_variables
+
+        self._set_assigned_variables()
+        return self._assigned_variables
+
+    def _set_assigned_variables(self):
+        assigned_variables = []
+        for line in self._assigns:
+            variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
+            assigned_variables.append(variable_name)
+        self._assigned_variables = assigned_variables
+
+    @property
+    def assigns(self):
+        return self._assigns
+
+    @assigns.setter
+    def assigns(self, assigns: List[str]):
+        self._assigns = assigns
+        self._set_assigned_variables()
+
     def _add_new_lines(self, new_imports_lines: List[str], new_variable_assignment_lines: List[str]) -> None:
-        [_append_if_not_in_list(self._imports, line) for line in new_imports_lines]
-        [_append_if_not_in_list(self._assigns, line) for line in new_variable_assignment_lines]
+        # For import statements, just check if they already exist exactly as generated
+        [_append_if_not_in_list(self.imports, line) for line in new_imports_lines]
+
+        # For assignment statements, check if the variable name is already defined. Then don't add
+        # the new line. Different handling as value may not be set correctly by code.
+        for line in new_variable_assignment_lines:
+            variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
+            if variable_name is None:
+                continue # whitespace line
+            if variable_name not in self.assigned_variables:
+                self.assigns.append(line)
+                # need to trigger set so that assigned variables will update from self.assigns
+                self._set_assigned_variables()
 
     def _config_to_file_lines(self, config: 'Config') -> Tuple[List[str], List[str]]:
 
