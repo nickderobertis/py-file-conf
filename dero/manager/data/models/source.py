@@ -4,26 +4,34 @@ from functools import partial
 import os
 import warnings
 import datetime
-from typing import Callable, TYPE_CHECKING
+from typing import Callable, TYPE_CHECKING, List
 
 from dero.manager.data.models.type import DataType
 
 if TYPE_CHECKING:
     from dero.manager.data.models.pipeline import DataPipeline
 
-
-
-
-
 class DataSource:
+    _scaffold_items = [
+        'name',
+        'type',
+        'location',
+        'loader_func',
+        'pipeline',
+        'tags'
+    ]
 
-    def __init__(self, filepath: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
-                 name: str =None, type: str =None, loader_func: Callable =None, **loader_func_kwargs):
-        self._check_inputs(filepath, df)
-        self.filepath = filepath
+    def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
+                 name: str =None, type: str =None, tags: List[str]=None,
+                 loader_func: Callable =None, **loader_func_kwargs):
+        self._check_inputs(location, df)
+        self.location = location
         self.name = name
         self.type = DataType(type)
-        self._loader_cache = (loader_func, pipeline, loader_func_kwargs)
+        self.tags = tags # TODO: better handling for tags
+        self.loader_func = loader_func
+        self.pipeline = pipeline
+        self.loader_func_kwargs = loader_func_kwargs
         self._df = df
         self.name_type = f'{name} {self.type}'
 
@@ -39,21 +47,18 @@ class DataSource:
 
     @property
     def last_modified(self):
-        if self.filepath is None:
+        if self.location is None:
             raise ValueError('no filepath to check for modified time')
 
-        return datetime.datetime.fromtimestamp(os.path.getmtime(self.filepath))
+        return datetime.datetime.fromtimestamp(os.path.getmtime(self.location))
 
     def _load(self):
         if not hasattr(self, 'data_loader'):
-            loader_func = self._loader_cache[0]
-            pipeline = self._loader_cache[1]
-            loader_func_kwargs = self._loader_cache[2]
-            self._set_data_loader(data_loader=loader_func, pipeline=pipeline, **loader_func_kwargs)
+            self._set_data_loader(data_loader=self.loader_func, pipeline=self.pipeline, **self.loader_func_kwargs)
         return self.data_loader()
 
     def output(self, **to_csv_kwargs):
-        self.df.to_csv(self.filepath, **to_csv_kwargs)
+        self.df.to_csv(self.location, **to_csv_kwargs)
 
     def _check_inputs(self, filepath, df):
         pass
@@ -82,9 +87,9 @@ class DataSource:
 
         if data_loader is None:
             # TODO: determine filetype and use proper loader
-            self.data_loader = partial(pd.read_csv, self.filepath, **loader_func_kwargs)
+            self.data_loader = partial(pd.read_csv, self.location, **loader_func_kwargs)
         else:
-            self.data_loader = partial(data_loader, self.filepath, **loader_func_kwargs)
+            self.data_loader = partial(data_loader, self.location, **loader_func_kwargs)
 
     def __repr__(self):
         return f'<DataSource(name={self.name}, type={self.type.name})>'

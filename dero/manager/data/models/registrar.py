@@ -1,5 +1,6 @@
 
 from dero.manager.basemodels.registrar import Registrar
+from dero.manager.data.models.collection import DataCollection
 
 class DataRegistrar(Registrar):
-    pass
+    collection_class = DataCollection
