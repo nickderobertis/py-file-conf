@@ -80,7 +80,7 @@ class PipelineManager:
         imported_modules = self._import_tracker.imported_modules
         imported_modules.reverse() # start with pipeline dict file first, then look at others for imports
 
-        self.register = PipelineRegistrar.from_pipeline_dict(
+        self.register = PipelineRegistrar.from_dict(
             pipeline_dict,
             basepath=self.basepath,
             name=self.name,
