@@ -8,8 +8,9 @@ from dero.manager.pipelines.models.interfaces import (
     PipelineOrFunctionOrCollection,
     StrList
 )
+from dero.manager.basemodels.registrar import Registrar
 
-class PipelineRegistrar(ReprMixin):
+class PipelineRegistrar(Registrar, ReprMixin):
     repr_cols = ['name', 'basepath', 'collection']
 
     def __init__(self, collection: PipelineCollection, basepath: str, name=None):

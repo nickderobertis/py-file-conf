@@ -5,7 +5,7 @@ import os
 
 from dero.manager.imports.logic.load.func import function_args_as_dict
 from dero.manager.pipelines.models.interfaces import PipelineOrFunction
-from dero.manager.pipelines.models.pipeline import Pipeline
+from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.config.models.file import ConfigFile
 
