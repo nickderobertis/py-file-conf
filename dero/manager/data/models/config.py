@@ -1,4 +1,4 @@
-from dero.manager.config.models.config import Config
+from dero.manager.basemodels.config import ConfigBase
 
-class DataConfig(Config):
+class DataConfig(ConfigBase):
     pass

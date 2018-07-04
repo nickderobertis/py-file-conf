@@ -1,6 +1,6 @@
 import os
 
-from dero.manager.config.models.config import Config
+from dero.manager.config.models.config import FunctionConfig
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.pipelines.models.interfaces import PipelineOrFunctionOrCollection
 
@@ -34,11 +34,11 @@ class PipelineCollection(Collection):
 
         if os.path.exists(item_filepath):
             # if config file already exists, load confguration from file, use to update function defaults
-            existing_config = Config.from_file(item_filepath)
+            existing_config = FunctionConfig.from_file(item_filepath)
         else:
-            existing_config = Config()
+            existing_config = FunctionConfig()
 
-        item_config = Config.from_pipeline_or_function(item, loaded_modules=self._loaded_modules)
+        item_config = FunctionConfig.from_pipeline_or_function(item, loaded_modules=self._loaded_modules)
         item_config.update(existing_config) # override function defaults with any settings from file
         item_config.to_file(item_filepath)
 

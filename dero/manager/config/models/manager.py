@@ -3,7 +3,7 @@ from typing import List, Union, Any
 from dero.mixins.repr import ReprMixin
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.config.models.interfaces import ConfigSectionOrConfig
-from dero.manager.config.models.section import ConfigSection, Config
+from dero.manager.config.models.section import ConfigSection, FunctionConfig
 from dero.manager.sectionpath.sectionpath import SectionPath
 
 class ConfigManager(ReprMixin):
@@ -12,7 +12,7 @@ class ConfigManager(ReprMixin):
     def __init__(self, basepath: str, main_section: ConfigSection=None):
         self.section = main_section
         self.basepath = basepath
-        self.local_config = Config()
+        self.local_config = FunctionConfig()
 
     def __getattr__(self, item):
         return getattr(self.section, item)
@@ -39,7 +39,7 @@ class ConfigManager(ReprMixin):
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         return config_obj.pop(key)
 
-    def get(self, section_path_str: str=None) -> Config:
+    def get(self, section_path_str: str=None) -> FunctionConfig:
         """
         Handles config inheritance to get the active config for a section or function
 
@@ -81,7 +81,7 @@ class ConfigManager(ReprMixin):
 
         return config
 
-    def _get_func_or_section_config(self, section_path_str: str=None) -> Config:
+    def _get_func_or_section_config(self, section_path_str: str=None) -> FunctionConfig:
         """
         This get method is used to get only the config for the section path, without handling
         multiple levels of config and overriding. To get the active config for a function,
@@ -110,13 +110,13 @@ class ConfigManager(ReprMixin):
         if isinstance(config_or_section, ConfigSection):
             # must be section, not individual pipeline or function
             return False
-        elif isinstance(config_or_section, Config):
+        elif isinstance(config_or_section, FunctionConfig):
             # must be individual function as Config is returned
             return True
         else:
             raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
 
-    def _get_project_config_or_local_config_by_section_path(self, section_path_str: str) -> Config:
+    def _get_project_config_or_local_config_by_section_path(self, section_path_str: str) -> FunctionConfig:
         if section_path_str is not None:
             config_obj = self._get_func_or_section_config(section_path_str)
         else:
@@ -126,11 +126,11 @@ class ConfigManager(ReprMixin):
         return config_obj
 
 
-def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Config:
+def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> FunctionConfig:
     # Pull Config from ConfigSection
     if isinstance(config_or_section, ConfigSection):
         return config_or_section.config
-    elif isinstance(config_or_section, Config):
+    elif isinstance(config_or_section, FunctionConfig):
         return config_or_section
     else:
         raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')

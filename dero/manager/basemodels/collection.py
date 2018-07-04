@@ -10,6 +10,14 @@ scaffolding_error = NotImplementedError('must use DataCollection or PipelineColl
 
 class Collection(Container, ReprMixin):
 
+    #### Scaffolding functions. These should be overridden by collection subclasses ###
+
+    def _set_name_map(self):
+        raise scaffolding_error
+
+    def _output_config_files(self):
+        raise scaffolding_error
+
     ### base functions. These probably do not need to be overridden by collection subclasses ###
 
     repr_cols = ['name', 'basepath', 'items']
@@ -75,13 +83,3 @@ class Collection(Container, ReprMixin):
                 items.append(dict_or_item)
 
         return cls(basepath=basepath, items=items, name=name, loaded_modules=loaded_modules)
-
-
-    #### Scaffolding functions. These should be overridden by collection subclasses ###
-
-    def _set_name_map(self):
-        raise scaffolding_error
-
-    def _output_config_files(self):
-        raise scaffolding_error
-
