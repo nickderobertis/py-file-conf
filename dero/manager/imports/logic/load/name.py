@@ -4,6 +4,8 @@ import sys
 import pandas as pd
 import warnings
 
+from dero.manager.imports.logic.load.skipmodules import skip_modules
+
 def get_imported_obj_variable_name(obj, module: ModuleType) -> str:
     key_list, value_list = _get_module_keys_and_values_lists(module)
     return _get_key_matching_value(obj, key_list, value_list)
@@ -14,6 +16,11 @@ def get_module_and_name_imported_from(obj, search_list: List[str]=None) -> Tuple
         search_list = list(sys.modules.keys())
 
     for module_name in search_list:
+
+        # skip modules which were causing issues
+        if module_name in skip_modules:
+            continue
+
         module = sys.modules[module_name]
         if _obj_in_module(obj, module):
             return module, module_name
@@ -23,6 +30,11 @@ def is_imported_name(name: str, search_list: List[str]=None) -> bool:
         search_list = list(sys.modules.keys())
 
     for module_name in search_list:
+
+        # skip modules which were causing issues
+        if module_name in skip_modules:
+            continue
+
         module = sys.modules[module_name]
         if _name_in_module(name, module):
             return True
@@ -35,6 +47,11 @@ def _is_imported_from(name: str, search_list: List[str]=None) -> List[str]:
 
     matched_modules = []
     for module_name in search_list:
+
+        # skip modules which were causing issues
+        if module_name in skip_modules:
+            continue
+
         module = sys.modules[module_name]
         if _name_in_module(name, module):
             matched_modules.append(module_name)

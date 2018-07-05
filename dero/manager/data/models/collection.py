@@ -40,11 +40,10 @@ class DataCollection(Collection):
         item_filepath = os.path.join(self.basepath, item_name)
 
         if os.path.exists(item_filepath):
-            # if config file already exists, load confguration from file, use to update function defaults
+            # if config file already exists, load confguration from file, use to update file defaults
             existing_config = DataConfig.from_file(item_filepath)
-        else:
-            existing_config = DataConfig()
+            # also use to update DataSource object in memory
+            item.apply_config(existing_config)
 
         item_config = DataConfig.from_source(item, loaded_modules=self._loaded_modules)
-        item_config.update(existing_config) # override function defaults with any settings from file
         item_config.to_file(item_filepath)

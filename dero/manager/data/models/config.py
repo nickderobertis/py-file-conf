@@ -2,8 +2,10 @@ from typing import List
 
 from dero.manager.basemodels.config import ConfigBase
 from dero.manager.data.models.source import DataSource
+from dero.manager.data.models.file import DataConfigFile
 
 class DataConfig(ConfigBase):
+    config_file_class = DataConfigFile
 
 
     @classmethod

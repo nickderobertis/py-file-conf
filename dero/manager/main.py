@@ -4,8 +4,10 @@ from copy import deepcopy
 
 from dero.manager.config.models.manager import ConfigManager
 from dero.manager.pipelines.models.registrar import PipelineRegistrar
+from dero.manager.data.models.registrar import DataRegistrar
 from dero.manager.runner.models.runner import Runner, StrOrListOfStrs, ResultOrResults
 from dero.manager.pipelines.logic.load import pipeline_dict_from_file
+from dero.manager.data.logic.load import data_dict_from_file
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
 
@@ -14,9 +16,11 @@ class PipelineManager:
     Main class for managing flow-based programming and configuration.
     """
 
-    def __init__(self, pipeline_dict_path: str, basepath: str, name: str='project'):
+    def __init__(self, pipeline_dict_path: str, data_dict_path: str, basepath: str, name: str='project'):
         self.pipeline_dict_path = pipeline_dict_path
+        self.data_dict_path = data_dict_path
         self.basepath = basepath
+        self.sources_basepath = os.path.join(basepath, 'sources')
         self.name = name
 
         self._load()
@@ -73,9 +77,10 @@ class PipelineManager:
         Returns:
 
         """
-        # Add module name to ensure module is loaded into sys
+        # Load dynamically instead of passing dict to ensure modules are loaded into sys now
         pipeline_section_path = SectionPath.from_filepath(os.getcwd(), self.pipeline_dict_path)
         pipeline_dict = pipeline_dict_from_file(self.pipeline_dict_path, module_name=pipeline_section_path.path_str)
+        data_dict = data_dict_from_file(self.data_dict_path)
 
         imported_modules = self._import_tracker.imported_modules
         imported_modules.reverse() # start with pipeline dict file first, then look at others for imports
@@ -91,8 +96,15 @@ class PipelineManager:
         self.config = ConfigManager(self.basepath)
         self.config.load()
 
+        self.sources = DataRegistrar.from_dict(
+            data_dict,
+            basepath=self.sources_basepath,
+            name=self.name,
+            loaded_modules=imported_modules
+        )
+        self.sources.scaffold_config()
+
         self.runner = Runner(config=self.config, pipelines=self.register)
 
     def _wipe_loaded_modules(self):
         [sys.modules.pop(module) for module in self._loaded_modules]
-

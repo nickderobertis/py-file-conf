@@ -9,7 +9,8 @@ def convert_list_of_strs_or_data_sources_to_data_sources(list_ : List[StrOrDataS
 
 
 def _convert_to_data_source_if_necessary(item: StrOrDataSource) -> DataSource:
-    if isinstance(item, DataSource):
+    from dero.manager.data.models.collection import DataCollection
+    if isinstance(item, (DataSource, DataCollection)):
         return item
 
     return DataSource(name=item)

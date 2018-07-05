@@ -35,6 +35,15 @@ class DataSource:
         self._df = df
         self.name_type = f'{name} {self.type}'
 
+    def apply_config(self, config) -> None:
+        from dero.manager.data.models.config import DataConfig
+        config: DataConfig
+
+        for config_attr, config_item in config.items():
+            # Skip irrelevant items
+            if hasattr(self, config_attr):
+                setattr(self, config_attr, config_item)
+
     @property
     def df(self):
         if self._df is None:
