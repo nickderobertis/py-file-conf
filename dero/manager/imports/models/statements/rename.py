@@ -1,10 +1,12 @@
 from typing import List
 
 from dero.mixins.repr import ReprMixin
+from dero.mixins.attrequals import EqOnAttrsMixin
 from dero.manager.imports.logic.parse.patterns import re_patterns
 
-class RenameStatement(ReprMixin):
+class RenameStatement(ReprMixin, EqOnAttrsMixin):
     repr_cols = ['item', 'new_name']
+    equal_attrs = ['item', 'new_name']
 
     def __init__(self, item: str, new_name: str):
         self.item = item

@@ -9,6 +9,7 @@ from dero.manager.imports.logic.parse.extract import _extract_modules_from_modul
 class ModuleImportStatement(ImportStatement, ReprMixin):
     rename_attr = 'modules'
     repr_cols = ['modules', 'renames']
+    equal_attrs = ['modules', 'renames']
 
     def __init__(self, modules: List[str], renames: RenameStatementCollection = None):
         self.modules = modules

@@ -1,7 +1,8 @@
 from typing import List
+from dero.mixins.attrequals import EqOnAttrsMixin
 
 
-class ImportStatement:
+class ImportStatement(EqOnAttrsMixin):
     rename_attr = None
 
     @property
