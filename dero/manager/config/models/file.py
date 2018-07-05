@@ -32,8 +32,8 @@ class FunctionConfigFile(ConfigFileBase):
 
         # Deal with imports as well as variable assignment
         if loaded_modules is not None:
-            new_variable_assignment_lines = dict_as_local_definitions_lines(config, config._loaded_modules)
-            new_imports_lines = modules_and_items_as_imports_lines(config._loaded_modules, config)
+            new_variable_assignment_lines = dict_as_local_definitions_lines(config, loaded_modules)
+            new_imports_lines = modules_and_items_as_imports_lines(loaded_modules, config)
             return new_imports_lines, new_variable_assignment_lines
 
         # no loaded modules, just variable assignment

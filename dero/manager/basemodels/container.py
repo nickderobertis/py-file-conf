@@ -9,3 +9,6 @@ class Container:
 
     def __getitem__(self, item):
         return self.items[item]
+
+    def __contains__(self, item):
+        return item in self.items

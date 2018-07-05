@@ -8,11 +8,12 @@ from dero.manager.imports.logic.load.name import (
     is_imported_name
 )
 
-def dict_as_local_definitions_lines(d: dict, module_strs: List[str]=None) -> List[str]:
+def dict_as_local_definitions_lines(d: dict, module_strs: List[str]=None, remove_imported=True) -> List[str]:
     lines = []
     for key, value in d.items():
-        if is_imported_name(key, module_strs):
-            continue # don't need to create assignment strs for imported names
+        if remove_imported:
+            if is_imported_name(key, module_strs):
+                continue # don't need to create assignment strs for imported names
         lines.append(
             _key_value_pair_to_assignment_str(key, value, module_strs=module_strs)
         )
