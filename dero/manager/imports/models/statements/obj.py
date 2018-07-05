@@ -14,6 +14,10 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
     equal_attrs = ['module', 'objs', 'renames', 'comment']
 
     def __init__(self, objs: List[str], module: str, renames: RenameStatementCollection = None, comment: Comment=None):
+
+        if renames is None:
+            renames = RenameStatementCollection([])
+
         self.objs = objs
         self.module = module
         self.renames = renames

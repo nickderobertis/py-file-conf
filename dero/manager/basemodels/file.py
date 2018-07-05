@@ -12,6 +12,8 @@ from dero.manager.config.logic.write import (
     import_lines_as_str,
     assignment_lines_as_str
 )
+from dero.manager.imports.models.statements.obj import ObjectImportStatement
+
 
 class ConfigFileBase:
 
@@ -117,8 +119,32 @@ class ConfigFileBase:
         self._set_assigned_variables()
 
     def _add_new_lines(self, new_imports_lines: List[str], new_variable_assignment_lines: List[str]) -> None:
+        always_imports = [
+            ObjectImportStatement.from_str('from dero.manager import Selector')
+        ]
+
+        always_assign_strs = [
+            's = Selector()'
+        ]
+
         # For import statements, just check if they already exist exactly as generated
         [_append_if_not_in_list(self.imports, line) for line in new_imports_lines]
+
+        # Add always imports
+        always_imports.reverse() # are getting added to beginning, so reverse order first to maintain order
+        for import_obj in always_imports:
+            if import_obj not in self.imports:
+                self.imports.insert(0, import_obj)
+
+        # Add always assigns
+        always_assign_strs.reverse() # are getting added to beginning, so reverse order first to maintain order
+        for line in always_assign_strs:
+            variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
+            if variable_name is None:
+                continue  # whitespace line
+            if variable_name not in self.assigned_variables:
+                self.assigns.insert(0, line)
+                self._set_assigned_variables()
 
         # For assignment statements, check if the variable name is already defined. Then don't add
         # the new line. Different handling as value may not be set correctly by code.

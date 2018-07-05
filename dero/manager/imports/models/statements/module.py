@@ -13,6 +13,10 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
     equal_attrs = ['modules', 'renames', 'comment']
 
     def __init__(self, modules: List[str], renames: RenameStatementCollection = None, comment: Comment=None):
+
+        if renames is None:
+            renames = RenameStatementCollection([])
+
         self.modules = modules
         self.renames = renames
         self.comment = comment
