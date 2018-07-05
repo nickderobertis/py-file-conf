@@ -21,3 +21,18 @@ def _extract_modules_from_module_import(import_str: str) -> List[str]:
 
     module_str, _ = match.groups()
     return [module.strip() for module in module_str.split(',')]
+
+
+def extract_line_without_comment_and_comment_from_line(line: str) -> Tuple[str, str]:
+    # no comment
+    if '#' not in line:
+        return line, ''
+
+    line = line.strip()
+    # entire line is comment
+    if line.startswith('#'):
+        return '', line[1:]
+
+    # comment is during line
+    parts = line.split('#')
+    return parts[0], '#'.join(parts[1:])

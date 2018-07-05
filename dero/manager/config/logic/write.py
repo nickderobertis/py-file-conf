@@ -54,7 +54,7 @@ def modules_and_items_as_imports_lines(module_strs: List[str], config_dict: dict
 
 
 def import_lines_as_str(lines: List[str]) -> str:
-    return '\n'.join(lines) + '\n'
+    return '\n'.join(str(line) for line in lines) + '\n'
 
 
 def dict_as_function_kwarg_str(d: dict) -> str:
