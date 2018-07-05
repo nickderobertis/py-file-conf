@@ -1,19 +1,14 @@
 import os
-from copy import deepcopy
 from typing import TYPE_CHECKING, List, Tuple
 if TYPE_CHECKING:
     from dero.manager.basemodels.config import ConfigBase
 
 from dero.manager.sectionpath.sectionpath import _strip_py
-from dero.manager.imports.models.tracker import ImportTracker
-from dero.manager.imports.logic.load.file import get_user_defined_dict_from_filepath
+
 from dero.manager.config.logic.load import (
-    _split_lines_into_import_and_assignment,
     _split_assignment_line_into_variable_name_and_assignment
 )
 from dero.manager.config.logic.write import (
-    dict_as_local_definitions_lines,
-    modules_and_items_as_imports_lines,
     import_lines_as_str,
     assignment_lines_as_str
 )
@@ -37,6 +32,28 @@ class ConfigFileBase:
         """
         raise NotImplementedError('must use FunctionConfigFile.load or DataConfigFile.load, not ConfigFileBase.load')
 
+    def _load_into_config_dict(self) -> dict:
+        """
+
+        Assigns to self._loaded_modules, self._lines, self.imports, self.assigns
+        Returns: config_dict
+
+        """
+        raise NotImplementedError('must use FunctionConfigFile._load_into_config_dict or '
+                                  'DataConfigFile._load_into_config_dict, not ConfigFileBase._load_into_config_dict')
+
+    def _config_to_file_lines(self, config: 'ConfigBase') -> Tuple[List[str], List[str]]:
+        """
+
+        Args:
+            config:
+
+        Returns:
+
+        """
+        raise NotImplementedError('must use FunctionConfigFile._config_to_file_lines or'
+                                  ' DataConfigFile._config_to_file_lines, not ConfigFileBase._config_to_file_lines')
+
     ##### Base class functions and attributes below. Shouldn't usually need to override in subclassing #####
 
     def __init__(self, filepath: str, name: str=None, loaded_modules=None):
@@ -49,21 +66,6 @@ class ConfigFileBase:
         self.imports = []
         self._assigns = []
         self._loaded_modules = loaded_modules
-
-    def _load_into_config_dict(self) -> dict:
-        # First import file, get user defined variables
-        import_tracker = ImportTracker()
-        config_dict = get_user_defined_dict_from_filepath(self.filepath)
-        self._loaded_modules = deepcopy(import_tracker.imported_modules)
-
-        # Now read file, to get as text rather than Python code
-        with open(self.filepath, 'r') as f:
-            lines = f.readlines()
-
-        self._lines = lines
-        self.imports, self.assigns = _split_lines_into_import_and_assignment(lines)
-
-        return config_dict
 
     @property
     def content(self):
@@ -128,21 +130,6 @@ class ConfigFileBase:
                 self.assigns.append(line)
                 # need to trigger set so that assigned variables will update from self.assigns
                 self._set_assigned_variables()
-
-    def _config_to_file_lines(self, config: 'ConfigBase') -> Tuple[List[str], List[str]]:
-
-        loaded_modules = self._get_loaded_modules(config)
-
-        # Deal with imports as well as variable assignment
-        if loaded_modules is not None:
-            new_variable_assignment_lines = dict_as_local_definitions_lines(config, config._loaded_modules)
-            new_imports_lines = modules_and_items_as_imports_lines(config._loaded_modules, config)
-            return new_imports_lines, new_variable_assignment_lines
-
-        # no loaded modules, just variable assignment
-        new_variable_assignment_lines = dict_as_local_definitions_lines(config)
-
-        return [], new_variable_assignment_lines
 
     def _get_loaded_modules(self, config: 'ConfigBase') -> List[str]:
         if config._loaded_modules is not None:
