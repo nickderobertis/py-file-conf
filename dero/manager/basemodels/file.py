@@ -13,6 +13,7 @@ from dero.manager.config.logic.write import (
     assignment_lines_as_str
 )
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
+from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 
 class ConfigFileBase:
@@ -65,7 +66,7 @@ class ConfigFileBase:
             name = _strip_py(os.path.basename(filepath))
 
         self.name = name
-        self.imports = []
+        self.imports = ImportStatementContainer([])
         self._assigns = []
         self._loaded_modules = loaded_modules
 

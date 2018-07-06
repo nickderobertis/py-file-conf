@@ -1,4 +1,5 @@
 from typing import Callable
+from functools import partial
 
 from dero.mixins.repr import ReprMixin
 from dero.manager.config.models.manager import ConfigManager, FunctionConfig
@@ -19,9 +20,30 @@ from dero.manager.config.logic.write import dict_as_function_kwarg_str
 class Runner(ReprMixin):
     repr_cols = ['config', 'pipelines']
 
+
     def __init__(self, config: ConfigManager, pipelines: PipelineRegistrar):
         self.config = config
         self.pipelines = pipelines
+        self._full_getattr = ''
+
+    def __getattr__(self, item):
+        # TODO: find way of doing this with fewer side effects
+        # TODO: find a way to get this working for sections
+        self._full_getattr += item
+        try:
+            func_or_collection = self._get_func_or_collection(self._full_getattr)
+        except AttributeError as e:
+            self._full_getattr = '' # didn't find an item, must be incorrect path. reset total path
+            raise e
+
+        if isinstance(func_or_collection, PipelineCollection):
+            # Got section, need to keep going. Return self
+            self._full_getattr += '.' # add period to separate next section
+            return self
+        else:
+            # Got function or Pipeline, return the function or pipeline itself
+            self._full_getattr = ''  # found the item, reset for next time
+            return func_or_collection
 
     def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
         """
@@ -106,6 +128,28 @@ class Runner(ReprMixin):
         print(f'Result:\n{result}\n')
 
         return result
+
+    def get(self, section_path_str: str) -> Callable:
+        func_or_collection = self._get_func_or_collection(section_path_str)
+        if isinstance(func_or_collection, PipelineCollection):
+            # TODO: get sections
+            raise NotImplementedError('have not implemented getting sections. works with run')
+        elif isinstance(func_or_collection, Callable):
+            return self._get_one_func(section_path_str)
+        else:
+            raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
+                             f'got {func_or_collection} of type {type(func_or_collection)}')
+
+    def _get_one_func(self, section_path_str: str) -> Callable:
+        config = self._get_config(section_path_str)
+        func = self._get_func_or_collection(section_path_str)
+
+        # Only pass items in config which are arguments of function
+        config_dict = config.for_function(func)
+
+        full_func = partial(func, **config_dict)
+
+        return full_func
 
     def _get_config(self, section_path_str: str) -> FunctionConfig:
         return self.config.get(section_path_str)

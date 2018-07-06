@@ -80,8 +80,10 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
 
     """
     # Handle functions, other things with builtin names
-    if hasattr(value, '__name__'):
+    try:
         return value.__name__
+    except (AttributeError, KeyError):
+        pass
 
     # Handle builtins
     if _is_builtin(value):

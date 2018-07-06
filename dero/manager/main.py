@@ -25,6 +25,25 @@ class PipelineManager:
 
         self._load()
 
+    def __getattr__(self, item):
+        pm_attrs = [
+            'pipeline_dict_path',
+            'data_dict_path',
+            'basepath',
+            'sources_basepath',
+            'name',
+            'register',
+            'config',
+            'sources',
+            'runner'
+        ]
+
+        if item in pm_attrs:
+            return getattr(self, item)
+
+        # Must be getting function
+        return getattr(self.runner, item)
+
     def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
         """
         Use to run registered pipelines/functions/sections. Pass a single section path or a list
@@ -46,6 +65,15 @@ class PipelineManager:
 
         """
         return self.runner.run(section_path_str_or_list)
+
+    # TODO: multiple section path strs
+    def get(self, section_path_str: str):
+        section_path = SectionPath(section_path_str)
+
+        if section_path[0] == 'sources':
+            return self.sources.get(section_path_str)
+        else:
+            return self.runner.get(section_path_str)
 
     def reload(self) -> None:
         """

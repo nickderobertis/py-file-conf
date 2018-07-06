@@ -22,18 +22,18 @@ class DataSource:
     ]
 
     def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
-                 name: str =None, type: str =None, tags: List[str]=None,
+                 name: str =None, data_type: str =None, tags: List[str]=None,
                  loader_func: Callable =None, **loader_func_kwargs):
         self._check_inputs(location, df)
         self.location = location
         self.name = name
-        self.type = DataType(type)
+        self.data_type = data_type
         self.tags = tags # TODO: better handling for tags
         self.loader_func = loader_func
         self.pipeline = pipeline
         self.loader_func_kwargs = loader_func_kwargs
         self._df = df
-        self.name_type = f'{name} {self.type}'
+        self.name_type = f'{name} {self.data_type}'
 
     def apply_config(self, config) -> None:
         from dero.manager.data.models.config import DataConfig
@@ -49,6 +49,14 @@ class DataSource:
         if self._df is None:
             self._df = self._load()
         return self._df
+
+    @property
+    def data_type(self):
+        return self._type
+
+    @data_type.setter
+    def data_type(self, dtype):
+        self._type = DataType(dtype)
 
     @df.setter
     def df(self, df):
@@ -101,4 +109,4 @@ class DataSource:
             self.data_loader = partial(data_loader, self.location, **loader_func_kwargs)
 
     def __repr__(self):
-        return f'<DataSource(name={self.name}, type={self.type.name})>'
+        return f'<DataSource(name={self.name}, type={self.data_type.name})>'
