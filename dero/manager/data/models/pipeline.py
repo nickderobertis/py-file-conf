@@ -1,6 +1,7 @@
 from functools import partial
 from typing import Union, Sequence, List
 import datetime
+from copy import deepcopy
 
 from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.data.models.source import DataSource
@@ -14,13 +15,14 @@ DataMerges = List[DataMerge]
 
 class DataPipeline(Pipeline):
 
-    def __init__(self, data_sources: DataSourcesOrPipelines, merge_options_list: MergeOptionsList,
-                 outpath=None, post_merge_cleanup_func=None, **cleanup_kwargs):
+    def __init__(self, data_sources: DataSourcesOrPipelines=None, merge_options_list: MergeOptionsList=None,
+                 outpath=None, post_merge_cleanup_func=None, name: str=None, **cleanup_kwargs):
         self.data_sources = data_sources
         self.merge_options_list = merge_options_list
         self._merge_index = 0
         self._set_cleanup_func(post_merge_cleanup_func, **cleanup_kwargs)
         self.outpath = outpath
+        self.name = name
 
     def execute(self):
         while True:
@@ -142,6 +144,9 @@ class DataPipeline(Pipeline):
                 most_recent_index = i
 
         return self.data_sources[most_recent_index]
+
+    def copy(self):
+        return deepcopy(self)
 
 
 def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOrPipeline,
