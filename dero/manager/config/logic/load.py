@@ -44,7 +44,15 @@ def _split_assignment_line_into_variable_name_and_assignment(line: str) -> TwoTu
     if '=' not in line:
         return None, None
 
-    variable, value = tuple(item.strip() for item in line.split('='))
+    # Split into two parts by the first equals (handle multiple equals). Treating further equals as string
+    # TODO: handle multiple assignments such as this = that = 5
+    split_line = line.split('=')
+    if len(split_line) > 2:
+        parts = split_line[0], '='.join(split_line[1:])
+    else:
+        parts = split_line
+
+    variable, value = tuple(item.strip() for item in parts)
     return variable, value
 
 def _is_whitespace_line(line: str) -> bool:
