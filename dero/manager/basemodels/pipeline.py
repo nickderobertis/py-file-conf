@@ -1,7 +1,7 @@
 class Pipeline:
 
     def __init__(self):
-        pass
+        raise NotImplementedError("don't call Pipeline base class methods directly")
 
     def execute(self):
-        pass
+        raise NotImplementedError("don't call Pipeline base class methods directly")
