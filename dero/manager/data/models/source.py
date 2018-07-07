@@ -18,12 +18,17 @@ class DataSource:
         'location',
         'loader_func',
         'pipeline',
-        'tags'
+        'tags',
+        'loader_func_kwargs'
     ]
 
     def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
                  name: str =None, data_type: str =None, tags: List[str]=None,
-                 loader_func: Callable =None, **loader_func_kwargs):
+                 loader_func: Callable =None, loader_func_kwargs: dict=None):
+
+        if loader_func_kwargs is None:
+            loader_func_kwargs = {}
+
         self._check_inputs(location, df)
         self.location = location
         self.name = name
