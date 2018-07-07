@@ -9,6 +9,7 @@ from dero.manager.runner.models.runner import Runner, StrOrListOfStrs, ResultOrR
 from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepaths
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
+from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
 
 class PipelineManager:
     """
@@ -27,7 +28,8 @@ class PipelineManager:
 
         if item in ('runner', 'sources'):
             # must not be defined yet
-            raise ValueError('call PipelineManager.load() before accessing functions or data sources')
+            raise PipelineManagerNotLoadedException('call PipelineManager.load() before accessing '
+                                                    'functions or data sources')
 
         # Must be getting function
         return getattr(self.runner, item)

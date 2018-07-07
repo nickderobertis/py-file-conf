@@ -1,0 +1,3 @@
+
+class ManagerException(Exception):
+    pass

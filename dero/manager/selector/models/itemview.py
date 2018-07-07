@@ -2,6 +2,8 @@
 from dero.mixins.repr import ReprMixin
 from dero.mixins.attrequals import EqOnAttrsMixin
 from dero.manager.selector.models.selector import Selector
+from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
+
 
 class ItemView(ReprMixin, EqOnAttrsMixin):
     """
@@ -24,8 +26,20 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
 
         # Not an item.
         # Must be either an attribute of an item, or a typo. Actually look up the item now
-        actual_item = self.selector._get_real_item(self.section_path_str)
+
+        try:
+            actual_item = self.selector._get_real_item(self.section_path_str)
+        except PipelineManagerNotLoadedException:
+            # Dealing with typos is difficult because if this is a typo and we are reaching here,
+            # if PipelineManager.load() has not been run yet, we can't know the attributes of the items,
+            # so there is no certain way to check whether this is an item attribute or a typo
+            # TODO: check if manager is loaded, if so, then do a proper check. otherwise return a general error
+            # TODO: saying that it could be either manager not being loaded or a typo and display part of the path not found
+            raise PipelineManagerNotLoadedException
+
+
         return getattr(actual_item, item)
+
 
     def __call__(self, *args, **kwargs):
         # When calling, assume user always wants the real item
