@@ -33,8 +33,8 @@ def modules_and_items_as_imports_lines(module_strs: List[str], config_dict: dict
 
         module_and_module_name_or_none = get_module_and_name_imported_from(value, module_strs)
         if module_and_module_name_or_none is None:
-            warnings.warn(f'could not find import module for {value}\n will not generate import statement. '
-                          f'likely, the configuration file will need to be manually updated.')
+            # warnings.warn(f'could not find import module for {value}\n will not generate import statement. '
+            #               f'likely, the configuration file will need to be manually updated.')
             continue
 
         module, module_name = module_and_module_name_or_none
@@ -79,6 +79,16 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
     Returns:
 
     """
+    from dero.manager.selector.models.selector import Selector
+    from dero.manager.selector.models.itemview import ItemView
+    if isinstance(value, Selector):
+        # accessing porperties of selector object will cause issues. Only need to return Selector()
+        return 'Selector()'
+
+    if isinstance(value, ItemView):
+        # accessing properties of ItemView object will also cause issues. need to return s. and section path
+        return f's.{value.section_path_str}'
+
     # Handle functions, other things with builtin names
     try:
         return value.__name__
@@ -93,8 +103,8 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
     if module_strs is not None:
         module_and_module_name_or_none = get_module_and_name_imported_from(value, module_strs)
         if module_and_module_name_or_none is None:
-            warnings.warn(f'could not find import module for {value}\n will generate assignment statement. '
-                          f'likely, the configuration file will need to be manually updated.')
+            # warnings.warn(f'could not find import module for {value}\n will generate assignment statement. '
+            #               f'likely, the configuration file will need to be manually updated.')
             return None
 
         module, module_name = module_and_module_name_or_none
@@ -102,8 +112,8 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
     else:
         variable_name = value
 
-    warnings.warn(f'could not find __name__ of type, and type was not builtin for {value} of type {type(value)}.'
-                  f'guessed {variable_name} as value, but may not execute correctly')
+    # warnings.warn(f'could not find __name__ of type, and type was not builtin for {value} of type {type(value)}.'
+    #               f'guessed {variable_name} as value, but may not execute correctly')
 
     return variable_name
 

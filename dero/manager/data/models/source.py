@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class DataSource:
     _scaffold_items = [
         'name',
-        'type',
+        'data_type',
         'location',
         'loader_func',
         'pipeline',
@@ -65,7 +65,8 @@ class DataSource:
     @property
     def last_modified(self):
         if self.location is None:
-            raise ValueError('no filepath to check for modified time')
+            warnings.warn('No location. Setting last modified time as a long time ago, so will trigger pipeline instead')
+            return datetime.datetime(1899, 1, 1)
 
         return datetime.datetime.fromtimestamp(os.path.getmtime(self.location))
 
@@ -85,6 +86,8 @@ class DataSource:
 
         if pipeline is not None:
             # if a source in the pipeline to create this data source was modified more recently than this data source
+            # note: if there is no location, will always enter the next block, as last modified time will set
+            # to a long time ago
             if pipeline.last_modified > self.last_modified:
                 # a prior source used to construct this data source has changed. need to re run pipeline
                 recent_source = pipeline.source_last_modified
@@ -101,6 +104,11 @@ class DataSource:
                 self.data_loader = run_pipeline_get_result
                 return
             # otherwise, don't need to worry about pipeline, continue handling
+
+        if self.location is None:
+            # no location or pipeline, so accessing df will return empty dataframe
+            self.data_loader = pd.DataFrame
+            return
 
         if data_loader is None:
             # TODO: determine filetype and use proper loader

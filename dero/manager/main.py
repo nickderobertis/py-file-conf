@@ -6,8 +6,7 @@ from dero.manager.config.models.manager import ConfigManager
 from dero.manager.pipelines.models.registrar import PipelineRegistrar
 from dero.manager.data.models.registrar import DataRegistrar
 from dero.manager.runner.models.runner import Runner, StrOrListOfStrs, ResultOrResults
-from dero.manager.pipelines.logic.load import pipeline_dict_from_file
-from dero.manager.data.logic.load import data_dict_from_file
+from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepaths
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
 
@@ -23,23 +22,12 @@ class PipelineManager:
         self.sources_basepath = os.path.join(basepath, 'sources')
         self.name = name
 
-        self._load()
 
     def __getattr__(self, item):
-        pm_attrs = [
-            'pipeline_dict_path',
-            'data_dict_path',
-            'basepath',
-            'sources_basepath',
-            'name',
-            'register',
-            'config',
-            'sources',
-            'runner'
-        ]
 
-        if item in pm_attrs:
-            return getattr(self, item)
+        if item in ('runner', 'sources'):
+            # must not be defined yet
+            raise ValueError('call PipelineManager.load() before accessing functions or data sources')
 
         # Must be getting function
         return getattr(self.runner, item)
@@ -87,9 +75,9 @@ class PipelineManager:
 
         """
         self._wipe_loaded_modules()
-        self._load()
+        self.load()
 
-    def _load(self) -> None:
+    def load(self) -> None:
         """
         Wrapper to track imported modules so that can reimport them upon reloading
         """
@@ -106,9 +94,9 @@ class PipelineManager:
 
         """
         # Load dynamically instead of passing dict to ensure modules are loaded into sys now
-        pipeline_section_path = SectionPath.from_filepath(os.getcwd(), self.pipeline_dict_path)
-        pipeline_dict = pipeline_dict_from_file(self.pipeline_dict_path, module_name=pipeline_section_path.path_str)
-        data_dict = data_dict_from_file(self.data_dict_path)
+        pipeline_dict, data_dict = get_pipeline_dict_and_data_dict_from_filepaths(
+            self.pipeline_dict_path, self.data_dict_path
+        )
 
         imported_modules = self._import_tracker.imported_modules
         imported_modules.reverse() # start with pipeline dict file first, then look at others for imports

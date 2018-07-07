@@ -19,6 +19,9 @@ class SectionPath(ReprMixin):
     def __getitem__(self, item):
         return self.sections[item]
 
+    def __len__(self):
+        return len(self.sections)
+
     @classmethod
     def from_filepath(cls, basepath: str, filepath: str):
         relative_path = os.path.relpath(filepath, start=basepath)

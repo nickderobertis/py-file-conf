@@ -22,8 +22,8 @@ class Runner(ReprMixin):
 
 
     def __init__(self, config: ConfigManager, pipelines: PipelineRegistrar):
-        self.config = config
-        self.pipelines = pipelines
+        self._config = config
+        self._pipelines = pipelines
         self._full_getattr = ''
 
     def __getattr__(self, item):
@@ -32,7 +32,7 @@ class Runner(ReprMixin):
         self._full_getattr += item
         try:
             func_or_collection = self._get_func_or_collection(self._full_getattr)
-        except AttributeError as e:
+        except KeyError as e:
             self._full_getattr = '' # didn't find an item, must be incorrect path. reset total path
             raise e
 
@@ -152,7 +152,7 @@ class Runner(ReprMixin):
         return full_func
 
     def _get_config(self, section_path_str: str) -> FunctionConfig:
-        return self.config.get(section_path_str)
+        return self._config.get(section_path_str)
 
     def _get_func_or_collection(self, section_path_str: str) -> PipelineOrFunctionOrCollection:
-        return self.pipelines.get(section_path_str)
+        return self._pipelines.get(section_path_str)
