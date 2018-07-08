@@ -85,7 +85,14 @@ class PipelineManager:
         """
         self._import_tracker = ImportTracker()
 
-        self._load_pipeline_config_and_runner()
+        try:
+            self._load_pipeline_config_and_runner()
+        except Exception as e:
+            # Reset loaded modules from import, completely canceling load so it can be tried again
+            self._loaded_modules = self._import_tracker.imported_modules
+            self._wipe_loaded_modules()
+            self._loaded_modules = [] # modules have been wiped, must be sure they won't be wiped again
+            raise e
 
         self._loaded_modules = self._import_tracker.imported_modules
 
