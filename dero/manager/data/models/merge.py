@@ -1,3 +1,5 @@
+from typing import Callable
+
 from dero.manager.data.models.source import DataSource
 from dero.manager.data.logic.merge import left_merge_df
 from dero.manager.data.logic.display import display_df_dict
@@ -37,17 +39,27 @@ class DataMerge:
         Merged obs: {len(self.result.df)}
         """)
 
-    def summary(self, *summary_args, summary_method='head', **summary_method_kwargs):
+    def summary(self, *summary_args, summary_method: str=None, summary_function: Callable=None,
+                             summary_attr: str=None, **summary_method_kwargs):
 
         df_disp_dict = _disp_df_dict_from_merge(
             self,
             *summary_args,
             summary_method=summary_method,
+            summary_function=summary_function,
+            summary_attr=summary_attr,
             **summary_method_kwargs
         )
 
+        if summary_attr is not None:
+            summary_disp = f'df.{summary_attr}'
+        if summary_function is not None:
+            summary_disp = f'{summary_function.__name__}(df, *{summary_args}, **{summary_method_kwargs})'
+        if summary_method is not None:
+            summary_disp = f'df.{summary_method}(*{summary_args}, **{summary_method_kwargs})'
+
         display_df_dict({
-            f'df.{summary_method}(**{summary_method_kwargs}) called on: ' + self.merge_str: df_disp_dict
+            f'{summary_disp} called on: ' + self.merge_str: df_disp_dict
         })
 
 
@@ -86,12 +98,38 @@ class DataMerge:
 class LastMergeFinishedException(Exception):
     pass
 
+def _disp_df_dict_from_merge(merge, *summary_args, summary_method: str=None, summary_function: Callable=None,
+                             summary_attr: str=None, **summary_method_kwargs):
 
-def _disp_df_dict_from_merge(merge, *summary_args, summary_method='head', **summary_method_kwargs):
+    if summary_method is None and summary_attr is None and summary_function is None:
+        summary_method = 'head'
+
     # keys are names of dataframes, values are dataframes themselves
     df_dict = _df_dict_from_merge(merge)
 
-    return {name: getattr(df, summary_method)(*summary_args, **summary_method_kwargs) for name, df in df_dict.items()}
+    return {
+        name: _get_summary_of_df(
+            df,
+            *summary_args,
+            summary_method=summary_method,
+            summary_function=summary_function,
+            summary_attr=summary_attr,
+            **summary_method_kwargs
+        ) for name, df in df_dict.items()
+    }
+
+def _get_summary_of_df(df, *summary_args, summary_method: str=None, summary_function: Callable=None,
+                             summary_attr: str=None, **summary_method_kwargs):
+    try:
+        if summary_method is not None:
+            return getattr(df, summary_method)(*summary_args, **summary_method_kwargs)
+        if summary_function is not None:
+            return summary_function(df, *summary_args, **summary_method_kwargs)
+        if summary_attr is not None:
+            return getattr(df, summary_attr)
+    except Exception as e:
+        # keep going, but save exception as result
+        return e
 
 
 def _df_dict_from_merge(merge):

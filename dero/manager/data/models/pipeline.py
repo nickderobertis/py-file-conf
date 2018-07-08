@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Union, Sequence, List
+from typing import Union, Sequence, List, Callable
 import datetime
 from copy import deepcopy
 
@@ -51,11 +51,14 @@ class DataPipeline(Pipeline):
         elif self.outpath:
             self._output(self.outpath)
 
-    def summary(self, *summary_args, summary_method='head', **summary_method_kwargs):
+    def summary(self, *summary_args, summary_method: str=None, summary_function: Callable=None,
+                             summary_attr: str=None, **summary_method_kwargs):
         for merge in self.merges:
             merge.summary(
                 *summary_args,
                 summary_method=summary_method,
+                summary_function=summary_function,
+                summary_attr=summary_attr,
                 **summary_method_kwargs
             )
 

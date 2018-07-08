@@ -11,10 +11,8 @@ def display_df_dict(df_dict):
         if isinstance(df_or_dict, dict):
             display(HTML(f'<h2>{df_name}</h2>'))
             display_df_dict(df_or_dict)
-        elif isinstance(df_or_dict, pd.DataFrame):
-            _display_df(df_or_dict, df_name)
         else:
-            raise ValueError('Must pass a dict containing dataframes')
+            _display_df(df_or_dict, df_name)
 
 def _display_df(df, df_name):
     display(HTML(f'<h3>{df_name}</h3>'))
