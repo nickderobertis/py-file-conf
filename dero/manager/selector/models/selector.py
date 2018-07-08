@@ -21,23 +21,11 @@ class Selector:
             warnings.warn('check for if non-str object in Selector will always return False')
             return False
 
-        # Handle accessing correct collection object.
-        section_path = SectionPath(item)
-        manager_name = section_path[0]
-        if section_path[1] == 'sources':
-            # got a data path
-            if len(section_path) == 2:
-                # got only the root data path, e.g. project.sources
-                # return the collection object itself
-                return self._structure[manager_name]['data']
-            collection_name = 'data'
-            section_path_begin_index = 2
-        else:
-            collection_name = 'funcs'
-            section_path_begin_index = 1
+        collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(item)
 
-        root_section_path  = SectionPath('.'.join(section_path[section_path_begin_index:]))
-        collection_obj = self._structure[manager_name][collection_name]
+        if relative_section_path is None:
+            # got only the root data path, e.g. project.sources. Return the collection object itself
+            return collection_obj
 
         # Only should return True if we find an ItemView
         # Three possible cases here.
@@ -45,7 +33,7 @@ class Selector:
         # Accessing an existing item, should be a collection, source, or function instance, return True
         # Accessing an existing attribute of an existing item, should not be an ItemView instance, return False
         try:
-            result = _get_from_nested_obj_by_section_path(collection_obj, root_section_path)
+            result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
         except KeyError:
             return False
 
@@ -64,6 +52,41 @@ class Selector:
     def __call__(self, item):
         from dero.manager.selector.models.itemview import ItemView
         return ItemView(item, self)
+
+    def _get_collection_obj_and_relative_section_path_from_structure(self, section_path_str: str):
+        # Handle accessing correct collection object.
+        section_path = SectionPath(section_path_str)
+        manager_name = section_path[0]
+        if section_path[1] == 'sources':
+            # got a data path
+            if len(section_path) == 2:
+                # got only the root data path, e.g. project.sources
+                # return the collection object itself
+                return self._structure[manager_name]['data'], None
+            collection_name = 'data'
+            section_path_begin_index = 2
+        else:
+            collection_name = 'funcs'
+            section_path_begin_index = 1
+
+        relative_section_path = SectionPath('.'.join(section_path[section_path_begin_index:]))
+        collection_obj = self._structure[manager_name][collection_name]
+
+        return collection_obj, relative_section_path
+
+    def get_type(self, section_path_str: str):
+        collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(
+            section_path_str
+        )
+
+        if relative_section_path is None:
+            # got only the root data path, e.g. project.sources. Return the collection object itself
+            return collection_obj
+
+        # TODO: nicer error than KeyError for typo
+        result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
+
+        return type(result)
 
     def _get_real_item(self, item):
         section_path = SectionPath(item)

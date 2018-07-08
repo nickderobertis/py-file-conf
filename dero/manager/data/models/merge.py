@@ -52,7 +52,7 @@ class DataMerge:
 
 
     def _set_result(self, outpath=None):
-        self.result = DataSource(outpath, name=self.merged_name, type=self.merged_type)
+        self.result = DataSource(outpath, name=self.merged_name, data_type=self.merged_type)
 
     @property
     def merged_name(self):
@@ -63,7 +63,7 @@ class DataMerge:
     @property
     def merged_type(self):
         if self._merged_type is None:
-            self._merged_type = self.data_sources[0].type + ' & ' + self.data_sources[1].type
+            self._merged_type = self.data_sources[0].data_type + ' & ' + self.data_sources[1].data_type
         return self._merged_type
 
     @property

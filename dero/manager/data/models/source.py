@@ -70,12 +70,13 @@ class DataSource:
     @property
     def last_modified(self):
         if self.location is None:
-            warnings.warn('No location. Setting last modified time as a long time ago, so will trigger pipeline instead')
+            # warnings.warn('No location. Setting last modified time as a long time ago, so will trigger pipeline instead')
             return datetime.datetime(1899, 1, 1)
 
         return datetime.datetime.fromtimestamp(os.path.getmtime(self.location))
 
     def _load(self):
+        self._touch_pipeline()
         if not hasattr(self, 'data_loader'):
             self._set_data_loader(data_loader=self.loader_func, pipeline=self.pipeline, **self.loader_func_kwargs)
         return self.data_loader()
@@ -89,6 +90,7 @@ class DataSource:
 
     def _set_data_loader(self, data_loader: Callable =None, pipeline: 'DataPipeline' =None, **loader_func_kwargs):
 
+        run_pipeline = False
         if pipeline is not None:
             # if a source in the pipeline to create this data source was modified more recently than this data source
             # note: if there is no location, will always enter the next block, as last modified time will set
@@ -102,24 +104,43 @@ class DataSource:
 
                 to get new changes, will load this data source through pipeline rather than from file.''')
 
-                def run_pipeline_get_result():
-                    pipeline.execute()
-                    return pipeline.df
-
-                self.data_loader = run_pipeline_get_result
-                return
+                run_pipeline = True
             # otherwise, don't need to worry about pipeline, continue handling
 
         if self.location is None:
             # no location or pipeline, so accessing df will return empty dataframe
-            self.data_loader = pd.DataFrame
-            return
+            loader = pd.DataFrame
 
         if data_loader is None:
             # TODO: determine filetype and use proper loader
-            self.data_loader = partial(pd.read_csv, self.location, **loader_func_kwargs)
+            loader = partial(pd.read_csv, self.location, **loader_func_kwargs)
         else:
-            self.data_loader = partial(data_loader, self.location, **loader_func_kwargs)
+            loader = partial(data_loader, self.location, **loader_func_kwargs)
+
+        # If necessary, run pipeline before loading
+        # Still necessary to use loader as may be transforming the data
+        if run_pipeline:
+            def run_pipeline_then_load(pipeline):
+                pipeline.execute() # outputs to file
+                loader()
+            self.data_loader = partial(run_pipeline_then_load, self.pipeline)
+        else:
+            self.data_loader = loader
+
+
+    def _touch_pipeline(self):
+        """
+        Pipeline may be passed using dero.manager.Selector, in which case it is
+        a dero.manager.selector.models.itemview.ItemView object. _set_data_loader accesses a property of
+        the pipeline before it's configured, and so won't work correctly. By accessing the .item proprty of the ItemView,
+        we get the original item back
+        Returns:
+
+        """
+        from dero.manager.selector.models.itemview import ItemView
+
+        if isinstance(self.pipeline, ItemView):
+            self.pipeline = self.pipeline.item
 
     def __repr__(self):
         return f'<DataSource(name={self.name}, type={self.data_type.name})>'

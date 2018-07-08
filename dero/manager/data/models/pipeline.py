@@ -6,6 +6,7 @@ from copy import deepcopy
 from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.data.models.source import DataSource
 from dero.manager.data.models.merge import DataMerge, MergeOptions, LastMergeFinishedException
+from dero.manager.selector.models.itemview import ItemView
 
 DataSourceOrPipeline = Union[DataSource, 'DataPipeline']
 DataSourcesOrPipelines = Sequence[DataSourceOrPipeline]
@@ -34,6 +35,8 @@ class DataPipeline(Pipeline):
         if self.has_post_merge_cleanup_func:
             self.df = self.post_merge_cleanup_func(self.df)
         self.output()
+
+        return self.df
 
     def next_merge(self):
         # On first merge, set df
@@ -109,6 +112,7 @@ class DataPipeline(Pipeline):
             self._set_merges()
 
     def _set_merges(self):
+        self._touch_data_sources()
         self._merges = self._create_merges(self.data_sources, self.merge_options_list)
 
     def _create_merges(self, data_sources: DataSourcesOrPipelines, merge_options_list: MergeOptionsList):
@@ -147,6 +151,23 @@ class DataPipeline(Pipeline):
 
     def copy(self):
         return deepcopy(self)
+
+    def _touch_data_sources(self):
+        """
+        Data sources may be passed using dero.manager.Selector, in which case they
+        are dero.manager.selector.models.itemview.ItemView objects. _get_merges uses isinstance, which will
+        return ItemView, and so won't work correctly. By accessing the .item proprty of the ItemView,
+        we get the original item back
+        Returns:
+
+        """
+        real_data_sources = []
+        for data_source_or_view in self.data_sources:
+            if isinstance(data_source_or_view, ItemView):
+                real_data_sources.append(data_source_or_view.item)
+            else:
+                real_data_sources.append(data_source_or_view)
+        self.data_sources = real_data_sources
 
 
 def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOrPipeline,

@@ -28,7 +28,7 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
         # Must be either an attribute of an item, or a typo. Actually look up the item now
 
         try:
-            actual_item = self.selector._get_real_item(self.section_path_str)
+            actual_item = self.item
         except PipelineManagerNotLoadedException:
             # Dealing with typos is difficult because if this is a typo and we are reaching here,
             # if PipelineManager.load() has not been run yet, we can't know the attributes of the items,
@@ -46,3 +46,10 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
         actual_item = self.selector._get_real_item(self.section_path_str)
         return actual_item(*args, **kwargs)
 
+    @property
+    def type(self):
+        return self.selector.get_type(self.section_path_str)
+
+    @property
+    def item(self):
+        return self.selector._get_real_item(self.section_path_str)
