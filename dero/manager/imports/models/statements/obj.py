@@ -26,7 +26,11 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
     def __str__(self):
         objs = self._renamed
         objs_str = ', '.join(objs)
-        return f'from {self.module} import {objs_str} {self.comment if self.comment is not None else ""}'
+        import_str = f'from {self.module} import {objs_str}'
+        if self.comment is not None:
+            import_str += f' {self.comment}'
+
+        return import_str
 
     @classmethod
     def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None):

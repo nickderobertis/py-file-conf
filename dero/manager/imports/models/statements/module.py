@@ -24,7 +24,11 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
     def __str__(self):
         modules = self._renamed
         modules_str = ', '.join(modules)
-        return f'import {modules_str} {self.comment if self.comment is not None else ""}'
+        import_str = f'import {modules_str}'
+        if self.comment is not None:
+            import_str += f' {self.comment}'
+
+        return import_str
 
     @classmethod
     def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None):
