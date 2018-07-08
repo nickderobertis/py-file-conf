@@ -18,8 +18,7 @@ class DataSource:
         'location',
         'loader_func',
         'pipeline',
-        'tags',
-        'loader_func_kwargs'
+        'tags'
     ]
 
     def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,

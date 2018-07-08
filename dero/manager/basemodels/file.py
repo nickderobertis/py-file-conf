@@ -1,4 +1,5 @@
 import os
+from functools import partial
 from typing import TYPE_CHECKING, List, Tuple
 if TYPE_CHECKING:
     from dero.manager.basemodels.config import ConfigBase
@@ -12,13 +13,21 @@ from dero.manager.config.logic.write import (
     import_lines_as_str,
     assignment_lines_as_str
 )
-from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 
 class ConfigFileBase:
 
     ##### Scaffolding functions or attributes. Need to override when subclassing  ####
+
+    # lines to always import. pass import objects
+    always_imports = []
+
+    # assignment lines to always include at beginning. pass strs
+    always_assigns_begin = []
+
+    # assignment lines to always include at end. pass strs
+    always_assigns_end = []
 
     def load(self) -> 'ConfigBase':
         """
@@ -120,13 +129,10 @@ class ConfigFileBase:
         self._set_assigned_variables()
 
     def _add_new_lines(self, new_imports_lines: List[str], new_variable_assignment_lines: List[str]) -> None:
-        always_imports = [
-            ObjectImportStatement.from_str('from dero.manager import Selector')
-        ]
 
-        always_assign_strs = [
-            's = Selector()'
-        ]
+        always_imports = self.always_imports.copy()
+        always_assigns_begin = self.always_assigns_begin.copy()
+        always_assigns_end = self.always_assigns_end.copy()
 
         # For import statements, just check if they already exist exactly as generated
         [_append_if_not_in_list(self.imports, line) for line in new_imports_lines]
@@ -138,25 +144,33 @@ class ConfigFileBase:
                 self.imports.insert(0, import_obj)
 
         # Add always assigns
-        always_assign_strs.reverse() # are getting added to beginning, so reverse order first to maintain order
-        for line in always_assign_strs:
-            variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
-            if variable_name is None:
-                continue  # whitespace line
-            if variable_name not in self.assigned_variables:
-                self.assigns.insert(0, line)
-                self._set_assigned_variables()
+        always_assigns_begin.reverse() # are getting added to beginning, so reverse order first to maintain order
+        self._add_assignment_lines_if_not_in_assigned_variables(always_assigns_begin, beginning=True)
 
         # For assignment statements, check if the variable name is already defined. Then don't add
         # the new line. Different handling as value may not be set correctly by code.
-        for line in new_variable_assignment_lines:
-            variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
-            if variable_name is None:
-                continue  # whitespace line
-            if variable_name not in self.assigned_variables:
-                self.assigns.append(line)
-                # need to trigger set so that assigned variables will update from self.assigns
-                self._set_assigned_variables()
+        self._add_assignment_lines_if_not_in_assigned_variables(new_variable_assignment_lines)
+
+        # Finally, add always assigns end
+        self._add_assignment_lines_if_not_in_assigned_variables(always_assigns_end)
+
+    def _add_assignment_lines_if_not_in_assigned_variables(self, lines: List[str], beginning: bool=False) -> None:
+        [self._add_assignment_line_if_not_in_assigned_variables(line, beginning=beginning) for line in lines]
+
+    def _add_assignment_line_if_not_in_assigned_variables(self, line: str, beginning: bool=False) -> None:
+        if beginning:
+            add_func = partial(self.assigns.insert, 0)
+        else:
+            add_func = self.assigns.append
+
+        variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
+        if variable_name is None:
+            return  # whitespace line
+        if variable_name not in self.assigned_variables:
+            add_func(line)
+            # need to trigger set so that assigned variables will update from self.assigns
+            self._set_assigned_variables()
+
 
     def _get_loaded_modules(self, config: 'ConfigBase') -> List[str]:
         if config._loaded_modules is not None:

@@ -15,11 +15,22 @@ from dero.manager.config.logic.write import (
     modules_and_items_as_imports_lines,
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
+from dero.manager.imports.models.statements.obj import ObjectImportStatement
+
 
 class FunctionConfigFile(ConfigFileBase):
     """
     Represents config file on filesystem. Handles low-level functions for writing and reading config file
     """
+
+    # lines to always import. pass import objects
+    always_imports = [ObjectImportStatement.from_str('from dero.manager import Selector, MergeOptions')]
+
+    # assignment lines to always include at beginning. pass strs
+    always_assigns_begin = ['s = Selector()']
+
+    # assignment lines to always include at end. pass strs
+    always_assigns_end = []
 
     def load(self) -> 'FunctionConfig':
         from dero.manager.config.models.config import FunctionConfig
