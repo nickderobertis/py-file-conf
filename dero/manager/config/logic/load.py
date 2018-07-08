@@ -20,7 +20,7 @@ def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True)
     for i, line in enumerate(lines):
 
         if strip_lines:
-            line = line.strip()
+            line = line.strip('\n')
 
         # Handle import section and add whitespace below import section
         if in_import_section:
@@ -76,5 +76,4 @@ def _strip_whitespace_lines_from_end_of_lines(lines: List[str]) -> List[str]:
     output_lines.reverse() # back to first first
 
     return output_lines
-
 
