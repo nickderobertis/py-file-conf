@@ -73,6 +73,21 @@ class ImportStatementContainer(Container, ReprMixin):
         return False
 
     @property
+    def imported_names(self) -> List[str]:
+        imported_names = []
+        for imp_or_comment in self:
+            if isinstance(imp_or_comment, Comment):
+                continue # could not be imported from a comment
+            if isinstance(imp_or_comment, ModuleImportStatement):
+                imported_names += imp_or_comment.modules
+                imported_names += imp_or_comment.renames.new_names
+            elif isinstance(imp_or_comment, ObjectImportStatement):
+                imported_names += imp_or_comment.objs
+                imported_names += imp_or_comment.renames.new_names
+                imported_names.append(imp_or_comment.module)
+        return list(set(imported_names)) # remove duplicates
+
+    @property
     def modules(self):
         modules = []
         for item in self:

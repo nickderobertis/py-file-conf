@@ -121,6 +121,17 @@ class ConfigFileBase:
         self._assigned_variables = assigned_variables
 
     @property
+    def imported_variables(self):
+        if hasattr(self, '_imported_variables'):
+            return self._imported_variables
+
+        self._set_imported_variables()
+        return self._imported_variables
+
+    def _set_imported_variables(self):
+        self._imported_variables = self.imports.imported_names
+
+    @property
     def assigns(self):
         return self._assigns
 
@@ -128,6 +139,19 @@ class ConfigFileBase:
     def assigns(self, assigns: List[str]):
         self._assigns = assigns
         self._set_assigned_variables()
+
+    @property
+    def imports(self):
+        return self._imports
+
+    @imports.setter
+    def imports(self, imports: List[str]):
+        self._imports = imports
+        self._set_imported_variables()
+
+    @property
+    def all_variables(self):
+        return self.imported_variables + self.assigned_variables
 
     def _add_new_lines(self, new_imports_lines: List[AnyImportStatement], new_variable_assignment_lines: List[str]) -> None:
 
@@ -144,19 +168,19 @@ class ConfigFileBase:
 
         # Add always assigns
         always_assigns_begin.reverse() # are getting added to beginning, so reverse order first to maintain order
-        self._add_assignment_lines_if_not_in_assigned_variables(always_assigns_begin, beginning=True)
+        self._add_assignment_lines_if_not_in_variables(always_assigns_begin, beginning=True)
 
         # For assignment statements, check if the variable name is already defined. Then don't add
         # the new line. Different handling as value may not be set correctly by code.
-        self._add_assignment_lines_if_not_in_assigned_variables(new_variable_assignment_lines)
+        self._add_assignment_lines_if_not_in_variables(new_variable_assignment_lines)
 
         # Finally, add always assigns end
-        self._add_assignment_lines_if_not_in_assigned_variables(always_assigns_end)
+        self._add_assignment_lines_if_not_in_variables(always_assigns_end)
 
-    def _add_assignment_lines_if_not_in_assigned_variables(self, lines: List[str], beginning: bool=False) -> None:
-        [self._add_assignment_line_if_not_in_assigned_variables(line, beginning=beginning) for line in lines]
+    def _add_assignment_lines_if_not_in_variables(self, lines: List[str], beginning: bool=False) -> None:
+        [self._add_assignment_line_if_not_in_variables(line, beginning=beginning) for line in lines]
 
-    def _add_assignment_line_if_not_in_assigned_variables(self, line: str, beginning: bool=False) -> None:
+    def _add_assignment_line_if_not_in_variables(self, line: str, beginning: bool=False) -> None:
         if beginning:
             add_func = partial(self.assigns.insert, 0)
         else:
@@ -165,7 +189,7 @@ class ConfigFileBase:
         variable_name, value_repr = _split_assignment_line_into_variable_name_and_assignment(line)
         if variable_name is None:
             return  # whitespace line
-        if variable_name not in self.assigned_variables:
+        if variable_name not in self.all_variables:
             add_func(line)
             # need to trigger set so that assigned variables will update from self.assigns
             self._set_assigned_variables()
@@ -186,6 +210,7 @@ class ConfigFileBase:
             else:
                 add_func = self.imports.append
             add_func(import_obj)
+            self._set_imported_variables()
 
     def _get_loaded_modules(self, config: 'ConfigBase') -> List[str]:
         if config._loaded_modules is not None:
