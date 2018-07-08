@@ -4,7 +4,7 @@ from dero.manager.basemodels.container import Container
 from dero.mixins.repr import ReprMixin
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.imports.models.statements.module import ModuleImportStatement
-from dero.manager.imports.models.statements.interfaces import AnyImportStatement
+from dero.manager.imports.models.statements.interfaces import AnyImportStatement, Comment
 
 class ImportStatementContainer(Container, ReprMixin):
     repr_cols = ['items']
@@ -43,6 +43,33 @@ class ImportStatementContainer(Container, ReprMixin):
                     return True
 
 
+        return False
+
+    def obj_name_is_imported(self, obj_name: str) -> bool:
+
+        obj_name_parts = obj_name.split('.')
+        if len(obj_name_parts) != 1:
+            obj_module = '.'.join(obj_name_parts[:-1])
+            obj_name = obj_name_parts[-1]
+        else:
+            # no . found, meaning object was imported by object import statement, no module name
+            obj_module = None
+
+        for imp_or_comment in self:
+            if isinstance(imp_or_comment, Comment):
+                continue # could not be imported from a comment
+            if isinstance(imp_or_comment, ModuleImportStatement):
+                if obj_module is None:
+                    continue # object was imported by object import statement
+
+                # object was imported by module import statement
+                if (obj_module in imp_or_comment.modules) or (obj_module in imp_or_comment.renames.new_names):
+                    return True # found matching module
+            elif isinstance(imp_or_comment, ObjectImportStatement):
+                if (obj_name in imp_or_comment.objs) or (obj_name in imp_or_comment.renames.new_names):
+                    return True
+
+        # failed all checks, obj not imported
         return False
 
     @property

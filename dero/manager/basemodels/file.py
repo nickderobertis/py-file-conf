@@ -14,6 +14,7 @@ from dero.manager.config.logic.write import (
     assignment_lines_as_str
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
+from dero.manager.imports.models.statements.interfaces import AnyImportStatement, ObjectImportStatement
 
 
 class ConfigFileBase:
@@ -128,20 +129,18 @@ class ConfigFileBase:
         self._assigns = assigns
         self._set_assigned_variables()
 
-    def _add_new_lines(self, new_imports_lines: List[str], new_variable_assignment_lines: List[str]) -> None:
+    def _add_new_lines(self, new_imports_lines: List[AnyImportStatement], new_variable_assignment_lines: List[str]) -> None:
 
         always_imports = self.always_imports.copy()
         always_assigns_begin = self.always_assigns_begin.copy()
         always_assigns_end = self.always_assigns_end.copy()
 
         # For import statements, just check if they already exist exactly as generated
-        [_append_if_not_in_list(self.imports, line) for line in new_imports_lines]
+        self._add_import_objs_if_not_in_imports(new_imports_lines)
 
         # Add always imports
         always_imports.reverse() # are getting added to beginning, so reverse order first to maintain order
-        for import_obj in always_imports:
-            if import_obj not in self.imports:
-                self.imports.insert(0, import_obj)
+        self._add_import_objs_if_not_in_imports(always_imports, beginning=True)
 
         # Add always assigns
         always_assigns_begin.reverse() # are getting added to beginning, so reverse order first to maintain order
@@ -171,6 +170,22 @@ class ConfigFileBase:
             # need to trigger set so that assigned variables will update from self.assigns
             self._set_assigned_variables()
 
+    def _add_import_objs_if_not_in_imports(self, import_objs: List[AnyImportStatement], beginning: bool=False) -> None:
+        [self._add_import_obj_if_not_in_imports(import_obj, beginning=beginning) for import_obj in import_objs]
+
+    def _add_import_obj_if_not_in_imports(self, import_obj: AnyImportStatement, beginning: bool=False) -> None:
+        if isinstance(import_obj, ObjectImportStatement):
+            imported_objs = import_obj.objs
+            already_imported = lambda: all([self.imports.obj_name_is_imported(imp_obj) for imp_obj in imported_objs])
+        else:
+            already_imported = lambda: import_obj in self.imports
+
+        if not already_imported():
+            if beginning:
+                add_func = partial(self.imports.insert, 0)
+            else:
+                add_func = self.imports.append
+            add_func(import_obj)
 
     def _get_loaded_modules(self, config: 'ConfigBase') -> List[str]:
         if config._loaded_modules is not None:

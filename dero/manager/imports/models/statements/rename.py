@@ -48,6 +48,14 @@ class RenameStatementCollection(ReprMixin):
             yield item
 
     @property
+    def new_names(self):
+        return [item.new_name for item in self]
+
+    @property
+    def orig_names(self):
+        return [item.item for item in self]
+
+    @property
     def item_map(self):
         return {rename_statement.item: rename_statement for rename_statement in self.items}
 
