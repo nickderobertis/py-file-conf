@@ -70,7 +70,7 @@ class DataSource:
     @property
     def last_modified(self):
         if self.location is None:
-            # warnings.warn('No location. Setting last modified time as a long time ago, so will trigger pipeline instead')
+            # No location. Setting last modified time as a long time ago, so will trigger pipeline instead
             return datetime.datetime(1899, 1, 1)
 
         return datetime.datetime.fromtimestamp(os.path.getmtime(self.location))
@@ -122,7 +122,7 @@ class DataSource:
         if run_pipeline:
             def run_pipeline_then_load(pipeline):
                 pipeline.execute() # outputs to file
-                loader()
+                return loader()
             self.data_loader = partial(run_pipeline_then_load, self.pipeline)
         else:
             self.data_loader = loader
