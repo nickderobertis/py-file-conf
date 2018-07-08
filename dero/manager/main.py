@@ -4,22 +4,53 @@ from copy import deepcopy
 
 from dero.manager.config.models.manager import ConfigManager
 from dero.manager.pipelines.models.registrar import PipelineRegistrar
+from dero.manager.data.models.registrar import DataRegistrar
 from dero.manager.runner.models.runner import Runner, StrOrListOfStrs, ResultOrResults
-from dero.manager.pipelines.logic.load import pipeline_dict_from_file
+from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepaths
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
+from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
 
 class PipelineManager:
     """
     Main class for managing flow-based programming and configuration.
     """
 
-    def __init__(self, pipeline_dict_path: str, basepath: str, name: str='project'):
+    def __init__(self, pipeline_dict_path: str, data_dict_path: str, basepath: str, name: str='project'):
         self.pipeline_dict_path = pipeline_dict_path
+        self.data_dict_path = data_dict_path
         self.basepath = basepath
+        self.sources_basepath = os.path.join(basepath, 'sources')
         self.name = name
 
-        self._load()
+
+    def __getattr__(self, item):
+
+        if item in ('runner', 'sources'):
+            # must not be defined yet
+            raise PipelineManagerNotLoadedException('call PipelineManager.load() before accessing '
+                                                    'functions or data sources')
+
+        # Must be getting function
+        return getattr(self.runner, item)
+
+    def __dir__(self):
+        exposed_methods = [
+            'run',
+            'get',
+            'load',
+            'reload'
+        ]
+        exposed_attrs = ['sources', 'name']
+        exposed = exposed_methods + exposed_attrs
+        if hasattr(self, 'register'):
+            skip_methods = [
+                'scaffold_config',
+                'basepath',
+            ]
+            register_attrs = [attr for attr in dir(self.register) if attr not in exposed + skip_methods]
+            exposed += register_attrs
+        return exposed
 
     def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
         """
@@ -43,6 +74,15 @@ class PipelineManager:
         """
         return self.runner.run(section_path_str_or_list)
 
+    # TODO: multiple section path strs
+    def get(self, section_path_str: str):
+        section_path = SectionPath(section_path_str)
+
+        if section_path[0] == 'sources':
+            return self.sources.get(section_path_str)
+        else:
+            return self.runner.get(section_path_str)
+
     def reload(self) -> None:
         """
         Useful for getting file system changes without having to start a new Python session. Also resets
@@ -55,15 +95,22 @@ class PipelineManager:
 
         """
         self._wipe_loaded_modules()
-        self._load()
+        self.load()
 
-    def _load(self) -> None:
+    def load(self) -> None:
         """
         Wrapper to track imported modules so that can reimport them upon reloading
         """
         self._import_tracker = ImportTracker()
 
-        self._load_pipeline_config_and_runner()
+        try:
+            self._load_pipeline_config_and_runner()
+        except Exception as e:
+            # Reset loaded modules from import, completely canceling load so it can be tried again
+            self._loaded_modules = self._import_tracker.imported_modules
+            self._wipe_loaded_modules()
+            self._loaded_modules = [] # modules have been wiped, must be sure they won't be wiped again
+            raise e
 
         self._loaded_modules = self._import_tracker.imported_modules
 
@@ -73,14 +120,15 @@ class PipelineManager:
         Returns:
 
         """
-        # Add module name to ensure module is loaded into sys
-        pipeline_section_path = SectionPath.from_filepath(os.getcwd(), self.pipeline_dict_path)
-        pipeline_dict = pipeline_dict_from_file(self.pipeline_dict_path, module_name=pipeline_section_path.path_str)
+        # Load dynamically instead of passing dict to ensure modules are loaded into sys now
+        pipeline_dict, data_dict = get_pipeline_dict_and_data_dict_from_filepaths(
+            self.pipeline_dict_path, self.data_dict_path
+        )
 
         imported_modules = self._import_tracker.imported_modules
         imported_modules.reverse() # start with pipeline dict file first, then look at others for imports
 
-        self.register = PipelineRegistrar.from_pipeline_dict(
+        self.register = PipelineRegistrar.from_dict(
             pipeline_dict,
             basepath=self.basepath,
             name=self.name,
@@ -91,8 +139,15 @@ class PipelineManager:
         self.config = ConfigManager(self.basepath)
         self.config.load()
 
+        self.sources = DataRegistrar.from_dict(
+            data_dict,
+            basepath=self.sources_basepath,
+            name=self.name,
+            loaded_modules=imported_modules
+        )
+        self.sources.scaffold_config()
+
         self.runner = Runner(config=self.config, pipelines=self.register)
 
     def _wipe_loaded_modules(self):
         [sys.modules.pop(module) for module in self._loaded_modules]
-

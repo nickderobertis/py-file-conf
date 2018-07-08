@@ -1,5 +1,5 @@
 from typing import Union
 
-from dero.manager.config.models.section import ConfigSection, Config
+from dero.manager.config.models.section import ConfigSection, FunctionConfig
 
-ConfigSectionOrConfig = Union[ConfigSection, Config]
+ConfigSectionOrConfig = Union[ConfigSection, FunctionConfig]

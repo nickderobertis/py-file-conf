@@ -6,6 +6,10 @@ def function_args_as_dict(func: Callable):
     args = inspect.getfullargspec(func)
     out_dict = {}
 
+    # for methods and classmethods, want to ignore the first argument (self, cls)
+    if inspect.ismethod(func):
+        del args.args[0] # delete self arg
+
     # Handle args
     num_no_default_value = _get_length_of_arg_section(args.args) - _get_length_of_arg_section(args.defaults)
     all_defaults = [None] * num_no_default_value + _get_list_of_arg_section(args.defaults)

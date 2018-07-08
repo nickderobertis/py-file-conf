@@ -8,3 +8,5 @@ high-level section configs, then lower-level section configs, and finally by any
 """
 
 from dero.manager.main import PipelineManager
+from dero.manager.selector.models.selector import Selector
+from dero.manager.data.models.merge import MergeOptions

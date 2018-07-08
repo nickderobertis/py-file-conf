@@ -1,7 +1,8 @@
-from typing import Callable
+from typing import Callable, Tuple
+from functools import partial
 
 from dero.mixins.repr import ReprMixin
-from dero.manager.config.models.manager import ConfigManager, Config
+from dero.manager.config.models.manager import ConfigManager, FunctionConfig
 from dero.manager.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.runner.models.interfaces import (
@@ -12,16 +13,62 @@ from dero.manager.runner.models.interfaces import (
 )
 from dero.manager.pipelines.models.interfaces import (
     PipelineOrFunctionOrCollection,
+    PipelineOrFunction
 )
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.config.logic.write import dict_as_function_kwarg_str
+from dero.manager.basemodels.pipeline import Pipeline
 
 class Runner(ReprMixin):
-    repr_cols = ['config', 'pipelines']
+    repr_cols = ['_config', '_pipelines']
+
 
     def __init__(self, config: ConfigManager, pipelines: PipelineRegistrar):
-        self.config = config
-        self.pipelines = pipelines
+        self._config = config
+        self._pipelines = pipelines
+        self._full_getattr = ''
+
+    def __getattr__(self, item):
+        # TODO: find way of doing this with fewer side effects
+        # TODO: find a way to get this working for sections
+        self._full_getattr += item
+        try:
+            func_or_collection = self._get_func_or_collection(self._full_getattr)
+        except KeyError as e:
+            self._full_getattr = '' # didn't find an item, must be incorrect path. reset total path
+            raise e
+
+        if isinstance(func_or_collection, PipelineCollection):
+            # Got section, need to keep going. Return self
+            self._full_getattr += '.' # add period to separate next section
+            return self
+        else:
+            # Got function or Pipeline, return the function or pipeline itself
+            configured_func_or_pipeline = self.get(self._full_getattr)
+            self._full_getattr = ''  # found the item, reset for next time
+            return configured_func_or_pipeline
+
+    # TODO: this may work once __getattr__ works with sections
+    # def __dir__(self):
+    #     exposed_methods = [
+    #         'run',
+    #         'get',
+    #     ]
+    #
+    #     if self._full_getattr != '':
+    #         # Already into nested runner, need to pull appropriate collection
+    #         try:
+    #             func_or_collection = self._get_func_or_collection(self._full_getattr)
+    #             pipeline_attrs = [attr for attr in dir(func_or_collection) if attr not in exposed_methods]
+    #         except KeyError:
+    #             pipeline_attrs = []
+    #
+    #     else:
+    #         # Original runner. Just pull pipeline register attrs
+    #         pipeline_attrs = [attr for attr in dir(self._pipelines) if attr not in exposed_methods]
+    #
+    #     return exposed_methods + pipeline_attrs
+
 
     def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
         """
@@ -63,6 +110,8 @@ class Runner(ReprMixin):
         func_or_collection = self._get_func_or_collection(section_path_str)
         if isinstance(func_or_collection, PipelineCollection):
             return self._run_section(section_path_str)
+        elif isinstance(func_or_collection, Pipeline):
+            return self._run_one_pipeline(section_path_str)
         elif isinstance(func_or_collection, Callable):
             return self._run_one_func(section_path_str)
         else:
@@ -95,11 +144,7 @@ class Runner(ReprMixin):
 
 
     def _run_one_func(self, section_path_str: str) -> Result:
-        config = self._get_config(section_path_str)
-        func = self._get_func_or_collection(section_path_str)
-
-        # Only pass items in config which are arguments of function
-        config_dict = config.for_function(func)
+        func, config_dict = self._get_func_and_config(section_path_str)
 
         print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
         result = func(**config_dict)
@@ -107,8 +152,66 @@ class Runner(ReprMixin):
 
         return result
 
-    def _get_config(self, section_path_str: str) -> Config:
-        return self.config.get(section_path_str)
+    def _run_one_pipeline(self, section_path_str: str) -> Result:
+        pipeline, config_dict = self._get_pipeline_and_config(section_path_str)
+
+        # Construct new pipeline instance with config args
+        configured_pipeline = pipeline.new_instance_with_config(**config_dict)
+
+        print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
+        result = configured_pipeline.execute()
+        print(f'Result:\n{result}\n')
+
+        return configured_pipeline
+
+    def get(self, section_path_str: str) -> PipelineOrFunction:
+        func_or_collection = self._get_func_or_collection(section_path_str)
+        if isinstance(func_or_collection, PipelineCollection):
+            # TODO: get sections
+            raise NotImplementedError('have not implemented getting sections. works with run')
+        elif isinstance(func_or_collection, Callable):
+            return self._get_one_func(section_path_str)
+        elif isinstance(func_or_collection, Pipeline):
+            return self._get_one_pipeline(section_path_str)
+        else:
+            raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
+                             f'got {func_or_collection} of type {type(func_or_collection)}')
+
+    def _get_one_func(self, section_path_str: str) -> Callable:
+        func, config_dict = self._get_func_and_config(section_path_str)
+
+        full_func = partial(func, **config_dict)
+
+        return full_func
+
+    def _get_one_pipeline(self, section_path_str: str) -> Pipeline:
+        pipeline, config_dict = self._get_pipeline_and_config(section_path_str)
+
+        # Construct new pipeline instance with config args
+        return pipeline.new_instance_with_config(**config_dict)
+
+
+    def _get_config(self, section_path_str: str) -> FunctionConfig:
+        return self._config.get(section_path_str)
 
     def _get_func_or_collection(self, section_path_str: str) -> PipelineOrFunctionOrCollection:
-        return self.pipelines.get(section_path_str)
+        return self._pipelines.get(section_path_str)
+
+    def _get_func_and_config(self, section_path_str: str) -> Tuple[Callable, dict]:
+        config = self._get_config(section_path_str)
+        func = self._get_func_or_collection(section_path_str)
+
+        # Only pass items in config which are arguments of function
+        config_dict = config.for_function(func)
+
+        return func, config_dict
+
+    def _get_pipeline_and_config(self, section_path_str: str) -> Tuple[Pipeline, dict]:
+        config = self._get_config(section_path_str)
+        # pipeline is an instance of the pipeline, without config
+        pipeline = self._get_func_or_collection(section_path_str)
+
+        # Only pass items in config which are arguments of function
+        config_dict = config.for_function(pipeline.__init__)
+
+        return pipeline, config_dict

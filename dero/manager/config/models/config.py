@@ -1,53 +1,16 @@
 from typing import Callable, Any, List
 import inspect
-from copy import deepcopy
-import os
 
+from dero.manager.basemodels.config import ConfigBase
 from dero.manager.imports.logic.load.func import function_args_as_dict
 from dero.manager.pipelines.models.interfaces import PipelineOrFunction
-from dero.manager.pipelines.models.pipeline import Pipeline
+from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.logic.get import _get_public_name_or_special_name
-from dero.manager.config.models.file import ConfigFile
+from dero.manager.config.models.file import FunctionConfigFile
 
-class Config(dict):
+class FunctionConfig(ConfigBase):
 
-    def __repr__(self):
-        dict_repr = super().__repr__()
-        return f'<Config(name={self.name}, {dict_repr})>'
-
-    def __init__(self, d: dict=None, name: str=None, _loaded_modules:  List[str]=None,
-                 _file: ConfigFile=None, **kwargs):
-        if d is None:
-            d = {}
-        super().__init__(d, **kwargs)
-        self.name = name
-        self._loaded_modules = _loaded_modules
-        self._file = _file
-
-    def __getattr__(self, attr):
-        return self[attr]
-
-    def __dir__(self):
-        return self.keys()
-
-    def update(self, d: dict=None, **kwargs):
-        if d is None:
-            d = {}
-        super().update(d, **kwargs)
-
-    def to_file(self, filepath: str):
-
-        if self._file is None:
-            output_file = ConfigFile(filepath, name=self.name, loaded_modules=self._loaded_modules)
-        else:
-            # In case this is a new filepath for the same config, copy old file contents for use in new filepath
-            output_file = deepcopy(self._file)
-            output_file.filepath = filepath
-
-        if os.path.exists(filepath):
-            output_file.load() # load any existing config saved in the file, for preserving of user-saved inputs
-
-        output_file.save(self)
+    config_file_class = FunctionConfigFile
 
     def for_function(self, func: Callable) -> dict:
         """
@@ -62,11 +25,6 @@ class Config(dict):
         # Only pass items in config which are arguments of function
         func_kwargs = function_args_as_dict(func)
         return {key: value for key, value in self.items() if key in func_kwargs}
-
-    @classmethod
-    def from_file(cls, filepath: str, name: str=None):
-        file = ConfigFile(filepath, name=name)
-        return file.load()
 
     @classmethod
     def from_function(cls, func: Callable, name: str=None, loaded_modules: List[str]=None):

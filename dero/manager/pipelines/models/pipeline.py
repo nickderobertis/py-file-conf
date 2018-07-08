@@ -1,9 +1,4 @@
+from dero.manager.basemodels.pipeline import Pipeline
 
-
-class Pipeline:
-
-    def __init__(self):
-        pass
-
-    def execute(self):
-        pass
+class FunctionPipeline(Pipeline):
+    pass

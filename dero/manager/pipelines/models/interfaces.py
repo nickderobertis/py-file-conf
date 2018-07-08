@@ -1,6 +1,6 @@
 from typing import Callable, Union, List, Dict
 
-from dero.manager.pipelines.models.pipeline import Pipeline
+from dero.manager.basemodels.pipeline import Pipeline
 
 PipelineOrFunction = Union[Pipeline, Callable]
 PipelineOrFunctionOrCollection = Union[PipelineOrFunction, 'PipelineCollection']
