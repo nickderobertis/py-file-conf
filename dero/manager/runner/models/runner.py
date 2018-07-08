@@ -48,6 +48,28 @@ class Runner(ReprMixin):
             self._full_getattr = ''  # found the item, reset for next time
             return configured_func_or_pipeline
 
+    # TODO: this may work once __getattr__ works with sections
+    # def __dir__(self):
+    #     exposed_methods = [
+    #         'run',
+    #         'get',
+    #     ]
+    #
+    #     if self._full_getattr != '':
+    #         # Already into nested runner, need to pull appropriate collection
+    #         try:
+    #             func_or_collection = self._get_func_or_collection(self._full_getattr)
+    #             pipeline_attrs = [attr for attr in dir(func_or_collection) if attr not in exposed_methods]
+    #         except KeyError:
+    #             pipeline_attrs = []
+    #
+    #     else:
+    #         # Original runner. Just pull pipeline register attrs
+    #         pipeline_attrs = [attr for attr in dir(self._pipelines) if attr not in exposed_methods]
+    #
+    #     return exposed_methods + pipeline_attrs
+
+
     def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
         """
         Use to run registered pipelines/functions/sections. Pass a single section path or a list

@@ -26,7 +26,8 @@ class Registrar(ReprMixin):
             'basepath',
             'name'
         ]
-        return exposed_methods + exposed_attrs + list(self.collection.name_dict.keys())
+        collection_attrs = [attr for attr in dir(self.collection) if attr not in exposed_methods + exposed_attrs]
+        return exposed_methods + exposed_attrs + collection_attrs
 
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str=None,

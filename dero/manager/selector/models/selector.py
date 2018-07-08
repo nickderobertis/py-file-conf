@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List
 import warnings
 
 from dero.manager.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
@@ -53,10 +53,38 @@ class Selector:
         from dero.manager.selector.models.itemview import ItemView
         return ItemView(item, self)
 
+    def __dir__(self):
+        exposed_methods = [
+            'get_type'
+        ]
+
+        managers = list(self._managers.keys())
+
+        return exposed_methods + managers
+
+    def _get_dir_for_section_path(self, section_path_str: str) -> List[str]:
+        collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(
+            section_path_str
+        )
+        if relative_section_path is None:
+            # got only the root data path, e.g. project.sources. Return the collection object itself
+            return dir(collection_obj)
+
+        result_obj = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
+
+        return dir(result_obj)
+
     def _get_collection_obj_and_relative_section_path_from_structure(self, section_path_str: str):
         # Handle accessing correct collection object.
         section_path = SectionPath(section_path_str)
         manager_name = section_path[0]
+
+        if len(section_path) == 1:
+            # Got only the manager, e.g. project
+            # return only the manager itself
+            return self._managers[manager_name], None
+
+
         if section_path[1] == 'sources':
             # got a data path
             if len(section_path) == 2:

@@ -40,6 +40,13 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
 
         return getattr(actual_item, item)
 
+    def __dir__(self):
+        exposed_properties = [
+            'type',
+            'item'
+        ]
+        collection_attrs = self.selector._get_dir_for_section_path(self.section_path_str)
+        return exposed_properties + collection_attrs
 
     def __call__(self, *args, **kwargs):
         # When calling, assume user always wants the real item

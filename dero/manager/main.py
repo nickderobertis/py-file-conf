@@ -34,6 +34,24 @@ class PipelineManager:
         # Must be getting function
         return getattr(self.runner, item)
 
+    def __dir__(self):
+        exposed_methods = [
+            'run',
+            'get',
+            'load',
+            'reload'
+        ]
+        exposed_attrs = ['sources', 'name']
+        exposed = exposed_methods + exposed_attrs
+        if hasattr(self, 'register'):
+            skip_methods = [
+                'scaffold_config',
+                'basepath',
+            ]
+            register_attrs = [attr for attr in dir(self.register) if attr not in exposed + skip_methods]
+            exposed += register_attrs
+        return exposed
+
     def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
         """
         Use to run registered pipelines/functions/sections. Pass a single section path or a list
