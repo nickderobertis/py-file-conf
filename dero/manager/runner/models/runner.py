@@ -20,7 +20,7 @@ from dero.manager.config.logic.write import dict_as_function_kwarg_str
 from dero.manager.basemodels.pipeline import Pipeline
 
 class Runner(ReprMixin):
-    repr_cols = ['config', 'pipelines']
+    repr_cols = ['_config', '_pipelines']
 
 
     def __init__(self, config: ConfigManager, pipelines: PipelineRegistrar):
@@ -162,7 +162,7 @@ class Runner(ReprMixin):
         result = configured_pipeline.execute()
         print(f'Result:\n{result}\n')
 
-        return result
+        return configured_pipeline
 
     def get(self, section_path_str: str) -> PipelineOrFunction:
         func_or_collection = self._get_func_or_collection(section_path_str)
