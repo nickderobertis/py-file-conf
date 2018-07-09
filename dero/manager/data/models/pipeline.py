@@ -140,6 +140,7 @@ class DataPipeline(Pipeline):
 
     @property
     def last_modified(self):
+        self._touch_data_sources()
         return max([source.last_modified for source in self.data_sources])
 
     @property
