@@ -130,14 +130,16 @@ class Runner(ReprMixin):
 
             if isinstance(section_or_callable, PipelineCollection):
                 # got another section within this section. recursively call run section
-                results.append(
-                    self._run_section(subsection_path_str)
-                )
+                results.append(self._run_section(subsection_path_str))
             elif isinstance(section_or_callable, Callable):
-                # run function or pipeline
+                # run function
                 results.append(self._run_one_func(subsection_path_str))
+            elif isinstance(section_or_callable, Pipeline):
+                # run pipeline
+                results.append(self._run_one_pipeline(subsection_path_str))
             else:
-                raise ValueError(f'could not run section {subsection_path_str}. expected PipelineCollection or function,'
+                raise ValueError(f'could not run section {subsection_path_str}. expected PipelineCollection or '
+                                 f'function or Pipeline,'
                                  f'got {section_or_callable} of type {type(section_or_callable)}')
 
         return results
