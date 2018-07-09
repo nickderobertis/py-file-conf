@@ -109,12 +109,12 @@ class DataSource:
         if self.location is None:
             # no location or pipeline, so accessing df will return empty dataframe
             loader = pd.DataFrame
-
-        if data_loader is None:
-            # TODO: determine filetype and use proper loader
-            loader = partial(pd.read_csv, self.location, **loader_func_kwargs)
         else:
-            loader = partial(data_loader, self.location, **loader_func_kwargs)
+            if data_loader is None:
+                # TODO: determine filetype and use proper loader
+                loader = partial(pd.read_csv, self.location, **loader_func_kwargs)
+            else:
+                loader = partial(data_loader, self.location, **loader_func_kwargs)
 
         # If necessary, run pipeline before loading
         # Still necessary to use loader as may be transforming the data
