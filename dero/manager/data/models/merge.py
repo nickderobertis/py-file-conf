@@ -1,4 +1,5 @@
 from typing import Callable
+from copy import deepcopy
 
 from dero.manager.data.models.source import DataSource
 from dero.manager.data.logic.merge import left_merge_df
@@ -14,6 +15,12 @@ class MergeOptions:
 
     def __repr__(self):
         return f'<DataMerge(args={self.args}, merge_function={self.merge_function.__name__})>'
+
+    def copy(self):
+        return deepcopy(self)
+
+    def update(self, **kwargs):
+        self.merge_function_kwargs.update(**kwargs)
 
 
 class DataMerge:

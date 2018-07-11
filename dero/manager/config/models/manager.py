@@ -35,6 +35,14 @@ class ConfigManager(ReprMixin):
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         config_obj.update(d, **kwargs)
 
+    def clear(self, section_path_str: str=None) -> None:
+
+        ### TODO: get working for section and function updates
+        if section_path_str is not None:
+            raise NotImplementedError('need to add functionality to clear updates to section and function config')
+
+        self.local_config = FunctionConfig()
+
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         return config_obj.pop(key)
