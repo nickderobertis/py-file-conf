@@ -14,7 +14,8 @@ class MergeOptions:
         self.merge_function_kwargs = merge_function_kwargs
 
     def __repr__(self):
-        return f'<DataMerge(args={self.args}, merge_function={self.merge_function.__name__})>'
+        return f'<DataMerge(args={self.args}, merge_function={self.merge_function.__name__}, ' \
+               f'kwargs={self.merge_function_kwargs})>'
 
     def copy(self):
         return deepcopy(self)
