@@ -1,6 +1,11 @@
 import sys
 import os
 from copy import deepcopy
+from typing import TYPE_CHECKING, Union, List
+if TYPE_CHECKING:
+    from dero.manager.selector.models.itemview import ItemView
+    StrOrView = Union[str, ItemView]
+    RunnerArgs = Union[str, List[str], ItemView, List[ItemView]]
 
 from dero.manager.config.models.manager import ConfigManager
 from dero.manager.pipelines.models.registrar import PipelineRegistrar
@@ -10,6 +15,7 @@ from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepat
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
+
 
 class PipelineManager:
     """
@@ -52,7 +58,7 @@ class PipelineManager:
             exposed += register_attrs
         return exposed
 
-    def run(self, section_path_str_or_list: StrOrListOfStrs) -> ResultOrResults:
+    def run(self, section_path_str_or_list: 'RunnerArgs') -> ResultOrResults:
         """
         Use to run registered pipelines/functions/sections. Pass a single section path or a list
         of section paths. If a list is passed, the return value will also be a list, with each
@@ -72,10 +78,12 @@ class PipelineManager:
         Returns: result or list of results
 
         """
+        section_path_str_or_list = self._convert_list_or_single_item_view_or_str_to_strs(section_path_str_or_list)
         return self.runner.run(section_path_str_or_list)
 
     # TODO: multiple section path strs
-    def get(self, section_path_str: str):
+    def get(self, section_path_str_or_view: 'StrOrView'):
+        section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
         section_path = SectionPath(section_path_str)
 
         if section_path[0] == 'sources':
@@ -151,3 +159,22 @@ class PipelineManager:
 
     def _wipe_loaded_modules(self):
         [sys.modules.pop(module) for module in self._loaded_modules]
+
+    def _convert_list_or_single_item_view_or_str_to_strs(self, run_list: 'RunnerArgs') -> Union[str, List[str]]:
+        if isinstance(run_list, list):
+            return [self._get_section_path_str_from_section_path_str_or_view(run_arg) for run_arg in run_list]
+        else:
+            return self._get_section_path_str_from_section_path_str_or_view(run_list)
+
+    def _get_section_path_str_from_section_path_str_or_view(self,section_path_str_or_view: 'StrOrView') -> str:
+        from dero.manager.selector.models.itemview import ItemView
+        if isinstance(section_path_str_or_view, ItemView):
+            # ItemView will have PipelineManager.name as first section, must strip
+            section_path = SectionPath(section_path_str_or_view.section_path_str)
+            relative_section_path = SectionPath.from_section_str_list(section_path[1:])
+            return relative_section_path.path_str
+        elif isinstance(section_path_str_or_view, str):
+            return section_path_str_or_view
+        else:
+            raise ValueError(f'expected str or ItemView. Got {section_path_str_or_view} of '
+                             f'type {type(section_path_str_or_view)}')
