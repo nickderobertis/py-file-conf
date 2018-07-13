@@ -2,6 +2,7 @@ from typing import List, Union, Any
 
 from dero.mixins.repr import ReprMixin
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
+from dero.manager.logic.set import _set_in_nested_obj_by_section_path
 from dero.manager.config.models.interfaces import ConfigSectionOrConfig
 from dero.manager.config.models.section import ConfigSection, FunctionConfig
 from dero.manager.sectionpath.sectionpath import SectionPath
@@ -36,12 +37,19 @@ class ConfigManager(ReprMixin):
         config_obj.update(d, **kwargs)
 
     def clear(self, section_path_str: str=None) -> None:
+        """
+        Resets a function or section config to default. If no section_path_str is passed, resets local config.
 
-        ### TODO: get working for section and function updates
-        if section_path_str is not None:
-            raise NotImplementedError('need to add functionality to clear updates to section and function config')
+        To reset all configs, use .load() instead.
 
-        self.local_config = FunctionConfig()
+        Args:
+            section_path_str:
+
+        Returns:
+
+        """
+        default = self._get_default_func_or_section_config(section_path_str)
+        self.set(section_path_str, default)
 
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
@@ -57,7 +65,7 @@ class ConfigManager(ReprMixin):
         Returns:
 
         """
-        config = self._get_func_or_section_config(section_path_str)
+        config = self._get_func_or_section_configs(section_path_str)
 
         # First override for function defaults is global project config
         section_configs = [self.section.config]
@@ -69,7 +77,7 @@ class ConfigManager(ReprMixin):
         for section in section_path[:-1]: # skip the last section or function for special handling at end
             full_section += section # rebuilding full section path str
             section_configs.append(
-                self._get_func_or_section_config(full_section)
+                self._get_func_or_section_configs(full_section)
             )
             full_section += '.'
 
@@ -78,7 +86,7 @@ class ConfigManager(ReprMixin):
         full_section += section_path[-1]
         if not self._is_function_or_pipeline_path(full_section):
             # if is a section, not function/pipeline
-            section_configs.append(self._get_func_or_section_config(full_section))
+            section_configs.append(self._get_func_or_section_configs(full_section))
 
         # Override configs. Default config is base config, then gets updated by project, then high
         # level sections to low level sections
@@ -89,7 +97,30 @@ class ConfigManager(ReprMixin):
 
         return config
 
-    def _get_func_or_section_config(self, section_path_str: str=None) -> FunctionConfig:
+    def set(self, section_path_str: str=None, value=None):
+        """
+        In contrast to update, completely replaces the config object.
+
+        Args:
+            section_path_str:
+            value:
+
+        Returns:
+
+        """
+
+        if value == None: # empty config
+            value = FunctionConfig()
+
+        if section_path_str is None:
+            # updating local config
+            self.local_config = value
+            return
+
+        self._set_func_or_section_config(section_path_str, value=value)
+
+
+    def _get_func_or_section_configs(self, section_path_str: str=None) -> FunctionConfig:
         """
         This get method is used to get only the config for the section path, without handling
         multiple levels of config and overriding. To get the active config for a function,
@@ -110,6 +141,45 @@ class ConfigManager(ReprMixin):
         config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
         return _get_config_from_config_or_section(config_or_section)
 
+    def _set_func_or_section_config(self, section_path_str: str=None, value=None) -> None:
+        if section_path_str is None:
+            section_path_str = self.section.name
+
+        section_path = SectionPath(section_path_str)
+
+        # Currently set up to update the files in the section config, not just the section config.
+        # Perhaps expose as another parameter or method. The below logic helps with updating just section config
+
+        # Goes into nested sections, until it pulls the final config or section
+        # config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
+
+        # if isinstance(config_or_section, ConfigSection):
+        #     # If target is a section, update config attr of section
+        #     update_path = SectionPath.from_section_str_list(section_path.sections + ['config'])
+        # else:
+        #     # Otherwise, got a config, apply update directly to the config object
+        #     update_path = section_path
+
+        _set_in_nested_obj_by_section_path(self, section_path, value)
+
+    def _get_default_func_or_section_config(self, section_path_str: str=None) -> Union[FunctionConfig, ConfigSection]:
+
+        if section_path_str is None:
+            # local config. Default is blank config
+            return FunctionConfig()
+        else:
+            # otherwise, load from file for default
+            section_path = SectionPath(section_path_str)
+            filepath = section_path.to_filepath(self.basepath)
+
+            config_obj = _get_from_nested_obj_by_section_path(self, section_path)
+            if isinstance(config_obj, ConfigSection):
+                return ConfigSection.from_files(filepath)
+            if isinstance(config_obj, FunctionConfig):
+                return FunctionConfig.from_file(filepath + '.py')
+            else:
+                raise ValueError(f'expected section path to return ConfigSection or FunctionConfig, '
+                                 f'got {config_obj} of type {type(config_obj)}')
 
     def _is_function_or_pipeline_path(self, section_path_str: str) -> bool:
         section_path = SectionPath(section_path_str)
@@ -126,7 +196,7 @@ class ConfigManager(ReprMixin):
 
     def _get_project_config_or_local_config_by_section_path(self, section_path_str: str) -> FunctionConfig:
         if section_path_str is not None:
-            config_obj = self._get_func_or_section_config(section_path_str)
+            config_obj = self._get_func_or_section_configs(section_path_str)
         else:
             # If no section passed, update local config
             config_obj = self.local_config

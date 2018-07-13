@@ -41,6 +41,10 @@ class SectionPath(ReprMixin):
         output_path_sections = section_path_1.sections + section_path_2.sections
         return cls.from_section_str_list(output_path_sections)
 
+    def to_filepath(self, basepath: str):
+        relative_path = _section_path_to_relative_filepath(self)
+        return os.path.join(basepath, relative_path)
+
 
 def _section_path_str_to_section_strs(section_path_str: str) -> List[str]:
     return section_path_str.split('.')
@@ -53,6 +57,8 @@ def _relative_filepath_to_section_path(filepath: str) -> str:
     sections[-1] = _strip_py(sections[-1]) # remove .py if exists at end of filepath
     return _section_strs_to_section_path_str(sections)
 
+def _section_path_to_relative_filepath(section_path: SectionPath) -> str:
+    return os.path.sep.join(section_path.sections)
 
 def _strip_py(filename_str: str) -> str:
     if not filename_str.endswith('.py'):
