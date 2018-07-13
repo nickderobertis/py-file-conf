@@ -1,5 +1,7 @@
 import sys
 import os
+import traceback
+import pdb
 from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List
 if TYPE_CHECKING:
@@ -22,12 +24,14 @@ class PipelineManager:
     Main class for managing flow-based programming and configuration.
     """
 
-    def __init__(self, pipeline_dict_path: str, data_dict_path: str, basepath: str, name: str='project'):
+    def __init__(self, pipeline_dict_path: str, data_dict_path: str, basepath: str, name: str='project',
+                 auto_pdb: bool=False):
         self.pipeline_dict_path = pipeline_dict_path
         self.data_dict_path = data_dict_path
         self.basepath = basepath
         self.sources_basepath = os.path.join(basepath, 'sources')
         self.name = name
+        self.auto_pdb = auto_pdb
 
 
     def __getattr__(self, item):
@@ -79,7 +83,17 @@ class PipelineManager:
 
         """
         section_path_str_or_list = self._convert_list_or_single_item_view_or_str_to_strs(section_path_str_or_list)
-        return self.runner.run(section_path_str_or_list)
+
+        if not self.auto_pdb:
+            return self.runner.run(section_path_str_or_list)
+
+        # auto pdb
+        try:
+            return self.runner.run(section_path_str_or_list)
+        except:
+            traceback.print_exc()
+            pdb.post_mortem()
+
 
     # TODO: multiple section path strs
     def get(self, section_path_str_or_view: 'StrOrView'):
