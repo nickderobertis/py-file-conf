@@ -41,6 +41,22 @@ def is_imported_name(name: str, search_list: List[str]=None) -> bool:
 
     return False
 
+def is_imported_obj(obj, search_list: List[str]=None) -> bool:
+    if search_list is None:
+        search_list = list(sys.modules.keys())
+
+    for module_name in search_list:
+
+        # skip modules which were causing issues
+        if module_name in skip_modules:
+            continue
+
+        module = sys.modules[module_name]
+        if _obj_in_module(obj, module):
+            return True
+
+    return False
+
 def _is_imported_from(name: str, search_list: List[str]=None) -> List[str]:
     if search_list is None:
         search_list = list(sys.modules.keys())
