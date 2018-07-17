@@ -8,6 +8,7 @@ from dero.manager.imports.models.statements.interfaces import (
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
+from dero.manager.io.func.load.config import FunctionConfigExtractor
 
 class ObjectView(SimplePropertyCacheMixin):
 
@@ -69,7 +70,7 @@ class ObjectView(SimplePropertyCacheMixin):
         self._name = extract_external_name_from_assign_value(self.obj_ast)
 
     def _get_default_config(self):
-        pass
+        self._default_config = FunctionConfigExtractor(self).extract_config()
 
     def _get_real_item(self):
         pass

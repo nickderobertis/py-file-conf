@@ -12,12 +12,13 @@ class ConfigBase(dict):
 
     ##### Base class functions and attributes below. Shouldn't usually need to override in subclassing #####
 
-    def __init__(self, d: dict=None, name: str=None, _loaded_modules:  List[str]=None,
+    def __init__(self, d: dict=None, name: str=None, annotations: dict=None, _loaded_modules:  List[str]=None,
                  _file: ConfigFileBase=None, **kwargs):
         if d is None:
             d = {}
         super().__init__(d, **kwargs)
         self.name = name
+        self.annotations = annotations
         self._loaded_modules = _loaded_modules
         self._file = _file
 

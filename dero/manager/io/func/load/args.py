@@ -1,5 +1,7 @@
 import ast
-from typing import List
+from typing import List, TYPE_CHECKING
+if TYPE_CHECKING:
+    from dero.manager.views.object import ObjectView
 from importlib.util import resolve_name
 
 from dero.manager.imports.models.statements.interfaces import (
@@ -7,13 +9,13 @@ from dero.manager.imports.models.statements.interfaces import (
     ModuleImportStatement,
     AnyImportStatement
 )
-from dero.manager.views.object import ObjectView
+
 from dero.manager.io.file.load.parsers.funcdef import extract_function_definition_from_ast_by_name
 from dero.manager.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoader
 
 class FunctionArgsExtractor:
 
-    def __init__(self, object_view: ObjectView):
+    def __init__(self, object_view: 'ObjectView'):
         self.object_view = object_view
 
     def extract_args(self) -> List[ast.arg]:
