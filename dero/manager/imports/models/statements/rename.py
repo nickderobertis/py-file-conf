@@ -1,4 +1,7 @@
-from typing import List
+from typing import List, TYPE_CHECKING
+if TYPE_CHECKING:
+    from dero.manager.imports.models.statements.interfaces import AnyAstImport
+import ast
 
 from dero.mixins.repr import ReprMixin
 from dero.mixins.attrequals import EqOnAttrsMixin
@@ -29,6 +32,14 @@ class RenameStatement(ReprMixin, EqOnAttrsMixin):
         obj._orig_str = rename_str
 
         return obj
+
+    @classmethod
+    def from_ast_alias(cls, alias: ast.alias):
+        # Note: will fail if ast alias does not have a rename. See RenameStatementCollection.from_ast_import
+        return cls(
+            alias.name,
+            alias.asname
+        )
 
 
 class RenameStatementCollection(ReprMixin):
@@ -62,3 +73,15 @@ class RenameStatementCollection(ReprMixin):
     @classmethod
     def from_str_list(cls, rename_strs: List[str]):
         return cls([RenameStatement.from_str(rename_str) for rename_str in rename_strs])
+
+    @classmethod
+    def from_ast_import(cls, ast_import: 'AnyAstImport'):
+        # For ast aliases, they always exist whether the item is being renamed or not.
+        # For RenameStatement objects, they only exist when there is a rename. Need to filter
+        renames = []
+        for alias in ast_import.names:
+            alias: ast.alias
+            if alias.asname is not None:
+                renames.append(RenameStatement.from_ast_alias(alias))
+
+        return cls(renames)

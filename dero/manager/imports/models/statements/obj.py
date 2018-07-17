@@ -1,4 +1,5 @@
 from typing import List
+import ast
 
 from dero.mixins.repr import ReprMixin
 
@@ -37,3 +38,18 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
         module, objs = _extract_module_and_objs_from_obj_import(import_str)
 
         return cls(objs=objs, module=module, renames=renames, comment=comment)
+
+    @classmethod
+    def from_ast_import_from(cls, ast_import: ast.ImportFrom):
+
+        # Create RenameStatementCollection
+        renames = RenameStatementCollection.from_ast_import(ast_import)
+
+        # Collect object names
+        objs = [alias.name for alias in ast_import.names]
+
+        return cls(
+            objs,
+            ast_import.module,
+            renames
+        )
