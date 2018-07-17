@@ -1,10 +1,16 @@
 from typing import List
+import ast
 
 from dero.manager.basemodels.container import Container
 from dero.mixins.repr import ReprMixin
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.imports.models.statements.module import ModuleImportStatement
-from dero.manager.imports.models.statements.interfaces import AnyImportStatementOrComment, Comment
+from dero.manager.imports.models.statements.interfaces import (
+    AnyImportStatementOrComment,
+    Comment,
+    ImportOrNone
+)
+from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
 
 class ImportStatementContainer(Container, ReprMixin):
     repr_cols = ['items']
@@ -74,6 +80,22 @@ class ImportStatementContainer(Container, ReprMixin):
 
         # failed all checks, obj not imported
         return False
+
+    def get_import_for_ast_obj(self, obj_ast: ast.AST) -> ImportOrNone:
+        possibly_imported_name = extract_external_name_from_assign_value(obj_ast)
+
+        if possibly_imported_name is None:
+            # Did not find any external names for this ast obj. Likely builtin.
+            return None
+
+        for imp in self:
+            if isinstance(imp, ModuleImportStatement):
+                # object was imported by module import statement
+                if (possibly_imported_name in imp.modules) or (possibly_imported_name in imp.renames.new_names):
+                    return imp # found matching module
+            elif isinstance(imp, ObjectImportStatement):
+                if (possibly_imported_name in imp.objs) or (possibly_imported_name in imp.renames.new_names):
+                    return imp # found matching object
 
     @property
     def imported_names(self) -> List[str]:

@@ -13,6 +13,9 @@ class Container:
     def __contains__(self, item):
         return item in self.items
 
+    def __len__(self):
+        return len(self.items)
+
     def append(self, item):
         self.items.append(item)
 

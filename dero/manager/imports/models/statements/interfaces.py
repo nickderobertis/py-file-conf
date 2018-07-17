@@ -8,3 +8,4 @@ from dero.manager.imports.models.statements.comment import Comment
 AnyAstImport = Union[ast.Import, ast.ImportFrom]
 AnyImportStatement = Union[ModuleImportStatement, ObjectImportStatement]
 AnyImportStatementOrComment = Union[AnyImportStatement, Comment]
+ImportOrNone = Union[AnyImportStatement, None]
