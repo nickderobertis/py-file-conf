@@ -1,7 +1,6 @@
 from typing import List
 from dero.mixins.attrequals import EqOnAttrsMixin
 
-
 class ImportStatement(EqOnAttrsMixin):
     rename_attr = None
 
@@ -26,3 +25,4 @@ class ImportStatement(EqOnAttrsMixin):
     def execute(self):
         # execute import statement
         pass
+

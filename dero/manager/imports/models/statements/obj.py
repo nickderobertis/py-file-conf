@@ -7,6 +7,7 @@ from dero.manager.imports.models.statements.importbase import ImportStatement
 from dero.manager.imports.models.statements.rename import RenameStatementCollection
 from dero.manager.imports.logic.parse.extract import _extract_module_and_objs_from_obj_import
 from dero.manager.imports.models.statements.comment import Comment
+from dero.manager.imports.logic.load.ext_importlib import get_filepath_from_module_str
 
 
 class ObjectImportStatement(ImportStatement, ReprMixin):
@@ -53,3 +54,6 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
             ast_import.module,
             renames
         )
+
+    def get_module_filepath(self, import_section_path_str: str=None) -> str:
+        return get_filepath_from_module_str(self.module, import_section_path_str)

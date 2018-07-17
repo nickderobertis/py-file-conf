@@ -10,6 +10,7 @@ from dero.manager.imports.models.statements.interfaces import (
     Comment,
     ImportOrNone
 )
+from dero.manager.imports.models.statements.rename import RenameStatementCollection
 from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
 
 class ImportStatementContainer(Container, ReprMixin):
@@ -88,14 +89,48 @@ class ImportStatementContainer(Container, ReprMixin):
             # Did not find any external names for this ast obj. Likely builtin.
             return None
 
+        found_import = False
         for imp in self:
             if isinstance(imp, ModuleImportStatement):
-                # object was imported by module import statement
-                if (possibly_imported_name in imp.modules) or (possibly_imported_name in imp.renames.new_names):
-                    return imp # found matching module
+                if possibly_imported_name in imp.modules:
+                    # match on original module name
+                    # set up for creating a new import
+                    found_import = True
+                    renames = None
+                    modules = [possibly_imported_name]
+                elif possibly_imported_name in imp.renames.new_names:
+                    # match on renamed module name
+                    # set up for creating a new import
+                    found_import = True
+                    renames = RenameStatementCollection(
+                        # Pull the rename matching this name
+                        [rename for rename in imp.renames if rename.new_name == possibly_imported_name]
+                    )
+                    # grab original module matching this rename
+                    modules = [rename.item for rename in imp.renames if rename.new_name == possibly_imported_name]
+                if found_import:
+                    # May be multiple modules imported in this one statement. Create a new statement with just this module
+                    return ModuleImportStatement(modules=modules, renames=renames)
             elif isinstance(imp, ObjectImportStatement):
-                if (possibly_imported_name in imp.objs) or (possibly_imported_name in imp.renames.new_names):
-                    return imp # found matching object
+                if possibly_imported_name in imp.objs:
+                    # match on original object name
+                    # set up for creating a new import
+                    found_import = True
+                    renames = None
+                    objs = [possibly_imported_name]
+                elif possibly_imported_name in imp.renames.new_names:
+                    # match on renamed object name
+                    # set up for creating a new import
+                    found_import = True
+                    renames = RenameStatementCollection(
+                        # Pull the rename matching this name
+                        [rename for rename in imp.renames if rename.new_name == possibly_imported_name]
+                    )
+                    # grab original object matching this rename
+                    objs = [rename.item for rename in imp.renames if rename.new_name == possibly_imported_name]
+                if found_import:
+                    return ObjectImportStatement(objs, module=imp.module, renames=renames)
+
 
     @property
     def imported_names(self) -> List[str]:

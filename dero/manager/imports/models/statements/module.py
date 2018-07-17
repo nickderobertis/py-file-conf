@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 import ast
 
 from dero.mixins.repr import ReprMixin
@@ -7,6 +7,8 @@ from dero.manager.imports.models.statements.importbase import ImportStatement
 from dero.manager.imports.models.statements.rename import RenameStatementCollection
 from dero.manager.imports.logic.parse.extract import _extract_modules_from_module_import
 from dero.manager.imports.models.statements.comment import Comment
+from dero.manager.imports.logic.load.ext_importlib import get_filepath_from_module_str
+
 
 class ModuleImportStatement(ImportStatement, ReprMixin):
     rename_attr = 'modules'
@@ -50,3 +52,6 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
             modules,
             renames
         )
+
+    def get_module_filepaths(self, import_section_path_str: str=None) -> Dict[str, str]:
+        return {module: get_filepath_from_module_str(module, import_section_path_str) for module in self.modules}
