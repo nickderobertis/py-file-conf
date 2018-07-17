@@ -1,12 +1,12 @@
-
+from typing import List
 
 class FileParser:
 
     def __init__(self, filepath: str):
         self.filepath = filepath
 
-    def load(self) -> str:
+    def load(self) -> List[str]:
         with open(self.filepath, 'r') as f:
-            contents = f.read()
+            contents = f.readlines()
 
         return contents

@@ -1,4 +1,4 @@
-
+from copy import deepcopy
 
 class Container:
     items = []
@@ -18,3 +18,7 @@ class Container:
 
     def insert(self, index, item):
         self.items.insert(index, item)
+
+    def copy(self):
+        return deepcopy(self)
+

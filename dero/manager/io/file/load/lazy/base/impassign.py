@@ -9,7 +9,7 @@ from dero.manager.imports.models.statements.container import ImportStatementCont
 class ImportAssignmentLazyLoader(LazyLoader):
 
     def register(self):
-        # Store ast representation of file
+        # Store ast representation of file and file body
         super().register()
 
         # Store imports and assignments

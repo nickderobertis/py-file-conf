@@ -45,6 +45,9 @@ class ImportStatementContainer(Container, ReprMixin):
 
         return False
 
+    def __str__(self):
+        return '\n'.join(str(imp) for imp in self)
+
     def obj_name_is_imported(self, obj_name: str) -> bool:
 
         obj_name_parts = obj_name.split('.')
