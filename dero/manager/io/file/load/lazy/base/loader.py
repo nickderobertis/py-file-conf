@@ -1,4 +1,5 @@
 from dero.mixins.propertycache import SimplePropertyCacheMixin
+from dero.manager.io.file.load.parsers.py import PythonFileParser
 
 class LazyLoader(SimplePropertyCacheMixin):
 
@@ -9,7 +10,7 @@ class LazyLoader(SimplePropertyCacheMixin):
         pass
 
     def register(self):
-        pass
+        self._ast = PythonFileParser(self.filepath).load()
 
     @property
     def ast(self):

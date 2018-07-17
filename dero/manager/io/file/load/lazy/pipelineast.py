@@ -1,4 +1,5 @@
 from dero.manager.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoader
+from dero.manager.io.file.load.parsers.assign import extract_assignments_from_ast_by_name
 
 class PipelineAstLoader(ImportAssignmentLazyLoader):
 
@@ -7,6 +8,7 @@ class PipelineAstLoader(ImportAssignmentLazyLoader):
         super().register()
 
         # Store pipeline dict assignment
+        self._pipeline_dict_assign = extract_assignments_from_ast_by_name(self._ast, 'pipeline_dict')
 
         # TODO: parse modules in pipeline dict
 
