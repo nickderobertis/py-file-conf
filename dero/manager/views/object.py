@@ -7,6 +7,7 @@ from dero.manager.imports.models.statements.interfaces import (
     ModuleImportStatement
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
+from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
 
 class ObjectView(SimplePropertyCacheMixin):
 
@@ -32,12 +33,12 @@ class ObjectView(SimplePropertyCacheMixin):
         return self._try_getattr_else_call_func('_item', self._get_real_item)
 
     @property
-    def module_ast(self) -> ast.Module:
-        return self._try_getattr_else_call_func('_module_ast', self._set_module_ast)
+    def module(self) -> str:
+        return self._try_getattr_else_call_func('_module', self._set_module)
 
     @property
-    def module_filepath(self) -> str:
-        return self._try_getattr_else_call_func('_module_filepath', self._set_module_filepath)
+    def name(self) -> str:
+        return self._try_getattr_else_call_func('_name', self._set_name)
 
     @classmethod
     def from_ast_and_imports(cls, obj_ast: ast.AST, import_statements: ImportStatementContainer,
@@ -50,24 +51,22 @@ class ObjectView(SimplePropertyCacheMixin):
             section_path_str=section_path_str
         )
 
-    def _set_module_filepath(self):
+    def _set_module(self):
         if self.import_statement is None:
-            self._module_filepath = None
+            self._module = None
 
         if isinstance(self.import_statement, ObjectImportStatement):
-            func = lambda: self.import_statement.get_module_filepath(self.section_path_str)
+            self._module = self.import_statement.module
         elif isinstance(self.import_statement, ModuleImportStatement):
             # have already ensured in creating ObjectView that there should be only one module
-            # in the module import statement. So just take the first filepath
-            func = lambda: self.import_statement.get_module_filepaths(self.section_path_str)[self.import_statement.modules[0]]
+            # in the module import statement. So just take the first module
+            self._module = self.import_statement.modules[0]
         else:
             raise ValueError(f'expected import statement to be ObjectImportStatement or ModuleImportStatement.'
                              f' Got {self.import_statement} of type {type(self.import_statement)}')
 
-        self._module_filepath = func()
-
-    def _set_module_ast(self):
-        pass
+    def _set_name(self):
+        self._name = extract_external_name_from_assign_value(self.obj_ast)
 
     def _get_default_config(self):
         pass

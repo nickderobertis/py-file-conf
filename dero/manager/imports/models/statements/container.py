@@ -89,45 +89,49 @@ class ImportStatementContainer(Container, ReprMixin):
             # Did not find any external names for this ast obj. Likely builtin.
             return None
 
+        return self.get_import_for_module_or_obj_name(possibly_imported_name)
+
+
+    def get_import_for_module_or_obj_name(self, name: str) -> ImportOrNone:
         found_import = False
         for imp in self:
             if isinstance(imp, ModuleImportStatement):
-                if possibly_imported_name in imp.modules:
+                if name in imp.modules:
                     # match on original module name
                     # set up for creating a new import
                     found_import = True
                     renames = None
-                    modules = [possibly_imported_name]
-                elif possibly_imported_name in imp.renames.new_names:
+                    modules = [name]
+                elif name in imp.renames.new_names:
                     # match on renamed module name
                     # set up for creating a new import
                     found_import = True
                     renames = RenameStatementCollection(
                         # Pull the rename matching this name
-                        [rename for rename in imp.renames if rename.new_name == possibly_imported_name]
+                        [rename for rename in imp.renames if rename.new_name == name]
                     )
                     # grab original module matching this rename
-                    modules = [rename.item for rename in imp.renames if rename.new_name == possibly_imported_name]
+                    modules = renames.reverse_name_map[name]
                 if found_import:
                     # May be multiple modules imported in this one statement. Create a new statement with just this module
                     return ModuleImportStatement(modules=modules, renames=renames)
             elif isinstance(imp, ObjectImportStatement):
-                if possibly_imported_name in imp.objs:
+                if name in imp.objs:
                     # match on original object name
                     # set up for creating a new import
                     found_import = True
                     renames = None
-                    objs = [possibly_imported_name]
-                elif possibly_imported_name in imp.renames.new_names:
+                    objs = [name]
+                elif name in imp.renames.new_names:
                     # match on renamed object name
                     # set up for creating a new import
                     found_import = True
                     renames = RenameStatementCollection(
                         # Pull the rename matching this name
-                        [rename for rename in imp.renames if rename.new_name == possibly_imported_name]
+                        [rename for rename in imp.renames if rename.new_name == name]
                     )
                     # grab original object matching this rename
-                    objs = [rename.item for rename in imp.renames if rename.new_name == possibly_imported_name]
+                    objs = renames.reverse_name_map[name]
                 if found_import:
                     return ObjectImportStatement(objs, module=imp.module, renames=renames)
 

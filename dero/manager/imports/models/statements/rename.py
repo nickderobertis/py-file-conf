@@ -70,6 +70,14 @@ class RenameStatementCollection(ReprMixin):
     def item_map(self):
         return {rename_statement.item: rename_statement for rename_statement in self.items}
 
+    @property
+    def reverse_name_map(self):
+        return {rename_statement.new_name: rename_statement.item for rename_statement in self.items}
+
+    @property
+    def name_map(self):
+        return {rename_statement.item: rename_statement.new_name for rename_statement in self.items}
+
     @classmethod
     def from_str_list(cls, rename_strs: List[str]):
         return cls([RenameStatement.from_str(rename_str) for rename_str in rename_strs])
