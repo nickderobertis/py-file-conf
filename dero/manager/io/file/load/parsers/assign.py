@@ -40,6 +40,7 @@ class AssignmentByVarnameExtractor(AssignmentExtractor):
         if node.target.id == self.varname:
             super().visit_AnnAssign(node)
 
+
 def extract_assignments_from_ast_by_name(module: ast.Module, name: str) -> AssignmentStatementContainer:
     ae = AssignmentByVarnameExtractor(name)
     ae.visit(module)
