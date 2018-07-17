@@ -4,7 +4,7 @@ if TYPE_CHECKING:
 
 from dero.manager.basemodels.file import ConfigFileBase
 from dero.manager.imports.logic.parse.main import parse_import_lines_return_import_models
-from dero.manager.imports.models.statements.interfaces import AnyImportStatement
+from dero.manager.imports.models.statements.interfaces import AnyImportStatementOrComment
 from dero.manager.imports.logic.load.file import get_user_defined_dict_from_filepath
 from dero.manager.config.logic.load import (
     _split_lines_into_import_and_assignment

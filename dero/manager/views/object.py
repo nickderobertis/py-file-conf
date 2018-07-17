@@ -1,5 +1,38 @@
+import ast
 
+from dero.mixins.propertycache import SimplePropertyCacheMixin
+from dero.manager.imports.models.statements.interfaces import AnyImportStatement
+from dero.manager.imports.models.statements.container import ImportStatementContainer
 
-class ObjectView:
+class ObjectView(SimplePropertyCacheMixin):
 
-    pass
+    def __init__(self, obj_ast: ast.AST, import_statement: AnyImportStatement,
+                 section_path_str: str=None):
+        self.obj_ast = obj_ast
+        self.import_statement = import_statement
+        self.section_path_str = section_path_str
+
+    def load(self):
+        # executes import
+        if self.import_statement is not None:
+            self.import_statement.execute()
+
+    @property
+    def default_config(self):
+        return self._try_getattr_else_call_func('_default_config', self._get_default_config)
+
+    @property
+    def item(self):
+        return self._try_getattr_else_call_func('_item', self._get_real_item)
+
+    @classmethod
+    def from_ast_and_imports(cls, obj_ast: ast.AST, import_statements: ImportStatementContainer,
+                             section_path_str: str=None):
+        # TODO: get import statement for obj_ast, create class
+        pass
+
+    def _get_default_config(self):
+        pass
+
+    def _get_real_item(self):
+        pass

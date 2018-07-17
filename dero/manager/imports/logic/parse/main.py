@@ -4,7 +4,7 @@ from dero.manager.imports.logic.parse.combine import combine_imports_lines_into_
 from dero.manager.imports.logic.parse.clean import pre_process_import_statement_get_renames
 from dero.manager.imports.logic.parse.classify import is_module_import, is_obj_import
 from dero.manager.imports.logic.parse.extract import extract_line_without_comment_and_comment_from_line
-from dero.manager.imports.models.statements.interfaces import AnyImportStatement
+from dero.manager.imports.models.statements.interfaces import AnyImportStatementOrComment
 from dero.manager.imports.models.statements.module import ModuleImportStatement
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.imports.models.statements.container import ImportStatementContainer
@@ -20,7 +20,7 @@ def parse_import_lines_return_import_models(import_lines: List[str]) -> ImportSt
         [_parse_import_statement_str_return_import_model(import_statement) for import_statement in import_statements]
     )
 
-def _parse_import_statement_str_return_import_model(import_str: str) -> AnyImportStatement:
+def _parse_import_statement_str_return_import_model(import_str: str) -> AnyImportStatementOrComment:
     import_str, comment_str = extract_line_without_comment_and_comment_from_line(import_str)
 
     if comment_str.strip() is not '':

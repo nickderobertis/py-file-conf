@@ -1,5 +1,6 @@
+from dero.mixins.propertycache import SimplePropertyCacheMixin
 
-class LazyLoader:
+class LazyLoader(SimplePropertyCacheMixin):
 
     def __init__(self, filepath: str):
         self.filepath = filepath
@@ -15,13 +16,4 @@ class LazyLoader:
         return self._try_getattr_else_register('_ast')
 
     def _try_getattr_else_register(self, attr: str):
-        return self._try_getattr_else_call_method_by_str(attr, 'register')
-
-    def _try_getattr_else_call_method_by_str(self, attr: str, method_str: str):
-        try:
-            return getattr(self, attr)
-        except AttributeError:
-            method = getattr(self, method_str)
-            method()
-
-        return getattr(self, attr)
+        return self._try_getattr_else_call_func(attr, self.register)

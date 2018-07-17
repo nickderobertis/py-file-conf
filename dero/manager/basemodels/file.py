@@ -14,7 +14,7 @@ from dero.manager.config.logic.write import (
     assignment_lines_as_str
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
-from dero.manager.imports.models.statements.interfaces import AnyImportStatement, ObjectImportStatement
+from dero.manager.imports.models.statements.interfaces import AnyImportStatementOrComment, ObjectImportStatement
 
 
 class ConfigFileBase:
@@ -153,7 +153,7 @@ class ConfigFileBase:
     def all_variables(self):
         return self.imported_variables + self.assigned_variables
 
-    def _add_new_lines(self, new_imports_lines: List[AnyImportStatement], new_variable_assignment_lines: List[str]) -> None:
+    def _add_new_lines(self, new_imports_lines: List[AnyImportStatementOrComment], new_variable_assignment_lines: List[str]) -> None:
 
         always_imports = self.always_imports.copy()
         always_assigns_begin = self.always_assigns_begin.copy()
@@ -194,10 +194,10 @@ class ConfigFileBase:
             # need to trigger set so that assigned variables will update from self.assigns
             self._set_assigned_variables()
 
-    def _add_import_objs_if_not_in_imports(self, import_objs: List[AnyImportStatement], beginning: bool=False) -> None:
+    def _add_import_objs_if_not_in_imports(self, import_objs: List[AnyImportStatementOrComment], beginning: bool=False) -> None:
         [self._add_import_obj_if_not_in_imports(import_obj, beginning=beginning) for import_obj in import_objs]
 
-    def _add_import_obj_if_not_in_imports(self, import_obj: AnyImportStatement, beginning: bool=False) -> None:
+    def _add_import_obj_if_not_in_imports(self, import_obj: AnyImportStatementOrComment, beginning: bool=False) -> None:
         if isinstance(import_obj, ObjectImportStatement):
             imported_objs = import_obj.objs
             already_imported = lambda: all([self.imports.obj_name_is_imported(imp_obj) for imp_obj in imported_objs])

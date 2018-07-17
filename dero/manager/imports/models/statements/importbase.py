@@ -22,3 +22,7 @@ class ImportStatement(EqOnAttrsMixin):
                 renamed_items.append(item)
 
         return renamed_items
+
+    def execute(self):
+        # execute import statement
+        pass

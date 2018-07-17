@@ -15,4 +15,4 @@ class PipelineAstLoader(ImportAssignmentLazyLoader):
         return self._try_getattr_else_load('_pipeline_dict_assign')
 
     def _try_getattr_else_load(self, attr: str):
-        return self._try_getattr_else_call_method_by_str(attr, 'load')
+        return self._try_getattr_else_call_func(attr, self.load)

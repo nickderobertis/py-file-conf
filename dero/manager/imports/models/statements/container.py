@@ -4,15 +4,15 @@ from dero.manager.basemodels.container import Container
 from dero.mixins.repr import ReprMixin
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.imports.models.statements.module import ModuleImportStatement
-from dero.manager.imports.models.statements.interfaces import AnyImportStatement, Comment
+from dero.manager.imports.models.statements.interfaces import AnyImportStatementOrComment, Comment
 
 class ImportStatementContainer(Container, ReprMixin):
     repr_cols = ['items']
 
-    def __init__(self, items: List[AnyImportStatement]):
+    def __init__(self, items: List[AnyImportStatementOrComment]):
         self.items = items
 
-    def __contains__(self, item: AnyImportStatement):
+    def __contains__(self, item: AnyImportStatementOrComment):
         for imp_or_comment in self:
             if item == imp_or_comment:
                 return True
