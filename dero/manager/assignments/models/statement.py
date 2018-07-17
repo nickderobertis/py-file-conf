@@ -35,3 +35,6 @@ class AssignmentStatement:
             ast_assign.value,
             annotation
         )
+
+    def to_dict(self) -> dict:
+        return {self.target.id: self.value}

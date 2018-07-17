@@ -1,6 +1,8 @@
 from dero.manager.io.file.load.lazy.base.loader import LazyLoader
 from dero.manager.io.file.load.parsers.imp import extract_imports_from_ast
 from dero.manager.io.file.load.parsers.assign import extract_assignments_from_ast
+from dero.manager.assignments.models.container import AssignmentStatementContainer
+from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 
 
@@ -15,9 +17,9 @@ class ImportAssignmentLazyLoader(LazyLoader):
         self._assigns = extract_assignments_from_ast(self._ast)
 
     @property
-    def imports(self):
+    def imports(self) -> ImportStatementContainer:
         return self._try_getattr_else_register('_imports')
 
     @property
-    def assigns(self):
+    def assigns(self) -> AssignmentStatementContainer:
         return self._try_getattr_else_register('_assigns')
