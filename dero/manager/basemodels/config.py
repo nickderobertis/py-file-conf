@@ -36,7 +36,10 @@ class ConfigBase(dict):
         return f'<{class_name}(name={self.name}, {dict_repr})>'
 
     def __getattr__(self, attr):
-        return self[attr]
+        try:
+            self[attr]
+        except KeyError:
+            raise AttributeError(attr)
 
     def __dir__(self):
         return self.keys()
