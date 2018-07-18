@@ -55,6 +55,7 @@ class FunctionDefinitionOrClassInitByNameExtractor(FunctionDefinitionByNameExtra
         if node.name == self.func_name:
             # Found a class definition matching the name we're looking for
             # Now look for the init method of that class
+            # TODO: deal with subclassing where __init__ will not be in class definition
             orig_name = self.func_name
             self.func_name = '__init__'
             self.generic_visit(node)
