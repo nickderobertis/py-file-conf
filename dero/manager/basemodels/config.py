@@ -1,9 +1,12 @@
-from typing import List
+from typing import List, Tuple
 import os
 from copy import deepcopy
 
 from dero.manager.basemodels.file import ConfigFileBase
 from dero.manager.imports.models.statements.container import ImportStatementContainer
+from dero.manager.assignments.models.container import AssignmentStatementContainer
+
+ImportsAndAssigns = Tuple[ImportStatementContainer, AssignmentStatementContainer]
 
 class ConfigBase(dict):
 
@@ -57,3 +60,8 @@ class ConfigBase(dict):
     def from_file(cls, filepath: str, name: str = None):
         file = cls.config_file_class(filepath, name=name)
         return file.load()
+
+    def as_imports_and_assignments(self) -> ImportsAndAssigns:
+        assigns = AssignmentStatementContainer.from_dict_of_varnames_and_ast(self, self.annotations)
+
+        return self.imports, assigns

@@ -19,3 +19,21 @@ class AssignmentStatementContainer(Container):
             )
 
         return out_dict
+
+    @classmethod
+    def from_dict_of_varnames_and_ast(cls, assignment_dict: dict, annotation_dict: dict=None):
+        assigns = []
+        for varname, value in assignment_dict.items():
+
+            # Extract annotation if exists
+            if varname in annotation_dict:
+                annotation = annotation_dict[varname]
+            else:
+                annotation = None
+
+            # Create assignment statement
+            assigns.append(
+                AssignmentStatement.from_varname_and_ast_value(varname, value=value, annotation=annotation)
+            )
+
+        return cls(assigns)

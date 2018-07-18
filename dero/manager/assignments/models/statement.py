@@ -58,3 +58,9 @@ class AssignmentStatement:
                 annotation=self.annotation,
                 simple=1
             )
+
+    @classmethod
+    def from_varname_and_ast_value(cls, varname: str, value: ast.AST, annotation: ast.Name=None):
+        assign_name = ast.Name(id=varname, ctx=ast.Store())
+
+        return cls(assign_name, value=value, annotation=annotation)
