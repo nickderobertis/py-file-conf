@@ -9,13 +9,13 @@ from dero.mixins.repr import ReprMixin
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
 DictTuple = Tuple[dict, dict]
 
-class AssignmentStatement(EqOnAttrsMixin, ReprMixin):
-    equal_attrs = ['target', 'value', 'annotation']
-    repr_cols = ['target', 'value', 'annotation']
+class AssignmentStatement(ReprMixin):
+    repr_cols = ['varname', 'value', 'annotation']
 
     def __init__(self, target: ast.Name, value: ast.AST, annotation: ast.Name=None,
                  preferred_position: str = None):
         self.target = target
+        self.varname = target.id if isinstance(target, ast.Name) else ast_node_to_source(target)  # handle subscripts, etc.
         self.value = value
         self.annotation = annotation
         self.preferred_position = preferred_position
@@ -23,6 +23,28 @@ class AssignmentStatement(EqOnAttrsMixin, ReprMixin):
     def __str__(self):
         ast_assign = self.to_ast()
         return ast_node_to_source(ast_assign)
+
+    def __eq__(self, other):
+        if not isinstance(other, AssignmentStatement):
+            # Auto convert ast assigns for comparison
+            if isinstance(other, (ast.Assign, ast.AnnAssign)):
+                other = AssignmentStatement.from_ast_assign(other)
+            else:
+                return False  # If not an assign or ast assign, not equal
+
+        # Other is an assignment statement.
+        if self.varname != other.varname:
+            return False  # non-matching assignment variable, must not be equal
+
+        # Other is an assignment statement to the same variable
+        # Check if source generated from ast values are the same
+        if ast_node_to_source(self.value) != ast_node_to_source(other.value):
+            return False
+
+        # Ignore differences on annotations. Could check that here.
+
+        # Passed all checks, must be the same
+        return True
 
     @classmethod
     def from_ast_assign(cls, ast_assign: AnyAstAssign, preferred_position: str = None):

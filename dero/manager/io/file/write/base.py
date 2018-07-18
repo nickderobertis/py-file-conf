@@ -67,7 +67,7 @@ class FileStr:
         [all_imports.add_if_missing(imp) for imp in possibly_new_imports]
 
         for assign in possibly_new_assigns:
-            if assign not in existing_assigns:
+            if not existing_assigns.contains_varname(assign.varname):
                 begin = getattr(assign, 'prefer_beginning', False)
                 if begin:
                     new_assigns_begin.append_if_missing(assign)

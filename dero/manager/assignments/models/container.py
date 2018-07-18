@@ -13,6 +13,9 @@ class AssignmentStatementContainer(Container, ReprMixin):
     def __str__(self):
         return ''.join(str(assign) for assign in self)
 
+    def contains_varname(self, varname: str):
+        return any([assign.varname == varname for assign in self])
+
     def to_default_dict_and_annotation_dict(self) -> Tuple[dict, dict]:
         default_dict = {}
         annotation_dict = {}
