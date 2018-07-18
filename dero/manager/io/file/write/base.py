@@ -63,23 +63,15 @@ class FileStr:
 
         possibly_new_imports, possibly_new_assigns = import_assignment_obj.as_imports_and_assignments()
 
-        for imp in possibly_new_imports:
-            if imp not in all_imports:
-                if _is_begin_str(imp.preferred_position):
-                    all_imports.insert(0, imp)
-                else:
-                    all_imports.append(imp)
+        # Checks to see whether should be added, and whether to beginning or end, then adds
+        [all_imports.add_if_missing(imp) for imp in possibly_new_imports]
 
         for assign in possibly_new_assigns:
             if assign not in existing_assigns:
-                if _is_begin_str(assign.preferred_position):
-                    new_assigns_begin.append(assign)
+                begin = getattr(assign, 'prefer_beginning', False)
+                if begin:
+                    new_assigns_begin.append_if_missing(assign)
                 else:
-                    new_assigns_end.append(assign)
+                    new_assigns_end.append_if_missing(assign)
 
         return all_imports, new_assigns_begin, new_assigns_end
-
-def _is_begin_str(begin_str: str) -> bool:
-    begin_str = begin_str.strip().lower()
-
-    return begin_str in ('b', 'begin', 'beginning', 'start', 's')

@@ -21,6 +21,10 @@ class ConfigBase(dict):
         if d is None:
             d = {}
         super().__init__(d, **kwargs)
+
+        if annotations is None:
+            annotations = {}
+
         self.name = name
         self.annotations = annotations
         self.imports = imports

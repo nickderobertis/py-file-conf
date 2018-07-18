@@ -135,7 +135,6 @@ class ImportStatementContainer(Container, ReprMixin):
                 if found_import:
                     return ObjectImportStatement(objs, module=imp.module, renames=renames)
 
-
     @property
     def imported_names(self) -> List[str]:
         imported_names = []

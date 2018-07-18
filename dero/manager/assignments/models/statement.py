@@ -3,12 +3,13 @@ import ast
 
 from dero.manager.io.file.write.asttosource import ast_node_to_source
 from dero.manager.io.file.load.parsers.assign import extract_assignment_from_ast
+from dero.mixins.attrequals import EqOnAttrsMixin
 
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
 DictTuple = Tuple[dict, dict]
 
-class AssignmentStatement:
-
+class AssignmentStatement(EqOnAttrsMixin):
+    equal_attrs = ['target', 'value', 'annotation']
 
     def __init__(self, target: ast.Name, value: ast.AST, annotation: ast.Name=None,
                  preferred_position: str = None):
