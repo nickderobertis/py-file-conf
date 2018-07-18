@@ -25,6 +25,9 @@ class ConfigBase(dict):
         if annotations is None:
             annotations = {}
 
+        if imports is None:
+            imports = ImportStatementContainer([])
+
         self.name = name
         self.annotations = annotations
         self.imports = imports
