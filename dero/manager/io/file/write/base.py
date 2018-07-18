@@ -46,7 +46,7 @@ class FileStr:
 
         # Now convert to str
         items = [
-            str(all_imports),
+            str(all_imports) + '\n',
             str(new_assigns_begin),
             '\n'.join(existing_body),
             str(new_assigns_end)
