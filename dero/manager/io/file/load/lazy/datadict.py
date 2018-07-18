@@ -1,5 +1,5 @@
 from dero.manager.io.file.load.lazy.dataast import DataDictAstLoader
-from dero.manager.io.file.load.parsers.collections import extract_collections_from_ast
+from dero.manager.io.file.load.parsers.collections import extract_collection_from_ast
 
 class DataDictLoader(DataDictAstLoader):
 
@@ -24,4 +24,4 @@ class DataDictLoader(DataDictAstLoader):
         Returns:
 
         """
-        self._data_dict = extract_collections_from_ast(self.data_dict_assign, convert_str_values=True)
+        self._data_dict = extract_collection_from_ast(self.data_dict_assign.to_ast(), convert_str_values=True)

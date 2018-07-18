@@ -3,6 +3,7 @@ import ast
 
 AstDictOrList = Union[ast.Dict, ast.List]
 DictOrList = Union[dict, list]
+DictOrListOrNone = Union[DictOrList, None]
 
 
 class AstDictListConverter(ast.NodeVisitor):
@@ -38,6 +39,18 @@ def extract_collections_from_ast(ast_node: ast.AST, convert_str_values: bool = F
     adlc = AstDictListConverter(convert_str_values=convert_str_values)
     adlc.visit(ast_node)
     return adlc.collections
+
+def extract_collection_from_ast(ast_node: ast.AST, convert_str_values: bool = False) -> DictOrListOrNone:
+    collections = extract_collections_from_ast(ast_node=ast_node, convert_str_values=convert_str_values)
+
+    if len(collections) == 0:
+        return None
+
+    if len(collections) > 1:
+        raise ValueError(f'expected to extract one assignment from ast. got {len(collections)} '
+                         f'assigns: {collections}')
+
+    return collections[0]
 
 
 def _ast_dict_or_list_to_dict_or_list(node: AstDictOrList, convert_str_values: bool = False) -> DictOrList:

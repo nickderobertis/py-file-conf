@@ -1,5 +1,5 @@
 from dero.manager.io.file.load.lazy.pipelineast import PipelineAstLoader
-from dero.manager.io.file.load.parsers.collections import extract_collections_from_ast
+from dero.manager.io.file.load.parsers.collections import extract_collection_from_ast
 
 class PipelineDictLoader(PipelineAstLoader):
 
@@ -24,4 +24,4 @@ class PipelineDictLoader(PipelineAstLoader):
         Returns:
 
         """
-        self._pipeline_dict = extract_collections_from_ast(self.pipeline_dict_assign)
+        self._pipeline_dict = extract_collection_from_ast(self.pipeline_dict_assign.to_ast())

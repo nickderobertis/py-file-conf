@@ -4,7 +4,8 @@ import warnings
 from dero.manager.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.sectionpath.sectionpath import SectionPath
-from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepaths
+from dero.manager.pipelines.models.file import PipelineDictFile
+from dero.manager.data.models.dictfile import DataDictFile
 from dero.manager.selector.logic.get.frommanager import get_pipeline_dict_path_and_data_dict_path_from_manager
 from dero.manager.pipelines.models.collection import PipelineCollection
 from dero.manager.basemodels.pipeline import Pipeline
@@ -130,7 +131,8 @@ class Selector:
         out_dict = {}
         for manager_name, manager in self._managers.items():
             pipeline_dict_path, data_dict_path = get_pipeline_dict_path_and_data_dict_path_from_manager(manager)
-            pipeline_dict, data_dict = get_pipeline_dict_and_data_dict_from_filepaths(pipeline_dict_path, data_dict_path)
+            pipeline_dict = PipelineDictFile(pipeline_dict_path, name='pipeline_dict').load()
+            data_dict = DataDictFile(data_dict_path, name='data_dict').load()
             manager_dict = {
                 'funcs': PipelineCollection.from_dict(pipeline_dict, manager.basepath),
                 'data': DataCollection.from_dict(data_dict, manager.basepath)
