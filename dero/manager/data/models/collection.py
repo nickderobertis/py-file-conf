@@ -44,8 +44,11 @@ class DataCollection(Collection):
         if os.path.exists(item_filepath):
             # if config file already exists, load confguration from file, use to update file defaults
             existing_config = DataConfig.from_file(item_filepath)
+            existing_imports = existing_config._file.interface.imports
             # also use to update DataSource object in memory
             item.apply_config(existing_config)
+        else:
+            existing_imports = None
 
-        item_config = DataConfig.from_source(item, loaded_modules=self._loaded_modules)
+        item_config = DataConfig.from_source(item, imports=existing_imports)
         item_config.to_file(item_filepath)
