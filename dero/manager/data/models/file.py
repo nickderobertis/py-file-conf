@@ -15,19 +15,20 @@ from dero.manager.config.logic.write import (
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
+from dero.manager.assignments.models.statement import AssignmentStatement
 
 
 
 
 class DataConfigFile(ConfigFileBase):
     # lines to always import. pass import objects
-    always_imports = [ObjectImportStatement.from_str('from dero.manager import Selector')]
+    always_imports = [ObjectImportStatement.from_str('from dero.manager import Selector', preferred_position='begin')]
 
-    # assignment lines to always include at beginning. pass strs
-    always_assigns_begin = ['s = Selector()']
-
-    # assignment lines to always include at end. pass strs
-    always_assigns_end = ['loader_func_kwargs = dict(\n    \n)']
+    # assignment lines to always include at beginning. pass assign objects
+    always_assigns = [
+        AssignmentStatement.from_str('s = Selector()', preferred_position='begin'),
+        AssignmentStatement.from_str('loader_func_kwargs = dict(\n    \n)', preferred_position='end')
+    ]
 
     def load(self) -> 'DataConfig':
         from dero.manager.data.models.config import DataConfig

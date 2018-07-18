@@ -2,6 +2,7 @@ from typing import Union
 import ast
 
 from dero.manager.io.file.write.asttosource import ast_node_to_source
+from dero.manager.io.file.load.parsers.assign import extract_assignment_from_ast
 
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
 
@@ -68,3 +69,11 @@ class AssignmentStatement:
         assign_name = ast.Name(id=varname, ctx=ast.Store())
 
         return cls(assign_name, value=value, annotation=annotation, preferred_position=preferred_position)
+
+    @classmethod
+    def from_str(cls, assign_str: str, preferred_position: str = None):
+        ast_module = ast.parse(assign_str)
+        cls_obj = extract_assignment_from_ast(ast_module)
+        cls_obj.preferred_position = preferred_position
+
+        return cls_obj

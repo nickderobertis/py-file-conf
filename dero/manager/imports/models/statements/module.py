@@ -7,7 +7,6 @@ from dero.mixins.repr import ReprMixin
 
 from dero.manager.imports.models.statements.importbase import ImportStatement
 from dero.manager.imports.models.statements.rename import RenameStatementCollection
-from dero.manager.imports.logic.parse.extract import _extract_modules_from_module_import
 from dero.manager.imports.models.statements.comment import Comment
 from dero.manager.imports.logic.load.ext_importlib import get_filepath_from_module_str
 
@@ -40,9 +39,13 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
     @classmethod
     def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None,
                  preferred_position: str = None):
-        modules = _extract_modules_from_module_import(import_str)
+        from dero.manager.io.file.load.parsers.imp import extract_module_import_from_ast
+        ast_module = ast.parse(import_str)
+        cls_obj = extract_module_import_from_ast(ast_module)
+        cls_obj.comment = comment
+        cls_obj.preferred_position = preferred_position
 
-        return cls(modules=modules, renames=renames, comment=comment, preferred_position=preferred_position)
+        return cls_obj
 
     @classmethod
     def from_ast_import(cls, ast_import: ast.Import, preferred_position: str = None):

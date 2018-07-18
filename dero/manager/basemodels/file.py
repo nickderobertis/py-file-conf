@@ -15,6 +15,7 @@ from dero.manager.config.logic.write import (
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 from dero.manager.imports.models.statements.interfaces import AnyImportStatementOrComment, ObjectImportStatement
+from dero.manager.io.file.interfaces.config import ConfigFileInterface
 
 
 class ConfigFileBase:
@@ -24,11 +25,8 @@ class ConfigFileBase:
     # lines to always import. pass import objects
     always_imports = []
 
-    # assignment lines to always include at beginning. pass strs
-    always_assigns_begin = []
-
-    # assignment lines to always include at end. pass strs
-    always_assigns_end = []
+    # assignment lines to always include at beginning. pass assignment objects
+    always_assigns = []
 
     def load(self) -> 'ConfigBase':
         """
