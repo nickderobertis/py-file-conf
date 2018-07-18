@@ -17,7 +17,7 @@ def ast_node_to_source(ast_node: ast.AST) -> str:
 
     # Must be a module to output to source. Wrap in module if not already
     if not isinstance(ast_node, ast.Module):
-        ast_node = ast.Module(ast_node)
+        ast_node = ast.Module([ast_node])
 
     # Fix line numbers
     ast.fix_missing_locations(ast_node)

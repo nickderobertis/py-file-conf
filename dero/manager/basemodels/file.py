@@ -40,7 +40,7 @@ class ConfigFileBase:
 
         return config_class(
             d=config_dict,
-            annotation_dict=annotation_dict,
+            annotations=annotation_dict,
             imports=self.interface.imports,
             _file=self
         )
