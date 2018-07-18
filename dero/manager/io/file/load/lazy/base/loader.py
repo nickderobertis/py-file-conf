@@ -1,4 +1,5 @@
 import ast
+import os
 from typing import List
 
 from dero.mixins.propertycache import SimplePropertyCacheMixin
@@ -15,7 +16,10 @@ class LazyLoader(SimplePropertyCacheMixin, ReprMixin):
         pass
 
     def register(self):
-        self._ast, self._body = PythonFileParser(self.filepath).load()
+        if os.path.exists(self.filepath):
+            self._ast, self._body = PythonFileParser(self.filepath).load()
+        else:
+            self._ast, self._body = None, None
 
     @property
     def ast(self) -> ast.AST:

@@ -13,8 +13,12 @@ class ImportAssignmentLazyLoader(LazyLoader):
         super().register()
 
         # Store imports and assignments
-        self._imports = extract_imports_from_ast(self._ast)
-        self._assigns = extract_assignments_from_ast(self._ast)
+        if self._ast is not None:
+            self._imports = extract_imports_from_ast(self._ast)
+            self._assigns = extract_assignments_from_ast(self._ast)
+        else:
+            self._imports = ImportStatementContainer([])
+            self._assigns = AssignmentStatementContainer([])
 
     @property
     def imports(self) -> ImportStatementContainer:

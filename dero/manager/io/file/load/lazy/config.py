@@ -28,6 +28,9 @@ class ConfigFileLoader(ImportAssignmentLazyLoader):
         Returns:
 
         """
-        import_lines, assignment_lines = _split_lines_into_import_and_assignment(self.body)
-        self._assignment_body = assignment_lines
+        if self.body is not None:
+            import_lines, assignment_lines = _split_lines_into_import_and_assignment(self.body)
+            self._assignment_body = assignment_lines
+        else:
+            self._assignment_body = []
 
