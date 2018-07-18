@@ -1,9 +1,10 @@
-from typing import List
 
 from dero.manager.basemodels.config import ConfigBase
 from dero.manager.data.models.source import DataSource
 from dero.manager.data.models.file import DataConfigFile
 from dero.manager.imports.models.statements.container import ImportStatementContainer
+from dero.manager.io.file.load.parsers.fromdict import extract_dict_from_ast_dict_or_dict_constructor
+
 
 class DataConfig(ConfigBase):
     config_file_class = DataConfigFile
@@ -21,8 +22,8 @@ class DataConfig(ConfigBase):
 
         # Handle loader func kwargs. They are saved as a dict in data source, but when passing to
         # init, they are spread. Therefore save as their own items in config dict
-        for config_attr, config_value in data_source.loader_func_kwargs.items():
+        loader_func_kwargs = extract_dict_from_ast_dict_or_dict_constructor(data_source.loader_func_kwargs)
+        for config_attr, config_value in loader_func_kwargs.items():
             config_dict[config_attr] = config_value
 
         return cls(config_dict, name=name, imports=imports)
-
