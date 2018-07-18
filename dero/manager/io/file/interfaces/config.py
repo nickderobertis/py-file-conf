@@ -8,7 +8,7 @@ from dero.manager.io.file.write.config import ConfigFileStr
 class ConfigFileInterface(ConfigFileLoader):
 
     def save(self, config: 'ConfigBase'):
-        file_str = ConfigFileStr(
+        file_str_obj = ConfigFileStr(
             config,
             existing_assigns=self.assigns,
             existing_imports=self.imports,
@@ -16,4 +16,4 @@ class ConfigFileInterface(ConfigFileLoader):
         )
 
         with open(self.filepath, 'w') as f:
-            f.write(file_str)
+            f.write(file_str_obj.file_str)
