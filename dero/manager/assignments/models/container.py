@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from dero.manager.basemodels.container import Container
 from dero.manager.assignments.models.statement import AssignmentStatement
@@ -11,14 +11,15 @@ class AssignmentStatementContainer(Container):
     def __str__(self):
         return '\n'.join(str(assign) for assign in self)
 
-    def to_dict(self):
-        out_dict = {}
+    def to_default_dict_and_annotation_dict(self) -> Tuple[dict, dict]:
+        default_dict = {}
+        annotation_dict = {}
         for assign_statement in self.items:
-            out_dict.update(
-                assign_statement.to_dict()
-            )
+            default_item, annotation_item = assign_statement.to_default_dict_and_annotation_dict()
+            default_dict.update(default_item)
+            annotation_dict.update(annotation_item)
 
-        return out_dict
+        return default_dict, annotation_dict
 
     @classmethod
     def from_dict_of_varnames_and_ast(cls, assignment_dict: dict, annotation_dict: dict=None,

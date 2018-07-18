@@ -1,10 +1,11 @@
-from typing import Union
+from typing import Union, Tuple
 import ast
 
 from dero.manager.io.file.write.asttosource import ast_node_to_source
 from dero.manager.io.file.load.parsers.assign import extract_assignment_from_ast
 
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
+DictTuple = Tuple[dict, dict]
 
 class AssignmentStatement:
 
@@ -46,8 +47,8 @@ class AssignmentStatement:
             preferred_position=preferred_position
         )
 
-    def to_dict(self) -> dict:
-        return {self.target.id: self.value}
+    def to_default_dict_and_annotation_dict(self) -> DictTuple:
+        return {self.target.id: self.value}, {self.target.id: self.annotation} if self.annotation is not None else {}
 
     def to_ast(self) -> AnyAstAssign:
         if self.annotation is None:
