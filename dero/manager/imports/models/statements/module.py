@@ -17,7 +17,8 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
     repr_cols = ['modules', 'renames', 'comment']
     equal_attrs = ['modules', 'renames', 'comment']
 
-    def __init__(self, modules: List[str], renames: RenameStatementCollection = None, comment: Comment=None):
+    def __init__(self, modules: List[str], renames: RenameStatementCollection = None, comment: Comment=None,
+                 preferred_position: str = None):
 
         if renames is None:
             renames = RenameStatementCollection([])
@@ -25,6 +26,7 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
         self.modules = modules
         self.renames = renames
         self.comment = comment
+        self.preferred_position = preferred_position
 
     def __str__(self):
         modules = self._renamed
@@ -36,13 +38,14 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
         return import_str
 
     @classmethod
-    def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None):
+    def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None,
+                 preferred_position: str = None):
         modules = _extract_modules_from_module_import(import_str)
 
-        return cls(modules=modules, renames=renames, comment=comment)
+        return cls(modules=modules, renames=renames, comment=comment, preferred_position=preferred_position)
 
     @classmethod
-    def from_ast_import(cls, ast_import: ast.Import):
+    def from_ast_import(cls, ast_import: ast.Import, preferred_position: str = None):
 
         # Create RenameStatementCollection
         renames = RenameStatementCollection.from_ast_import(ast_import)
@@ -52,7 +55,8 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
 
         return cls(
             modules,
-            renames
+            renames,
+            preferred_position=preferred_position
         )
 
     def get_module_filepaths(self, import_section_path_str: str=None) -> Dict[str, str]:

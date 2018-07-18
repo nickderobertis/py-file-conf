@@ -16,7 +16,8 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
     repr_cols = ['module', 'objs', 'renames', 'comment']
     equal_attrs = ['module', 'objs', 'renames', 'comment']
 
-    def __init__(self, objs: List[str], module: str, renames: RenameStatementCollection = None, comment: Comment=None):
+    def __init__(self, objs: List[str], module: str, renames: RenameStatementCollection = None, comment: Comment=None,
+                 preferred_position: str = None):
 
         if renames is None:
             renames = RenameStatementCollection([])
@@ -25,6 +26,7 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
         self.module = module
         self.renames = renames
         self.comment = comment
+        self.preferred_position = preferred_position
 
     def __str__(self):
         objs = self._renamed
@@ -36,13 +38,14 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
         return import_str
 
     @classmethod
-    def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None):
+    def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None,
+                 preferred_position: str = None):
         module, objs = _extract_module_and_objs_from_obj_import(import_str)
 
-        return cls(objs=objs, module=module, renames=renames, comment=comment)
+        return cls(objs=objs, module=module, renames=renames, comment=comment, preferred_position=preferred_position)
 
     @classmethod
-    def from_ast_import_from(cls, ast_import: ast.ImportFrom):
+    def from_ast_import_from(cls, ast_import: ast.ImportFrom, preferred_position: str = None):
 
         # Create RenameStatementCollection
         renames = RenameStatementCollection.from_ast_import(ast_import)
@@ -53,7 +56,8 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
         return cls(
             objs,
             ast_import.module,
-            renames
+            renames,
+            preferred_position=preferred_position
         )
 
     def get_module_filepath(self, import_section_path_str: str=None) -> str:

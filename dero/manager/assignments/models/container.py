@@ -21,7 +21,8 @@ class AssignmentStatementContainer(Container):
         return out_dict
 
     @classmethod
-    def from_dict_of_varnames_and_ast(cls, assignment_dict: dict, annotation_dict: dict=None):
+    def from_dict_of_varnames_and_ast(cls, assignment_dict: dict, annotation_dict: dict=None,
+                                      preferred_position: str = None):
         assigns = []
         for varname, value in assignment_dict.items():
 
@@ -33,7 +34,12 @@ class AssignmentStatementContainer(Container):
 
             # Create assignment statement
             assigns.append(
-                AssignmentStatement.from_varname_and_ast_value(varname, value=value, annotation=annotation)
+                AssignmentStatement.from_varname_and_ast_value(
+                    varname,
+                    value=value,
+                    annotation=annotation,
+                    preferred_position=preferred_position
+                )
             )
 
         return cls(assigns)

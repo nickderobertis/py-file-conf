@@ -8,17 +8,19 @@ AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
 class AssignmentStatement:
 
 
-    def __init__(self, target: ast.Name, value: ast.AST, annotation: ast.Name=None):
+    def __init__(self, target: ast.Name, value: ast.AST, annotation: ast.Name=None,
+                 preferred_position: str = None):
         self.target = target
         self.value = value
         self.annotation = annotation
+        self.preferred_position = preferred_position
 
     def __str__(self):
         ast_assign = self.to_ast()
         return ast_node_to_source(ast_assign)
 
     @classmethod
-    def from_ast_assign(cls, ast_assign: AnyAstAssign):
+    def from_ast_assign(cls, ast_assign: AnyAstAssign, preferred_position: str = None):
 
         if isinstance(ast_assign, ast.Assign):
             # Base assignment, no annotation. May be multiple targets
@@ -39,7 +41,8 @@ class AssignmentStatement:
         return cls(
             target,
             ast_assign.value,
-            annotation
+            annotation,
+            preferred_position=preferred_position
         )
 
     def to_dict(self) -> dict:
@@ -60,7 +63,8 @@ class AssignmentStatement:
             )
 
     @classmethod
-    def from_varname_and_ast_value(cls, varname: str, value: ast.AST, annotation: ast.Name=None):
+    def from_varname_and_ast_value(cls, varname: str, value: ast.AST, annotation: ast.Name=None,
+                                   preferred_position: str = None):
         assign_name = ast.Name(id=varname, ctx=ast.Store())
 
-        return cls(assign_name, value=value, annotation=annotation)
+        return cls(assign_name, value=value, annotation=annotation, preferred_position=preferred_position)
