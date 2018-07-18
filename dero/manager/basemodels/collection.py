@@ -38,9 +38,10 @@ class Collection(Container, ReprMixin):
     def __init__(self, basepath: str, items, name: str = None,
                  imports: ImportStatementContainer = None):
         self.basepath = basepath
+        self.imports = imports
         self.items = self._transform_items(items)
         self.name = name
-        self.imports = imports
+
 
     def __getattr__(self, item):
         return self.name_dict[item]
