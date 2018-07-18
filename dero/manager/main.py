@@ -2,7 +2,6 @@ import sys
 import os
 import traceback
 import pdb
-from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List
 if TYPE_CHECKING:
     from dero.manager.selector.models.itemview import ItemView

@@ -3,8 +3,10 @@ from typing import List
 
 from dero.mixins.propertycache import SimplePropertyCacheMixin
 from dero.manager.io.file.load.parsers.py import PythonFileParser
+from dero.mixins.repr import ReprMixin
 
-class LazyLoader(SimplePropertyCacheMixin):
+class LazyLoader(SimplePropertyCacheMixin, ReprMixin):
+    repr_cols = ['filepath']
 
     def __init__(self, filepath: str):
         self.filepath = filepath

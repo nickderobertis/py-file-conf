@@ -9,15 +9,15 @@ from dero.manager.imports.models.statements.interfaces import (
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
 from dero.manager.io.func.load.config import FunctionConfigExtractor
+from dero.mixins.repr import ReprMixin
 
-class ObjectView(SimplePropertyCacheMixin):
+class ObjectView(SimplePropertyCacheMixin, ReprMixin):
+    repr_cols = ['name', 'obj_ast', 'section_path_str']
 
     def __init__(self, obj_ast: ast.AST, import_statement: AnyImportStatement=None,
-                 basepath: str=None,
                  section_path_str: str=None):
         self.obj_ast = obj_ast
         self.import_statement = import_statement
-        self.basepath = basepath
         self.section_path_str = section_path_str
 
     def load(self):
