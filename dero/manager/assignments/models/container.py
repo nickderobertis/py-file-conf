@@ -11,7 +11,7 @@ class AssignmentStatementContainer(Container, ReprMixin):
         self.items = items
 
     def __str__(self):
-        return '\n'.join(str(assign) for assign in self)
+        return ''.join(str(assign) for assign in self)
 
     def to_default_dict_and_annotation_dict(self) -> Tuple[dict, dict]:
         default_dict = {}

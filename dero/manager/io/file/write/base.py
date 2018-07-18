@@ -48,7 +48,7 @@ class FileStr:
         items = [
             str(all_imports),
             str(new_assigns_begin),
-            ''.join(existing_body),
+            '\n'.join(existing_body),
             str(new_assigns_end)
         ]
         valid_items = [item for item in items if item not in ('', None)]
