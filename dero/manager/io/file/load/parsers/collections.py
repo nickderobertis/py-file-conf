@@ -68,7 +68,7 @@ def _ast_dict_to_dict(ast_dict: ast.Dict, convert_str_values: bool = False) -> d
         key: ast.Str
         key_string = key.s
         if isinstance(value, (ast.Dict, ast.List)):
-            store_value = _ast_dict_or_list_to_dict_or_list(value)
+            store_value = _ast_dict_or_list_to_dict_or_list(value, convert_str_values=convert_str_values)
         else:
             store_value = _convert_to_str_if_ast_str_and_desired(value, convert_desired=convert_str_values)
         out_dict[key_string] = store_value
@@ -80,7 +80,7 @@ def _ast_list_to_list(ast_list: ast.List, convert_str_values: bool = False) -> l
     out_list = []
     for item in ast_list.elts:
         if isinstance(item, (ast.Dict, ast.List)):
-            store_item = _ast_dict_or_list_to_dict_or_list(item)
+            store_item = _ast_dict_or_list_to_dict_or_list(item, convert_str_values=convert_str_values)
         else:
             store_item = _convert_to_str_if_ast_str_and_desired(item, convert_desired=convert_str_values)
         out_list.append(store_item)
