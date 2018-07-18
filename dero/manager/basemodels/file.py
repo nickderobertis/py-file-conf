@@ -23,7 +23,7 @@ class ConfigFileBase:
 
     ##### Base class functions and attributes below. Shouldn't usually need to override in subclassing #####
 
-    def __init__(self, filepath: str, name: str=None, loaded_modules=None):
+    def __init__(self, filepath: str, name: str=None):
         self.interface = self.interface_class(filepath)
 
         if name is None:
@@ -56,7 +56,12 @@ class ConfigFileBase:
         [config.imports.add_if_missing(imp) for imp in self.always_imports]
 
         # Add always assigns
+        # First get always assigns, annotations as dict
         always_assigns = AssignmentStatementContainer(self.always_assigns)
         always_defaults, always_annotations = always_assigns.to_default_dict_and_annotation_dict()
-        config.update(always_defaults)
-        config.annotations.update(always_annotations)
+        # Select assigns, annotations which are not already defined in config
+        new_defaults = {key: value for key, value in always_defaults.items() if key not in config}
+        new_annotations = {key: value for key, value in always_annotations.items() if key not in config.annotations}
+        # Add to config
+        config.update(new_defaults)
+        config.annotations.update(new_annotations)

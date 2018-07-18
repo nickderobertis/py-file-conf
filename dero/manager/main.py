@@ -11,9 +11,10 @@ if TYPE_CHECKING:
 
 from dero.manager.config.models.manager import ConfigManager
 from dero.manager.pipelines.models.registrar import PipelineRegistrar
+from dero.manager.pipelines.models.file import PipelineDictFile
 from dero.manager.data.models.registrar import DataRegistrar
-from dero.manager.runner.models.runner import Runner, StrOrListOfStrs, ResultOrResults
-from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepaths
+from dero.manager.data.models.dictfile import DataDictFile
+from dero.manager.runner.models.runner import Runner, ResultOrResults
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
@@ -143,18 +144,16 @@ class PipelineManager:
 
         """
         # Load dynamically instead of passing dict to ensure modules are loaded into sys now
-        pipeline_dict, data_dict = get_pipeline_dict_and_data_dict_from_filepaths(
-            self.pipeline_dict_path, self.data_dict_path
-        )
-
-        imported_modules = self._import_tracker.imported_modules
-        imported_modules.reverse() # start with pipeline dict file first, then look at others for imports
+        pipeline_dict_file = PipelineDictFile(self.pipeline_dict_path, name='pipeline_dict')
+        pipeline_dict = pipeline_dict_file.load()
+        data_dict_file = DataDictFile(self.data_dict_path, name='data_dict')
+        data_dict = data_dict_file.load()
 
         self.register = PipelineRegistrar.from_dict(
             pipeline_dict,
             basepath=self.basepath,
             name=self.name,
-            loaded_modules=imported_modules
+            imports=pipeline_dict_file.interface.imports
         )
         self.register.scaffold_config()
 
@@ -165,7 +164,7 @@ class PipelineManager:
             data_dict,
             basepath=self.sources_basepath,
             name=self.name,
-            loaded_modules=imported_modules
+            imports=data_dict_file.interface.imports
         )
         self.sources.scaffold_config()
 
