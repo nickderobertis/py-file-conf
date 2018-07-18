@@ -69,3 +69,6 @@ class ConfigBase(dict):
         assigns = AssignmentStatementContainer.from_dict_of_varnames_and_ast(self, self.annotations)
 
         return self.imports, assigns
+
+    def copy(self):
+        return deepcopy(self)
