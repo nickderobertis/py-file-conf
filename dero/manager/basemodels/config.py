@@ -69,7 +69,7 @@ class ConfigBase(dict):
     @classmethod
     def from_file(cls, filepath: str, name: str = None):
         file = cls.config_file_class(filepath, name=name)
-        return file.load(type(cls))
+        return file.load(cls)
 
     def as_imports_and_assignments(self) -> ImportsAndAssigns:
         assigns = AssignmentStatementContainer.from_dict_of_varnames_and_ast(self, self.annotations)

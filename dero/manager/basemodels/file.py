@@ -32,6 +32,7 @@ class ConfigFileBase:
         self.name = name
 
     def load(self, config_class: type = None) -> 'ConfigBase':
+        from dero.manager.basemodels.config import ConfigBase
         config_dict, annotation_dict = self.interface.load()
 
         if config_class is None:

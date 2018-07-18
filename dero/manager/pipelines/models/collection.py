@@ -51,7 +51,7 @@ class PipelineCollection(Collection):
                              f'type {type(item)}')
 
         # Dealing with ObjectView
-        item_filepath = os.path.join(self.basepath, item.name)
+        item_filepath = os.path.join(self.basepath, item.name + '.py')
 
         if os.path.exists(item_filepath):
             # if config file already exists, load confguration from file, use to update function defaults
