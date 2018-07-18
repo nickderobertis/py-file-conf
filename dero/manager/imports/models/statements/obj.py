@@ -1,5 +1,6 @@
 from typing import List
 import ast
+import importlib
 
 from dero.mixins.repr import ReprMixin
 
@@ -57,3 +58,7 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
 
     def get_module_filepath(self, import_section_path_str: str=None) -> str:
         return get_filepath_from_module_str(self.module, import_section_path_str)
+
+    def execute(self, import_section_path_str: str=None) -> list:
+        module = importlib.import_module(self.module, import_section_path_str)
+        return [getattr(module, obj_name) for obj_name in self.objs]

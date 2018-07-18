@@ -4,6 +4,14 @@ from dero.mixins.attrequals import EqOnAttrsMixin
 class ImportStatement(EqOnAttrsMixin):
     rename_attr = None
 
+    ### Scaffolding methods
+
+    def execute(self):
+        # execute import statement
+        raise NotImplementedError('use ModuleImportStatement or ObjectImportStatement, not base ImportStatement')
+
+    #### Common class methods and properties
+
     @property
     def _renamed(self):
         if self.rename_attr is None:
@@ -22,7 +30,5 @@ class ImportStatement(EqOnAttrsMixin):
 
         return renamed_items
 
-    def execute(self):
-        # execute import statement
-        pass
+
 

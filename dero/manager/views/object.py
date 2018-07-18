@@ -23,7 +23,9 @@ class ObjectView(SimplePropertyCacheMixin):
     def load(self):
         # executes import
         if self.import_statement is not None:
-            self.import_statement.execute()
+            self._item = _execute_import_get_obj_from_result(self.import_statement, self.name)
+
+        return self._item
 
     @property
     def default_config(self):
@@ -31,7 +33,7 @@ class ObjectView(SimplePropertyCacheMixin):
 
     @property
     def item(self):
-        return self._try_getattr_else_call_func('_item', self._get_real_item)
+        return self._try_getattr_else_call_func('_item', self.load)
 
     @property
     def module(self) -> str:
@@ -72,5 +74,17 @@ class ObjectView(SimplePropertyCacheMixin):
     def _get_default_config(self):
         self._default_config = FunctionConfigExtractor(self).extract_config()
 
-    def _get_real_item(self):
-        pass
+
+def _execute_import_get_obj_from_result(import_statement: AnyImportStatement, obj_name: str):
+    # Should be just a single module or object, can take first of either.
+    result = import_statement.execute()[0]
+
+    if isinstance(import_statement, ObjectImportStatement):
+        # Result is the object itself
+        return result
+    elif isinstance(import_statement, ModuleImportStatement):
+        # Result is the module. Get the object from the module
+        return getattr(result, obj_name)
+    else:
+        raise ValueError(f'expected import statement to be ObjectImportStatement or ModuleImportStatement.'
+                         f' Got {import_statement} of type {type(import_statement)}')

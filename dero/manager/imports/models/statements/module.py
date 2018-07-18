@@ -1,5 +1,7 @@
 from typing import List, Dict
 import ast
+import importlib
+from types import ModuleType
 
 from dero.mixins.repr import ReprMixin
 
@@ -55,3 +57,6 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
 
     def get_module_filepaths(self, import_section_path_str: str=None) -> Dict[str, str]:
         return {module: get_filepath_from_module_str(module, import_section_path_str) for module in self.modules}
+
+    def execute(self, import_section_path_str: str=None) -> List[ModuleType]:
+        return [importlib.import_module(mod_str, import_section_path_str) for mod_str in self.modules]
