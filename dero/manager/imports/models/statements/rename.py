@@ -1,11 +1,10 @@
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from dero.manager.imports.models.statements.interfaces import AnyAstImport
 import ast
 
 from dero.mixins.repr import ReprMixin
 from dero.mixins.attrequals import EqOnAttrsMixin
-from dero.manager.imports.logic.parse.patterns import re_patterns
 
 class RenameStatement(ReprMixin, EqOnAttrsMixin):
     repr_cols = ['item', 'new_name']
@@ -17,21 +16,6 @@ class RenameStatement(ReprMixin, EqOnAttrsMixin):
 
     def __str__(self):
         return f'{self.item} as {self.new_name}'
-
-    @classmethod
-    def from_str(cls, rename_str: str):
-        pattern = re_patterns['rename parts']
-        match = pattern.fullmatch(rename_str)
-
-        if match is None:
-            raise ValueError(f'could not parse rename statement {rename_str}')
-
-        item, new_name = match.groups()
-
-        obj = cls(item=item, new_name=new_name)
-        obj._orig_str = rename_str
-
-        return obj
 
     @classmethod
     def from_ast_alias(cls, alias: ast.alias):
@@ -77,10 +61,6 @@ class RenameStatementCollection(ReprMixin):
     @property
     def name_map(self):
         return {rename_statement.item: rename_statement.new_name for rename_statement in self.items}
-
-    @classmethod
-    def from_str_list(cls, rename_strs: List[str]):
-        return cls([RenameStatement.from_str(rename_str) for rename_str in rename_strs])
 
     @classmethod
     def from_ast_import(cls, ast_import: 'AnyAstImport'):

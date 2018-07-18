@@ -1,10 +1,13 @@
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from dero.manager.basemodels.config import ConfigBase
+
 from dero.manager.io.file.load.lazy.config import ConfigFileLoader
 from dero.manager.io.file.write.config import ConfigFileStr
-from dero.manager.basemodels.config import ConfigBase
 
 class ConfigFileInterface(ConfigFileLoader):
 
-    def save(self, config: ConfigBase):
+    def save(self, config: 'ConfigBase'):
         file_str = ConfigFileStr(
             config,
             existing_assigns=self.assigns,
