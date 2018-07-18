@@ -3,13 +3,14 @@ from typing import List
 from dero.manager.basemodels.config import ConfigBase
 from dero.manager.data.models.source import DataSource
 from dero.manager.data.models.file import DataConfigFile
+from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 class DataConfig(ConfigBase):
     config_file_class = DataConfigFile
 
 
     @classmethod
-    def from_source(cls, data_source: DataSource, name: str=None, loaded_modules: List[str]=None):
+    def from_source(cls, data_source: DataSource, name: str=None, imports: ImportStatementContainer = None):
         # Initialize a blank config dictionary
         config_dict = {attr: None for attr in DataSource._scaffold_items}
 
@@ -23,5 +24,5 @@ class DataConfig(ConfigBase):
         for config_attr, config_value in data_source.loader_func_kwargs.items():
             config_dict[config_attr] = config_value
 
-        return cls(config_dict, name=name, _loaded_modules=loaded_modules)
+        return cls(config_dict, name=name, imports=imports)
 

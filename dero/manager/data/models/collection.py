@@ -6,15 +6,17 @@ from dero.manager.data.models.source import DataSource
 from dero.manager.data.logic.convert import convert_list_of_strs_or_data_sources_to_data_sources
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.data.models.config import DataConfig
+from dero.manager.imports.models.statements.container import ImportStatementContainer
+
 
 SourceOrCollection = Union[DataSource, 'DataCollection']
 
 class DataCollection(Collection):
 
     def __init__(self, basepath: str, items, name: str = None,
-                 loaded_modules: List[str] = None):
+                 imports: ImportStatementContainer = None):
         items = convert_list_of_strs_or_data_sources_to_data_sources(items)
-        super().__init__(basepath, items, name=name, loaded_modules=loaded_modules)
+        super().__init__(basepath, items, name=name, imports=imports)
 
     def _set_name_map(self) -> None:
         source_map = {}

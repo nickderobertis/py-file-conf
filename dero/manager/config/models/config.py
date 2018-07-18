@@ -7,6 +7,7 @@ from dero.manager.pipelines.models.interfaces import PipelineOrFunction
 from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.config.models.file import FunctionConfigFile
+from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 class FunctionConfig(ConfigBase):
 
@@ -27,26 +28,26 @@ class FunctionConfig(ConfigBase):
         return {key: value for key, value in self.items() if key in func_kwargs}
 
     @classmethod
-    def from_function(cls, func: Callable, name: str=None, loaded_modules: List[str]=None):
+    def from_function(cls, func: Callable, name: str=None, imports: ImportStatementContainer = None):
         config_dict = function_args_as_dict(func)
         if name is None:
             name = _get_public_name_or_special_name(func)
 
-        return cls(config_dict, name=name, _loaded_modules=loaded_modules)
+        return cls(config_dict, name=name, imports=imports)
 
     @classmethod
-    def from_pipeline(cls, item: PipelineOrFunction, name: str=None, loaded_modules: List[str]=None):
+    def from_pipeline(cls, item: PipelineOrFunction, name: str=None, imports: ImportStatementContainer = None):
         init_func = _pipeline_class_or_instance_or_method_to_init_func(item)
         if name is None:
             name = _get_public_name_or_special_name(item)
-        return cls.from_function(init_func, name=name, loaded_modules=loaded_modules)
+        return cls.from_function(init_func, name=name, imports=imports)
 
     @classmethod
-    def from_pipeline_or_function(cls, item: PipelineOrFunction, name: str=None, loaded_modules: List[str]=None):
+    def from_pipeline_or_function(cls, item: PipelineOrFunction, name: str=None, imports: ImportStatementContainer = None):
         func = _function_or_pipeline_to_function(item)
         if name is None:
             name = _get_public_name_or_special_name(item)
-        return cls.from_function(func, name=name, loaded_modules=loaded_modules)
+        return cls.from_function(func, name=name, imports=imports)
 
 
 def _function_or_pipeline_to_function(obj_or_class: Any) -> Callable:
