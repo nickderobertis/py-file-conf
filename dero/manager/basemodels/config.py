@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Tuple
 import os
 from copy import deepcopy
 
@@ -49,7 +49,7 @@ class ConfigBase(dict):
     def to_file(self, filepath: str):
 
         if self._file is None:
-            output_file = self.config_file_class(filepath, name=self.name, loaded_modules=self._loaded_modules)
+            output_file = self.config_file_class(filepath, name=self.name)
         else:
             # In case this is a new filepath for the same config, copy old file contents for use in new filepath
             output_file = deepcopy(self._file)
@@ -63,7 +63,7 @@ class ConfigBase(dict):
     @classmethod
     def from_file(cls, filepath: str, name: str = None):
         file = cls.config_file_class(filepath, name=name)
-        return file.load()
+        return file.load(type(cls))
 
     def as_imports_and_assignments(self) -> ImportsAndAssigns:
         assigns = AssignmentStatementContainer.from_dict_of_varnames_and_ast(self, self.annotations)
