@@ -24,4 +24,4 @@ class PipelineDictLoader(PipelineAstLoader):
         Returns:
 
         """
-        self._pipeline_dict = extract_collections_from_ast(self.pipeline_dict_assign)[0]
+        self._pipeline_dict = extract_collections_from_ast(self.pipeline_dict_assign)

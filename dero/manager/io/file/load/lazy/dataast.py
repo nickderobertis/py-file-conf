@@ -1,5 +1,5 @@
 from dero.manager.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoader
-from dero.manager.io.file.load.parsers.assign import extract_assignments_from_ast_by_name
+from dero.manager.io.file.load.parsers.assign import extract_assignment_from_ast_by_name
 
 class DataDictAstLoader(ImportAssignmentLazyLoader):
 
@@ -8,7 +8,7 @@ class DataDictAstLoader(ImportAssignmentLazyLoader):
         super().register()
 
         # Store pipeline dict assignment
-        self._data_dict_assign = extract_assignments_from_ast_by_name(self._ast, 'data_dict')
+        self._data_dict_assign = extract_assignment_from_ast_by_name(self._ast, 'data_dict')
 
     @property
     def data_dict_assign(self):

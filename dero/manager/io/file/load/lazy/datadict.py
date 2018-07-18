@@ -24,4 +24,4 @@ class DataDictLoader(DataDictAstLoader):
         Returns:
 
         """
-        self._data_dict = extract_collections_from_ast(self.data_dict_assign, convert_str_values=True)[0]
+        self._data_dict = extract_collections_from_ast(self.data_dict_assign, convert_str_values=True)
