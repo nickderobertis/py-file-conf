@@ -10,7 +10,7 @@ from dero.manager.imports.models.statements.interfaces import (
     AnyImportStatement
 )
 
-from dero.manager.io.file.load.parsers.funcdef import extract_function_definition_from_ast_by_name
+from dero.manager.io.file.load.parsers.funcdef import extract_function_definition_or_class_init_from_ast_by_name
 from dero.manager.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoader
 
 class FunctionArgsExtractor:
@@ -41,7 +41,7 @@ def extract_function_args_from_import(function_name: str, imp: AnyImportStatemen
 
     loader = ImportAssignmentLazyLoader(filepath)
 
-    ast_function_def = extract_function_definition_from_ast_by_name(
+    ast_function_def = extract_function_definition_or_class_init_from_ast_by_name(
         loader.ast,
         function_name
     )

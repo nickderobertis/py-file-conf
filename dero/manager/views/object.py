@@ -8,6 +8,7 @@ from dero.manager.imports.models.statements.interfaces import (
 )
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
+from dero.manager.io.file.load.parsers.kwargs import extract_keywords_from_ast_by_name
 from dero.manager.io.func.load.config import FunctionConfigExtractor
 from dero.mixins.repr import ReprMixin
 
@@ -43,6 +44,13 @@ class ObjectView(SimplePropertyCacheMixin, ReprMixin):
     def name(self) -> str:
         return self._try_getattr_else_call_func('_name', self._set_name)
 
+    @property
+    def output_name(self) -> str:
+        try:
+            return self._output_name
+        except AttributeError:
+            return self.name
+
     @classmethod
     def from_ast_and_imports(cls, obj_ast: ast.AST, import_statements: ImportStatementContainer,
                              section_path_str: str=None):
@@ -69,7 +77,12 @@ class ObjectView(SimplePropertyCacheMixin, ReprMixin):
                              f' Got {self.import_statement} of type {type(self.import_statement)}')
 
     def _set_name(self):
-        self._name = extract_external_name_from_assign_value(self.obj_ast)
+        name = extract_external_name_from_assign_value(self.obj_ast)
+        if name == 'DataPipeline':
+            # DataPipeline may be passed in pipeline dict. Then need to get name from DataPipeline constructor
+            ast_name = extract_keywords_from_ast_by_name(self.obj_ast, 'name')['name']
+            self._output_name = ast_name.s
+        self._name = name
 
     def _get_default_config(self):
         self._default_config = FunctionConfigExtractor(self).extract_config()
