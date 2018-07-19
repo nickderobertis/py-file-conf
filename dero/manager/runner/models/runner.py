@@ -110,7 +110,7 @@ class Runner(ReprMixin):
         func_or_collection = self._get_func_or_collection(section_path_str)
         if isinstance(func_or_collection, PipelineCollection):
             return self._run_section(section_path_str)
-        elif isinstance(func_or_collection, Pipeline):
+        elif issubclass(func_or_collection, Pipeline):
             return self._run_one_pipeline(section_path_str)
         elif isinstance(func_or_collection, Callable):
             return self._run_one_func(section_path_str)
@@ -155,10 +155,10 @@ class Runner(ReprMixin):
         return result
 
     def _run_one_pipeline(self, section_path_str: str) -> Result:
-        pipeline, config_dict = self._get_pipeline_and_config(section_path_str)
+        pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
-        configured_pipeline = pipeline.new_instance_with_config(**config_dict)
+        configured_pipeline = pipeline_class(**config_dict)
 
         print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
         result = configured_pipeline.execute()
