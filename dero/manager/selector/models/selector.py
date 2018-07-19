@@ -31,12 +31,12 @@ class Selector:
 
         # Only should return True if we find an ItemView
         # Three possible cases here.
-        # Accessing a non-existent attr, should catch KeyError then return False
+        # Accessing a non-existent attr, should catch AttributeError then return False
         # Accessing an existing item, should be a collection, source, or function instance, return True
         # Accessing an existing attribute of an existing item, should not be an ItemView instance, return False
         try:
             result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
-        except KeyError:
+        except AttributeError:
             return False
 
         # TODO: converting all functions to pipelines would make this check safer

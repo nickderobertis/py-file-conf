@@ -3,6 +3,7 @@ from dero.mixins.repr import ReprMixin
 from dero.mixins.attrequals import EqOnAttrsMixin
 from dero.manager.selector.models.selector import Selector
 from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
+from copy import deepcopy
 
 
 class ItemView(ReprMixin, EqOnAttrsMixin):
@@ -52,6 +53,18 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
         # When calling, assume user always wants the real item
         actual_item = self.selector._get_real_item(self.section_path_str)
         return actual_item(*args, **kwargs)
+
+    def __deepcopy__(self, memodict={}):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memodict[id(self)] = result
+        deepcopy_skip_items = ['selector']
+        deepcopy_dict = {key: value for key, value in self.__dict__.items() if key not in deepcopy_skip_items}
+        shallow_copy_dict = {key: value for key, value in self.__dict__.items() if key in deepcopy_skip_items}
+        for k, v in deepcopy_dict.items():
+            setattr(result, k, deepcopy(v, memodict))
+        result.__dict__.update(shallow_copy_dict)
+        return result
 
     @property
     def type(self):
