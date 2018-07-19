@@ -6,7 +6,7 @@ from dero.manager.io.func.load.args import FunctionArgsExtractor
 class FunctionConfigExtractor(FunctionArgsExtractor):
 
     def extract_config(self, name: str=None):
-        from dero.manager.config.models.config import FunctionConfig
+        from dero.manager.pipelines.models.config import FunctionConfig
         args, func_arg_imports = super().extract_args()
 
         # Parse into config

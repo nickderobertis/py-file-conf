@@ -2,7 +2,7 @@ from typing import Callable, Tuple
 from functools import partial
 
 from dero.mixins.repr import ReprMixin
-from dero.manager.config.models.manager import ConfigManager, FunctionConfig
+from dero.manager.config.models.manager import ConfigManager, ActiveFunctionConfig
 from dero.manager.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.runner.models.interfaces import (
@@ -193,7 +193,7 @@ class Runner(ReprMixin):
         return pipeline.new_instance_with_config(**config_dict)
 
 
-    def _get_config(self, section_path_str: str) -> FunctionConfig:
+    def _get_config(self, section_path_str: str) -> ActiveFunctionConfig:
         return self._config.get(section_path_str)
 
     def _get_func_or_collection(self, section_path_str: str) -> PipelineOrFunctionOrCollection:

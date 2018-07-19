@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 from dero.manager.config.models.manager import ConfigManager
 from dero.manager.pipelines.models.registrar import PipelineRegistrar
-from dero.manager.pipelines.models.file import PipelineDictFile
+from dero.manager.pipelines.models.dictfile import PipelineDictFile
 from dero.manager.data.models.registrar import DataRegistrar
 from dero.manager.data.models.dictfile import DataDictFile
 from dero.manager.runner.models.runner import Runner, ResultOrResults

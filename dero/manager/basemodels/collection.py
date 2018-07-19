@@ -44,7 +44,10 @@ class Collection(Container, ReprMixin):
 
 
     def __getattr__(self, item):
-        return self.name_dict[item]
+        try:
+            return self.name_dict[item]
+        except KeyError:
+            raise AttributeError(f'{item}')
 
     def __dir__(self):
         return self.name_dict.keys()

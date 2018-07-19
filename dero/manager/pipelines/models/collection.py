@@ -1,6 +1,6 @@
 import os
 
-from dero.manager.config.models.config import FunctionConfig
+from dero.manager.pipelines.models.config import FunctionConfig
 from dero.manager.logic.get import _get_public_name_or_special_name
 from dero.manager.pipelines.models.interfaces import ObjectViewOrCollection
 from dero.manager.views.object import ObjectView

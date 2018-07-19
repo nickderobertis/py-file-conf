@@ -4,12 +4,13 @@ import warnings
 from dero.manager.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.sectionpath.sectionpath import SectionPath
-from dero.manager.pipelines.models.file import PipelineDictFile
+from dero.manager.pipelines.models.dictfile import PipelineDictFile
 from dero.manager.data.models.dictfile import DataDictFile
 from dero.manager.selector.logic.get.frommanager import get_pipeline_dict_path_and_data_dict_path_from_manager
 from dero.manager.pipelines.models.collection import PipelineCollection
 from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.data.models.collection import DataCollection, DataSource
+from dero.manager.views.object import ObjectView
 
 class Selector:
 
@@ -39,7 +40,7 @@ class Selector:
             return False
 
         # TODO: converting all functions to pipelines would make this check safer
-        item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable)
+        item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable, ObjectView)
         if isinstance(result, item_types):
             return True
 
