@@ -6,9 +6,8 @@ from dero.manager.basemodels.file import ConfigFileBase
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.assignments.models.statement import AssignmentStatement
 from dero.manager.data.models.source import DataSource
-from dero.manager.io.file.interfaces.config import ConfigFileInterface
 from dero.manager.io.file.interfaces.activeconfig import ActiveConfigFileInterface
-from dero.manager.config.models.file import ActiveFunctionConfigFile
+from dero.manager.data.models.astitems import ast_dict_constructor_with_kwargs_from_dict
 
 class DataConfigFile(ConfigFileBase):
     # lines to always import. pass import objects
@@ -46,9 +45,9 @@ class DataConfigFile(ConfigFileBase):
 
         # When loading the config from file, loader_func_kwargs were spread into the individual kwargs.
         # Now need to combine back into loader_func_kwargs, as to not add those to the file
-        loader_func_kwargs = {key: value for key, value in config.items() if key not in DataSource._scaffold_items}
+        loader_func_kwargs = {key: value for key, value in config.items() if key not in DataSource._scaffold_dict}
         [config.pop(key) for key in loader_func_kwargs]  # remove individual kwargs
-        # TODO: use ast to create dict() constructor
-        config.update({'loader_func_kwargs': loader_func_kwargs})
+        # Convert to ast
+        config.update({'loader_func_kwargs': ast_dict_constructor_with_kwargs_from_dict(loader_func_kwargs)})
 
         super().save(config)

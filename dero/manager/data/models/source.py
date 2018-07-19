@@ -7,19 +7,22 @@ import datetime
 from typing import Callable, TYPE_CHECKING, List
 
 from dero.manager.data.models.type import DataType
+from dero.manager.data.models.astitems import ast_none
 
 if TYPE_CHECKING:
     from dero.manager.data.models.pipeline import DataPipeline
 
 class DataSource:
-    _scaffold_items = [
-        'name',
-        'data_type',
-        'location',
-        'loader_func',
-        'pipeline',
-        'tags'
-    ]
+    _scaffold_dict = {
+        'name': ast_none,
+        'data_type': ast_none,
+        'location': ast_none,
+        'loader_func': ast_none,
+        'pipeline': ast_none,
+        'tags': ast_none
+    }
+
+    # TODO: scaffold annotations
 
     def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
                  name: str =None, data_type: str =None, tags: List[str]=None,

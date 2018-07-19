@@ -14,3 +14,18 @@ class DataType:
 
     def __repr__(self):
         return f'<DataType({self.name})>'
+
+    def __eq__(self, other):
+        # Handle when other is None
+        if other is None:
+            if self.name is None:
+                return True
+            else:
+                return False
+
+        # Handle when other is str
+        if isinstance(other, str):
+            return self.name == other
+
+        # Handle when other is DataType
+        return self.name == other.name

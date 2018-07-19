@@ -68,9 +68,5 @@ class DataCollection(Collection):
         if not file_existed:
             # If this was a new output, we now need to load again to get the object representation
             # instead of just the ast representation
-            #### TEMP
-            import pdb
-            pdb.set_trace()
-            #### END TEMP
             existing_config = DataConfig.from_file(item_filepath, item_name)
             item.apply_config(existing_config.active_config_dict)
