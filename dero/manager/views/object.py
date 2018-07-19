@@ -85,7 +85,7 @@ class ObjectView(SimplePropertyCacheMixin, ReprMixin):
         self._name = name
 
     def _get_default_config(self):
-        self._default_config = FunctionConfigExtractor(self).extract_config()
+        self._default_config = FunctionConfigExtractor(self).extract_config(self.name)
 
 
 def _execute_import_get_obj_from_result(import_statement: AnyImportStatement, obj_name: str):

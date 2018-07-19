@@ -44,12 +44,12 @@ class DataCollection(Collection):
             return item._output_config_files()
 
         # Dealing with DataSource
-        item_name = _get_public_name_or_special_name(item) + '.py'
-        item_filepath = os.path.join(self.basepath, item_name)
+        item_name = _get_public_name_or_special_name(item)
+        item_filepath = os.path.join(self.basepath, item_name + '.py')
 
         if os.path.exists(item_filepath):
             # if config file already exists, load confguration from file, use to update file defaults
-            existing_config = DataConfig.from_file(item_filepath)
+            existing_config = DataConfig.from_file(item_filepath, item_name)
             existing_imports = existing_config._file.interface.imports
             # also use to update DataSource object in memory
             item.apply_config(existing_config)

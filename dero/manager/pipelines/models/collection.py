@@ -55,7 +55,7 @@ class PipelineCollection(Collection):
 
         if os.path.exists(item_filepath):
             # if config file already exists, load confguration from file, use to update function defaults
-            existing_config = FunctionConfig.from_file(item_filepath)
+            existing_config = FunctionConfig.from_file(item_filepath, item.output_name)
         else:
             existing_config = FunctionConfig()
 

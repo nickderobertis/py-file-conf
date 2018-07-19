@@ -42,7 +42,8 @@ class ConfigFileBase:
             d=config_dict,
             annotations=annotation_dict,
             imports=self.interface.imports,
-            _file=self
+            _file=self,
+            name=self.name
         )
 
     def save(self, config: 'ConfigBase') -> None:
