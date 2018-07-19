@@ -33,6 +33,10 @@ class RenameStatementCollection(ReprMixin):
         self.items = items
 
     def __contains__(self, item):
+        if isinstance(item, RenameStatement):
+            return item in self.items
+
+        # If not rename statement, assuming got variable name
         return item in [rename_statement.item for rename_statement in self.items]
 
     def __getitem__(self, item):
