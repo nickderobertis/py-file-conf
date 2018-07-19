@@ -110,7 +110,7 @@ class Runner(ReprMixin):
         func_or_collection = self._get_func_or_collection(section_path_str)
         if isinstance(func_or_collection, PipelineCollection):
             return self._run_section(section_path_str)
-        elif issubclass(func_or_collection, Pipeline):
+        elif type(func_or_collection) is type and issubclass(func_or_collection, Pipeline):
             return self._run_one_pipeline(section_path_str)
         elif isinstance(func_or_collection, Callable):
             return self._run_one_func(section_path_str)
@@ -171,7 +171,7 @@ class Runner(ReprMixin):
         if isinstance(func_or_collection, PipelineCollection):
             # TODO: get sections
             raise NotImplementedError('have not implemented getting sections. works with run')
-        elif issubclass(func_or_collection, Pipeline):
+        elif type(func_or_collection) is type and issubclass(func_or_collection, Pipeline):
             # Got pipeline class
             return self._get_one_pipeline(section_path_str)
         elif isinstance(func_or_collection, Callable):
