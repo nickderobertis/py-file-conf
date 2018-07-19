@@ -67,3 +67,10 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
 
     def execute(self, import_section_path_str: str=None) -> List[ModuleType]:
         return [importlib.import_module(mod_str, import_section_path_str) for mod_str in self.modules]
+
+    @property
+    def module(self):
+        if len(self.modules) > 1:
+            raise ValueError('cannot get one module, import has multiple modules')
+
+        return self.modules[0]
