@@ -6,3 +6,10 @@ def _is_builtin(value: any) -> bool:
 
     builtin_types = [getattr(builtins, d) for d in dir(builtins) if isinstance(getattr(builtins, d), type)]
     return type(value) in builtin_types
+
+def _is_str_matching_builtin_type(str_value: str) -> bool:
+    """
+    should pass 'str', 'int', etc.
+    """
+    builtin_types = [getattr(builtins, d) for d in dir(builtins) if isinstance(getattr(builtins, d), type)]
+    return f"<class '{str_value}'>" in [str(bt) for bt in builtin_types]

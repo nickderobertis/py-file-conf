@@ -7,7 +7,7 @@ class FunctionConfigExtractor(FunctionArgsExtractor):
 
     def extract_config(self, name: str=None):
         from dero.manager.config.models.config import FunctionConfig
-        args = super().extract_args()
+        args, func_arg_imports = super().extract_args()
 
         # Parse into config
         defaults_dict, annotation_dict = function_args_as_arg_and_annotation_dict(args)
@@ -15,7 +15,8 @@ class FunctionConfigExtractor(FunctionArgsExtractor):
         return FunctionConfig(
             defaults_dict,
             annotations=annotation_dict,
-            name=name
+            name=name,
+            imports=func_arg_imports
         )
 
 
