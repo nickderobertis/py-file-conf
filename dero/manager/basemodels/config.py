@@ -17,7 +17,7 @@ class ConfigBase(dict):
     ##### Base class functions and attributes below. Shouldn't usually need to override in subclassing #####
 
     def __init__(self, d: dict=None, name: str=None, annotations: dict=None, imports: ImportStatementContainer = None,
-                 _file: ConfigFileBase=None, **kwargs):
+                 _file: ConfigFileBase=None, begin_assignments: AssignmentStatementContainer=None, **kwargs):
         if d is None:
             d = {}
         super().__init__(d, **kwargs)
@@ -28,10 +28,14 @@ class ConfigBase(dict):
         if imports is None:
             imports = ImportStatementContainer([])
 
+        if begin_assignments is None:
+            begin_assignments = AssignmentStatementContainer([])
+
         self.name = name
         self.annotations = annotations
         self.imports = imports
         self._file = _file
+        self.begin_assignments = begin_assignments
 
     def __repr__(self):
         dict_repr = super().__repr__()
@@ -74,7 +78,7 @@ class ConfigBase(dict):
     def as_imports_and_assignments(self) -> ImportsAndAssigns:
         assigns = AssignmentStatementContainer.from_dict_of_varnames_and_ast(self, self.annotations)
 
-        return self.imports, assigns
+        return self.imports, self.begin_assignments + assigns
 
     def copy(self):
         return deepcopy(self)

@@ -1,7 +1,8 @@
 from typing import List
 from dero.mixins.attrequals import EqOnAttrsMixin
+from dero.manager.mixins.orderpref import OrderPreferenceMixin
 
-class ImportStatement(EqOnAttrsMixin):
+class ImportStatement(EqOnAttrsMixin, OrderPreferenceMixin):
     rename_attr = None
 
     ### Scaffolding methods
@@ -29,12 +30,3 @@ class ImportStatement(EqOnAttrsMixin):
                 renamed_items.append(item)
 
         return renamed_items
-
-    def _is_begin_str(self, begin_str: str) -> bool:
-        if begin_str is None:
-            return False
-
-        begin_str = begin_str.strip().lower()
-
-        return begin_str in ('b', 'begin', 'beginning', 'start', 's')
-

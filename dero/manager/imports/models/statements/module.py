@@ -25,7 +25,7 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
         self.modules = modules
         self.renames = renames
         self.comment = comment
-        self.prefer_beginning = self._is_begin_str(preferred_position)
+        self.preferred_position = preferred_position  # sets self.prefer_beginning as bool
 
     def __str__(self):
         modules = self._renamed

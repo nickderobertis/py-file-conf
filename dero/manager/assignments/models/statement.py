@@ -3,13 +3,13 @@ import ast
 
 from dero.manager.io.file.write.asttosource import ast_node_to_source
 from dero.manager.io.file.load.parsers.assign import extract_assignment_from_ast
-from dero.mixins.attrequals import EqOnAttrsMixin
 from dero.mixins.repr import ReprMixin
+from dero.manager.mixins.orderpref import OrderPreferenceMixin
 
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
 DictTuple = Tuple[dict, dict]
 
-class AssignmentStatement(ReprMixin):
+class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
     repr_cols = ['varname', 'value', 'annotation']
 
     def __init__(self, target: ast.Name, value: ast.AST, annotation: ast.Name=None,
@@ -18,7 +18,7 @@ class AssignmentStatement(ReprMixin):
         self.varname = target.id if isinstance(target, ast.Name) else ast_node_to_source(target)  # handle subscripts, etc.
         self.value = value
         self.annotation = annotation
-        self.preferred_position = preferred_position
+        self.preferred_position = preferred_position  # sets self.prefer_beginning as bool
 
     def __str__(self):
         ast_assign = self.to_ast()

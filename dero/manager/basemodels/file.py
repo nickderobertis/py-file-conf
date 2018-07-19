@@ -57,9 +57,17 @@ class ConfigFileBase:
         [config.imports.add_if_missing(imp) for imp in self.always_imports]
 
         # Add always assigns
+        # First handle begin assigns
+        begin_assigns = AssignmentStatementContainer(
+            [assign for assign in self.always_assigns if assign.prefer_beginning]
+        )
+        config.begin_assignments = begin_assigns
+        # Now handle the rest
         # First get always assigns, annotations as dict
-        always_assigns = AssignmentStatementContainer(self.always_assigns)
-        always_defaults, always_annotations = always_assigns.to_default_dict_and_annotation_dict()
+        other_always_assigns = AssignmentStatementContainer(
+            [assign for assign in self.always_assigns if not assign.prefer_beginning]
+        )
+        always_defaults, always_annotations = other_always_assigns.to_default_dict_and_annotation_dict()
         # Select assigns, annotations which are not already defined in config
         new_defaults = {key: value for key, value in always_defaults.items() if key not in config}
         new_annotations = {key: value for key, value in always_annotations.items() if key not in config.annotations}

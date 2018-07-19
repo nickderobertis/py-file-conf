@@ -16,6 +16,13 @@ class Container:
     def __len__(self):
         return len(self.items)
 
+    def __add__(self, other):
+        cls = type(self)
+        if not isinstance(other, cls):
+            raise TypeError(f'must be {cls}, not {type(other)}')
+
+        return cls(self.items + other.items)
+
     def append(self, item):
         self.items.append(item)
 
