@@ -4,11 +4,13 @@ import warnings
 from dero.manager.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.sectionpath.sectionpath import SectionPath
-from dero.manager.logic.load import get_pipeline_dict_and_data_dict_from_filepaths
+from dero.manager.pipelines.models.dictfile import PipelineDictFile
+from dero.manager.data.models.dictfile import DataDictFile
 from dero.manager.selector.logic.get.frommanager import get_pipeline_dict_path_and_data_dict_path_from_manager
 from dero.manager.pipelines.models.collection import PipelineCollection
 from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.data.models.collection import DataCollection, DataSource
+from dero.manager.views.object import ObjectView
 
 class Selector:
 
@@ -29,16 +31,16 @@ class Selector:
 
         # Only should return True if we find an ItemView
         # Three possible cases here.
-        # Accessing a non-existent attr, should catch KeyError then return False
+        # Accessing a non-existent attr, should catch AttributeError then return False
         # Accessing an existing item, should be a collection, source, or function instance, return True
         # Accessing an existing attribute of an existing item, should not be an ItemView instance, return False
         try:
             result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
-        except KeyError:
+        except AttributeError:
             return False
 
         # TODO: converting all functions to pipelines would make this check safer
-        item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable)
+        item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable, ObjectView)
         if isinstance(result, item_types):
             return True
 
@@ -130,9 +132,15 @@ class Selector:
         out_dict = {}
         for manager_name, manager in self._managers.items():
             pipeline_dict_path, data_dict_path = get_pipeline_dict_path_and_data_dict_path_from_manager(manager)
-            pipeline_dict, data_dict = get_pipeline_dict_and_data_dict_from_filepaths(pipeline_dict_path, data_dict_path)
+            pipeline_dict_file = PipelineDictFile(pipeline_dict_path, name='pipeline_dict')
+            pipeline_dict = pipeline_dict_file.load()
+            data_dict = DataDictFile(data_dict_path, name='data_dict').load()
             manager_dict = {
-                'funcs': PipelineCollection.from_dict(pipeline_dict, manager.basepath),
+                'funcs': PipelineCollection.from_dict(
+                    pipeline_dict,
+                    manager.basepath,
+                    imports=pipeline_dict_file.interface.imports
+                ),
                 'data': DataCollection.from_dict(data_dict, manager.basepath)
             }
             out_dict[manager_name] = manager_dict

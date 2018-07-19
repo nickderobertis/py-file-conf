@@ -1,8 +1,10 @@
-from typing import List
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from dero.manager.imports.models.statements.interfaces import AnyAstImport
+import ast
 
 from dero.mixins.repr import ReprMixin
 from dero.mixins.attrequals import EqOnAttrsMixin
-from dero.manager.imports.logic.parse.patterns import re_patterns
 
 class RenameStatement(ReprMixin, EqOnAttrsMixin):
     repr_cols = ['item', 'new_name']
@@ -16,19 +18,12 @@ class RenameStatement(ReprMixin, EqOnAttrsMixin):
         return f'{self.item} as {self.new_name}'
 
     @classmethod
-    def from_str(cls, rename_str: str):
-        pattern = re_patterns['rename parts']
-        match = pattern.fullmatch(rename_str)
-
-        if match is None:
-            raise ValueError(f'could not parse rename statement {rename_str}')
-
-        item, new_name = match.groups()
-
-        obj = cls(item=item, new_name=new_name)
-        obj._orig_str = rename_str
-
-        return obj
+    def from_ast_alias(cls, alias: ast.alias):
+        # Note: will fail if ast alias does not have a rename. See RenameStatementCollection.from_ast_import
+        return cls(
+            alias.name,
+            alias.asname
+        )
 
 
 class RenameStatementCollection(ReprMixin):
@@ -38,6 +33,10 @@ class RenameStatementCollection(ReprMixin):
         self.items = items
 
     def __contains__(self, item):
+        if isinstance(item, RenameStatement):
+            return item in self.items
+
+        # If not rename statement, assuming got variable name
         return item in [rename_statement.item for rename_statement in self.items]
 
     def __getitem__(self, item):
@@ -59,6 +58,22 @@ class RenameStatementCollection(ReprMixin):
     def item_map(self):
         return {rename_statement.item: rename_statement for rename_statement in self.items}
 
+    @property
+    def reverse_name_map(self):
+        return {rename_statement.new_name: rename_statement.item for rename_statement in self.items}
+
+    @property
+    def name_map(self):
+        return {rename_statement.item: rename_statement.new_name for rename_statement in self.items}
+
     @classmethod
-    def from_str_list(cls, rename_strs: List[str]):
-        return cls([RenameStatement.from_str(rename_str) for rename_str in rename_strs])
+    def from_ast_import(cls, ast_import: 'AnyAstImport'):
+        # For ast aliases, they always exist whether the item is being renamed or not.
+        # For RenameStatement objects, they only exist when there is a rename. Need to filter
+        renames = []
+        for alias in ast_import.names:
+            alias: ast.alias
+            if alias.asname is not None:
+                renames.append(RenameStatement.from_ast_alias(alias))
+
+        return cls(renames)

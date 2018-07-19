@@ -1,8 +1,12 @@
-from typing import List
+from typing import Tuple
 import os
 from copy import deepcopy
 
 from dero.manager.basemodels.file import ConfigFileBase
+from dero.manager.imports.models.statements.container import ImportStatementContainer
+from dero.manager.assignments.models.container import AssignmentStatementContainer
+
+ImportsAndAssigns = Tuple[ImportStatementContainer, AssignmentStatementContainer]
 
 class ConfigBase(dict):
 
@@ -12,14 +16,26 @@ class ConfigBase(dict):
 
     ##### Base class functions and attributes below. Shouldn't usually need to override in subclassing #####
 
-    def __init__(self, d: dict=None, name: str=None, _loaded_modules:  List[str]=None,
-                 _file: ConfigFileBase=None, **kwargs):
+    def __init__(self, d: dict=None, name: str=None, annotations: dict=None, imports: ImportStatementContainer = None,
+                 _file: ConfigFileBase=None, begin_assignments: AssignmentStatementContainer=None, **kwargs):
         if d is None:
             d = {}
         super().__init__(d, **kwargs)
+
+        if annotations is None:
+            annotations = {}
+
+        if imports is None:
+            imports = ImportStatementContainer([])
+
+        if begin_assignments is None:
+            begin_assignments = AssignmentStatementContainer([])
+
         self.name = name
-        self._loaded_modules = _loaded_modules
+        self.annotations = annotations
+        self.imports = imports
         self._file = _file
+        self.begin_assignments = begin_assignments
 
     def __repr__(self):
         dict_repr = super().__repr__()
@@ -27,7 +43,10 @@ class ConfigBase(dict):
         return f'<{class_name}(name={self.name}, {dict_repr})>'
 
     def __getattr__(self, attr):
-        return self[attr]
+        try:
+            self[attr]
+        except KeyError:
+            raise AttributeError(attr)
 
     def __dir__(self):
         return self.keys()
@@ -40,7 +59,7 @@ class ConfigBase(dict):
     def to_file(self, filepath: str):
 
         if self._file is None:
-            output_file = self.config_file_class(filepath, name=self.name, loaded_modules=self._loaded_modules)
+            output_file = self.config_file_class(filepath, name=self.name)
         else:
             # In case this is a new filepath for the same config, copy old file contents for use in new filepath
             output_file = deepcopy(self._file)
@@ -54,4 +73,12 @@ class ConfigBase(dict):
     @classmethod
     def from_file(cls, filepath: str, name: str = None):
         file = cls.config_file_class(filepath, name=name)
-        return file.load()
+        return file.load(cls)
+
+    def as_imports_and_assignments(self) -> ImportsAndAssigns:
+        assigns = AssignmentStatementContainer.from_dict_of_varnames_and_ast(self, self.annotations)
+
+        return self.imports, self.begin_assignments + assigns
+
+    def copy(self):
+        return deepcopy(self)

@@ -4,13 +4,15 @@ import warnings
 
 from dero.mixins.repr import ReprMixin
 from dero.manager.basemodels.container import Container
-from dero.manager.config.models.config import FunctionConfig
+from dero.manager.config.models.config import ActiveFunctionConfig
+from dero.manager.sectionpath.sectionpath import _strip_py
 
 
 class ConfigSection(Container, ReprMixin):
     repr_cols = ['name', 'config', 'items']
 
-    def __init__(self, configs: List[Union[FunctionConfig, 'ConfigSection']], section_config: FunctionConfig=None, name: str=None):
+    def __init__(self, configs: List[Union[ActiveFunctionConfig, 'ConfigSection']],
+                 section_config: ActiveFunctionConfig=None, name: str=None):
         self.config = section_config
         self.items = configs
         self.name = name
@@ -75,12 +77,17 @@ class ConfigSection(Container, ReprMixin):
         # Special handling for section config
         try:
             config_file_list.remove('section.py')
-            section_config = FunctionConfig.from_file(os.path.join(basepath, 'section.py'), name=name)
+            section_config = ActiveFunctionConfig.from_file(os.path.join(basepath, 'section.py'), name=name)
         except ValueError:
             # Didn't find section config
             section_config = None
 
-        configs = [FunctionConfig.from_file(os.path.join(basepath, file)) for file in config_file_list]
+        configs = [
+            ActiveFunctionConfig.from_file(
+                os.path.join(basepath, file),
+                name=_strip_py(file)
+            ) for file in config_file_list
+        ]
         # Recursively calling section creation to create individual config files
         config_sections = [ConfigSection.from_files(os.path.join(basepath, folder)) for folder in config_section_list]
 

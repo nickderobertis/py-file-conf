@@ -1,67 +1,53 @@
-from typing import TYPE_CHECKING, Tuple, List
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from dero.manager.data.models.config import DataConfig
 
 from dero.manager.basemodels.file import ConfigFileBase
-from dero.manager.imports.logic.parse.main import parse_import_lines_return_import_models
-from dero.manager.imports.models.statements.interfaces import AnyImportStatement
-from dero.manager.imports.logic.load.file import get_user_defined_dict_from_filepath
-from dero.manager.config.logic.load import (
-    _split_lines_into_import_and_assignment
-)
-from dero.manager.config.logic.write import (
-    dict_as_local_definitions_lines,
-    modules_and_items_as_imports_lines,
-)
-from dero.manager.imports.models.statements.container import ImportStatementContainer
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
-
-
-
+from dero.manager.assignments.models.statement import AssignmentStatement
+from dero.manager.data.models.source import DataSource
+from dero.manager.io.file.interfaces.activeconfig import ActiveConfigFileInterface
+from dero.manager.data.models.astitems import ast_dict_constructor_with_kwargs_from_dict
 
 class DataConfigFile(ConfigFileBase):
     # lines to always import. pass import objects
-    always_imports = [ObjectImportStatement.from_str('from dero.manager import Selector')]
+    always_imports = [ObjectImportStatement.from_str('from dero.manager import Selector', preferred_position='begin')]
 
-    # assignment lines to always include at beginning. pass strs
-    always_assigns_begin = ['s = Selector()']
+    # assignment lines to always include at beginning. pass assign objects
+    always_assigns = [
+        AssignmentStatement.from_str('s = Selector()', preferred_position='begin'),
+        AssignmentStatement.from_str('loader_func_kwargs = dict(\n    \n)', preferred_position='end')
+    ]
 
-    # assignment lines to always include at end. pass strs
-    always_assigns_end = ['loader_func_kwargs = dict(\n    \n)']
-
-    def load(self) -> 'DataConfig':
+    def load(self, config_class: type = None) -> 'DataConfig':
+        # Override base class method to pull a single dict, and not pass annotations
         from dero.manager.data.models.config import DataConfig
 
-        config_dict = self._load_into_config_dict()
+        # Data configs are a hybrid of the ast/static config and the active config
+        self.active_interface = ActiveConfigFileInterface(self.interface.filepath)
 
-        return DataConfig(config_dict, _loaded_modules=self._loaded_modules, _file=self, name=self.name)
+        config_dict, annotation_dict = self.interface.load()
+        user_defined_dict = self.active_interface.load()
 
-    def _config_to_file_lines(self, config: 'DataConfig') -> Tuple[ImportStatementContainer, List[str]]:
+        if config_class is None:
+            config_class = DataConfig
 
-        loaded_modules = self.imports.modules
+        return config_class(
+            d=config_dict,
+            annotations=annotation_dict,
+            active_config_dict=user_defined_dict,
+            imports=self.interface.imports,
+            _file=self,
+            name=self.name
+        )
 
-        # Deal with imports as well as variable assignment
-        if loaded_modules is not None:
-            new_variable_assignment_lines = dict_as_local_definitions_lines(config, loaded_modules)
-            new_imports_lines = modules_and_items_as_imports_lines(loaded_modules, config)
-            new_imports = parse_import_lines_return_import_models(new_imports_lines)
-            return new_imports, new_variable_assignment_lines
+    def save(self, config: 'DataConfig'):
 
-            # no loaded modules, just variable assignment
-        new_variable_assignment_lines = dict_as_local_definitions_lines(config)
+        # When loading the config from file, loader_func_kwargs were spread into the individual kwargs.
+        # Now need to combine back into loader_func_kwargs, as to not add those to the file
+        loader_func_kwargs = {key: value for key, value in config.items() if key not in DataSource._scaffold_dict}
+        [config.pop(key) for key in loader_func_kwargs]  # remove individual kwargs
+        # Convert to ast
+        config.update({'loader_func_kwargs': ast_dict_constructor_with_kwargs_from_dict(loader_func_kwargs)})
 
-        return ImportStatementContainer([]), new_variable_assignment_lines
-
-    def _load_into_config_dict(self) -> dict:
-        # First import file, get user defined variables
-        config_dict = get_user_defined_dict_from_filepath(self.filepath)
-
-        # Now read file, to get as text rather than Python code
-        with open(self.filepath, 'r') as f:
-            lines = f.readlines()
-
-        self._lines = lines
-        import_lines, self.assigns = _split_lines_into_import_and_assignment(lines)
-        self.imports = parse_import_lines_return_import_models(import_lines)
-
-        return config_dict
+        super().save(config)

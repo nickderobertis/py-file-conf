@@ -4,6 +4,7 @@ from dero.mixins.repr import ReprMixin
 from dero.manager.basemodels.collection import Collection
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
+from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 class Registrar(ReprMixin):
     repr_cols = ['name', 'basepath', 'collection']
@@ -31,9 +32,9 @@ class Registrar(ReprMixin):
 
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str=None,
-                  loaded_modules: List[str]=None):
+                  imports: ImportStatementContainer = None):
         collection = cls.collection_class.from_dict(
-            dict_, basepath=basepath, name=name, loaded_modules=loaded_modules
+            dict_, basepath=basepath, name=name, imports=imports
         )
 
         return cls(collection, basepath=basepath, name=name)

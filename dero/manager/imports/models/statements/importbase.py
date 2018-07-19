@@ -1,9 +1,17 @@
 from typing import List
 from dero.mixins.attrequals import EqOnAttrsMixin
+from dero.manager.mixins.orderpref import OrderPreferenceMixin
 
-
-class ImportStatement(EqOnAttrsMixin):
+class ImportStatement(EqOnAttrsMixin, OrderPreferenceMixin):
     rename_attr = None
+
+    ### Scaffolding methods
+
+    def execute(self):
+        # execute import statement
+        raise NotImplementedError('use ModuleImportStatement or ObjectImportStatement, not base ImportStatement')
+
+    #### Common class methods and properties
 
     @property
     def _renamed(self):
