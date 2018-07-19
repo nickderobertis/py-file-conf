@@ -5,6 +5,7 @@ import warnings
 from dero.mixins.repr import ReprMixin
 from dero.manager.basemodels.container import Container
 from dero.manager.config.models.config import ActiveFunctionConfig
+from dero.manager.sectionpath.sectionpath import _strip_py
 
 
 class ConfigSection(Container, ReprMixin):
@@ -81,7 +82,12 @@ class ConfigSection(Container, ReprMixin):
             # Didn't find section config
             section_config = None
 
-        configs = [ActiveFunctionConfig.from_file(os.path.join(basepath, file), name=file.strip('.py')) for file in config_file_list]
+        configs = [
+            ActiveFunctionConfig.from_file(
+                os.path.join(basepath, file),
+                name=_strip_py(file)
+            ) for file in config_file_list
+        ]
         # Recursively calling section creation to create individual config files
         config_sections = [ConfigSection.from_files(os.path.join(basepath, folder)) for folder in config_section_list]
 
