@@ -6,6 +6,9 @@ from dero.manager.basemodels.file import ConfigFileBase
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.assignments.models.statement import AssignmentStatement
 from dero.manager.data.models.source import DataSource
+from dero.manager.io.file.interfaces.config import ConfigFileInterface
+from dero.manager.io.file.interfaces.activeconfig import ActiveConfigFileInterface
+from dero.manager.config.models.file import ActiveFunctionConfigFile
 
 class DataConfigFile(ConfigFileBase):
     # lines to always import. pass import objects
@@ -17,9 +20,27 @@ class DataConfigFile(ConfigFileBase):
         AssignmentStatement.from_str('loader_func_kwargs = dict(\n    \n)', preferred_position='end')
     ]
 
-    # class to use for interfacing with file
-    # no need to override default
-    # interface_class = ConfigFileInterface
+    def load(self, config_class: type = None) -> 'DataConfig':
+        # Override base class method to pull a single dict, and not pass annotations
+        from dero.manager.data.models.config import DataConfig
+
+        # Data configs are a hybrid of the ast/static config and the active config
+        self.active_interface = ActiveConfigFileInterface(self.interface.filepath)
+
+        config_dict, annotation_dict = self.interface.load()
+        user_defined_dict = self.active_interface.load()
+
+        if config_class is None:
+            config_class = DataConfig
+
+        return config_class(
+            d=config_dict,
+            annotations=annotation_dict,
+            active_config_dict=user_defined_dict,
+            imports=self.interface.imports,
+            _file=self,
+            name=self.name
+        )
 
     def save(self, config: 'DataConfig'):
 

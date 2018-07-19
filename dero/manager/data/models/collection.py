@@ -48,13 +48,29 @@ class DataCollection(Collection):
         item_filepath = os.path.join(self.basepath, item_name + '.py')
 
         if os.path.exists(item_filepath):
+            file_existed = True
             # if config file already exists, load confguration from file, use to update file defaults
             existing_config = DataConfig.from_file(item_filepath, item_name)
             existing_imports = existing_config._file.interface.imports
-            # also use to update DataSource object in memory
-            item.apply_config(existing_config)
+            # Here using the ast config, for the purpose of writing to file
+            file_config_item = item.copy()
+            file_config_item.apply_config(existing_config)
+            # also use to update DataSource object in memory. Here use the actual objects instead of ast
+            item.apply_config(existing_config.active_config_dict)
         else:
+            file_existed = False
             existing_imports = None
+            file_config_item = item
 
-        item_config = DataConfig.from_source(item, imports=existing_imports)
+        item_config = DataConfig.from_source(file_config_item, imports=existing_imports)
         item_config.to_file(item_filepath)
+
+        if not file_existed:
+            # If this was a new output, we now need to load again to get the object representation
+            # instead of just the ast representation
+            #### TEMP
+            import pdb
+            pdb.set_trace()
+            #### END TEMP
+            existing_config = DataConfig.from_file(item_filepath, item_name)
+            item.apply_config(existing_config.active_config_dict)

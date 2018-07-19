@@ -1,4 +1,4 @@
-
+from copy import deepcopy
 import pandas as pd
 from functools import partial
 import os
@@ -140,6 +140,9 @@ class DataSource:
 
         if isinstance(self.pipeline, ItemView):
             self.pipeline = self.pipeline.item
+
+    def copy(self):
+        return deepcopy(self)
 
     def __repr__(self):
         return f'<DataSource(name={self.name}, type={self.data_type.name})>'
