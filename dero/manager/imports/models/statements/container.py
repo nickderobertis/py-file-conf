@@ -131,8 +131,9 @@ class ImportStatementContainer(Container, ReprMixin):
                         [rename for rename in imp.renames if rename.new_name == name]
                     )
                     # grab original object matching this rename
-                    objs = renames.reverse_name_map[name]
+                    objs = [renames.reverse_name_map[name]]
                 if found_import:
+                    # May be multiple objects imported in this one statement. Create a new statement with just this object
                     return ObjectImportStatement(objs, module=imp.module, renames=renames)
 
     @property
