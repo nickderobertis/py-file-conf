@@ -131,10 +131,15 @@ class Selector:
         out_dict = {}
         for manager_name, manager in self._managers.items():
             pipeline_dict_path, data_dict_path = get_pipeline_dict_path_and_data_dict_path_from_manager(manager)
-            pipeline_dict = PipelineDictFile(pipeline_dict_path, name='pipeline_dict').load()
+            pipeline_dict_file = PipelineDictFile(pipeline_dict_path, name='pipeline_dict')
+            pipeline_dict = pipeline_dict_file.load()
             data_dict = DataDictFile(data_dict_path, name='data_dict').load()
             manager_dict = {
-                'funcs': PipelineCollection.from_dict(pipeline_dict, manager.basepath),
+                'funcs': PipelineCollection.from_dict(
+                    pipeline_dict,
+                    manager.basepath,
+                    imports=pipeline_dict_file.interface.imports
+                ),
                 'data': DataCollection.from_dict(data_dict, manager.basepath)
             }
             out_dict[manager_name] = manager_dict
