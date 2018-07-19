@@ -171,10 +171,11 @@ class Runner(ReprMixin):
         if isinstance(func_or_collection, PipelineCollection):
             # TODO: get sections
             raise NotImplementedError('have not implemented getting sections. works with run')
+        elif issubclass(func_or_collection, Pipeline):
+            # Got pipeline class
+            return self._get_one_pipeline(section_path_str)
         elif isinstance(func_or_collection, Callable):
             return self._get_one_func(section_path_str)
-        elif isinstance(func_or_collection, Pipeline):
-            return self._get_one_pipeline(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
                              f'got {func_or_collection} of type {type(func_or_collection)}')
@@ -187,10 +188,10 @@ class Runner(ReprMixin):
         return full_func
 
     def _get_one_pipeline(self, section_path_str: str) -> Pipeline:
-        pipeline, config_dict = self._get_pipeline_and_config(section_path_str)
+        pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
-        return pipeline.new_instance_with_config(**config_dict)
+        return pipeline_class(**config_dict)
 
 
     def _get_config(self, section_path_str: str) -> ActiveFunctionConfig:
@@ -208,7 +209,7 @@ class Runner(ReprMixin):
 
         return func, config_dict
 
-    def _get_pipeline_and_config(self, section_path_str: str) -> Tuple[Pipeline, dict]:
+    def _get_pipeline_and_config(self, section_path_str: str) -> Tuple[type, dict]:
         config = self._get_config(section_path_str)
         # pipeline is an instance of the pipeline, without config
         pipeline = self._get_func_or_collection(section_path_str)
