@@ -50,6 +50,10 @@ class DataMerge:
     def summary(self, *summary_args, summary_method: str=None, summary_function: Callable=None,
                              summary_attr: str=None, **summary_method_kwargs):
 
+        # If nothing is passed to use for summary, use df.head()
+        if (summary_attr is None) and (summary_function is None) and (summary_method is None):
+            summary_method = 'head'
+
         df_disp_dict = _disp_df_dict_from_merge(
             self,
             *summary_args,
@@ -65,6 +69,7 @@ class DataMerge:
             summary_disp = f'{summary_function.__name__}(df, *{summary_args}, **{summary_method_kwargs})'
         if summary_method is not None:
             summary_disp = f'df.{summary_method}(*{summary_args}, **{summary_method_kwargs})'
+
 
         display_df_dict({
             f'{summary_disp} called on: ' + self.merge_str: df_disp_dict
@@ -108,9 +113,6 @@ class LastMergeFinishedException(Exception):
 
 def _disp_df_dict_from_merge(merge, *summary_args, summary_method: str=None, summary_function: Callable=None,
                              summary_attr: str=None, **summary_method_kwargs):
-
-    if summary_method is None and summary_attr is None and summary_function is None:
-        summary_method = 'head'
 
     # keys are names of dataframes, values are dataframes themselves
     df_dict = _df_dict_from_merge(merge)
