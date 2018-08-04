@@ -62,6 +62,10 @@ class DataPipeline(Pipeline):
                 **summary_method_kwargs
             )
 
+    def describe(self):
+        for merge in self.merges:
+            merge.describe()
+
     def _output(self, outpath=None):
         self.df.to_csv(outpath, index=False, encoding='utf8')
 
