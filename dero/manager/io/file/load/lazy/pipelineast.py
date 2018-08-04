@@ -8,7 +8,10 @@ class PipelineAstLoader(ImportAssignmentLazyLoader):
         super().register()
 
         # Store pipeline dict assignment
-        self._pipeline_dict_assign = extract_assignment_from_ast_by_name(self._ast, 'pipeline_dict')
+        if self._ast is not None:
+            self._pipeline_dict_assign = extract_assignment_from_ast_by_name(self._ast, 'pipeline_dict')
+        else:
+            self._pipeline_dict_assign = None
 
         # TODO: parse modules in pipeline dict
 

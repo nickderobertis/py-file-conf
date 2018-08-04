@@ -7,7 +7,7 @@ class ConfigFileLoader(ImportAssignmentLazyLoader):
 
     def load(self) -> Tuple[dict, dict]:
         # Get ast, body, imports, assigns
-        super().load()
+        super().register()
 
         # Extract assignment portion of body
         self._file_body_to_assignment_body()

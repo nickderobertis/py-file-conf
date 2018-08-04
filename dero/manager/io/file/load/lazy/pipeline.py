@@ -24,4 +24,7 @@ class PipelineDictLoader(PipelineAstLoader):
         Returns:
 
         """
-        self._pipeline_dict = extract_collection_from_ast(self.pipeline_dict_assign.to_ast())
+        if self.pipeline_dict_assign is not None:
+            self._pipeline_dict = extract_collection_from_ast(self.pipeline_dict_assign.to_ast())
+        else:
+            self._pipeline_dict = {}
