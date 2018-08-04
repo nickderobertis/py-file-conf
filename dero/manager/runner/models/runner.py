@@ -18,6 +18,7 @@ from dero.manager.pipelines.models.interfaces import (
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.config.logic.write import dict_as_function_kwarg_str
 from dero.manager.basemodels.pipeline import Pipeline
+from dero.manager.views.object import ObjectView
 
 class Runner(ReprMixin):
     repr_cols = ['_config', '_pipelines']
@@ -122,21 +123,27 @@ class Runner(ReprMixin):
     def _run_section(self, section_path_str: str) -> Results:
         section: PipelineCollection = self._get_func_or_collection(section_path_str)
         results = []
-        for section_or_callable in section:
+        for section_or_object_view in section:
+
+            # Get from object view if necessary
+            if isinstance(section_or_object_view, ObjectView):
+                section_or_callable = section_or_object_view.item
+            else:
+                section_or_callable = section_or_object_view
 
             # Get section path by which to call this item
-            subsection_name = _get_public_name_or_special_name(section_or_callable)
+            subsection_name = _get_public_name_or_special_name(section_or_callable, accept_output_names=False)
             subsection_path_str = SectionPath.join(section_path_str, subsection_name).path_str
 
             if isinstance(section_or_callable, PipelineCollection):
                 # got another section within this section. recursively call run section
                 results.append(self._run_section(subsection_path_str))
+            elif type(section_or_callable) is type and issubclass(section_or_callable, Pipeline):
+                # run pipeline
+                results.append(self._run_one_pipeline(subsection_path_str))
             elif isinstance(section_or_callable, Callable):
                 # run function
                 results.append(self._run_one_func(subsection_path_str))
-            elif isinstance(section_or_callable, Pipeline):
-                # run pipeline
-                results.append(self._run_one_pipeline(subsection_path_str))
             else:
                 raise ValueError(f'could not run section {subsection_path_str}. expected PipelineCollection or '
                                  f'function or Pipeline,'
@@ -173,21 +180,21 @@ class Runner(ReprMixin):
             raise NotImplementedError('have not implemented getting sections. works with run')
         elif type(func_or_collection) is type and issubclass(func_or_collection, Pipeline):
             # Got pipeline class
-            return self._get_one_pipeline(section_path_str)
+            return self._get_one_pipeline_with_config(section_path_str)
         elif isinstance(func_or_collection, Callable):
-            return self._get_one_func(section_path_str)
+            return self._get_one_func_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
                              f'got {func_or_collection} of type {type(func_or_collection)}')
 
-    def _get_one_func(self, section_path_str: str) -> Callable:
+    def _get_one_func_with_config(self, section_path_str: str) -> Callable:
         func, config_dict = self._get_func_and_config(section_path_str)
 
         full_func = partial(func, **config_dict)
 
         return full_func
 
-    def _get_one_pipeline(self, section_path_str: str) -> Pipeline:
+    def _get_one_pipeline_with_config(self, section_path_str: str) -> Pipeline:
         pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
