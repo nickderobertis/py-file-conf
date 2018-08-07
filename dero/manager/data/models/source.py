@@ -6,6 +6,8 @@ import warnings
 import datetime
 from typing import Callable, TYPE_CHECKING, List
 
+from dero.ext_pandas.optimize.load import read_file as read_file_into_df
+
 from dero.manager.data.models.type import DataType
 from dero.manager.data.models.astitems import ast_none
 
@@ -115,7 +117,7 @@ class DataSource:
         else:
             if data_loader is None:
                 # TODO: determine filetype and use proper loader
-                loader = partial(pd.read_csv, self.location, **loader_func_kwargs)
+                loader = partial(read_file_into_df, self.location, **loader_func_kwargs)
             else:
                 loader = partial(data_loader, self.location, **loader_func_kwargs)
 
