@@ -3,7 +3,8 @@ if TYPE_CHECKING:
     from dero.manager.data.models.merge import DataMerge
 
 from dero.manager.data.logic.merge.summarize import get_summary_of_df
-from dero.manager.data.logic.display import display_df_dict
+from dero.data.display import display_df_dict
+
 
 def display_merge_summary(merge: 'DataMerge', *summary_args, summary_method: str=None, summary_function: Callable=None,
                           summary_attr: str=None, **summary_method_kwargs):
