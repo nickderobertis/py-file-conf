@@ -40,14 +40,3 @@ class DataConfigFile(ConfigFileBase):
             _file=self,
             name=self.name
         )
-
-    def save(self, config: 'DataConfig'):
-
-        # When loading the config from file, loader_func_kwargs were spread into the individual kwargs.
-        # Now need to combine back into loader_func_kwargs, as to not add those to the file
-        loader_func_kwargs = {key: value for key, value in config.items() if key not in DataSource._scaffold_dict}
-        [config.pop(key) for key in loader_func_kwargs]  # remove individual kwargs
-        # Convert to ast
-        config.update({'loader_func_kwargs': ast_dict_constructor_with_kwargs_from_dict(loader_func_kwargs)})
-
-        super().save(config)

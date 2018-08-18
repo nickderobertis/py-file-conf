@@ -51,11 +51,6 @@ class DataConfig(ConfigBase):
         if isinstance(config_dict['name'], str):
             config_dict['name'] = ast_str(config_dict['name'])  # convert str to ast
 
-        # Handle loader func kwargs. They are saved as a dict in data source, but when passing to
-        # init, they are spread. Therefore save as their own items in config dict
-        loader_func_kwargs = extract_dict_from_ast_dict_or_dict_constructor(data_source.loader_func_kwargs)
-        for config_attr, config_value in loader_func_kwargs.items():
-            config_dict[config_attr] = config_value
 
         return cls(config_dict, name=name, imports=imports)
 
