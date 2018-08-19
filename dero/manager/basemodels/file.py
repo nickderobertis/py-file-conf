@@ -18,6 +18,9 @@ class ConfigFileBase:
     # assignment lines to always include at beginning. pass assignment objects
     always_assigns = []
 
+    # always assign dict, where assigns will get added if item name matches dict key
+    always_assign_with_names_dict = {}
+
     # class to use for interfacing with file
     interface_class = ConfigFileInterface
 
@@ -57,16 +60,21 @@ class ConfigFileBase:
         # Add always imports
         [config.imports.add_if_missing(imp) for imp in self.always_imports]
 
+        # # Check if there are any extra assigns for items with this name
+        always_assigns = self.always_assigns.copy()
+        if self.name in self.always_assign_with_names_dict:
+            always_assigns.extend(self.always_assign_with_names_dict[self.name])
+
         # Add always assigns
         # First handle begin assigns
         begin_assigns = AssignmentStatementContainer(
-            [assign for assign in self.always_assigns if assign.prefer_beginning]
+            [assign for assign in always_assigns if assign.prefer_beginning]
         )
         config.begin_assignments = begin_assigns
         # Now handle the rest
         # First get always assigns, annotations as dict
         other_always_assigns = AssignmentStatementContainer(
-            [assign for assign in self.always_assigns if not assign.prefer_beginning]
+            [assign for assign in always_assigns if not assign.prefer_beginning]
         )
         always_defaults, always_annotations = other_always_assigns.to_default_dict_and_annotation_dict()
         # Select assigns, annotations which are not already defined in config
