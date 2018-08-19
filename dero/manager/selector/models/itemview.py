@@ -18,6 +18,7 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
     def __init__(self, section_path_str: str, selector: Selector):
         self.section_path_str = section_path_str
         self.selector = selector
+        self._is_item_view = True
 
     def __getattr__(self, item):
         full_section_path_str = self.section_path_str + '.' + item

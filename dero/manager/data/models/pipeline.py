@@ -171,7 +171,8 @@ class DataPipeline(Pipeline):
         """
         real_data_sources = []
         for data_source_or_view in self.data_sources:
-            if isinstance(data_source_or_view, ItemView):
+            if _is_item_view(data_source_or_view):
+                data_source_or_view: ItemView
                 real_data_sources.append(data_source_or_view.item)
             else:
                 real_data_sources.append(data_source_or_view)
@@ -192,7 +193,7 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
     final_merge_sources = []
     # Add any pipeline merges first, as the results from the pipeline must be ready before we can merge the results
     # to other data sources or pipeline results
-    if isinstance(data_source_1, DataPipeline):
+    if _is_data_pipeline(data_source_1):
 
         # TODO: implement cleanup funcs in pipelines of pipelines
         if data_source_1.has_post_merge_cleanup_func:
@@ -201,7 +202,7 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
         merges += data_source_1.merges
         pipeline_1_result = data_source_1.merges[-1].result
         final_merge_sources.append(pipeline_1_result) # result of first pipeline will be first source in final merge
-    if isinstance(data_source_2, DataPipeline):
+    if _is_data_pipeline(data_source_2):
 
         # TODO: implement cleanup funcs in pipelines of pipelines
         if data_source_2.has_post_merge_cleanup_func:
@@ -210,13 +211,13 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
         merges += data_source_2.merges
         pipeline_2_result = data_source_2.merges[-1].result # result of second pipeline will be second source in final merge
 
-    if isinstance(data_source_1, DataSource):
+    if not _is_data_pipeline(data_source_1):
         final_merge_sources.append(data_source_1)
 
     # Now final merge source 1 is filled, may add 2
-    if isinstance(data_source_2, DataPipeline):
+    if _is_data_pipeline(data_source_2):
         final_merge_sources.append(pipeline_2_result)
-    elif isinstance(data_source_2, DataSource):
+    elif not _is_data_pipeline(data_source_2):
         final_merge_sources.append(data_source_2)
 
     # Add last (or only) merge
@@ -225,3 +226,9 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
     return merges
 
 
+def _is_data_pipeline(obj) -> bool:
+    return hasattr(obj, 'data_sources') and hasattr(obj, 'merge_options_list')
+
+def _is_item_view(obj) -> bool:
+    is_item_view = getattr(obj, '_is_item_view', False)
+    return is_item_view
