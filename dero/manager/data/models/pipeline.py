@@ -17,13 +17,18 @@ DataMerges = List[DataMerge]
 class DataPipeline(Pipeline):
 
     def __init__(self, data_sources: DataSourcesOrPipelines=None, merge_options_list: MergeOptionsList=None,
-                 outpath=None, post_merge_cleanup_func=None, name: str=None, **cleanup_kwargs):
+                 outpath=None, post_merge_cleanup_func=None, name: str=None, cleanup_kwargs: dict=None):
+
+        if cleanup_kwargs is None:
+            cleanup_kwargs = {}
+
         self.data_sources = data_sources
         self.merge_options_list = merge_options_list
         self._merge_index = 0
         self._set_cleanup_func(post_merge_cleanup_func, **cleanup_kwargs)
         self.outpath = outpath
         self.name = name
+        self.cleanup_kwargs = cleanup_kwargs
 
     def execute(self):
         while True:
