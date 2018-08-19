@@ -20,7 +20,17 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
         self.annotation = annotation
         self.preferred_position = preferred_position  # sets self.prefer_beginning as bool
 
+        # Will get set to True if creating using classmethod self.from_str.
+        # When set to True, will simply use the original str to output back to str
+        self.created_from_str = False
+        self.orig_str = None
+
     def __str__(self):
+        # Created from str, just return that str back (keeps whitespace, comments, etc.)
+        if self.created_from_str:
+            return self.orig_str
+
+        # Not created from str, use ast to create str
         ast_assign = self.to_ast()
         return ast_node_to_source(ast_assign)
 
@@ -101,5 +111,7 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
         ast_module = ast.parse(assign_str)
         cls_obj = extract_assignment_from_ast(ast_module)
         cls_obj.preferred_position = preferred_position
+        cls_obj.created_from_str = True
+        cls_obj.orig_str = assign_str
 
         return cls_obj
