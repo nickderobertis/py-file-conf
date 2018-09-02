@@ -74,3 +74,8 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
     @property
     def item(self):
         return self.selector._get_real_item(self.section_path_str)
+
+
+def _is_item_view(obj) -> bool:
+    is_item_view = getattr(obj, '_is_item_view', False)
+    return is_item_view

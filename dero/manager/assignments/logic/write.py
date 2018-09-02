@@ -18,13 +18,13 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
     Returns:
 
     """
-    from dero.manager.selector.models.selector import Selector
-    from dero.manager.selector.models.itemview import ItemView
-    if isinstance(value, Selector):
+    from dero.manager.selector.models.selector import _is_selector
+    from dero.manager.selector.models.itemview import _is_item_view
+    if _is_selector(value):
         # accessing porperties of selector object will cause issues. Only need to return Selector()
         return 'Selector()'
 
-    if isinstance(value, ItemView):
+    if _is_item_view(value):
         # accessing properties of ItemView object will also cause issues. need to return s. and section path
         return f's.{value.section_path_str}'
 

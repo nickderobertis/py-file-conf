@@ -17,6 +17,7 @@ class Selector:
     def __init__(self):
         self._attach_to_pipeline_manager()
         self._load_structure()
+        self._is_selector = True
 
     def __contains__(self, item):
         if not isinstance(item, (str, SectionPath)):
@@ -149,3 +150,6 @@ class Selector:
 
 
 
+def _is_selector(obj) -> bool:
+    is_selector = getattr(obj, '_is_selector', False)
+    return is_selector

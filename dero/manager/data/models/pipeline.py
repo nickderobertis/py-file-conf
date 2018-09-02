@@ -6,7 +6,7 @@ from copy import deepcopy
 from dero.manager.basemodels.pipeline import Pipeline
 from dero.manager.data.models.source import DataSource
 from dero.manager.data.models.merge import DataMerge, MergeOptions, LastMergeFinishedException
-from dero.manager.selector.models.itemview import ItemView
+from dero.manager.selector.models.itemview import ItemView, _is_item_view
 
 DataSourceOrPipeline = Union[DataSource, 'DataPipeline']
 DataSourcesOrPipelines = Sequence[DataSourceOrPipeline]
@@ -234,6 +234,3 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
 def _is_data_pipeline(obj) -> bool:
     return hasattr(obj, 'data_sources') and hasattr(obj, 'merge_options_list')
 
-def _is_item_view(obj) -> bool:
-    is_item_view = getattr(obj, '_is_item_view', False)
-    return is_item_view

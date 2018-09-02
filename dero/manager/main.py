@@ -179,8 +179,8 @@ class PipelineManager:
             return self._get_section_path_str_from_section_path_str_or_view(run_list)
 
     def _get_section_path_str_from_section_path_str_or_view(self,section_path_str_or_view: 'StrOrView') -> str:
-        from dero.manager.selector.models.itemview import ItemView
-        if isinstance(section_path_str_or_view, ItemView):
+        from dero.manager.selector.models.itemview import _is_item_view
+        if _is_item_view(section_path_str_or_view):
             # ItemView will have PipelineManager.name as first section, must strip
             section_path = SectionPath(section_path_str_or_view.section_path_str)
             relative_section_path = SectionPath.from_section_str_list(section_path[1:])
