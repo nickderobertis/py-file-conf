@@ -93,7 +93,6 @@ class DataSource:
         # assert not (filepath is None) and (df is None)
 
     def _set_data_loader(self, data_loader: Callable =None, pipeline: 'DataPipeline' =None, **loader_func_kwargs):
-
         run_pipeline = False
         if pipeline is not None:
             # if a source in the pipeline to create this data source was modified more recently than this data source
@@ -141,9 +140,9 @@ class DataSource:
         Returns:
 
         """
-        from dero.manager.selector.models.itemview import ItemView
+        from dero.manager.selector.models.itemview import _is_item_view
 
-        if isinstance(self.pipeline, ItemView):
+        if _is_item_view(self.pipeline):
             self.pipeline = self.pipeline.item
 
     def copy(self):
