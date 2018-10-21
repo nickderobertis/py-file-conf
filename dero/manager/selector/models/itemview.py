@@ -34,10 +34,14 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
         except PipelineManagerNotLoadedException:
             # Dealing with typos is difficult because if this is a typo and we are reaching here,
             # if PipelineManager.load() has not been run yet, we can't know the attributes of the items,
-            # so there is no certain way to check whether this is an item attribute or a typo
-            # TODO: check if manager is loaded, if so, then do a proper check. otherwise return a general error
-            # TODO: saying that it could be either manager not being loaded or a typo and display part of the path not found
-            raise PipelineManagerNotLoadedException
+
+            # check whether this is an item attribute or a typo
+            manager_name = SectionPath(full_section_path_str)[0]
+            if manager_name in self.selector._managers:  # if manager is loaded
+                # Even though manager is loaded, cannot find item. it is likely a typo.
+                raise ItemNotFoundException(f'could not find item {full_section_path_str}')
+            else:
+                raise PipelineManagerNotLoadedException('create pipeline manager instance before using selectors')
 
 
         return getattr(actual_item, item)
@@ -75,6 +79,8 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
     def item(self):
         return self.selector._get_real_item(self.section_path_str)
 
+class ItemNotFoundException(Exception):
+    pass
 
 def _is_item_view(obj) -> bool:
     is_item_view = getattr(obj, '_is_item_view', False)
