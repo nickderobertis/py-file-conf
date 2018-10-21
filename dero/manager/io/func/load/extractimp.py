@@ -72,7 +72,13 @@ def _extract_unique_type_str_names_from_annotation_dict(annotation_dict: dict) -
         elif isinstance(value, ast.Subscript):
             # e.g.: List[str]
             names.append(value.value.id) # e.g., gets List portion
-            names.append(value.slice.value.id) # e.g., gets str portion
+            if hasattr(value.slice.value, 'elts'):
+                # got multiple values, e.g. List[str, bool]
+                # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
+                names.extend([item.id for item in value.slice.value.elts])
+            else:
+                # Got a single item, list List[str]
+                names.append(value.slice.value.id) # e.g., gets str portion
         else:
             raise NotImplementedError(f'no handling for {value} of type {type(value)}')
 
