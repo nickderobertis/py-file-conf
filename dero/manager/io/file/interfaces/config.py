@@ -15,5 +15,5 @@ class ConfigFileInterface(ConfigFileLoader):
             existing_body=self.assignment_body
         )
 
-        with open(self.filepath, 'w') as f:
+        with open(self.filepath, 'w', newline='\n') as f:
             f.write(file_str_obj.file_str)
