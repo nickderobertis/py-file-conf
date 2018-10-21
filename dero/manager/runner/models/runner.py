@@ -125,15 +125,15 @@ class Runner(ReprMixin):
         results = []
         for section_or_object_view in section:
 
+            # Get section path by which to call this item
+            subsection_name = _get_public_name_or_special_name(section_or_object_view, accept_output_names=False)
+            subsection_path_str = SectionPath.join(section_path_str, subsection_name).path_str
+
             # Get from object view if necessary
             if isinstance(section_or_object_view, ObjectView):
                 section_or_callable = section_or_object_view.item
             else:
                 section_or_callable = section_or_object_view
-
-            # Get section path by which to call this item
-            subsection_name = _get_public_name_or_special_name(section_or_callable, accept_output_names=False)
-            subsection_path_str = SectionPath.join(section_path_str, subsection_name).path_str
 
             if isinstance(section_or_callable, PipelineCollection):
                 # got another section within this section. recursively call run section

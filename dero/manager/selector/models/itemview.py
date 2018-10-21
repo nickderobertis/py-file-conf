@@ -3,17 +3,16 @@ from dero.mixins.repr import ReprMixin
 from dero.mixins.attrequals import EqOnAttrsMixin
 from dero.manager.selector.models.selector import Selector
 from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
+from dero.manager.sectionpath.sectionpath import SectionPath
 from copy import deepcopy
 
 
-class ItemView(ReprMixin, EqOnAttrsMixin):
+class ItemView:
     """
     Class for representing a pipeline manager unit (function, pipeline, data source) without needing
     that unit to be loaded into pipeline manager. Allows using selector in config files and in app,
     by delaying looking up the item until an attribute/method is accessed or item is called.
     """
-    repr_cols = ['section_path_str']
-    equal_attrs = ['section_path_str']
 
     def __init__(self, section_path_str: str, selector: Selector):
         self.section_path_str = section_path_str
@@ -70,6 +69,26 @@ class ItemView(ReprMixin, EqOnAttrsMixin):
             setattr(result, k, deepcopy(v, memodict))
         result.__dict__.update(shallow_copy_dict)
         return result
+
+    def __eq__(self, other):
+        equal_attrs = ['section_path_str']
+
+        for equal_attr in equal_attrs:
+            if not hasattr(other, equal_attr): # other object doesn't have this property, must not be equal
+                return False
+            if getattr(self, equal_attr) != getattr(other, equal_attr):
+                return False
+
+        # passed all checks, must be equal
+        return True
+
+    def __repr__(self):
+        repr_cols = ['section_path_str']
+
+        repr_col_strs = [f'{col}={getattr(self, col, None).__repr__()}' for col in repr_cols]
+        repr_col_str = f'({", ".join(repr_col_strs)})'
+
+        return f'<{type(self).__name__}{repr_col_str}>'
 
     @property
     def type(self):
