@@ -67,21 +67,41 @@ def _unique_external_names_from_annotation_dict(annotation_dict: dict) -> List[s
 def _extract_unique_type_str_names_from_annotation_dict(annotation_dict: dict) -> List[str]:
     names = []
     for value in annotation_dict.values():
-        if isinstance(value, ast.Name):
-            names.append(value.id) # handles most types
-        elif isinstance(value, ast.Subscript):
-            # e.g.: List[str]
-            names.append(value.value.id) # e.g., gets List portion
-            if hasattr(value.slice.value, 'elts'):
-                # got multiple values, e.g. List[str, bool]
-                # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
-                names.extend([item.id for item in value.slice.value.elts])
-            else:
-                # Got a single item, list List[str]
-                names.append(value.slice.value.id) # e.g., gets str portion
-        else:
-            raise NotImplementedError(f'no handling for {value} of type {type(value)}')
-
-
+        names.extend(_extract_str_names_from_ambiguous_annotation(value))
 
     return list(set(names))
+
+def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
+    names = []
+    if isinstance(annotation, ast.Name):
+        names.append(annotation.id)  # handles most types
+    elif isinstance(annotation, ast.Subscript):
+        names.extend(_extract_str_names_from_subscript(annotation))
+    else:
+        raise NotImplementedError(f'no handling for {annotation} of type {type(annotation)}')
+
+    return names
+
+def _extract_str_names_from_subscript(subscript: ast.Subscript) -> List[str]:
+    names = []
+    # e.g.: List[str]
+    names.append(subscript.value.id)  # e.g., gets List portion
+    if hasattr(subscript.slice.value, 'elts'):
+        # got multiple values, e.g. List[str, bool]
+        # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
+        names.extend(_extract_str_names_from_tuple(subscript.slice.value))
+    elif isinstance(subscript.slice.value, ast.Subscript):
+        # Recursively call extract from subscript if subscript found within subscript
+        # e.g. Optional[List[str]]
+        names.extend(_extract_str_names_from_subscript(subscript.slice.value))
+    else:
+        # Got a single item, list List[str]
+        names.append(subscript.slice.value.id)  # e.g., gets str portion
+
+    return names
+
+def _extract_str_names_from_tuple(tuple: ast.Tuple) -> List[str]:
+    names = []
+    for item in tuple.elts:
+        names.extend(_extract_str_names_from_ambiguous_annotation(item))
+    return names
