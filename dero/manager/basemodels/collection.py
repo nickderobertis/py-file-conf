@@ -90,11 +90,21 @@ class Collection(Container, ReprMixin):
         items = []
         for dict_or_item in list_:
             if isinstance(dict_or_item, dict):
-                items.append(
-                    cls.from_dict(
-                        dict_or_item, basepath=basepath, name=name, imports=imports
-                    )
-                )
+                # Dict within list means that there is no name for the dict. Instead just access the keys
+                # of the dict by their names.
+                for section_name, dict_list_or_item in dict_or_item.items():
+                    section_basepath = os.path.join(basepath, section_name)
+                    if isinstance(dict_list_or_item, dict):
+                        collection = cls.from_dict(
+                            dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports
+                        )
+                    elif isinstance(dict_list_or_item, list):
+                        collection = cls.from_list(
+                            dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports
+                        )
+                    else:
+                        collection = dict_list_or_item
+                    items.append(collection)
             else:
                 # pipeline or function
                 items.append(dict_or_item)
