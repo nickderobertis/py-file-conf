@@ -2,7 +2,8 @@ import sys
 import os
 import traceback
 import pdb
-from typing import TYPE_CHECKING, Union, List
+import bdb
+from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any
 if TYPE_CHECKING:
     from dero.manager.selector.models.itemview import ItemView
     StrOrView = Union[str, ItemView]
@@ -17,6 +18,7 @@ from dero.manager.runner.models.runner import Runner, ResultOrResults
 from dero.manager.imports.models.tracker import ImportTracker
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
+from dero.manager.logger import stdout_also_logged
 
 
 class PipelineManager:
@@ -25,14 +27,17 @@ class PipelineManager:
     """
 
     def __init__(self, pipeline_dict_path: str, data_dict_path: str, basepath: str, name: str='project',
-                 auto_pdb: bool=False):
+                 auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None):
         self.pipeline_dict_path = pipeline_dict_path
         self.data_dict_path = data_dict_path
         self.basepath = basepath
         self.sources_basepath = os.path.join(basepath, 'sources')
         self.name = name
         self.auto_pdb = auto_pdb
+        self.force_continue = force_continue
+        self.log_folder = log_folder
 
+        self._validate_options()
 
     def __getattr__(self, item):
 
@@ -84,16 +89,70 @@ class PipelineManager:
         """
         section_path_str_or_list = self._convert_list_or_single_item_view_or_str_to_strs(section_path_str_or_list)
 
-        if not self.auto_pdb:
-            return self.runner.run(section_path_str_or_list)
+        if self.log_folder is not None:
+            with stdout_also_logged(self.log_folder):
+                return self._run_depending_on_settings(section_path_str_or_list)
+        else:
+            return self._run_depending_on_settings(section_path_str_or_list)
 
-        # auto pdb
-        try:
-            return self.runner.run(section_path_str_or_list)
-        except:
-            traceback.print_exc()
-            pdb.post_mortem()
+    def _run_depending_on_settings(self, section_path_str_or_list: 'RunnerArgs') -> ResultOrResults:
+        if self.auto_pdb:
+            return self._run_with_auto_pdb(section_path_str_or_list)
 
+        if self.force_continue:
+            return self._run_with_force_continue(section_path_str_or_list)
+
+        return self.runner.run(section_path_str_or_list)
+
+    def _run_with_auto_pdb(self, section_path_str_or_list: 'RunnerArgs'):
+        result, successful = _try_except_run_func_except_user_interrupts(
+            self.runner.run,
+            except_func=pdb.post_mortem,
+            try_func_kwargs=dict(
+                section_path_str_or_list=section_path_str_or_list
+            ),
+        )
+
+        if successful:
+            return result
+        else:
+            return None
+
+    def _run_with_force_continue(self, section_path_str_or_list: 'RunnerArgs'):
+        if not isinstance(section_path_str_or_list, list):
+            section_path_str_or_list = [section_path_str_or_list]
+            strip_list_at_end = True
+        else:
+            strip_list_at_end = False
+
+        exceptions: List[RunnerException] = []
+        results = []
+        for section_path_str in section_path_str_or_list:
+            result, successful = _try_except_run_func_except_user_interrupts(
+                self.runner.run,
+                except_func=_return_with_traceback,
+                try_func_kwargs=dict(
+                    section_path_str_or_list=section_path_str
+                ),
+            )
+            if successful:
+                results.append(result)
+            else:
+                exception, tb = result
+                re = RunnerException(
+                    exception,
+                    section_path_str=section_path_str,
+                    trace_back=tb
+                )
+                exceptions.append(re)
+                print(re)
+
+        report_runner_exceptions(exceptions)
+
+        if strip_list_at_end:
+            return results[0]
+        else:
+            return results
 
     # TODO: multiple section path strs
     def get(self, section_path_str_or_view: 'StrOrView'):
@@ -190,3 +249,79 @@ class PipelineManager:
         else:
             raise ValueError(f'expected str or ItemView. Got {section_path_str_or_view} of '
                              f'type {type(section_path_str_or_view)}')
+
+    def _validate_options(self):
+        if self.auto_pdb and self.force_continue:
+            raise ValueError('cannot force continue and drop into pdb at the same time')
+
+
+
+def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func: callable = lambda x: x,
+                                                exceptions: Tuple[Exception] = (
+                                                        KeyboardInterrupt,
+                                                        SystemExit,
+                                                        bdb.BdbQuit
+                                                ), try_func_kwargs: Optional[dict] = None,
+                                                except_func_kwargs: Optional[dict] = None,
+                                                print_traceback: bool = True) -> Tuple[Any, bool]:
+    """
+    Args:
+        try_func:
+        except_func: first arg of except_func must accept the exception being raised
+        exceptions:
+        try_func_kwargs:
+        except_func_kwargs:
+
+    Returns:
+        Tuple where first item is the result and second item is a boolean for whether an exception was raised.
+        In the case of passed exceptions being raised, will quit.
+        In the case of another exception being raised, the result of except_func will be returned as the first item
+        and False will be the second item of the tuple.
+
+    """
+    if try_func_kwargs is None:
+        try_func_kwargs = {}
+
+    try:
+        return try_func(**try_func_kwargs), True
+    except exceptions:
+        quit()
+    except Exception as e:
+        if print_traceback:
+            traceback.print_exc()
+        if except_func_kwargs is None:
+            except_result = except_func(e)
+        else:
+            except_result = except_func(e, **except_func_kwargs)
+        return except_result, False
+
+def _return_with_traceback(any: Any) -> Tuple[Any, str]:
+    return any, traceback.format_exc()
+
+class RunnerException(Exception):
+
+    def __init__(self, *args, section_path_str: 'StrOrView' = None, trace_back: str = None, **kwargs):
+        self.section_path_str = section_path_str
+        self.trace_back = trace_back
+
+        if len(args) > 0:
+            self.exc = args[0]
+        else:
+            self.exc = None
+
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        output_str = f'Error while running {self.section_path_str}:\n\n'
+        output_str += self.trace_back
+
+        return output_str
+
+def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
+    print('\n\n')
+    for runner_exception in runner_exceptions:
+        print(runner_exception)
+        print('\n\n')
+
+    if len(runner_exceptions) == 0:
+        print('Everything ran successfully, no exceptions to report.\n\n')
