@@ -107,7 +107,7 @@ class PipelineManager:
     def _run_with_auto_pdb(self, section_path_str_or_list: 'RunnerArgs'):
         result, successful = _try_except_run_func_except_user_interrupts(
             self.runner.run,
-            except_func=pdb.post_mortem,
+            except_func=lambda exc: pdb.post_mortem(),
             try_func_kwargs=dict(
                 section_path_str_or_list=section_path_str_or_list
             ),
