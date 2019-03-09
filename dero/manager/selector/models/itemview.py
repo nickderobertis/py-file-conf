@@ -1,9 +1,11 @@
-
-from dero.mixins.repr import ReprMixin
-from dero.mixins.attrequals import EqOnAttrsMixin
+from dero.manager.selector.logic.exc.typo import (
+    handle_pipeline_manager_not_loaded_or_typo,
+    handle_known_typo_at_end_of_section_path_str,
+    handle_known_typo_after_pipeline_manager_name,
+    ItemNotFoundException
+)
 from dero.manager.selector.models.selector import Selector
 from dero.manager.exceptions.pipelinemanager import PipelineManagerNotLoadedException
-from dero.manager.sectionpath.sectionpath import SectionPath
 from copy import deepcopy
 
 
@@ -34,16 +36,18 @@ class ItemView:
             # Dealing with typos is difficult because if this is a typo and we are reaching here,
             # if PipelineManager.load() has not been run yet, we can't know the attributes of the items,
 
-            # check whether this is an item attribute or a typo
-            manager_name = SectionPath(full_section_path_str)[0]
-            if manager_name in self.selector._managers:  # if manager is loaded
-                # Even though manager is loaded, cannot find item. it is likely a typo.
-                raise ItemNotFoundException(f'could not find item {full_section_path_str}')
-            else:
-                raise PipelineManagerNotLoadedException('create pipeline manager instance before using selectors')
+            # check whether this is an item attribute or a typo, and raise error if needed
+            return handle_pipeline_manager_not_loaded_or_typo(full_section_path_str, self.selector._managers)
+        # TODO: refactor so that there is a better way of catching this than python throwing a RecursionError
+        except RecursionError:
+            # We are landing here when there is a typo in after the pipeline manager selection of a longer
+            # section path, e.g if "this" was portfolio manager name: s.this.tpyo.would.cause.this
+            return handle_known_typo_after_pipeline_manager_name(full_section_path_str)
 
-
-        return getattr(actual_item, item)
+        try:
+            return getattr(actual_item, item)
+        except (KeyError, AttributeError):
+            return handle_known_typo_at_end_of_section_path_str(full_section_path_str)
 
     def __dir__(self):
         exposed_properties = [
@@ -98,8 +102,6 @@ class ItemView:
     def item(self):
         return self.selector._get_real_item(self.section_path_str)
 
-class ItemNotFoundException(Exception):
-    pass
 
 def _is_item_view(obj) -> bool:
     is_item_view = getattr(obj, '_is_item_view', False)
