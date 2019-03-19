@@ -1,4 +1,4 @@
-from typing import Callable, List, Union, Tuple
+from typing import Callable, List, Union, Tuple, Optional
 from copy import deepcopy
 import pandas as pd
 from functools import partial
@@ -18,6 +18,7 @@ class MergeOptions:
                  left_df_keep_cols: StrListOrNone=None, right_df_keep_cols: StrListOrNone=None,
                  left_df_pre_process_func: Callable=None, right_df_pre_process_func: Callable=None,
                  left_df_pre_process_kwargs: dict=None, right_df_pre_process_kwargs: dict=None,
+                 post_merge_func: Callable = None, post_merge_func_kwargs: Optional[dict] = None,
                  **merge_function_kwargs):
         """
 
@@ -39,6 +40,8 @@ class MergeOptions:
             merge_function:
             left_df_keep_cols:
             right_df_keep_cols:
+            post_merge_func: function to be called on data after merge
+            post_merge_func_kwargs: kwargs to be passed to post_merge_func
             **merge_function_kwargs:
         """
 
@@ -48,11 +51,17 @@ class MergeOptions:
         if right_df_pre_process_kwargs == None:
             right_df_pre_process_kwargs = {}
 
+        if post_merge_func_kwargs == None:
+            post_merge_func_kwargs = {}
+
         if left_df_pre_process_func == None:
             left_df_pre_process_func = lambda x: x
 
         if right_df_pre_process_func == None:
             right_df_pre_process_func = lambda x: x
+
+        if post_merge_func == None:
+            post_merge_func = lambda x: x
 
         self.args = merge_function_args
         self.outpath = outpath
@@ -62,6 +71,7 @@ class MergeOptions:
         self.right_df_keep_cols = right_df_keep_cols
         self.left_df_pre_process_func = partial(left_df_pre_process_func, **left_df_pre_process_kwargs)
         self.right_df_pre_process_func = partial(right_df_pre_process_func, **right_df_pre_process_kwargs)
+        self.post_merge_func = partial(post_merge_func, **post_merge_func_kwargs)
 
 
     def __repr__(self):
@@ -93,6 +103,9 @@ class DataMerge:
             *self.merge_options.args,
             **self.merge_options.merge_function_kwargs
         )
+        if self.merge_options.post_merge_func is not None:
+            self.result.df = self.merge_options.post_merge_func(self.result.df)
+
         print(f"""
         {self.data_sources[0].name_type} obs: {len(left_df)}
         {self.data_sources[1].name_type} obs: {len(right_df)}

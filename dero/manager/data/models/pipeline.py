@@ -199,20 +199,11 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
     # Add any pipeline merges first, as the results from the pipeline must be ready before we can merge the results
     # to other data sources or pipeline results
     if _is_data_pipeline(data_source_1):
-
-        # TODO: implement cleanup funcs in pipelines of pipelines
-        if data_source_1.has_post_merge_cleanup_func:
-            raise NotImplementedError(f'no handling yet for post merge cleanup function in {data_source_1}')
-
         merges += data_source_1.merges
         pipeline_1_result = data_source_1.merges[-1].result
         final_merge_sources.append(pipeline_1_result) # result of first pipeline will be first source in final merge
+
     if _is_data_pipeline(data_source_2):
-
-        # TODO: implement cleanup funcs in pipelines of pipelines
-        if data_source_2.has_post_merge_cleanup_func:
-            raise NotImplementedError(f'no handling yet for post merge cleanup function in {data_source_2}')
-
         merges += data_source_2.merges
         pipeline_2_result = data_source_2.merges[-1].result # result of second pipeline will be second source in final merge
 
