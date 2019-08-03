@@ -16,7 +16,7 @@ class Logger(object):
     def __init__(self, log_folder: str = None):
         self.terminal = sys.stdout
         log_path = _log_filename() if log_folder is None else os.path.join(log_folder, _log_filename())
-        self.log = open(log_path, "a")
+        self.log = open(log_path, "a", encoding='utf8')
 
     def write(self, message):
         self.terminal.write(message)
