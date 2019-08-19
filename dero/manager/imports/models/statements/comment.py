@@ -1,5 +1,5 @@
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 
 class Comment(ReprMixin):
     repr_cols = ['comment']

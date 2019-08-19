@@ -1,5 +1,5 @@
 from typing import List
-from dero.mixins.attrequals import EqOnAttrsMixin
+from mixins.attrequals import EqOnAttrsMixin
 from dero.manager.mixins.orderpref import OrderPreferenceMixin
 
 class ImportStatement(EqOnAttrsMixin, OrderPreferenceMixin):

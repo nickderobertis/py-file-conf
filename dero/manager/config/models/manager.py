@@ -1,6 +1,6 @@
 from typing import List, Union, Any
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
 from dero.manager.logic.set import _set_in_nested_obj_by_section_path
 from dero.manager.config.models.interfaces import ConfigSectionOrConfig

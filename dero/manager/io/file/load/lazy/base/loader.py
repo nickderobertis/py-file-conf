@@ -2,9 +2,9 @@ import ast
 import os
 from typing import List
 
-from dero.mixins.propertycache import SimplePropertyCacheMixin
+from mixins.propertycache import SimplePropertyCacheMixin
 from dero.manager.io.file.load.parsers.py import PythonFileParser
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 
 class LazyLoader(SimplePropertyCacheMixin, ReprMixin):
     repr_cols = ['filepath']

@@ -2,7 +2,7 @@ from typing import List
 import os
 
 from dero.manager.basemodels.container import Container
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.imports.models.statements.container import ImportStatementContainer
 
 StrList = List[str]

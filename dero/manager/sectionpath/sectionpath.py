@@ -1,7 +1,7 @@
 from typing import List, Union
 import os
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 
 SectionPathOrStr = Union[str, 'SectionPath']
 

@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from dero.manager.basemodels.container import Container
 from dero.manager.assignments.models.statement import AssignmentStatement
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 
 class AssignmentStatementContainer(Container, ReprMixin):
     repr_cols = ['items']

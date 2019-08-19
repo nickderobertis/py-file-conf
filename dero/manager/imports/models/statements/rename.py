@@ -3,8 +3,8 @@ if TYPE_CHECKING:
     from dero.manager.imports.models.statements.interfaces import AnyAstImport
 import ast
 
-from dero.mixins.repr import ReprMixin
-from dero.mixins.attrequals import EqOnAttrsMixin
+from mixins.repr import ReprMixin
+from mixins.attrequals import EqOnAttrsMixin
 
 class RenameStatement(ReprMixin, EqOnAttrsMixin):
     repr_cols = ['item', 'new_name']

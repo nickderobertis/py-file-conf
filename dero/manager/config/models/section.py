@@ -2,7 +2,7 @@ from typing import List, Union
 import os
 import warnings
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.basemodels.container import Container
 from dero.manager.config.models.config import ActiveFunctionConfig
 from dero.manager.sectionpath.sectionpath import _strip_py

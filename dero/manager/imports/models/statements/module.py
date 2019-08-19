@@ -3,7 +3,7 @@ import ast
 import importlib
 from types import ModuleType
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 
 from dero.manager.imports.models.statements.importbase import ImportStatement
 from dero.manager.imports.models.statements.rename import RenameStatementCollection

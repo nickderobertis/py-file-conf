@@ -2,7 +2,7 @@ from typing import List
 import ast
 
 from dero.manager.basemodels.container import Container
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.imports.models.statements.obj import ObjectImportStatement
 from dero.manager.imports.models.statements.module import ModuleImportStatement
 from dero.manager.imports.models.statements.interfaces import (

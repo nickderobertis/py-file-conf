@@ -1,6 +1,6 @@
 import ast
 
-from dero.mixins.propertycache import SimplePropertyCacheMixin
+from mixins.propertycache import SimplePropertyCacheMixin
 from dero.manager.imports.models.statements.interfaces import (
     AnyImportStatement,
     ObjectImportStatement,
@@ -10,7 +10,7 @@ from dero.manager.imports.models.statements.container import ImportStatementCont
 from dero.manager.io.file.load.parsers.extname import extract_external_name_from_assign_value
 from dero.manager.io.file.load.parsers.kwargs import extract_keywords_from_ast_by_name
 from dero.manager.io.func.load.config import FunctionConfigExtractor
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 
 class ObjectView(SimplePropertyCacheMixin, ReprMixin):
     repr_cols = ['name', 'obj_ast', 'section_path_str']

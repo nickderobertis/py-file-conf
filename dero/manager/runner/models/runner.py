@@ -1,7 +1,7 @@
 from typing import Callable, Tuple
 from functools import partial
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.config.models.manager import ConfigManager, ActiveFunctionConfig
 from dero.manager.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from dero.manager.logic.get import _get_public_name_or_special_name

@@ -3,7 +3,7 @@ import ast
 
 from dero.manager.io.file.write.asttosource import ast_node_to_source
 from dero.manager.io.file.load.parsers.assign import extract_assignment_from_ast
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.mixins.orderpref import OrderPreferenceMixin
 
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]

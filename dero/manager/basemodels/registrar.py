@@ -1,6 +1,6 @@
 from typing import List
 
-from dero.mixins.repr import ReprMixin
+from mixins.repr import ReprMixin
 from dero.manager.basemodels.collection import Collection
 from dero.manager.sectionpath.sectionpath import SectionPath
 from dero.manager.logic.get import _get_from_nested_obj_by_section_path
