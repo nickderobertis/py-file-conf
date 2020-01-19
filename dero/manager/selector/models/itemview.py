@@ -46,7 +46,10 @@ class ItemView:
 
         try:
             return getattr(actual_item, item)
-        except (KeyError, AttributeError):
+        except (KeyError, AttributeError) as e:
+            ### TEMP - having issues with _is_selector
+            raise e
+            ### END TEMP
             return handle_known_typo_at_end_of_section_path_str(full_section_path_str)
 
     def __dir__(self):
