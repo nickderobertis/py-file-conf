@@ -6,7 +6,7 @@ import warnings
 import datetime
 from typing import Callable, TYPE_CHECKING, List
 
-from dero.ext_pandas.optimize.load import read_file as read_file_into_df
+from pd_utils.optimize.load import read_file as read_file_into_df
 
 from dero.manager.data.models.type import DataType
 from dero.manager.data.models.astitems import ast_none
