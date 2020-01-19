@@ -6,7 +6,7 @@ class FileParser:
         self.filepath = filepath
 
     def load(self) -> List[str]:
-        with open(self.filepath, 'r') as f:
+        with open(self.filepath, 'r', encoding='utf8') as f:
             contents = f.readlines()
 
         return contents
