@@ -1,6 +1,6 @@
 import os
 import shutil
-from typing import Callable
+from typing import Callable, Type
 
 
 def delete_project(path: str):
@@ -22,3 +22,7 @@ def delete_project(path: str):
 
 def pipeline_dict_str_with_obj(func: Callable, func_key: str, func_module: str) -> str:
     return f'from {func_module} import {func.__name__}\n\npipeline_dict = {{\n\t"{func_key}": [{func.__name__}],\n}}\n'
+
+
+def class_dict_str(name: str, key: str, value: str) -> str:
+    return f'\n{name} = {{\n\t"{key}": ["{value}"],\n}}\n'

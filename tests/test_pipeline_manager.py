@@ -1,9 +1,9 @@
 import os
 
-from pyfileconf import PipelineManager, create_project, Selector
+from pyfileconf import PipelineManager, create_project, Selector, DataSource
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.bmodule import ExampleClass
-from tests.utils import delete_project, pipeline_dict_str_with_obj
+from tests.utils import delete_project, pipeline_dict_str_with_obj, class_dict_str
 from tests.input_files.amodule import a_function
 
 BASE_GENERATED_DIR = os.path.join('tests', 'generated_files')
@@ -77,6 +77,10 @@ class PipelineManagerTestBase:
         with open(self.pipeline_path, 'w') as f:
             f.write(pipeline_dict_str_with_obj(ExampleClass, 'stuff', 'tests.input_files.bmodule'))
 
+    def write_data_dict_to_file(self):
+        with open(self.data_dict_path, 'w') as f:
+            f.write(class_dict_str('data_dict', 'stuff', 'data'))
+
 class TestPipelineManagerLoad(PipelineManagerTestBase):
 
     def test_create_empty_pm(self):
@@ -117,6 +121,27 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert 's = Selector()' in contents
             assert 'a: Tuple[int, int] = None' in contents
 
+    def test_create_pm_with_source(self):
+        self.write_data_dict_to_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.sources.stuff.data
+        sources_folder = os.path.join(self.defaults_path, 'sources')
+        module_folder = os.path.join(sources_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            assert 'from pyfileconf import Selector' in contents
+            assert 's = Selector()' in contents
+            assert "name = 'data'" in contents
+            assert "data_type = None" in contents
+            assert "location = None" in contents
+            assert "loader_func = None" in contents
+            assert "pipeline = None" in contents
+            assert "tags = None" in contents
+            assert "loader_func_kwargs = dict()" in contents
+
 
 def partialExampleClass(param):
     pass
@@ -138,9 +163,18 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
-        iv = sel.test_pipeline_manager.stuff.ExampleClass
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(None)
+
+    def test_create_data_source(self):
+        self.write_data_dict_to_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        ds = sel.test_pipeline_manager.sources.stuff.data.item
+        expect_ds = DataSource(name='data')
+        assert ds.name == expect_ds.name
+        assert ds.location == expect_ds.location
 
 
 
@@ -175,6 +209,26 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
+
+    # TODO: create update data source test should work after refactor for any arbitrary class as dict
+
+    # def test_create_update_data_source(self):
+    #     self.write_data_dict_to_file()
+    #     pipeline_manager = self.create_pm()
+    #     pipeline_manager.load()
+    #     sel = Selector()
+    #     iv = sel.test_pipeline_manager.sources.stuff.data
+    #     expected_location_result = 'abc'
+    #     section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+    #     pipeline_manager.config.update(
+    #         location=expected_location_result,
+    #         section_path_str=section_path.path_str
+    #     )
+    #     ds = sel.test_pipeline_manager.sources.stuff.data.item
+    #     expect_ds = DataSource(name='data', location=expected_location_result)
+    #     assert ds.name == expect_ds.name
+    #     assert ds.location == expect_ds.location
+
 
     def test_config_reload_function(self):
         self.write_a_function_to_pipeline_dict_file()
