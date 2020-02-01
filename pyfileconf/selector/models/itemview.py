@@ -37,7 +37,11 @@ class ItemView:
 
             # check whether this is an item attribute or a typo, and raise error if needed
             return handle_pipeline_manager_not_loaded_or_typo(full_section_path_str, self.selector._managers)
-        # TODO: refactor so that there is a better way of catching this than python throwing a RecursionError
+
+        # TODO: refactor item view lookup errors
+        #
+        #  So that there is a better way of catching a known typo than python throwing a RecursionError
+
         except RecursionError:
             # We are landing here when there is a typo in after the pipeline manager selection of a longer
             # section path, e.g if "this" was portfolio manager name: s.this.tpyo.would.cause.this
