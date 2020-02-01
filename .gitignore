@@ -67,3 +67,4 @@ _examples
 **/.ipynb_checkpoints
 .vscode
 temp
+tests/generated_files

@@ -1,10 +1,11 @@
 import os
-import shutil
 
-from pyfileconf import PipelineManager, create_project
-from tests.utils import delete_project
+from pyfileconf import PipelineManager, create_project, Selector
+from tests.utils import delete_project, pipeline_dict_str_with_func
+from tests.input_files.amodule import a_function
 
-BASE_GENERATED_DIR = 'tests/generated_files'
+BASE_GENERATED_DIR = os.path.join('tests', 'generated_files')
+INPUT_FILES_DIR = os.path.join('tests', 'input_files')
 
 
 def test_create_project():
@@ -63,3 +64,29 @@ class TestPipelineManagerLoad:
             log_folder=self.logs_path
         )
         pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager
+
+    def test_create_pm_with_function(self):
+        with open(self.pipeline_path, 'w') as f:
+            f.write(pipeline_dict_str_with_func(a_function, 'stuff', 'tests.input_files.amodule'))
+        pipeline_manager = PipelineManager(
+            pipeline_dict_path=self.pipeline_path,
+            data_dict_path=self.data_dict_path,
+            basepath=self.defaults_path,
+            name=self.test_name,
+            log_folder=self.logs_path
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        module_folder = os.path.join(self.defaults_path, 'stuff')
+        function_path = os.path.join(module_folder, 'a_function.py')
+        with open(function_path, 'r') as f:
+            contents = f.read()
+            assert 'a: str = None' in contents
+            assert 'b: List[str] = None' in contents
+            assert 'from typing import List' in contents
+            assert 'from pyfileconf import Selector, MergeOptions' in contents
+            assert 's = Selector()' in contents
+
