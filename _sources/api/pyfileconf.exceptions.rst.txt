@@ -1,0 +1,27 @@
+pyfileconf.exceptions package
+=============================
+
+.. automodule:: pyfileconf.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.exceptions.base module
+---------------------------------
+
+.. automodule:: pyfileconf.exceptions.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.exceptions.pipelinemanager module
+--------------------------------------------
+
+.. automodule:: pyfileconf.exceptions.pipelinemanager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

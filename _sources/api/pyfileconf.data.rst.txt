@@ -1,0 +1,15 @@
+pyfileconf.data package
+=======================
+
+.. automodule:: pyfileconf.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.data.logic
+   pyfileconf.data.models

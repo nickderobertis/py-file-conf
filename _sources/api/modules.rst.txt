@@ -1,0 +1,7 @@
+pyfileconf
+==========
+
+.. toctree::
+   :maxdepth: 4
+
+   pyfileconf

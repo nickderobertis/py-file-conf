@@ -1,0 +1,67 @@
+pyfileconf.imports.models.statements package
+============================================
+
+.. automodule:: pyfileconf.imports.models.statements
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.imports.models.statements.comment module
+---------------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.comment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.imports.models.statements.container module
+-----------------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.container
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.imports.models.statements.importbase module
+------------------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.importbase
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.imports.models.statements.interfaces module
+------------------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.interfaces
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.imports.models.statements.module module
+--------------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.module
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.imports.models.statements.obj module
+-----------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.obj
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.imports.models.statements.rename module
+--------------------------------------------------
+
+.. automodule:: pyfileconf.imports.models.statements.rename
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

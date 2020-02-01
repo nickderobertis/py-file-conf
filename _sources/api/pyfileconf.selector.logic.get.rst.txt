@@ -1,0 +1,43 @@
+pyfileconf.selector.logic.get package
+=====================================
+
+.. automodule:: pyfileconf.selector.logic.get
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.selector.logic.get.fromglobs module
+----------------------------------------------
+
+.. automodule:: pyfileconf.selector.logic.get.fromglobs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.selector.logic.get.frommanager module
+------------------------------------------------
+
+.. automodule:: pyfileconf.selector.logic.get.frommanager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.selector.logic.get.globs module
+------------------------------------------
+
+.. automodule:: pyfileconf.selector.logic.get.globs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.selector.logic.get.main module
+-----------------------------------------
+
+.. automodule:: pyfileconf.selector.logic.get.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

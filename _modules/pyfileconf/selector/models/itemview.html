@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../../../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">pyfileconf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyfileconf.selector.models.itemview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyfileconf.selector.models.itemview</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.exc.typo</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">handle_pipeline_manager_not_loaded_or_typo</span><span class="p">,</span>
+    <span class="n">handle_known_typo_at_end_of_section_path_str</span><span class="p">,</span>
+    <span class="n">handle_known_typo_after_pipeline_manager_name</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.selector.models.selector</span> <span class="kn">import</span> <span class="n">Selector</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+
+<div class="viewcode-block" id="ItemView"><a class="viewcode-back" href="../../../../api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.ItemView">[docs]</a><span class="k">class</span> <span class="nc">ItemView</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for representing a pipeline manager unit (function, pipeline, data source) without needing</span>
+<span class="sd">    that unit to be loaded into pipeline manager. Allows using selector in config files and in app,</span>
+<span class="sd">    by delaying looking up the item until an attribute/method is accessed or item is called.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ItemView.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.ItemView.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="n">Selector</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span> <span class="o">=</span> <span class="n">section_path_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="n">selector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_item_view</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="n">full_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">item</span>
+        <span class="k">if</span> <span class="n">full_section_path_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="p">:</span>
+            <span class="c1"># This is an item, return an item view for it</span>
+            <span class="k">return</span> <span class="n">ItemView</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="p">)</span>
+
+        <span class="c1"># Not an item.</span>
+        <span class="c1"># Must be either an attribute of an item, or a typo. Actually look up the item now</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">actual_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span>
+        <span class="k">except</span> <span class="n">PipelineManagerNotLoadedException</span><span class="p">:</span>
+            <span class="c1"># Dealing with typos is difficult because if this is a typo and we are reaching here,</span>
+            <span class="c1"># if PipelineManager.load() has not been run yet, we can&#39;t know the attributes of the items,</span>
+
+            <span class="c1"># check whether this is an item attribute or a typo, and raise error if needed</span>
+            <span class="k">return</span> <span class="n">handle_pipeline_manager_not_loaded_or_typo</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_managers</span><span class="p">)</span>
+
+        <span class="c1"># TODO: refactor item view lookup errors</span>
+        <span class="c1">#</span>
+        <span class="c1">#  So that there is a better way of catching a known typo than python throwing a RecursionError</span>
+
+        <span class="k">except</span> <span class="n">RecursionError</span><span class="p">:</span>
+            <span class="c1"># We are landing here when there is a typo in after the pipeline manager selection of a longer</span>
+            <span class="c1"># section path, e.g if &quot;this&quot; was portfolio manager name: s.this.tpyo.would.cause.this</span>
+            <span class="k">return</span> <span class="n">handle_known_typo_after_pipeline_manager_name</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1">### TEMP - having issues with _is_selector</span>
+            <span class="k">raise</span> <span class="n">e</span>
+            <span class="c1">### END TEMP</span>
+            <span class="k">return</span> <span class="n">handle_known_typo_at_end_of_section_path_str</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">exposed_properties</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;item&#39;</span>
+        <span class="p">]</span>
+        <span class="n">collection_attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_dir_for_section_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">exposed_properties</span> <span class="o">+</span> <span class="n">collection_attrs</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># When calling, assume user always wants the real item</span>
+        <span class="n">actual_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">actual_item</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memodict</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">memodict</span><span class="p">[</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)]</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="n">deepcopy_skip_items</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;selector&#39;</span><span class="p">]</span>
+        <span class="n">deepcopy_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">deepcopy_skip_items</span><span class="p">}</span>
+        <span class="n">shallow_copy_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">deepcopy_skip_items</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">deepcopy_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">memodict</span><span class="p">))</span>
+        <span class="n">result</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">shallow_copy_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">equal_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">equal_attr</span> <span class="ow">in</span> <span class="n">equal_attrs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">equal_attr</span><span class="p">):</span> <span class="c1"># other object doesn&#39;t have this property, must not be equal</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">equal_attr</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">equal_attr</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># passed all checks, must be equal</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">]</span>
+
+        <span class="n">repr_col_strs</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{col}</span><span class="s1">={getattr(self, col, None).__repr__()}&#39;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">repr_cols</span><span class="p">]</span>
+        <span class="n">repr_col_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;({&quot;, &quot;.join(repr_col_strs)})&#39;</span>
+
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;{type(self).__name__}</span><span class="si">{repr_col_str}</span><span class="s1">&gt;&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">get_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_is_item_view</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">is_item_view</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">is_item_view</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

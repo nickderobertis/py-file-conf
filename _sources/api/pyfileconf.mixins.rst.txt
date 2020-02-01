@@ -1,0 +1,19 @@
+pyfileconf.mixins package
+=========================
+
+.. automodule:: pyfileconf.mixins
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.mixins.orderpref module
+----------------------------------
+
+.. automodule:: pyfileconf.mixins.orderpref
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

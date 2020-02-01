@@ -1,0 +1,14 @@
+pyfileconf.pipelines package
+============================
+
+.. automodule:: pyfileconf.pipelines
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.pipelines.models

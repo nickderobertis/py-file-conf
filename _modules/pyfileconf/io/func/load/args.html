@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.io.func.load.args &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../../../../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/modules.html">pyfileconf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyfileconf.io.func.load.args</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyfileconf.io.func.load.args</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
+<span class="kn">from</span> <span class="nn">importlib.util</span> <span class="kn">import</span> <span class="n">resolve_name</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.interfaces</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ObjectImportStatement</span><span class="p">,</span>
+    <span class="n">ModuleImportStatement</span><span class="p">,</span>
+    <span class="n">AnyImportStatement</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.funcdef</span> <span class="kn">import</span> <span class="n">extract_function_definition_or_class_init_from_ast_by_name</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.lazy.base.impassign</span> <span class="kn">import</span> <span class="n">ImportAssignmentLazyLoader</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.container</span> <span class="kn">import</span> <span class="n">ImportStatementContainer</span>
+
+<span class="n">ArgumentsAndImports</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">arguments</span><span class="p">,</span> <span class="n">ImportStatementContainer</span><span class="p">]</span>
+
+<div class="viewcode-block" id="FunctionArgsExtractor"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.FunctionArgsExtractor">[docs]</a><span class="k">class</span> <span class="nc">FunctionArgsExtractor</span><span class="p">:</span>
+
+<div class="viewcode-block" id="FunctionArgsExtractor.__init__"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.FunctionArgsExtractor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_view</span><span class="p">:</span> <span class="s1">&#39;ObjectView&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_view</span> <span class="o">=</span> <span class="n">object_view</span></div>
+
+<div class="viewcode-block" id="FunctionArgsExtractor.extract_args"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.FunctionArgsExtractor.extract_args">[docs]</a>    <span class="k">def</span> <span class="nf">extract_args</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentsAndImports</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">extract_function_args_and_arg_imports_from_import</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_view</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_view</span><span class="o">.</span><span class="n">import_statement</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_view</span><span class="o">.</span><span class="n">section_path_str</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="extract_function_args_and_arg_imports_from_import"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.extract_function_args_and_arg_imports_from_import">[docs]</a><span class="k">def</span> <span class="nf">extract_function_args_and_arg_imports_from_import</span><span class="p">(</span><span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">imp</span><span class="p">:</span> <span class="n">AnyImportStatement</span><span class="p">,</span>
+                                                      <span class="n">import_section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentsAndImports</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.io.func.load.extractimp</span> <span class="kn">import</span> <span class="n">extract_import_statements_from_function_args_imports_and_assigns</span>
+
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_module_filepath_from_import</span><span class="p">(</span>
+        <span class="n">imp</span><span class="p">,</span>
+        <span class="n">import_section_path_str</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">function_name</span> <span class="ow">in</span> <span class="n">imp</span><span class="o">.</span><span class="n">renames</span><span class="o">.</span><span class="n">new_names</span><span class="p">:</span>
+        <span class="c1"># If was renamed in the import,</span>
+        <span class="c1"># Get original name from rename statement</span>
+        <span class="n">function_name</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">renames</span><span class="o">.</span><span class="n">reverse_name_map</span><span class="p">[</span><span class="n">function_name</span><span class="p">]</span>
+
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">ImportAssignmentLazyLoader</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="n">ast_function_def</span> <span class="o">=</span> <span class="n">extract_function_definition_or_class_init_from_ast_by_name</span><span class="p">(</span>
+        <span class="n">loader</span><span class="o">.</span><span class="n">ast</span><span class="p">,</span>
+        <span class="n">function_name</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ast_function_def</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Found function definition in this import</span>
+        <span class="c1"># TODO: handle other class methods - also update extract_function_definition function</span>
+        <span class="k">if</span> <span class="n">ast_function_def</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;__init__&#39;</span><span class="p">:</span>
+            <span class="c1"># Got class init</span>
+            <span class="k">del</span> <span class="n">ast_function_def</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># delete first arg (self)</span>
+        <span class="n">function_arg_imports</span> <span class="o">=</span> <span class="n">extract_import_statements_from_function_args_imports_and_assigns</span><span class="p">(</span>
+            <span class="n">ast_function_def</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+            <span class="n">loader</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
+            <span class="n">loader</span><span class="o">.</span><span class="n">assigns</span><span class="p">,</span>
+            <span class="n">imp</span><span class="o">.</span><span class="n">module</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ast_function_def</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="n">function_arg_imports</span>
+
+    <span class="c1"># Else, this function must have been imported into this file as well.</span>
+    <span class="c1"># Must find the matching import, the extract args from that import</span>
+    <span class="n">next_level_import</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">imports</span><span class="o">.</span><span class="n">get_import_for_module_or_obj_name</span><span class="p">(</span><span class="n">function_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">next_level_import</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;not able to find function definition for </span><span class="si">{function_name}</span><span class="s1">. Could not &#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39;find in definitions or in imports&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">import_section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">next_module</span> <span class="o">=</span> <span class="n">next_level_import</span><span class="o">.</span><span class="n">module</span>
+        <span class="n">new_section_path</span> <span class="o">=</span> <span class="n">resolve_name</span><span class="p">(</span><span class="n">next_module</span><span class="p">,</span> <span class="n">import_section_path_str</span><span class="p">)</span> <span class="k">if</span> <span class="n">next_module</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">next_module</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_section_path</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">extract_function_args_and_arg_imports_from_import</span><span class="p">(</span>
+        <span class="n">function_name</span><span class="p">,</span>
+        <span class="n">imp</span><span class="o">=</span><span class="n">next_level_import</span><span class="p">,</span>
+        <span class="n">import_section_path_str</span><span class="o">=</span><span class="n">new_section_path</span>
+    <span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="get_module_filepath_from_import"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.get_module_filepath_from_import">[docs]</a><span class="k">def</span> <span class="nf">get_module_filepath_from_import</span><span class="p">(</span><span class="n">imp</span><span class="p">:</span> <span class="n">AnyImportStatement</span><span class="p">,</span> <span class="n">import_section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">imp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">ObjectImportStatement</span><span class="p">):</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">imp</span><span class="o">.</span><span class="n">get_module_filepath</span><span class="p">(</span><span class="n">import_section_path_str</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">ModuleImportStatement</span><span class="p">):</span>
+        <span class="c1"># have already ensured in creating ObjectView that there should be only one module</span>
+        <span class="c1"># in the module import statement. So just take the first filepath</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">imp</span><span class="o">.</span><span class="n">get_module_filepaths</span><span class="p">(</span><span class="n">import_section_path_str</span><span class="p">)[</span><span class="n">imp</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected import statement to be ObjectImportStatement or ModuleImportStatement.&#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39; Got </span><span class="si">{imp}</span><span class="s1"> of type {type(imp)}&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">func</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

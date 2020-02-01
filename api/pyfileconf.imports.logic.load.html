@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.imports.logic.load package &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyfileconf.imports.models package" href="pyfileconf.imports.models.html" />
+    <link rel="prev" title="pyfileconf.imports.logic package" href="pyfileconf.imports.logic.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyfileconf</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyfileconf.html">pyfileconf package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pyfileconf.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.html">pyfileconf.assignments package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.sectionpath.html">pyfileconf.sectionpath package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.html">pyfileconf.selector package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.views.html">pyfileconf.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.main">pyfileconf.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pyfileconf</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.html">pyfileconf package</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.imports.html">pyfileconf.imports package</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.imports.logic.html">pyfileconf.imports.logic package</a> &raquo;</li>
+        
+      <li>pyfileconf.imports.logic.load package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/pyfileconf.imports.logic.load.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyfileconf.imports.logic.load">
+<span id="pyfileconf-imports-logic-load-package"></span><h1>pyfileconf.imports.logic.load package<a class="headerlink" href="#module-pyfileconf.imports.logic.load" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyfileconf.imports.logic.load.ext_importlib">
+<span id="pyfileconf-imports-logic-load-ext-importlib-module"></span><h2>pyfileconf.imports.logic.load.ext_importlib module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.ext_importlib" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.ext_importlib.find_spec">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.ext_importlib.</code><code class="sig-name descname">find_spec</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">package=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/ext_importlib.html#find_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.ext_importlib.find_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the spec for the specified module.</p>
+<p>Note: this is a modification of importlib.util.find_spec which does not
+import parent packages. It instead recursively searches through the parents.</p>
+<p>First, sys.modules is checked to see if the module was already imported. If
+so, then sys.modules[name].__spec__ is returned. If that happens to be
+set to None, then ValueError is raised. If the module is not in
+sys.modules, then sys.meta_path is searched for a suitable spec with the
+value of ‘path’ given to the finders. None is returned if no spec could
+be found.</p>
+<p>If the name is for submodule (contains a dot), find_spec is called on the
+parent module to determine the submodule_search_locations.</p>
+<p>The name and package arguments work the same as importlib.import_module().
+In other words, relative module names (with leading dots) work.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleSpec</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.ext_importlib.</code><code class="sig-name descname">get_filepath_from_module_str</code><span class="sig-paren">(</span><em class="sig-param">module_str</em>, <em class="sig-param">location_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/ext_importlib.html#get_filepath_from_module_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.imports.logic.load.func">
+<span id="pyfileconf-imports-logic-load-func-module"></span><h2>pyfileconf.imports.logic.load.func module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.func" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.func.function_args_as_dict">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.func.</code><code class="sig-name descname">function_args_as_dict</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/func.html#function_args_as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.func.function_args_as_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.func.get_variable_name_of_obj">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.func.</code><code class="sig-name descname">get_variable_name_of_obj</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/func.html#get_variable_name_of_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.func.get_variable_name_of_obj" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.imports.logic.load.name">
+<span id="pyfileconf-imports-logic-load-name-module"></span><h2>pyfileconf.imports.logic.load.name module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.name" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.name.get_imported_obj_variable_name">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">get_imported_obj_variable_name</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#get_imported_obj_variable_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.get_imported_obj_variable_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.name.get_module_and_name_imported_from">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">get_module_and_name_imported_from</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">search_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#get_module_and_name_imported_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.get_module_and_name_imported_from" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.name.is_imported_name">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">is_imported_name</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">search_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#is_imported_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.is_imported_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.imports.logic.load.name.is_imported_obj">
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">is_imported_obj</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">search_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#is_imported_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.is_imported_obj" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.imports.logic.load.skipmodules">
+<span id="pyfileconf-imports-logic-load-skipmodules-module"></span><h2>pyfileconf.imports.logic.load.skipmodules module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.skipmodules" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyfileconf.imports.models.html" class="btn btn-neutral float-right" title="pyfileconf.imports.models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pyfileconf.imports.logic.html" class="btn btn-neutral float-left" title="pyfileconf.imports.logic package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

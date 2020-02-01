@@ -1,0 +1,19 @@
+pyfileconf.sectionpath package
+==============================
+
+.. automodule:: pyfileconf.sectionpath
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.sectionpath.sectionpath module
+-----------------------------------------
+
+.. automodule:: pyfileconf.sectionpath.sectionpath
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

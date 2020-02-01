@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.main &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">pyfileconf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyfileconf.main</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyfileconf.main</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">bdb</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">ItemView</span>
+    <span class="n">StrOrView</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ItemView</span><span class="p">]</span>
+    <span class="n">RunnerArgs</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ItemView</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">ItemView</span><span class="p">]]</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.config.models.manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.registrar</span> <span class="kn">import</span> <span class="n">PipelineRegistrar</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.dictfile</span> <span class="kn">import</span> <span class="n">PipelineDictFile</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.registrar</span> <span class="kn">import</span> <span class="n">DataRegistrar</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictfile</span> <span class="kn">import</span> <span class="n">DataDictFile</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.runner.models.runner</span> <span class="kn">import</span> <span class="n">Runner</span><span class="p">,</span> <span class="n">ResultOrResults</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.models.tracker</span> <span class="kn">import</span> <span class="n">ImportTracker</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logger</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
+
+
+<div class="viewcode-block" id="PipelineManager"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager">[docs]</a><span class="k">class</span> <span class="nc">PipelineManager</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main class for managing flow-based programming and configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PipelineManager.__init__"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_dict_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_dict_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;project&#39;</span><span class="p">,</span>
+                 <span class="n">auto_pdb</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_continue</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_dict_path</span> <span class="o">=</span> <span class="n">pipeline_dict_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dict_path</span> <span class="o">=</span> <span class="n">data_dict_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span> <span class="o">=</span> <span class="n">basepath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources_basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s1">&#39;sources&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span> <span class="o">=</span> <span class="n">auto_pdb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_continue</span> <span class="o">=</span> <span class="n">force_continue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="o">=</span> <span class="n">log_folder</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_options</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;runner&#39;</span><span class="p">,</span> <span class="s1">&#39;sources&#39;</span><span class="p">):</span>
+            <span class="c1"># must not be defined yet</span>
+            <span class="k">raise</span> <span class="n">PipelineManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;call PipelineManager.load() before accessing &#39;</span>
+                                                    <span class="s1">&#39;functions or data sources&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Must be getting function</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">exposed_methods</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;run&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;get&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;load&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;reload&#39;</span>
+        <span class="p">]</span>
+        <span class="n">exposed_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sources&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">exposed</span> <span class="o">=</span> <span class="n">exposed_methods</span> <span class="o">+</span> <span class="n">exposed_attrs</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;register&#39;</span><span class="p">):</span>
+            <span class="n">skip_methods</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;scaffold_config&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;basepath&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">register_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">attr</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">)</span> <span class="k">if</span> <span class="n">attr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exposed</span> <span class="o">+</span> <span class="n">skip_methods</span><span class="p">]</span>
+            <span class="n">exposed</span> <span class="o">+=</span> <span class="n">register_attrs</span>
+        <span class="k">return</span> <span class="n">exposed</span>
+
+<div class="viewcode-block" id="PipelineManager.run"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResultOrResults</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use to run registered pipelines/functions/sections. Pass a single section path or a list</span>
+<span class="sd">        of section paths. If a list is passed, the return value will also be a list, with each</span>
+<span class="sd">        result item corresponding to the function at the same index.</span>
+
+<span class="sd">        If a path for a section is passed rather than a path for a function or pipeline, a list</span>
+<span class="sd">        of results will be returned for that section as well. Therefore, calling a high-level</span>
+<span class="sd">        section will result in a nested list structure of results.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            section_path_str_or_list: . separated name of path of function or section, or list thereof.</span>
+<span class="sd">                similar to how a function would be imported. e.g. &#39;main.data.summarize.summary_func1&#39;</span>
+<span class="sd">                or when running multiple functions/sections, e.g.</span>
+<span class="sd">                    [&#39;main.data&#39;, &#39;main.analysis.reg.1&#39;]</span>
+<span class="sd">                These sections/functions are based on the structure of your pipeline_dict</span>
+
+<span class="sd">        Returns: result or list of results</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">section_path_str_or_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_list_or_single_item_view_or_str_to_strs</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">stdout_also_logged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_run_depending_on_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResultOrResults</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_with_auto_pdb</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_continue</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_with_force_continue</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_run_with_auto_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">):</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">successful</span> <span class="o">=</span> <span class="n">_try_except_run_func_except_user_interrupts</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">,</span>
+            <span class="n">except_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">exc</span><span class="p">:</span> <span class="n">pdb</span><span class="o">.</span><span class="n">post_mortem</span><span class="p">(),</span>
+            <span class="n">try_func_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">section_path_str_or_list</span><span class="o">=</span><span class="n">section_path_str_or_list</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">successful</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_run_with_force_continue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">section_path_str_or_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">section_path_str_or_list</span><span class="p">]</span>
+            <span class="n">strip_list_at_end</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">strip_list_at_end</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">exceptions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RunnerException</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="n">section_path_str_or_list</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">,</span> <span class="n">successful</span> <span class="o">=</span> <span class="n">_try_except_run_func_except_user_interrupts</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">,</span>
+                <span class="n">except_func</span><span class="o">=</span><span class="n">_return_with_traceback</span><span class="p">,</span>
+                <span class="n">try_func_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">section_path_str_or_list</span><span class="o">=</span><span class="n">section_path_str</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">successful</span><span class="p">:</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">exception</span><span class="p">,</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">result</span>
+                <span class="n">re</span> <span class="o">=</span> <span class="n">RunnerException</span><span class="p">(</span>
+                    <span class="n">exception</span><span class="p">,</span>
+                    <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span>
+                    <span class="n">trace_back</span><span class="o">=</span><span class="n">tb</span>
+                <span class="p">)</span>
+                <span class="n">exceptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">re</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="p">)</span>
+
+        <span class="n">report_runner_exceptions</span><span class="p">(</span><span class="n">exceptions</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">strip_list_at_end</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">results</span>
+
+    <span class="c1"># TODO: multiple section path strs</span>
+<div class="viewcode-block" id="PipelineManager.get"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_view</span><span class="p">:</span> <span class="s1">&#39;StrOrView&#39;</span><span class="p">):</span>
+        <span class="n">section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">)</span>
+        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sources&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PipelineManager.reload"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Useful for getting file system changes without having to start a new Python session. Also resets</span>
+<span class="sd">        any locally defined configuration.</span>
+
+<span class="sd">        Reloads functions from pipeline dict, scaffolds config files for any new functions,</span>
+<span class="sd">        and updates configuration from files.</span>
+
+<span class="sd">        Returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wipe_loaded_modules</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PipelineManager.load"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrapper to track imported modules so that can reimport them upon reloading</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span> <span class="o">=</span> <span class="n">ImportTracker</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_pipeline_config_and_runner</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Reset loaded modules from import, completely canceling load so it can be tried again</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wipe_loaded_modules</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># modules have been wiped, must be sure they won&#39;t be wiped again</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span></div>
+
+    <span class="k">def</span> <span class="nf">_load_pipeline_config_and_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        External logic for main initialization</span>
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Load dynamically instead of passing dict to ensure modules are loaded into sys now</span>
+        <span class="n">pipeline_dict_file</span> <span class="o">=</span> <span class="n">PipelineDictFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_dict_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pipeline_dict&#39;</span><span class="p">)</span>
+        <span class="n">pipeline_dict</span> <span class="o">=</span> <span class="n">pipeline_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">data_dict_file</span> <span class="o">=</span> <span class="n">DataDictFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dict_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;data_dict&#39;</span><span class="p">)</span>
+        <span class="n">data_dict</span> <span class="o">=</span> <span class="n">data_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">register</span> <span class="o">=</span> <span class="n">PipelineRegistrar</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+            <span class="n">pipeline_dict</span><span class="p">,</span>
+            <span class="n">basepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">imports</span><span class="o">=</span><span class="n">pipeline_dict_file</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">scaffold_config</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">DataRegistrar</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+            <span class="n">data_dict</span><span class="p">,</span>
+            <span class="n">basepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sources_basepath</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">imports</span><span class="o">=</span><span class="n">data_dict_file</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">scaffold_config</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">pipelines</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_wipe_loaded_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">module</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_convert_list_or_single_item_view_or_str_to_strs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">run_arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">run_arg</span> <span class="ow">in</span> <span class="n">run_list</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">run_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section_path_str_or_view</span><span class="p">:</span> <span class="s1">&#39;StrOrView&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">_is_item_view</span>
+        <span class="k">if</span> <span class="n">_is_item_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">):</span>
+            <span class="c1"># ItemView will have PipelineManager.name as first section, must strip</span>
+            <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
+            <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="k">return</span> <span class="n">relative_section_path</span><span class="o">.</span><span class="n">path_str</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">section_path_str_or_view</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected str or ItemView. Got </span><span class="si">{section_path_str_or_view}</span><span class="s1"> of &#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;type {type(section_path_str_or_view)}&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_validate_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_continue</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;cannot force continue and drop into pdb at the same time&#39;</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_try_except_run_func_except_user_interrupts</span><span class="p">(</span><span class="n">try_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">except_func</span><span class="p">:</span> <span class="n">callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                                                <span class="n">exceptions</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                                        <span class="ne">KeyboardInterrupt</span><span class="p">,</span>
+                                                        <span class="ne">SystemExit</span><span class="p">,</span>
+                                                        <span class="n">bdb</span><span class="o">.</span><span class="n">BdbQuit</span>
+                                                <span class="p">),</span> <span class="n">try_func_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                                <span class="n">except_func_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                                <span class="n">print_traceback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        try_func:</span>
+<span class="sd">        except_func: first arg of except_func must accept the exception being raised</span>
+<span class="sd">        exceptions:</span>
+<span class="sd">        try_func_kwargs:</span>
+<span class="sd">        except_func_kwargs:</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple where first item is the result and second item is a boolean for whether an exception was raised.</span>
+<span class="sd">        In the case of passed exceptions being raised, will quit.</span>
+<span class="sd">        In the case of another exception being raised, the result of except_func will be returned as the first item</span>
+<span class="sd">        and False will be the second item of the tuple.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">try_func_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">try_func_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">try_func</span><span class="p">(</span><span class="o">**</span><span class="n">try_func_kwargs</span><span class="p">),</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="n">exceptions</span><span class="p">:</span>
+        <span class="n">quit</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">print_traceback</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">except_func_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">except_result</span> <span class="o">=</span> <span class="n">except_func</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">except_result</span> <span class="o">=</span> <span class="n">except_func</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="o">**</span><span class="n">except_func_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">except_result</span><span class="p">,</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">_return_with_traceback</span><span class="p">(</span><span class="nb">any</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">,</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+
+<div class="viewcode-block" id="RunnerException"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.RunnerException">[docs]</a><span class="k">class</span> <span class="nc">RunnerException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RunnerException.__init__"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.RunnerException.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="s1">&#39;StrOrView&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">trace_back</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span> <span class="o">=</span> <span class="n">section_path_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace_back</span> <span class="o">=</span> <span class="n">trace_back</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exc</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exc</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">output_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Error while running </span><span class="si">{self.section_path_str}</span><span class="s1">:</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">output_str</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace_back</span>
+
+        <span class="k">return</span> <span class="n">output_str</span></div>
+
+<div class="viewcode-block" id="report_runner_exceptions"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.report_runner_exceptions">[docs]</a><span class="k">def</span> <span class="nf">report_runner_exceptions</span><span class="p">(</span><span class="n">runner_exceptions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RunnerException</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">runner_exception</span> <span class="ow">in</span> <span class="n">runner_exceptions</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">runner_exception</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">runner_exceptions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Everything ran successfully, no exceptions to report.</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

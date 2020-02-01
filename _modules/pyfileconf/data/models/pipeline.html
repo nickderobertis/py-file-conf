@@ -1,0 +1,448 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.data.models.pipeline &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../../../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">pyfileconf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyfileconf.data.models.pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyfileconf.data.models.pipeline</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.basemodels.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.source</span> <span class="kn">import</span> <span class="n">DataSource</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.merge</span> <span class="kn">import</span> <span class="n">DataMerge</span><span class="p">,</span> <span class="n">MergeOptions</span><span class="p">,</span> <span class="n">LastMergeFinishedException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">ItemView</span><span class="p">,</span> <span class="n">_is_item_view</span>
+
+<span class="n">DataSourceOrPipeline</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataSource</span><span class="p">,</span> <span class="s1">&#39;DataPipeline&#39;</span><span class="p">]</span>
+<span class="n">DataSourcesOrPipelines</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DataSourceOrPipeline</span><span class="p">]</span>
+<span class="n">MergeOptionsList</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">MergeOptions</span><span class="p">]</span>
+<span class="n">DataMerges</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">DataMerge</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="DataPipeline"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline">[docs]</a><span class="k">class</span> <span class="nc">DataPipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DataPipeline.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_sources</span><span class="p">:</span> <span class="n">DataSourcesOrPipelines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">merge_options_list</span><span class="p">:</span> <span class="n">MergeOptionsList</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">outpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">post_merge_cleanup_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cleanup_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">cleanup_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cleanup_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span> <span class="o">=</span> <span class="n">data_sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merge_options_list</span> <span class="o">=</span> <span class="n">merge_options_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merge_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cleanup_func</span><span class="p">(</span><span class="n">post_merge_cleanup_func</span><span class="p">,</span> <span class="o">**</span><span class="n">cleanup_kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outpath</span> <span class="o">=</span> <span class="n">outpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cleanup_kwargs</span> <span class="o">=</span> <span class="n">cleanup_kwargs</span></div>
+
+<div class="viewcode-block" id="DataPipeline.execute"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">next_merge</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">LastMergeFinishedException</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_post_merge_cleanup_func</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_merge_cleanup_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span></div>
+
+<div class="viewcode-block" id="DataPipeline.next_merge"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.next_merge">[docs]</a>    <span class="k">def</span> <span class="nf">next_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># On first merge, set df</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_df_from_first_merge</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataPipeline.output"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.output">[docs]</a>    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">outpath</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outpath</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataPipeline.summary"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">summary_args</span><span class="p">,</span> <span class="n">summary_method</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summary_function</span><span class="p">:</span> <span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                             <span class="n">summary_attr</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">summary_method_kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">merge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">:</span>
+            <span class="n">merge</span><span class="o">.</span><span class="n">summary</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">summary_args</span><span class="p">,</span>
+                <span class="n">summary_method</span><span class="o">=</span><span class="n">summary_method</span><span class="p">,</span>
+                <span class="n">summary_function</span><span class="o">=</span><span class="n">summary_function</span><span class="p">,</span>
+                <span class="n">summary_attr</span><span class="o">=</span><span class="n">summary_attr</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">summary_method_kwargs</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataPipeline.describe"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">merge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">:</span>
+            <span class="n">merge</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Now running merge {self._merge_index + 1}: </span><span class="si">{self.merges[self._merge_index]}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">LastMergeFinishedException</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_index</span><span class="p">]</span><span class="o">.</span><span class="n">merge</span><span class="p">()</span>
+
+        <span class="c1"># Set current df to result of merge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_merge_index</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">df</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merge_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># TODO: add output considering path in merge options</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">merges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merges</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_merges</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merges</span>
+
+    <span class="c1"># Following properties exist to recreate merges if data sources or merge options are overridden</span>
+    <span class="c1"># by user</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_sources</span>
+
+    <span class="nd">@data_sources</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">data_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_sources</span><span class="p">:</span> <span class="n">DataSourcesOrPipelines</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_sources</span> <span class="o">=</span> <span class="n">data_sources</span>
+        <span class="c1"># only set merges if previously set. otherwise no need to worry about updating cached result</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_merges&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_merges</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">merge_options_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge_options_list</span>
+
+    <span class="nd">@merge_options_list</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">merge_options_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">merge_options_list</span><span class="p">:</span> <span class="n">MergeOptionsList</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merge_options_list</span> <span class="o">=</span> <span class="n">merge_options_list</span>
+        <span class="c1"># only set merges if previously set. otherwise no need to worry about updating cached result</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_merges&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_merges</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_set_merges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_touch_data_sources</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_merges</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_options_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_merges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_sources</span><span class="p">:</span> <span class="n">DataSourcesOrPipelines</span><span class="p">,</span> <span class="n">merge_options_list</span><span class="p">:</span> <span class="n">MergeOptionsList</span><span class="p">):</span>
+        <span class="n">merges</span> <span class="o">=</span> <span class="n">_get_merges</span><span class="p">(</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data_sources</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">merge_options_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">merge_options_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">merges</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">merge_options</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">merge_options_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">merges</span> <span class="o">+=</span> <span class="n">_get_merges</span><span class="p">(</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">data_sources</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">],</span> <span class="n">merge_options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">merges</span>
+
+    <span class="k">def</span> <span class="nf">_set_df_from_first_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_set_cleanup_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_merge_cleanup_func</span><span class="p">,</span> <span class="o">**</span><span class="n">cleanup_kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">post_merge_cleanup_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_post_merge_cleanup_func</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">post_merge_cleanup_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">post_merge_cleanup_func</span><span class="p">,</span> <span class="o">**</span><span class="n">cleanup_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_post_merge_cleanup_func</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">last_modified</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_touch_data_sources</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="n">source</span><span class="o">.</span><span class="n">last_modified</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source_last_modified</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">most_recent_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">source</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">last_modified</span> <span class="o">&gt;</span> <span class="n">most_recent_time</span><span class="p">:</span>
+                <span class="n">most_recent_time</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">last_modified</span>
+                <span class="n">most_recent_index</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="n">most_recent_index</span><span class="p">]</span>
+
+<div class="viewcode-block" id="DataPipeline.copy"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.pipeline.DataPipeline.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_touch_data_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Data sources may be passed using pyfileconf.Selector, in which case they</span>
+<span class="sd">        are pyfileconf.selector.models.itemview.ItemView objects. _get_merges uses isinstance, which will</span>
+<span class="sd">        return ItemView, and so won&#39;t work correctly. By accessing the .item proprty of the ItemView,</span>
+<span class="sd">        we get the original item back</span>
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">real_data_sources</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">data_source_or_view</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_is_item_view</span><span class="p">(</span><span class="n">data_source_or_view</span><span class="p">):</span>
+                <span class="n">data_source_or_view</span><span class="p">:</span> <span class="n">ItemView</span>
+                <span class="n">real_data_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_or_view</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">real_data_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_or_view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span> <span class="o">=</span> <span class="n">real_data_sources</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_merges</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">:</span> <span class="n">DataSourceOrPipeline</span><span class="p">,</span> <span class="n">data_source_2</span><span class="p">:</span> <span class="n">DataSourceOrPipeline</span><span class="p">,</span>
+                <span class="n">merge_options</span><span class="p">:</span> <span class="n">MergeOptions</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataMerges</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a list of DataMerge objects from a paring of two DataSource objects, a DataSource and a DataPipeline,</span>
+<span class="sd">    or two DataPipeline objects.</span>
+<span class="sd">    :param data_source_1: DataSource or DataPipeline</span>
+<span class="sd">    :param data_source_2: DataSource or DataPipeline</span>
+<span class="sd">    :param merge_options: MergeOptions</span>
+<span class="sd">    :return: list of DataMerge objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">merges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">final_merge_sources</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># Add any pipeline merges first, as the results from the pipeline must be ready before we can merge the results</span>
+    <span class="c1"># to other data sources or pipeline results</span>
+    <span class="k">if</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">):</span>
+        <span class="n">merges</span> <span class="o">+=</span> <span class="n">data_source_1</span><span class="o">.</span><span class="n">merges</span>
+        <span class="n">pipeline_1_result</span> <span class="o">=</span> <span class="n">data_source_1</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span>
+        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipeline_1_result</span><span class="p">)</span> <span class="c1"># result of first pipeline will be first source in final merge</span>
+
+    <span class="k">if</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">):</span>
+        <span class="n">merges</span> <span class="o">+=</span> <span class="n">data_source_2</span><span class="o">.</span><span class="n">merges</span>
+        <span class="n">pipeline_2_result</span> <span class="o">=</span> <span class="n">data_source_2</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span> <span class="c1"># result of second pipeline will be second source in final merge</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">):</span>
+        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">)</span>
+
+    <span class="c1"># Now final merge source 1 is filled, may add 2</span>
+    <span class="k">if</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">):</span>
+        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipeline_2_result</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">):</span>
+        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">)</span>
+
+    <span class="c1"># Add last (or only) merge</span>
+    <span class="n">merges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DataMerge</span><span class="p">(</span><span class="n">final_merge_sources</span><span class="p">,</span> <span class="n">merge_options</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">merges</span>
+
+
+<span class="k">def</span> <span class="nf">_is_data_pipeline</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;data_sources&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;merge_options_list&#39;</span><span class="p">)</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

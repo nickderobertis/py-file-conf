@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.assignments.models.statement &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../../../../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">pyfileconf</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pyfileconf.assignments.models.statement</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pyfileconf.assignments.models.statement</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.io.file.write.asttosource</span> <span class="kn">import</span> <span class="n">ast_node_to_source</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.assign</span> <span class="kn">import</span> <span class="n">extract_assignment_from_ast</span>
+<span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.mixins.orderpref</span> <span class="kn">import</span> <span class="n">OrderPreferenceMixin</span>
+
+<span class="n">AnyAstAssign</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">]</span>
+<span class="n">DictTuple</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
+
+<div class="viewcode-block" id="AssignmentStatement"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement">[docs]</a><span class="k">class</span> <span class="nc">AssignmentStatement</span><span class="p">(</span><span class="n">ReprMixin</span><span class="p">,</span> <span class="n">OrderPreferenceMixin</span><span class="p">):</span>
+    <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;varname&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;annotation&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="AssignmentStatement.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="n">annotation</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">varname</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span> <span class="k">else</span> <span class="n">ast_node_to_source</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>  <span class="c1"># handle subscripts, etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="o">=</span> <span class="n">annotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preferred_position</span> <span class="o">=</span> <span class="n">preferred_position</span>  <span class="c1"># sets self.prefer_beginning as bool</span>
+
+        <span class="c1"># Will get set to True if creating using classmethod self.from_str.</span>
+        <span class="c1"># When set to True, will simply use the original str to output back to str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">created_from_str</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orig_str</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Created from str, just return that str back (keeps whitespace, comments, etc.)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">created_from_str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_str</span>
+
+        <span class="c1"># Not created from str, use ast to create str</span>
+        <span class="n">ast_assign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_ast</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ast_node_to_source</span><span class="p">(</span><span class="n">ast_assign</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">AssignmentStatement</span><span class="p">):</span>
+            <span class="c1"># Auto convert ast assigns for comparison</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">)):</span>
+                <span class="n">other</span> <span class="o">=</span> <span class="n">AssignmentStatement</span><span class="o">.</span><span class="n">from_ast_assign</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># If not an assign or ast assign, not equal</span>
+
+        <span class="c1"># Other is an assignment statement.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">varname</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">varname</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># non-matching assignment variable, must not be equal</span>
+
+        <span class="c1"># Other is an assignment statement to the same variable</span>
+        <span class="c1"># Check if source generated from ast values are the same</span>
+        <span class="k">if</span> <span class="n">ast_node_to_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ast_node_to_source</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Ignore differences on annotations. Could check that here.</span>
+
+        <span class="c1"># Passed all checks, must be the same</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="AssignmentStatement.from_ast_assign"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.from_ast_assign">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_ast_assign</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ast_assign</span><span class="p">:</span> <span class="n">AnyAstAssign</span><span class="p">,</span> <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ast_assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">):</span>
+            <span class="c1"># Base assignment, no annotation. May be multiple targets</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">ast_assign</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># TODO: multiple assignments (multiple targets)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ast_assign</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot yet handle multiple assignment to: </span><span class="si">{ast_assign.targets}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="n">annotation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ast_assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">):</span>
+            <span class="c1"># Annotation assignment. Must be single target.</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">ast_assign</span><span class="o">.</span><span class="n">target</span>
+            <span class="n">annotation</span> <span class="o">=</span> <span class="n">ast_assign</span><span class="o">.</span><span class="n">annotation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected ast.Assign or ast.AnnAssign. got </span><span class="si">{ast_assign}</span><span class="s1"> of type {type(ast_assign)}&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">target</span><span class="p">,</span>
+            <span class="n">ast_assign</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">annotation</span><span class="p">,</span>
+            <span class="n">preferred_position</span><span class="o">=</span><span class="n">preferred_position</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AssignmentStatement.to_default_dict_and_annotation_dict"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.to_default_dict_and_annotation_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_default_dict_and_annotation_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DictTuple</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">},</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="p">}</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="AssignmentStatement.to_ast"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.to_ast">[docs]</a>    <span class="k">def</span> <span class="nf">to_ast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyAstAssign</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">(</span>
+                <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">],</span>
+                <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">(</span>
+                <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">annotation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span>
+                <span class="n">simple</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="AssignmentStatement.from_varname_and_ast_value"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.from_varname_and_ast_value">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_varname_and_ast_value</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">varname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="n">annotation</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">assign_name</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">varname</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Store</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">assign_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">annotation</span><span class="o">=</span><span class="n">annotation</span><span class="p">,</span> <span class="n">preferred_position</span><span class="o">=</span><span class="n">preferred_position</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AssignmentStatement.from_str"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.from_str">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assign_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">ast_module</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">assign_str</span><span class="p">)</span>
+        <span class="n">cls_obj</span> <span class="o">=</span> <span class="n">extract_assignment_from_ast</span><span class="p">(</span><span class="n">ast_module</span><span class="p">)</span>
+        <span class="n">cls_obj</span><span class="o">.</span><span class="n">preferred_position</span> <span class="o">=</span> <span class="n">preferred_position</span>
+        <span class="n">cls_obj</span><span class="o">.</span><span class="n">created_from_str</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">cls_obj</span><span class="o">.</span><span class="n">orig_str</span> <span class="o">=</span> <span class="n">assign_str</span>
+
+        <span class="k">return</span> <span class="n">cls_obj</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

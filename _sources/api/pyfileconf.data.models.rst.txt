@@ -1,0 +1,91 @@
+pyfileconf.data.models package
+==============================
+
+.. automodule:: pyfileconf.data.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.data.models.astitems module
+--------------------------------------
+
+.. automodule:: pyfileconf.data.models.astitems
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.collection module
+----------------------------------------
+
+.. automodule:: pyfileconf.data.models.collection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.config module
+------------------------------------
+
+.. automodule:: pyfileconf.data.models.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.dictfile module
+--------------------------------------
+
+.. automodule:: pyfileconf.data.models.dictfile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.file module
+----------------------------------
+
+.. automodule:: pyfileconf.data.models.file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.merge module
+-----------------------------------
+
+.. automodule:: pyfileconf.data.models.merge
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.pipeline module
+--------------------------------------
+
+.. automodule:: pyfileconf.data.models.pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.registrar module
+---------------------------------------
+
+.. automodule:: pyfileconf.data.models.registrar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.source module
+------------------------------------
+
+.. automodule:: pyfileconf.data.models.source
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.models.type module
+----------------------------------
+
+.. automodule:: pyfileconf.data.models.type
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

@@ -1,0 +1,83 @@
+pyfileconf.io.file.load.parsers package
+=======================================
+
+.. automodule:: pyfileconf.io.file.load.parsers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.io.file.load.parsers.assign module
+---------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.assign
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.base module
+-------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.collections module
+--------------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.collections
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.extname module
+----------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.extname
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.fromdict module
+-----------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.fromdict
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.funcdef module
+----------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.funcdef
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.imp module
+------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.imp
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.kwargs module
+---------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.kwargs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.parsers.py module
+-----------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.parsers.py
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

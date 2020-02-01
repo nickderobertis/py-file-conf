@@ -1,0 +1,27 @@
+pyfileconf.config.logic package
+===============================
+
+.. automodule:: pyfileconf.config.logic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.config.logic.load module
+-----------------------------------
+
+.. automodule:: pyfileconf.config.logic.load
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.config.logic.write module
+------------------------------------
+
+.. automodule:: pyfileconf.config.logic.write
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

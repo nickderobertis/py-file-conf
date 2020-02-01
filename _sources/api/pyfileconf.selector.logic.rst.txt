@@ -1,0 +1,15 @@
+pyfileconf.selector.logic package
+=================================
+
+.. automodule:: pyfileconf.selector.logic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.selector.logic.exc
+   pyfileconf.selector.logic.get

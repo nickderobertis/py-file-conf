@@ -1,0 +1,15 @@
+pyfileconf.selector package
+===========================
+
+.. automodule:: pyfileconf.selector
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.selector.logic
+   pyfileconf.selector.models

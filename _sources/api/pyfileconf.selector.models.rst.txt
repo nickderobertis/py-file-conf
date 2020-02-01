@@ -1,0 +1,27 @@
+pyfileconf.selector.models package
+==================================
+
+.. automodule:: pyfileconf.selector.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.selector.models.itemview module
+------------------------------------------
+
+.. automodule:: pyfileconf.selector.models.itemview
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.selector.models.selector module
+------------------------------------------
+
+.. automodule:: pyfileconf.selector.models.selector
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

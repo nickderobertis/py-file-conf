@@ -1,0 +1,27 @@
+pyfileconf.assignments.models package
+=====================================
+
+.. automodule:: pyfileconf.assignments.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.assignments.models.container module
+----------------------------------------------
+
+.. automodule:: pyfileconf.assignments.models.container
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.assignments.models.statement module
+----------------------------------------------
+
+.. automodule:: pyfileconf.assignments.models.statement
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

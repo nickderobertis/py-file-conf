@@ -1,0 +1,59 @@
+pyfileconf.basemodels package
+=============================
+
+.. automodule:: pyfileconf.basemodels
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.basemodels.collection module
+---------------------------------------
+
+.. automodule:: pyfileconf.basemodels.collection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.basemodels.config module
+-----------------------------------
+
+.. automodule:: pyfileconf.basemodels.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.basemodels.container module
+--------------------------------------
+
+.. automodule:: pyfileconf.basemodels.container
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.basemodels.file module
+---------------------------------
+
+.. automodule:: pyfileconf.basemodels.file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.basemodels.pipeline module
+-------------------------------------
+
+.. automodule:: pyfileconf.basemodels.pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.basemodels.registrar module
+--------------------------------------
+
+.. automodule:: pyfileconf.basemodels.registrar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

@@ -1,0 +1,731 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.io.file.load.parsers package &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyfileconf.io.file.write package" href="pyfileconf.io.file.write.html" />
+    <link rel="prev" title="pyfileconf.io.file.load.lazy.base package" href="pyfileconf.io.file.load.lazy.base.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyfileconf</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyfileconf.html">pyfileconf package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pyfileconf.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.html">pyfileconf.assignments package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.sectionpath.html">pyfileconf.sectionpath package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.html">pyfileconf.selector package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.views.html">pyfileconf.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.main">pyfileconf.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pyfileconf</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.html">pyfileconf package</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.io.html">pyfileconf.io package</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.io.file.html">pyfileconf.io.file package</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.io.file.load.html">pyfileconf.io.file.load package</a> &raquo;</li>
+        
+      <li>pyfileconf.io.file.load.parsers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/pyfileconf.io.file.load.parsers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyfileconf.io.file.load.parsers">
+<span id="pyfileconf-io-file-load-parsers-package"></span><h1>pyfileconf.io.file.load.parsers package<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.assign">
+<span id="pyfileconf-io-file-load-parsers-assign-module"></span><h2>pyfileconf.io.file.load.parsers.assign module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.assign" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.assign.</code><code class="sig-name descname">AssignmentByVarnameExtractor</code><span class="sig-paren">(</span><em class="sig-param">varname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentByVarnameExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.load.parsers.assign.AssignmentExtractor" title="pyfileconf.io.file.load.parsers.assign.AssignmentExtractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.parsers.assign.AssignmentExtractor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">varname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentByVarnameExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.visit_AnnAssign">
+<code class="sig-name descname">visit_AnnAssign</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentByVarnameExtractor.visit_AnnAssign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.visit_AnnAssign" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.visit_Assign">
+<code class="sig-name descname">visit_Assign</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentByVarnameExtractor.visit_Assign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.visit_Assign" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.assign.</code><code class="sig-name descname">AssignmentExtractor</code><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ast.NodeVisitor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentExtractor.visit_AnnAssign">
+<code class="sig-name descname">visit_AnnAssign</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentExtractor.visit_AnnAssign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentExtractor.visit_AnnAssign" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.assign.AssignmentExtractor.visit_Assign">
+<code class="sig-name descname">visit_Assign</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#AssignmentExtractor.visit_Assign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.AssignmentExtractor.visit_Assign" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.assign.extract_assignment_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.assign.</code><code class="sig-name descname">extract_assignment_from_ast</code><span class="sig-paren">(</span><em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#extract_assignment_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.extract_assignment_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.assign.extract_assignment_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.assign.</code><code class="sig-name descname">extract_assignment_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">module</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#extract_assignment_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.extract_assignment_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.assign.extract_assignments_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.assign.</code><code class="sig-name descname">extract_assignments_from_ast</code><span class="sig-paren">(</span><em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#extract_assignments_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.extract_assignments_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer" title="pyfileconf.assignments.models.container.AssignmentStatementContainer">AssignmentStatementContainer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.assign.extract_assignments_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.assign.</code><code class="sig-name descname">extract_assignments_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">module</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/assign.html#extract_assignments_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.assign.extract_assignments_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer" title="pyfileconf.assignments.models.container.AssignmentStatementContainer">AssignmentStatementContainer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.base">
+<span id="pyfileconf-io-file-load-parsers-base-module"></span><h2>pyfileconf.io.file.load.parsers.base module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.base" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.base.FileParser">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.base.</code><code class="sig-name descname">FileParser</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/base.html#FileParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.base.FileParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.base.FileParser.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/base.html#FileParser.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.base.FileParser.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.base.FileParser.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/base.html#FileParser.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.base.FileParser.load" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.collections">
+<span id="pyfileconf-io-file-load-parsers-collections-module"></span><h2>pyfileconf.io.file.load.parsers.collections module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.collections" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.collections.AstDictListConverter">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.collections.</code><code class="sig-name descname">AstDictListConverter</code><span class="sig-paren">(</span><em class="sig-param">convert_str_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/collections.html#AstDictListConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.collections.AstDictListConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ast.NodeVisitor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.collections.AstDictListConverter.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">convert_str_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/collections.html#AstDictListConverter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_Dict">
+<code class="sig-name descname">visit_Dict</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/collections.html#AstDictListConverter.visit_Dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_Dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_List">
+<code class="sig-name descname">visit_List</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/collections.html#AstDictListConverter.visit_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_List" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.collections.extract_collection_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.collections.</code><code class="sig-name descname">extract_collection_from_ast</code><span class="sig-paren">(</span><em class="sig-param">ast_node</em>, <em class="sig-param">convert_str_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/collections.html#extract_collection_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.collections.extract_collection_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.collections.extract_collections_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.collections.</code><code class="sig-name descname">extract_collections_from_ast</code><span class="sig-paren">(</span><em class="sig-param">ast_node</em>, <em class="sig-param">convert_str_values=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/collections.html#extract_collections_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.collections.extract_collections_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of dicts or lists. Goes through ast, converting
+ast.Dict to dict and ast.List to list, leaving the rest intact.
+Returns a list of these created dicts and lists</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ast_node:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.extname">
+<span id="pyfileconf-io-file-load-parsers-extname-module"></span><h2>pyfileconf.io.file.load.parsers.extname module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.extname" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.extname.NameExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.extname.</code><code class="sig-name descname">NameExtractor</code><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/extname.html#NameExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.extname.NameExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ast.NodeVisitor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.extname.NameExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/extname.html#NameExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.extname.NameExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.extname.NameExtractor.visit_Name">
+<code class="sig-name descname">visit_Name</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/extname.html#NameExtractor.visit_Name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.extname.NameExtractor.visit_Name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.extname.extract_external_name_from_assign_value">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.extname.</code><code class="sig-name descname">extract_external_name_from_assign_value</code><span class="sig-paren">(</span><em class="sig-param">ast_node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/extname.html#extract_external_name_from_assign_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.extname.extract_external_name_from_assign_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies the root part of an assignment value, so long as it is not builtin.</p>
+<p>Examples
+from a import b</p>
+<p>b -&gt; ‘b’
+b.attr -&gt; ‘b’</p>
+<p>import c</p>
+<p>c.test -&gt; ‘c’
+c.thing.stuff -&gt; ‘c’</p>
+<p>‘abc’ -&gt; None
+123 -&gt; None</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ast_node: should be ast form of the value of an assignment</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.fromdict">
+<span id="pyfileconf-io-file-load-parsers-fromdict-module"></span><h2>pyfileconf.io.file.load.parsers.fromdict module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.fromdict" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.fromdict.extract_dict_from_ast_dict_or_dict_constructor">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.fromdict.</code><code class="sig-name descname">extract_dict_from_ast_dict_or_dict_constructor</code><span class="sig-paren">(</span><em class="sig-param">ast_dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/fromdict.html#extract_dict_from_ast_dict_or_dict_constructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.fromdict.extract_dict_from_ast_dict_or_dict_constructor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.funcdef">
+<span id="pyfileconf-io-file-load-parsers-funcdef-module"></span><h2>pyfileconf.io.file.load.parsers.funcdef module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.funcdef" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">FunctionDefinitionByNameExtractor</code><span class="sig-paren">(</span><em class="sig-param">func_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionByNameExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor" title="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">func_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionByNameExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor.visit_FunctionDef">
+<code class="sig-name descname">visit_FunctionDef</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionByNameExtractor.visit_FunctionDef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor.visit_FunctionDef" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">FunctionDefinitionExtractor</code><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ast.NodeVisitor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor.visit_ClassDef">
+<code class="sig-name descname">visit_ClassDef</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionExtractor.visit_ClassDef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor.visit_ClassDef" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor.visit_FunctionDef">
+<code class="sig-name descname">visit_FunctionDef</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionExtractor.visit_FunctionDef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor.visit_FunctionDef" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">FunctionDefinitionOrClassInitByNameExtractor</code><span class="sig-paren">(</span><em class="sig-param">func_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionOrClassInitByNameExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor" title="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor.visit_ClassDef">
+<code class="sig-name descname">visit_ClassDef</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#FunctionDefinitionOrClassInitByNameExtractor.visit_ClassDef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor.visit_ClassDef" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.extract_function_definition_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">extract_function_definition_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">module</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#extract_function_definition_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.extract_function_definition_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDef</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.extract_function_definition_or_class_init_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">extract_function_definition_or_class_init_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">module</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#extract_function_definition_or_class_init_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.extract_function_definition_or_class_init_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDef</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.extract_function_definitions_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">extract_function_definitions_from_ast</code><span class="sig-paren">(</span><em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#extract_function_definitions_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.extract_function_definitions_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDef</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.extract_function_definitions_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">extract_function_definitions_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">module</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#extract_function_definitions_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.extract_function_definitions_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDef</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.funcdef.extract_function_definitions_or_class_inits_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.funcdef.</code><code class="sig-name descname">extract_function_definitions_or_class_inits_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">module</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/funcdef.html#extract_function_definitions_or_class_inits_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.funcdef.extract_function_definitions_or_class_inits_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">FunctionDef</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.imp">
+<span id="pyfileconf-io-file-load-parsers-imp-module"></span><h2>pyfileconf.io.file.load.parsers.imp module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.imp" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.imp.ImportExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.imp.</code><code class="sig-name descname">ImportExtractor</code><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#ImportExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.ImportExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ast.NodeVisitor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.imp.ImportExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#ImportExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.ImportExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.imp.ImportExtractor.visit_Import">
+<code class="sig-name descname">visit_Import</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#ImportExtractor.visit_Import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.ImportExtractor.visit_Import" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.imp.ImportExtractor.visit_ImportFrom">
+<code class="sig-name descname">visit_ImportFrom</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#ImportExtractor.visit_ImportFrom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.ImportExtractor.visit_ImportFrom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.imp.extract_imports_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.imp.</code><code class="sig-name descname">extract_imports_from_ast</code><span class="sig-paren">(</span><em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#extract_imports_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.extract_imports_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.imp.extract_module_import_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.imp.</code><code class="sig-name descname">extract_module_import_from_ast</code><span class="sig-paren">(</span><em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#extract_module_import_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.extract_module_import_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.module.ModuleImportStatement" title="pyfileconf.imports.models.statements.module.ModuleImportStatement"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleImportStatement</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.imp.extract_obj_import_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.imp.</code><code class="sig-name descname">extract_obj_import_from_ast</code><span class="sig-paren">(</span><em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/imp.html#extract_obj_import_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.imp.extract_obj_import_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.obj.ObjectImportStatement" title="pyfileconf.imports.models.statements.obj.ObjectImportStatement"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectImportStatement</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.kwargs">
+<span id="pyfileconf-io-file-load-parsers-kwargs-module"></span><h2>pyfileconf.io.file.load.parsers.kwargs module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.kwargs" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.KeywordByNameExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.kwargs.</code><code class="sig-name descname">KeywordByNameExtractor</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#KeywordByNameExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordByNameExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor" title="pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.KeywordByNameExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#KeywordByNameExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordByNameExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.KeywordByNameExtractor.visit_keyword">
+<code class="sig-name descname">visit_keyword</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#KeywordByNameExtractor.visit_keyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordByNameExtractor.visit_keyword" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.kwargs.</code><code class="sig-name descname">KeywordExtractor</code><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#KeywordExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ast.NodeVisitor</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#KeywordExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor.visit_keyword">
+<code class="sig-name descname">visit_keyword</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#KeywordExtractor.visit_keyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.KeywordExtractor.visit_keyword" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.extract_keywords_from_ast">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.kwargs.</code><code class="sig-name descname">extract_keywords_from_ast</code><span class="sig-paren">(</span><em class="sig-param">node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#extract_keywords_from_ast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.extract_keywords_from_ast" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.kwargs.extract_keywords_from_ast_by_name">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.kwargs.</code><code class="sig-name descname">extract_keywords_from_ast_by_name</code><span class="sig-paren">(</span><em class="sig-param">node</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/kwargs.html#extract_keywords_from_ast_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.kwargs.extract_keywords_from_ast_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.io.file.load.parsers.py">
+<span id="pyfileconf-io-file-load-parsers-py-module"></span><h2>pyfileconf.io.file.load.parsers.py module<a class="headerlink" href="#module-pyfileconf.io.file.load.parsers.py" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.io.file.load.parsers.py.PythonFileParser">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.py.</code><code class="sig-name descname">PythonFileParser</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/py.html#PythonFileParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.py.PythonFileParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.load.parsers.base.FileParser" title="pyfileconf.io.file.load.parsers.base.FileParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.parsers.base.FileParser</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.io.file.load.parsers.py.PythonFileParser.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/py.html#PythonFileParser.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.py.PythonFileParser.load" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyfileconf.io.file.write.html" class="btn btn-neutral float-right" title="pyfileconf.io.file.write package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pyfileconf.io.file.load.lazy.base.html" class="btn btn-neutral float-left" title="pyfileconf.io.file.load.lazy.base package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

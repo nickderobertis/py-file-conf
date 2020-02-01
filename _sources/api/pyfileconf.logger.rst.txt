@@ -1,0 +1,7 @@
+pyfileconf.logger package
+=========================
+
+.. automodule:: pyfileconf.logger
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,19 @@
+pyfileconf.views package
+========================
+
+.. automodule:: pyfileconf.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.views.object module
+------------------------------
+
+.. automodule:: pyfileconf.views.object
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

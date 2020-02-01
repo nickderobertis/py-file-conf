@@ -1,0 +1,43 @@
+pyfileconf.logic package
+========================
+
+.. automodule:: pyfileconf.logic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.logic.get module
+---------------------------
+
+.. automodule:: pyfileconf.logic.get
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.logic.inspect module
+-------------------------------
+
+.. automodule:: pyfileconf.logic.inspect
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.logic.set module
+---------------------------
+
+.. automodule:: pyfileconf.logic.set
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.logic.userinput module
+---------------------------------
+
+.. automodule:: pyfileconf.logic.userinput
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

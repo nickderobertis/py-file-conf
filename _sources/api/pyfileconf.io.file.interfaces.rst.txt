@@ -1,0 +1,43 @@
+pyfileconf.io.file.interfaces package
+=====================================
+
+.. automodule:: pyfileconf.io.file.interfaces
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.io.file.interfaces.activeconfig module
+-------------------------------------------------
+
+.. automodule:: pyfileconf.io.file.interfaces.activeconfig
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.interfaces.config module
+-------------------------------------------
+
+.. automodule:: pyfileconf.io.file.interfaces.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.interfaces.datadict module
+---------------------------------------------
+
+.. automodule:: pyfileconf.io.file.interfaces.datadict
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.interfaces.pipeline module
+---------------------------------------------
+
+.. automodule:: pyfileconf.io.file.interfaces.pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

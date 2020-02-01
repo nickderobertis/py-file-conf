@@ -1,0 +1,27 @@
+pyfileconf.io.file.load.lazy.base package
+=========================================
+
+.. automodule:: pyfileconf.io.file.load.lazy.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.io.file.load.lazy.base.impassign module
+--------------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.lazy.base.impassign
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.lazy.base.loader module
+-----------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.lazy.base.loader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

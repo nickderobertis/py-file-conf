@@ -1,0 +1,27 @@
+pyfileconf.io.file.load.active package
+======================================
+
+.. automodule:: pyfileconf.io.file.load.active
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.io.file.load.active.loader module
+--------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.active.loader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.io.file.load.active.userdef module
+---------------------------------------------
+
+.. automodule:: pyfileconf.io.file.load.active.userdef
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

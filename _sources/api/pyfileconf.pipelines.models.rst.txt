@@ -1,0 +1,67 @@
+pyfileconf.pipelines.models package
+===================================
+
+.. automodule:: pyfileconf.pipelines.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.pipelines.models.collection module
+---------------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.collection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pipelines.models.config module
+-----------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pipelines.models.dictfile module
+-------------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.dictfile
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pipelines.models.file module
+---------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.file
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pipelines.models.interfaces module
+---------------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.interfaces
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pipelines.models.pipeline module
+-------------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.pipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pipelines.models.registrar module
+--------------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.registrar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

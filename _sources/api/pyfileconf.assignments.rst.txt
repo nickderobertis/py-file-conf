@@ -1,0 +1,15 @@
+pyfileconf.assignments package
+==============================
+
+.. automodule:: pyfileconf.assignments
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.assignments.logic
+   pyfileconf.assignments.models

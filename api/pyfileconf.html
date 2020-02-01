@@ -1,0 +1,671 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf package &mdash; pyfileconf 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
+        <script type="text/javascript" src="../_static/copybutton.js"></script>
+        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyfileconf.assignments package" href="pyfileconf.assignments.html" />
+    <link rel="prev" title="pyfileconf" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyfileconf</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyfileconf package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.html">pyfileconf.assignments package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.sectionpath.html">pyfileconf.sectionpath package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.html">pyfileconf.selector package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.views.html">pyfileconf.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.main">pyfileconf.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pyfileconf</a> &raquo;</li>
+        
+      <li>pyfileconf package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/pyfileconf.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyfileconf">
+<span id="pyfileconf-package"></span><h1>pyfileconf package<a class="headerlink" href="#module-pyfileconf" title="Permalink to this headline">¶</a></h1>
+<p>Flow Manager is a Python framework for flow-based programming and managing configuration. To use it, you register
+your main functions, and config files are created automatically for them. It provides a way to run these functions
+individually, in a list, in sections, or a combination thereof. Configuration has multiple layers, with the defaults
+for the function being the lowest level config, which then gets overrided by project config, which gets overrided by
+the config file, and finally by any local config updates in a script.</p>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.assignments.html">pyfileconf.assignments package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.assignments.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.assignments.logic.html">pyfileconf.assignments.logic package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.logic.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.logic.html#module-pyfileconf.assignments.logic.write">pyfileconf.assignments.logic.write module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.assignments.models.html">pyfileconf.assignments.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.models.html#module-pyfileconf.assignments.models.container">pyfileconf.assignments.models.container module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.models.html#module-pyfileconf.assignments.models.statement">pyfileconf.assignments.models.statement module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#module-pyfileconf.basemodels.collection">pyfileconf.basemodels.collection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#module-pyfileconf.basemodels.config">pyfileconf.basemodels.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#module-pyfileconf.basemodels.container">pyfileconf.basemodels.container module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#module-pyfileconf.basemodels.file">pyfileconf.basemodels.file module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#module-pyfileconf.basemodels.pipeline">pyfileconf.basemodels.pipeline module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.basemodels.html#module-pyfileconf.basemodels.registrar">pyfileconf.basemodels.registrar module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.config.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.config.logic.html">pyfileconf.config.logic package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.logic.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.logic.html#module-pyfileconf.config.logic.load">pyfileconf.config.logic.load module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.logic.html#module-pyfileconf.config.logic.write">pyfileconf.config.logic.write module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.config.models.html">pyfileconf.config.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.models.html#module-pyfileconf.config.models.config">pyfileconf.config.models.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.models.html#module-pyfileconf.config.models.file">pyfileconf.config.models.file module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.models.html#module-pyfileconf.config.models.interfaces">pyfileconf.config.models.interfaces module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.models.html#module-pyfileconf.config.models.manager">pyfileconf.config.models.manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.models.html#module-pyfileconf.config.models.section">pyfileconf.config.models.section module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.data.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.data.logic.html">pyfileconf.data.logic package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.logic.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.data.logic.merge.html">pyfileconf.data.logic.merge package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.data.logic.merge.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.data.logic.merge.html#module-pyfileconf.data.logic.merge.display">pyfileconf.data.logic.merge.display module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.data.logic.merge.html#module-pyfileconf.data.logic.merge.summarize">pyfileconf.data.logic.merge.summarize module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.logic.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.logic.html#module-pyfileconf.data.logic.convert">pyfileconf.data.logic.convert module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.logic.html#module-pyfileconf.data.logic.display">pyfileconf.data.logic.display module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.data.models.html">pyfileconf.data.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.astitems">pyfileconf.data.models.astitems module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.collection">pyfileconf.data.models.collection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.config">pyfileconf.data.models.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.dictfile">pyfileconf.data.models.dictfile module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.file">pyfileconf.data.models.file module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.merge">pyfileconf.data.models.merge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.pipeline">pyfileconf.data.models.pipeline module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.registrar">pyfileconf.data.models.registrar module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.source">pyfileconf.data.models.source module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.type">pyfileconf.data.models.type module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.base">pyfileconf.exceptions.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.pipelinemanager">pyfileconf.exceptions.pipelinemanager module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.imports.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.imports.logic.html">pyfileconf.imports.logic package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.logic.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.imports.logic.load.html">pyfileconf.imports.logic.load package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.logic.load.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.logic.load.html#module-pyfileconf.imports.logic.load.ext_importlib">pyfileconf.imports.logic.load.ext_importlib module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.logic.load.html#module-pyfileconf.imports.logic.load.func">pyfileconf.imports.logic.load.func module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.logic.load.html#module-pyfileconf.imports.logic.load.name">pyfileconf.imports.logic.load.name module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.logic.load.html#module-pyfileconf.imports.logic.load.skipmodules">pyfileconf.imports.logic.load.skipmodules module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.imports.models.html">pyfileconf.imports.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.models.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.imports.models.statements.html">pyfileconf.imports.models.statements package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.comment">pyfileconf.imports.models.statements.comment module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.container">pyfileconf.imports.models.statements.container module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.importbase">pyfileconf.imports.models.statements.importbase module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.interfaces">pyfileconf.imports.models.statements.interfaces module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.module">pyfileconf.imports.models.statements.module module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.obj">pyfileconf.imports.models.statements.obj module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.rename">pyfileconf.imports.models.statements.rename module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.models.html#module-pyfileconf.imports.models.tracker">pyfileconf.imports.models.tracker module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.io.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.io.file.html">pyfileconf.io.file package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.file.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.io.file.interfaces.html">pyfileconf.io.file.interfaces package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.interfaces.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.interfaces.html#module-pyfileconf.io.file.interfaces.activeconfig">pyfileconf.io.file.interfaces.activeconfig module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.interfaces.html#module-pyfileconf.io.file.interfaces.config">pyfileconf.io.file.interfaces.config module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.interfaces.html#module-pyfileconf.io.file.interfaces.datadict">pyfileconf.io.file.interfaces.datadict module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.interfaces.html#module-pyfileconf.io.file.interfaces.pipeline">pyfileconf.io.file.interfaces.pipeline module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.io.file.load.html">pyfileconf.io.file.load package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.load.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="pyfileconf.io.file.load.active.html">pyfileconf.io.file.load.active package</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.active.html#submodules">Submodules</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.active.html#module-pyfileconf.io.file.load.active.loader">pyfileconf.io.file.load.active.loader module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.active.html#module-pyfileconf.io.file.load.active.userdef">pyfileconf.io.file.load.active.userdef module</a></li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html">pyfileconf.io.file.load.lazy package</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l9"><a class="reference internal" href="pyfileconf.io.file.load.lazy.base.html">pyfileconf.io.file.load.lazy.base package</a><ul>
+<li class="toctree-l10"><a class="reference internal" href="pyfileconf.io.file.load.lazy.base.html#submodules">Submodules</a></li>
+<li class="toctree-l10"><a class="reference internal" href="pyfileconf.io.file.load.lazy.base.html#module-pyfileconf.io.file.load.lazy.base.impassign">pyfileconf.io.file.load.lazy.base.impassign module</a></li>
+<li class="toctree-l10"><a class="reference internal" href="pyfileconf.io.file.load.lazy.base.html#module-pyfileconf.io.file.load.lazy.base.loader">pyfileconf.io.file.load.lazy.base.loader module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#submodules">Submodules</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#module-pyfileconf.io.file.load.lazy.config">pyfileconf.io.file.load.lazy.config module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#module-pyfileconf.io.file.load.lazy.dataast">pyfileconf.io.file.load.lazy.dataast module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#module-pyfileconf.io.file.load.lazy.datadict">pyfileconf.io.file.load.lazy.datadict module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#module-pyfileconf.io.file.load.lazy.pipeline">pyfileconf.io.file.load.lazy.pipeline module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.lazy.html#module-pyfileconf.io.file.load.lazy.pipelineast">pyfileconf.io.file.load.lazy.pipelineast module</a></li>
+</ul>
+</li>
+<li class="toctree-l7"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html">pyfileconf.io.file.load.parsers package</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#submodules">Submodules</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.assign">pyfileconf.io.file.load.parsers.assign module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.base">pyfileconf.io.file.load.parsers.base module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.collections">pyfileconf.io.file.load.parsers.collections module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.extname">pyfileconf.io.file.load.parsers.extname module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.fromdict">pyfileconf.io.file.load.parsers.fromdict module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.funcdef">pyfileconf.io.file.load.parsers.funcdef module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.imp">pyfileconf.io.file.load.parsers.imp module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.kwargs">pyfileconf.io.file.load.parsers.kwargs module</a></li>
+<li class="toctree-l8"><a class="reference internal" href="pyfileconf.io.file.load.parsers.html#module-pyfileconf.io.file.load.parsers.py">pyfileconf.io.file.load.parsers.py module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.io.file.write.html">pyfileconf.io.file.write package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.write.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.write.html#module-pyfileconf.io.file.write.asttosource">pyfileconf.io.file.write.asttosource module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.write.html#module-pyfileconf.io.file.write.base">pyfileconf.io.file.write.base module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.file.write.html#module-pyfileconf.io.file.write.config">pyfileconf.io.file.write.config module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.io.func.html">pyfileconf.io.func package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.func.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.io.func.load.html">pyfileconf.io.func.load package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.func.load.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.func.load.html#module-pyfileconf.io.func.load.args">pyfileconf.io.func.load.args module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.func.load.html#module-pyfileconf.io.func.load.config">pyfileconf.io.func.load.config module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.io.func.load.html#module-pyfileconf.io.func.load.extractimp">pyfileconf.io.func.load.extractimp module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#module-pyfileconf.logic.get">pyfileconf.logic.get module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#module-pyfileconf.logic.inspect">pyfileconf.logic.inspect module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#module-pyfileconf.logic.set">pyfileconf.logic.set module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#module-pyfileconf.logic.userinput">pyfileconf.logic.userinput module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.mixins.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.mixins.html#module-pyfileconf.mixins.orderpref">pyfileconf.mixins.orderpref module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.pipelines.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.pipelines.models.html">pyfileconf.pipelines.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.collection">pyfileconf.pipelines.models.collection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.config">pyfileconf.pipelines.models.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.dictfile">pyfileconf.pipelines.models.dictfile module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.file">pyfileconf.pipelines.models.file module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.interfaces">pyfileconf.pipelines.models.interfaces module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.pipeline">pyfileconf.pipelines.models.pipeline module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.registrar">pyfileconf.pipelines.models.registrar module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.runner.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.runner.models.html">pyfileconf.runner.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.models.html#module-pyfileconf.runner.models.interfaces">pyfileconf.runner.models.interfaces module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.models.html#module-pyfileconf.runner.models.runner">pyfileconf.runner.models.runner module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.sectionpath.html">pyfileconf.sectionpath package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.sectionpath.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.sectionpath.html#module-pyfileconf.sectionpath.sectionpath">pyfileconf.sectionpath.sectionpath module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.selector.html">pyfileconf.selector package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.selector.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.selector.logic.html">pyfileconf.selector.logic package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.logic.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.selector.logic.exc.html">pyfileconf.selector.logic.exc package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.exc.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.exc.html#module-pyfileconf.selector.logic.exc.typo">pyfileconf.selector.logic.exc.typo module</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="pyfileconf.selector.logic.get.html">pyfileconf.selector.logic.get package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.get.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.get.html#module-pyfileconf.selector.logic.get.fromglobs">pyfileconf.selector.logic.get.fromglobs module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.get.html#module-pyfileconf.selector.logic.get.frommanager">pyfileconf.selector.logic.get.frommanager module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.get.html#module-pyfileconf.selector.logic.get.globs">pyfileconf.selector.logic.get.globs module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="pyfileconf.selector.logic.get.html#module-pyfileconf.selector.logic.get.main">pyfileconf.selector.logic.get.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.selector.models.html">pyfileconf.selector.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.models.html#module-pyfileconf.selector.models.itemview">pyfileconf.selector.models.itemview module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.models.html#module-pyfileconf.selector.models.selector">pyfileconf.selector.models.selector module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.views.html">pyfileconf.views package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.views.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.views.html#module-pyfileconf.views.object">pyfileconf.views.object module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyfileconf.main">
+<span id="pyfileconf-main-module"></span><h2>pyfileconf.main module<a class="headerlink" href="#module-pyfileconf.main" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.main.PipelineManager">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">data_dict_path</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Main class for managing flow-based programming and configuration.</p>
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">data_dict_path</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper to track imported modules so that can reimport them upon reloading</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.reload">
+<code class="sig-name descname">reload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.reload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Useful for getting file system changes without having to start a new Python session. Also resets
+any locally defined configuration.</p>
+<p>Reloads functions from pipeline dict, scaffolds config files for any new functions,
+and updates configuration from files.</p>
+<p>Returns: None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use to run registered pipelines/functions/sections. Pass a single section path or a list
+of section paths. If a list is passed, the return value will also be a list, with each
+result item corresponding to the function at the same index.</p>
+<p>If a path for a section is passed rather than a path for a function or pipeline, a list
+of results will be returned for that section as well. Therefore, calling a high-level
+section will result in a nested list structure of results.</p>
+<dl>
+<dt>Args:</dt><dd><dl>
+<dt>section_path_str_or_list: . separated name of path of function or section, or list thereof.</dt><dd><p>similar to how a function would be imported. e.g. ‘main.data.summarize.summary_func1’
+or when running multiple functions/sections, e.g.</p>
+<blockquote>
+<div><p>[‘main.data’, ‘main.analysis.reg.1’]</p>
+</div></blockquote>
+<p>These sections/functions are based on the structure of your pipeline_dict</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Returns: result or list of results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="pyfileconf.main.RunnerException">
+<em class="property">exception </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">RunnerException</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.main.RunnerException.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.main.report_runner_exceptions">
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">report_runner_exceptions</code><span class="sig-paren">(</span><em class="sig-param">runner_exceptions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#report_runner_exceptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.report_runner_exceptions" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyfileconf.assignments.html" class="btn btn-neutral float-right" title="pyfileconf.assignments package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="pyfileconf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

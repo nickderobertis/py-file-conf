@@ -1,0 +1,15 @@
+pyfileconf.imports package
+==========================
+
+.. automodule:: pyfileconf.imports
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.imports.logic
+   pyfileconf.imports.models

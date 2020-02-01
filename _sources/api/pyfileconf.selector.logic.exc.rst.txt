@@ -1,0 +1,19 @@
+pyfileconf.selector.logic.exc package
+=====================================
+
+.. automodule:: pyfileconf.selector.logic.exc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.selector.logic.exc.typo module
+-----------------------------------------
+
+.. automodule:: pyfileconf.selector.logic.exc.typo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

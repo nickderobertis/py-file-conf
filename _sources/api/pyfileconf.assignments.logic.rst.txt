@@ -1,0 +1,19 @@
+pyfileconf.assignments.logic package
+====================================
+
+.. automodule:: pyfileconf.assignments.logic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.assignments.logic.write module
+-----------------------------------------
+
+.. automodule:: pyfileconf.assignments.logic.write
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

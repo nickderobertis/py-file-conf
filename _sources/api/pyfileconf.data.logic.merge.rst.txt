@@ -1,0 +1,27 @@
+pyfileconf.data.logic.merge package
+===================================
+
+.. automodule:: pyfileconf.data.logic.merge
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.data.logic.merge.display module
+------------------------------------------
+
+.. automodule:: pyfileconf.data.logic.merge.display
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.logic.merge.summarize module
+--------------------------------------------
+
+.. automodule:: pyfileconf.data.logic.merge.summarize
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

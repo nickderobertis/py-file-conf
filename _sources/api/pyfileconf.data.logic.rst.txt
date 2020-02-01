@@ -1,0 +1,34 @@
+pyfileconf.data.logic package
+=============================
+
+.. automodule:: pyfileconf.data.logic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.data.logic.merge
+
+Submodules
+----------
+
+pyfileconf.data.logic.convert module
+------------------------------------
+
+.. automodule:: pyfileconf.data.logic.convert
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.data.logic.display module
+------------------------------------
+
+.. automodule:: pyfileconf.data.logic.display
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

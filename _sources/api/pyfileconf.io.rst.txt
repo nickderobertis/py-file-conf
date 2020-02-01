@@ -1,0 +1,15 @@
+pyfileconf.io package
+=====================
+
+.. automodule:: pyfileconf.io
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.io.file
+   pyfileconf.io.func

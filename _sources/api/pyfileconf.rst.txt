@@ -1,0 +1,40 @@
+pyfileconf package
+==================
+
+.. automodule:: pyfileconf
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+   pyfileconf.assignments
+   pyfileconf.basemodels
+   pyfileconf.config
+   pyfileconf.data
+   pyfileconf.exceptions
+   pyfileconf.imports
+   pyfileconf.io
+   pyfileconf.logger
+   pyfileconf.logic
+   pyfileconf.mixins
+   pyfileconf.pipelines
+   pyfileconf.runner
+   pyfileconf.sectionpath
+   pyfileconf.selector
+   pyfileconf.views
+
+Submodules
+----------
+
+pyfileconf.main module
+----------------------
+
+.. automodule:: pyfileconf.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
