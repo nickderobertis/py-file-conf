@@ -10,7 +10,7 @@ PipelineOrFunctionOrCollection = Union[PipelineOrFunction, 'PipelineCollection']
 PipelinesOrFunctions = List[PipelineOrFunction]
 PipelinesOrFunctionsOrCollections = List[PipelineOrFunctionOrCollection]
 
-# TODO: remove type ignores for recursive type definitions once mypy supports them
+# TODO [$5e35d3fc1b50960008d53d6f]: remove type ignores for recursive type definitions once mypy supports them
 #
 # See https://github.com/python/mypy/issues/731
 PipelineDict = Dict[str, Union[PipelinesOrFunctions, 'PipelineDict']]  # type: ignore
