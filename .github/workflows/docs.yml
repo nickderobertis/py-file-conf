@@ -55,9 +55,9 @@ jobs:
         flags: unittests
         name: codecov-pytest
         yml: ./codecov.yml
-    - name: Static Typing Checks with mypy
-      run: |
-        pipenv run mypy $(python name.py)
+#    - name: Static Typing Checks with mypy
+#      run: |
+#        pipenv run mypy $(python name.py)
 
   deploy:
     needs: test
