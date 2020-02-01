@@ -52,7 +52,7 @@ def extract_function_args_and_arg_imports_from_import(function_name: str, imp: A
 
     if ast_function_def is not None:
         # Found function definition in this import
-        # TODO [$5e34f65c6e8191000791e361]: handle other class methods - also update extract_function_definition function
+        # TODO [#12]: handle other class methods - also update extract_function_definition function
         if ast_function_def.name == '__init__':
             # Got class init
             del ast_function_def.args.args[0]  # delete first arg (self)

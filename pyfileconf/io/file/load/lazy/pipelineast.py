@@ -13,7 +13,7 @@ class PipelineAstLoader(ImportAssignmentLazyLoader):
         else:
             self._pipeline_dict_assign = None
 
-        # TODO [$5e34f65c6e8191000791e35f]: parse modules in pipeline dict
+        # TODO [#10]: parse modules in pipeline dict
 
     @property
     def pipeline_dict_assign(self):

@@ -40,7 +40,7 @@ class Selector:
         except AttributeError:
             return False
 
-        # TODO [$5e34f65c6e8191000791e368]: convert all functions to pipelines
+        # TODO [#19]: convert all functions to pipelines
         #
         # it would make this check safer
         item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable, ObjectView)
@@ -116,7 +116,7 @@ class Selector:
             # got only the root data path, e.g. project.sources. Return the collection object itself
             return collection_obj
 
-        # TODO [$5e34f65c6e8191000791e369]: nicer error than KeyError for typo
+        # TODO [#20]: nicer error than KeyError for typo
         result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
 
         return type(result)

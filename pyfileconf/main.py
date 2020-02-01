@@ -154,7 +154,7 @@ class PipelineManager:
         else:
             return results
 
-    # TODO [$5e34f65c6e8191000791e362]: multiple section path strs
+    # TODO [#13]: multiple section path strs
     def get(self, section_path_str_or_view: 'StrOrView'):
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
         section_path = SectionPath(section_path_str)

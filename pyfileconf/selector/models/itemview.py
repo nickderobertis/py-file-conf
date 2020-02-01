@@ -38,7 +38,7 @@ class ItemView:
             # check whether this is an item attribute or a typo, and raise error if needed
             return handle_pipeline_manager_not_loaded_or_typo(full_section_path_str, self.selector._managers)
 
-        # TODO [$5e34f65c6e8191000791e367]: refactor item view lookup errors
+        # TODO [#18]: refactor item view lookup errors
         #
         #  So that there is a better way of catching a known typo than python throwing a RecursionError
 
