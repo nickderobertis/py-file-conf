@@ -7,7 +7,7 @@ from importlib.machinery import ModuleSpec
 def get_filepath_from_module_str(module_str: str, location_section_path_str: str=None):
     spec: ModuleSpec = find_spec(module_str, package=location_section_path_str)
     if not spec.has_location:
-        raise ValueError(f'could not find location of module {module_str}, package {package}')
+        raise ValueError(f'could not find location of module {module_str}, package {location_section_path_str}')
 
     return spec.origin
 
