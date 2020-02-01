@@ -36,7 +36,7 @@ def test_create_project():
     delete_project(BASE_GENERATED_DIR)
 
 
-class TestPipelineManagerLoad:
+class PipelineManagerTestBase:
     defaults_path = os.path.join(BASE_GENERATED_DIR, 'defaults')
     pipeline_path = os.path.join(BASE_GENERATED_DIR, 'pipeline_dict.py')
     data_dict_path = os.path.join(BASE_GENERATED_DIR, 'data_dict.py')
@@ -48,6 +48,21 @@ class TestPipelineManagerLoad:
         logs_path
     )
     test_name = 'test_pipeline_manager'
+
+    def create_pm(self, **kwargs):
+        all_kwargs = dict(
+            pipeline_dict_path=self.pipeline_path,
+            data_dict_path=self.data_dict_path,
+            basepath=self.defaults_path,
+            name=self.test_name,
+            log_folder=self.logs_path,
+        )
+        all_kwargs.update(**kwargs)
+        pipeline_manager = PipelineManager(**all_kwargs)
+        return pipeline_manager
+
+
+class TestPipelineManagerLoad(PipelineManagerTestBase):
 
     def setup_method(self, method):
         create_project(BASE_GENERATED_DIR)
@@ -70,13 +85,7 @@ class TestPipelineManagerLoad:
     def test_create_pm_with_function(self):
         with open(self.pipeline_path, 'w') as f:
             f.write(pipeline_dict_str_with_func(a_function, 'stuff', 'tests.input_files.amodule'))
-        pipeline_manager = PipelineManager(
-            pipeline_dict_path=self.pipeline_path,
-            data_dict_path=self.data_dict_path,
-            basepath=self.defaults_path,
-            name=self.test_name,
-            log_folder=self.logs_path
-        )
+        pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
