@@ -97,3 +97,14 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert 'from tests.input_files.bmodule import ExampleClass' in contents
             assert 's = Selector()' in contents
 
+
+class TestPipelineManagerRun(PipelineManagerTestBase):
+
+    def test_run_function(self):
+        self.write_test_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
