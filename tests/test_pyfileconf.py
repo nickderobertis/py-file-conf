@@ -1,5 +1,4 @@
 import os
-from functools import partial
 
 from pyfileconf import PipelineManager, create_project, Selector
 from pyfileconf.sectionpath.sectionpath import SectionPath
