@@ -230,7 +230,7 @@ class Runner(ReprMixin):
         pipeline = self._get_func_or_collection(section_path_str)
         pipeline = cast(Pipeline, pipeline)
 
-        # TODO [$5e35d3fc1b50960008d53d70]: verify whether pipeline is class or object in _get_pipeline_and_config
+        # TODO [#28]: verify whether pipeline is class or object in _get_pipeline_and_config
         #
         # Originally the return type from `_get_pipeline_and_config` was `Tuple[type, dict]`.
         # That didn't seem like what it was doing so updated type to Pipeline. But later

@@ -37,7 +37,7 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
 
         return import_str
 
-    # TODO [$5e35d3fc1b50960008d53d6c]: handle renames in ModuleImportStatement.from_str
+    # TODO [#24]: handle renames in ModuleImportStatement.from_str
     @classmethod
     def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None,
                  preferred_position: str = None):

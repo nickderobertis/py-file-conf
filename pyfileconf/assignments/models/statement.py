@@ -75,7 +75,7 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
         else:
             raise ValueError(f'expected ast.Assign or ast.AnnAssign. got {ast_assign} of type {type(ast_assign)}')
 
-        # TODO [$5e35d3fc1b50960008d53d6a]: remove type ignores in AssignmentStatement.from_ast_assign once ast has proper type definitions
+        # TODO [#22]: remove type ignores in AssignmentStatement.from_ast_assign once ast has proper type definitions
         return cls(
             target,  # type: ignore
             ast_assign.value,  # type: ignore

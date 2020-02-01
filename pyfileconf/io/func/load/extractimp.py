@@ -85,7 +85,7 @@ def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
 def _extract_str_names_from_subscript(subscript: ast.Subscript) -> List[str]:
     names = []
 
-    # TODO [$5e35d3fc1b50960008d53d6e]: remove type ignores once typeshed has better ast support
+    # TODO [#26]: remove type ignores once typeshed has better ast support
     #
     # Hitting errors "expr" has no attribute "id" and  "slice" has no attribute "value"
 

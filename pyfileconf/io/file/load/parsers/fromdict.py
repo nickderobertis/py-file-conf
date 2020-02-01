@@ -15,7 +15,7 @@ def _extract_dict_from_ast_dict(ast_dict: ast.Dict) -> dict:
     out_dict = {}
     for ast_key, ast_value in zip(ast_dict.keys, ast_dict.values):
         ast_key = cast(ast.Str, ast_key)
-        # TODO [$5e35d3fc1b50960008d53d6d]: remove type ignores from _extract_dict_from_ast_dict when ast has better typing support
+        # TODO [#25]: remove type ignores from _extract_dict_from_ast_dict when ast has better typing support
         key = ast_key.s  # type: ignore
         out_dict[key] = ast_value
     return out_dict
