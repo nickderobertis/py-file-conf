@@ -59,6 +59,12 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
+    'astor',
+    'mixins',
+    'pandas',
+    'pd_utils',
+    'datacode',
+    'IPython',
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here

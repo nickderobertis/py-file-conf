@@ -21,6 +21,12 @@ pytest-cov = "*"
 mypy = "*"
 pypandoc = "*"
 cruft = "*"
+astor = "*"
+mixins = "*"
+pandas = "*"
+pd_utils = "*"
+datacode = "*"
+IPython = "*"
 
 [requires]
 python_version = "3.7"
