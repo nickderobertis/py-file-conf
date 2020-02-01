@@ -1,6 +1,6 @@
 import os
 import shutil
-from collections import Callable
+from typing import Callable
 
 
 def delete_project(path: str):
