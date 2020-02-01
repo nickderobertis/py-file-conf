@@ -1,5 +1,5 @@
 import ast
-from typing import TYPE_CHECKING, Tuple, Optional
+from typing import TYPE_CHECKING, Tuple, Optional, cast
 
 from pyfileconf.exceptions.imports import NoImportStatementException
 
@@ -36,8 +36,8 @@ def extract_function_args_and_arg_imports_from_import(function_name: str, imp: O
                                                       import_section_path_str: Optional[str] = None) -> ArgumentsAndImports:
     from pyfileconf.io.func.load.extractimp import extract_import_statements_from_function_args_imports_and_assigns
 
-    if import_section_path_str is None or imp is None:
-        raise NoImportStatementException('no import or import section path str passed to extract function and imports')
+    if imp is None:
+        raise NoImportStatementException('no import passed to extract function and imports')
 
     filepath = get_module_filepath_from_import(
         imp,
@@ -90,18 +90,19 @@ def extract_function_args_and_arg_imports_from_import(function_name: str, imp: O
     )
 
 
-
-
-def get_module_filepath_from_import(imp: AnyImportStatement, import_section_path_str: str):
+def get_module_filepath_from_import(imp: Optional[AnyImportStatement], import_section_path_str: Optional[str]):
     if imp is None:
         return None
 
+    # TODO: figure out why mypy won't pick up that imp is not None in get_module_filepath_from_import
+    #
+    # Then type ignores can be removed
     if isinstance(imp, ObjectImportStatement):
         func = lambda: imp.get_module_filepath(import_section_path_str)
     elif isinstance(imp, ModuleImportStatement):
         # have already ensured in creating ObjectView that there should be only one module
         # in the module import statement. So just take the first filepath
-        func = lambda: imp.get_module_filepaths(import_section_path_str)[imp.modules[0]]
+        func = lambda: imp.get_module_filepaths(import_section_path_str)[imp.modules[0]]  # type: ignore
     else:
         raise ValueError(f'expected import statement to be ObjectImportStatement or ModuleImportStatement.'
                          f' Got {imp} of type {type(imp)}')
