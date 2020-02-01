@@ -1,13 +1,13 @@
-from typing import Union, Tuple
+from typing import Union, Tuple, Dict, Optional
 import ast
 
+from pyfileconf.exceptions.assignments import CouldNotExtractAssignmentFromAstException
 from pyfileconf.io.file.write.asttosource import ast_node_to_source
 from pyfileconf.io.file.load.parsers.assign import extract_assignment_from_ast
 from mixins.repr import ReprMixin
 from pyfileconf.mixins.orderpref import OrderPreferenceMixin
 
 AnyAstAssign = Union[ast.Assign, ast.AnnAssign]
-DictTuple = Tuple[dict, dict]
 
 class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
     repr_cols = ['varname', 'value', 'annotation']
@@ -23,7 +23,7 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
         # Will get set to True if creating using classmethod self.from_str.
         # When set to True, will simply use the original str to output back to str
         self.created_from_str = False
-        self.orig_str = None
+        self.orig_str: Optional[str] = None
 
     def __str__(self):
         # Created from str, just return that str back (keeps whitespace, comments, etc.)
@@ -75,14 +75,15 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
         else:
             raise ValueError(f'expected ast.Assign or ast.AnnAssign. got {ast_assign} of type {type(ast_assign)}')
 
+        # TODO: remove type ignores in AssignmentStatement.from_ast_assign once ast has proper type definitions
         return cls(
-            target,
-            ast_assign.value,
-            annotation,
+            target,  # type: ignore
+            ast_assign.value,  # type: ignore
+            annotation,  # type: ignore
             preferred_position=preferred_position
         )
 
-    def to_default_dict_and_annotation_dict(self) -> DictTuple:
+    def to_default_dict_and_annotation_dict(self) -> Tuple[Dict[str, ast.AST], Dict[str, ast.Name]]:
         return {self.target.id: self.value}, {self.target.id: self.annotation} if self.annotation is not None else {}
 
     def to_ast(self) -> AnyAstAssign:
@@ -110,6 +111,8 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
     def from_str(cls, assign_str: str, preferred_position: str = None):
         ast_module = ast.parse(assign_str)
         cls_obj = extract_assignment_from_ast(ast_module)
+        if cls_obj is None:
+            raise CouldNotExtractAssignmentFromAstException(f'Original str which created ast: {assign_str}')
         cls_obj.preferred_position = preferred_position
         cls_obj.created_from_str = True
         cls_obj.orig_str = assign_str

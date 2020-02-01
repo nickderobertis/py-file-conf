@@ -5,6 +5,7 @@ import warnings
 from mixins.repr import ReprMixin
 from pyfileconf.basemodels.container import Container
 from pyfileconf.config.models.config import ActiveFunctionConfig
+from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
 from pyfileconf.sectionpath.sectionpath import _strip_py
 
 
@@ -28,7 +29,7 @@ class ConfigSection(Container, ReprMixin):
     def __dir__(self):
         return self.config_map.keys()
 
-    @property
+    @property  # type: ignore
     def items(self):
         return self._items
 
@@ -51,6 +52,8 @@ class ConfigSection(Container, ReprMixin):
         self._config_map = config_map
 
     def update(self, d: dict=None, **kwargs):
+        if self.config is None:
+            raise ConfigManagerNotLoadedException('no config in ConfigSection')
         if d is not None:
             self.config.update(d)
         self.config.update(kwargs)

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, cast
 import ast
 
 AstDict = Union[ast.Dict, ast.Call]
@@ -14,8 +14,9 @@ def extract_dict_from_ast_dict_or_dict_constructor(ast_dict: AstDict) -> dict:
 def _extract_dict_from_ast_dict(ast_dict: ast.Dict) -> dict:
     out_dict = {}
     for ast_key, ast_value in zip(ast_dict.keys, ast_dict.values):
-        ast_key: ast.Str
-        key = ast_key.s
+        ast_key = cast(ast.Str, ast_key)
+        # TODO: remove type ignores from _extract_dict_from_ast_dict when ast has better typing support
+        key = ast_key.s  # type: ignore
         out_dict[key] = ast_value
     return out_dict
 

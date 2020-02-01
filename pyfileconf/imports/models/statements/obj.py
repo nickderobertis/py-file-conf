@@ -4,6 +4,7 @@ import importlib
 
 from mixins.repr import ReprMixin
 
+from pyfileconf.exceptions.imports import CouldNotExtractObjectImportFromAstException
 from pyfileconf.imports.models.statements.importbase import ImportStatement
 from pyfileconf.imports.models.statements.rename import RenameStatementCollection
 from pyfileconf.imports.models.statements.comment import Comment
@@ -42,6 +43,8 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
         from pyfileconf.io.file.load.parsers.imp import extract_obj_import_from_ast
         ast_module = ast.parse(import_str)
         cls_obj = extract_obj_import_from_ast(ast_module)
+        if cls_obj is None:
+            raise CouldNotExtractObjectImportFromAstException(f'Original str which was converted to ast: {import_str}')
         cls_obj.comment = comment
         cls_obj.preferred_position = preferred_position
 
@@ -55,6 +58,9 @@ class ObjectImportStatement(ImportStatement, ReprMixin):
 
         # Collect object names
         objs = [alias.name for alias in ast_import.names]
+
+        if ast_import.module is None:
+            raise CouldNotExtractObjectImportFromAstException(f'original ast: {ast_import}')
 
         return cls(
             objs,

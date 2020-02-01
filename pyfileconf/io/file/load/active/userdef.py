@@ -1,7 +1,10 @@
 import importlib.util
+from importlib.abc import Loader
 from types import ModuleType
 import sys
+from typing import Optional
 
+from pyfileconf.exceptions.imports import CouldNotImportException
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
 
 def get_user_defined_dict_from_filepath(filepath: str, module_name: str=None, remove_imports=False,
@@ -28,7 +31,7 @@ def _get_user_defined_dict_from_module(module: ModuleType) -> dict:
     return out_dict
 
 
-def _load_file_as_module(filepath: str, name: str= 'module.name') -> ModuleType:
+def _load_file_as_module(filepath: str, name: Optional[str] = 'module.name') -> ModuleType:
     if name is None:
         name = 'module.name'
         add_to_sys = False
@@ -37,6 +40,10 @@ def _load_file_as_module(filepath: str, name: str= 'module.name') -> ModuleType:
 
     spec = importlib.util.spec_from_file_location(name, filepath)
     module = importlib.util.module_from_spec(spec)
+    if spec is None or spec.loader is None or not isinstance(spec.loader, Loader):
+        raise CouldNotImportException(
+            f'got no spec.loader after calling importlib.util.spec_from_file_location on {filepath}'
+        )
     spec.loader.exec_module(module)
 
     if add_to_sys:

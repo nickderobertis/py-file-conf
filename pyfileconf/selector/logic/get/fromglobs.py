@@ -1,11 +1,11 @@
-from typing import Dict, Type, List
+from typing import Dict, Type, List, Any
 
 from pyfileconf.main import PipelineManager
 
 
 def get_dict_of_pipeline_manager_names_and_instances_from_globals(globs=None) -> Dict[str, PipelineManager]:
     managers = _get_objs_of_class_from_globals(PipelineManager, globs=globs)
-    out_dict = {}
+    out_dict: Dict[str, PipelineManager] = {}
     for manager in managers:
         name = manager.name
         if name in out_dict:
@@ -37,11 +37,11 @@ def _get_objs_of_class_from_globals(klass: Type, globs=None) -> List:
     return selected_items
 
 
-def _get_dicts_of_variable_name_value_from_globals_by_class(klass: Type, globs=None) -> Dict[str, any]:
+def _get_dicts_of_variable_name_value_from_globals_by_class(klass: Type, globs=None) -> Dict[str, Any]:
     if globs is None:
         globs = globals()
 
-    selected_dict = {}
+    selected_dict: Dict[str, Any] = {}
     for variable_name, value in globs.items():
         if isinstance(value, klass):
             if variable_name in selected_dict:

@@ -1,7 +1,8 @@
-from typing import List, Any, Tuple
+from typing import List, Any, Tuple, Iterator
 from types import ModuleType
 import sys
 
+from pyfileconf.exceptions.imports import CouldNotDetermineModuleForObjectException
 from pyfileconf.imports.logic.load.skipmodules import skip_modules
 
 def get_imported_obj_variable_name(obj, module: ModuleType) -> str:
@@ -22,6 +23,8 @@ def get_module_and_name_imported_from(obj, search_list: List[str]=None) -> Tuple
         module = sys.modules[module_name]
         if _obj_in_module(obj, module):
             return module, module_name
+
+    raise CouldNotDetermineModuleForObjectException(f'could not find {obj} in {search_list}')
 
 def is_imported_name(name: str, search_list: List[str]=None) -> bool:
     if search_list is None:
@@ -76,6 +79,7 @@ def _get_key_matching_value(value, key_list, value_list) -> str:
     for i, match_value in enumerate(value_list):
         if value is match_value:
             return key_list[i]
+    raise ValueError(f'could not find {value} in {value_list}')
 
 
 def _get_module_keys_and_values_lists(module: ModuleType) -> Tuple[List[str],List[Any]]:
@@ -88,7 +92,7 @@ def _get_module_keys_and_values_lists(module: ModuleType) -> Tuple[List[str],Lis
     return key_list, value_list
 
 
-def _module_key_value_generator(module: ModuleType) -> Tuple[str, Any]:
+def _module_key_value_generator(module: ModuleType) -> Iterator[Tuple[str, Any]]:
     for key in dir(module):
         yield key, getattr(module, key)
 

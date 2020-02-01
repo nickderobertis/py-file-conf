@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Sequence, cast
+
+from pyfileconf.exceptions.imports import CouldNotExtractRenameException
+
 if TYPE_CHECKING:
     from pyfileconf.imports.models.statements.interfaces import AnyAstImport
 import ast
@@ -20,6 +23,9 @@ class RenameStatement(ReprMixin, EqOnAttrsMixin):
     @classmethod
     def from_ast_alias(cls, alias: ast.alias):
         # Note: will fail if ast alias does not have a rename. See RenameStatementCollection.from_ast_import
+        if alias.asname is None:
+            raise CouldNotExtractRenameException(f'must pass alias which as .asname. passed alias: {alias}')
+
         return cls(
             alias.name,
             alias.asname
@@ -29,7 +35,7 @@ class RenameStatement(ReprMixin, EqOnAttrsMixin):
 class RenameStatementCollection(ReprMixin):
     repr_cols = ['items']
 
-    def __init__(self, items: [RenameStatement]):
+    def __init__(self, items: Sequence[RenameStatement]):
         self.items = items
 
     def __contains__(self, item):
@@ -72,7 +78,7 @@ class RenameStatementCollection(ReprMixin):
         # For RenameStatement objects, they only exist when there is a rename. Need to filter
         renames = []
         for alias in ast_import.names:
-            alias: ast.alias
+            alias = cast(ast.alias, alias)
             if alias.asname is not None:
                 renames.append(RenameStatement.from_ast_alias(alias))
 

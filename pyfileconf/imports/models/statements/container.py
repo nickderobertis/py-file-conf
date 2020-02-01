@@ -1,8 +1,10 @@
-from typing import List
+from typing import List, Optional
 import ast
 
 from pyfileconf.basemodels.container import Container
 from mixins.repr import ReprMixin
+
+from pyfileconf.exceptions.imports import NoImportMatchingNameException
 from pyfileconf.imports.models.statements.obj import ObjectImportStatement
 from pyfileconf.imports.models.statements.module import ModuleImportStatement
 from pyfileconf.imports.models.statements.interfaces import (
@@ -57,6 +59,7 @@ class ImportStatementContainer(Container, ReprMixin):
 
     def obj_name_is_imported(self, obj_name: str) -> bool:
 
+        obj_module: Optional[str]
         obj_name_parts = obj_name.split('.')
         if len(obj_name_parts) != 1:
             obj_module = '.'.join(obj_name_parts[:-1])
@@ -90,7 +93,6 @@ class ImportStatementContainer(Container, ReprMixin):
             return None
 
         return self.get_import_for_module_or_obj_name(possibly_imported_name)
-
 
     def get_import_for_module_or_obj_name(self, name: str) -> ImportOrNone:
         found_import = False
@@ -135,10 +137,11 @@ class ImportStatementContainer(Container, ReprMixin):
                 if found_import:
                     # May be multiple objects imported in this one statement. Create a new statement with just this object
                     return ObjectImportStatement(objs, module=imp.module, renames=renames)
+        raise NoImportMatchingNameException(f'could not find name {name} in {self}')
 
     @property
     def imported_names(self) -> List[str]:
-        imported_names = []
+        imported_names: List[str] = []
         for imp_or_comment in self:
             if isinstance(imp_or_comment, Comment):
                 continue # could not be imported from a comment

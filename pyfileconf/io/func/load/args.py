@@ -1,5 +1,8 @@
 import ast
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Tuple, Optional
+
+from pyfileconf.exceptions.imports import NoImportStatementException
+
 if TYPE_CHECKING:
     from pyfileconf.views.object import ObjectView
 from importlib.util import resolve_name
@@ -29,9 +32,12 @@ class FunctionArgsExtractor:
         )
 
 
-def extract_function_args_and_arg_imports_from_import(function_name: str, imp: AnyImportStatement,
-                                                      import_section_path_str: str=None) -> ArgumentsAndImports:
+def extract_function_args_and_arg_imports_from_import(function_name: str, imp: Optional[AnyImportStatement],
+                                                      import_section_path_str: Optional[str] = None) -> ArgumentsAndImports:
     from pyfileconf.io.func.load.extractimp import extract_import_statements_from_function_args_imports_and_assigns
+
+    if import_section_path_str is None or imp is None:
+        raise NoImportStatementException('no import or import section path str passed to extract function and imports')
 
     filepath = get_module_filepath_from_import(
         imp,

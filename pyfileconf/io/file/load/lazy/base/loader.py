@@ -1,4 +1,4 @@
-import ast
+from ast import AST
 import os
 from typing import List
 
@@ -22,7 +22,7 @@ class LazyLoader(SimplePropertyCacheMixin, ReprMixin):
             self._ast, self._body = None, None
 
     @property
-    def ast(self) -> ast.AST:
+    def ast(self) -> AST:
         return self._try_getattr_else_register('_ast')
 
     @property

@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Optional
 from mixins.attrequals import EqOnAttrsMixin
 from pyfileconf.mixins.orderpref import OrderPreferenceMixin
 
 class ImportStatement(EqOnAttrsMixin, OrderPreferenceMixin):
-    rename_attr = None
+    rename_attr: Optional[str] = None
 
     ### Scaffolding methods
 

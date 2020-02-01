@@ -1,4 +1,4 @@
-from typing import Callable, List, Union, Tuple, Optional
+from typing import Callable, List, Union, Tuple, Optional, Dict, Any, Sequence
 from copy import deepcopy
 import pandas as pd
 from functools import partial
@@ -17,8 +17,9 @@ class MergeOptions:
     def __init__(self, *merge_function_args, outpath=None, merge_function=left_merge_df,
                  left_df_keep_cols: StrListOrNone=None, right_df_keep_cols: StrListOrNone=None,
                  left_df_pre_process_func: Callable=None, right_df_pre_process_func: Callable=None,
-                 left_df_pre_process_kwargs: dict=None, right_df_pre_process_kwargs: dict=None,
-                 post_merge_func: Callable = None, post_merge_func_kwargs: Optional[dict] = None,
+                 left_df_pre_process_kwargs: Optional[Dict[str, Any]] = None,
+                 right_df_pre_process_kwargs: Optional[Dict[str, Any]] = None,
+                 post_merge_func: Callable = None, post_merge_func_kwargs: Optional[Dict[str, Any]] = None,
                  **merge_function_kwargs):
         """
 
@@ -45,22 +46,22 @@ class MergeOptions:
             **merge_function_kwargs:
         """
 
-        if left_df_pre_process_kwargs == None:
+        if left_df_pre_process_kwargs is None:
             left_df_pre_process_kwargs = {}
 
-        if right_df_pre_process_kwargs == None:
+        if right_df_pre_process_kwargs is None:
             right_df_pre_process_kwargs = {}
 
-        if post_merge_func_kwargs == None:
+        if post_merge_func_kwargs is None:
             post_merge_func_kwargs = {}
 
-        if left_df_pre_process_func == None:
+        if left_df_pre_process_func is None:
             left_df_pre_process_func = lambda x: x
 
-        if right_df_pre_process_func == None:
+        if right_df_pre_process_func is None:
             right_df_pre_process_func = lambda x: x
 
-        if post_merge_func == None:
+        if post_merge_func is None:
             post_merge_func = lambda x: x
 
         self.args = merge_function_args
@@ -87,7 +88,7 @@ class MergeOptions:
 
 class DataMerge:
 
-    def __init__(self, data_sources: [DataSource], merge_options: MergeOptions):
+    def __init__(self, data_sources: Sequence[DataSource], merge_options: MergeOptions):
         self.data_sources = data_sources
         self.merge_options = merge_options
         self._merged_name = None

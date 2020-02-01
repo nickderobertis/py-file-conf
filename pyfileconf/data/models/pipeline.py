@@ -194,27 +194,28 @@ def _get_merges(data_source_1: DataSourceOrPipeline, data_source_2: DataSourceOr
     :param merge_options: MergeOptions
     :return: list of DataMerge objects
     """
-    merges = []
-    final_merge_sources = []
+    merges: DataMerges = []
+    final_merge_sources: List[DataSource] = []
     # Add any pipeline merges first, as the results from the pipeline must be ready before we can merge the results
     # to other data sources or pipeline results
     if _is_data_pipeline(data_source_1):
-        merges += data_source_1.merges
-        pipeline_1_result = data_source_1.merges[-1].result
+        merges += data_source_1.merges  # type: ignore
+        pipeline_1_result = data_source_1.merges[-1].result  # type: ignore
         final_merge_sources.append(pipeline_1_result) # result of first pipeline will be first source in final merge
 
     if _is_data_pipeline(data_source_2):
-        merges += data_source_2.merges
-        pipeline_2_result = data_source_2.merges[-1].result # result of second pipeline will be second source in final merge
+        merges += data_source_2.merges  # type: ignore
+        # result of second pipeline will be second source in final merge
+        pipeline_2_result = data_source_2.merges[-1].result # type: ignore
 
     if not _is_data_pipeline(data_source_1):
-        final_merge_sources.append(data_source_1)
+        final_merge_sources.append(data_source_1)  # type: ignore
 
     # Now final merge source 1 is filled, may add 2
     if _is_data_pipeline(data_source_2):
         final_merge_sources.append(pipeline_2_result)
     elif not _is_data_pipeline(data_source_2):
-        final_merge_sources.append(data_source_2)
+        final_merge_sources.append(data_source_2) # type: ignore
 
     # Add last (or only) merge
     merges.append(DataMerge(final_merge_sources, merge_options))

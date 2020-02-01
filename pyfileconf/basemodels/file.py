@@ -1,5 +1,9 @@
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Dict
+
+from pyfileconf.assignments.models.statement import AssignmentStatement
+from pyfileconf.imports.models.statements.interfaces import AnyImportStatement
+
 if TYPE_CHECKING:
     from pyfileconf.basemodels.config import ConfigBase
 
@@ -13,13 +17,13 @@ class ConfigFileBase:
     ##### Scaffolding functions or attributes. Need to override when subclassing  ####
 
     # lines to always import. pass import objects
-    always_imports = []
+    always_imports: List[AnyImportStatement] = []
 
     # assignment lines to always include at beginning. pass assignment objects
-    always_assigns = []
+    always_assigns: List[AssignmentStatement] = []
 
     # always assign dict, where assigns will get added if item name matches dict key
-    always_assign_with_names_dict = {}
+    always_assign_with_names_dict: Dict[str, List[AssignmentStatement]] = {}
 
     # class to use for interfacing with file
     interface_class = ConfigFileInterface
@@ -28,6 +32,13 @@ class ConfigFileBase:
 
     def __init__(self, filepath: str, name: str=None):
         self.interface = self.interface_class(filepath)
+
+        # TODO: check if setting filepath in ConfigFileBase.__init__ had side effects
+        #
+        # added this because filepath was being set after object creation in
+        # `pyfileconf.basemodels.config.ConfigBase.to_file` and was causing mypy errors. Check
+        # to ensure this didn't cause any issues.
+        self.filepath = filepath
 
         if name is None:
             name = _strip_py(os.path.basename(filepath))

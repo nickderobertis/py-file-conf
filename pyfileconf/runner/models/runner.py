@@ -1,8 +1,9 @@
-from typing import Callable, Tuple
+from typing import Callable, Tuple, cast
 from functools import partial
 
 from mixins.repr import ReprMixin
 from pyfileconf.config.models.manager import ConfigManager, ActiveFunctionConfig
+from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from pyfileconf.logic.get import _get_public_name_or_special_name
 from pyfileconf.runner.models.interfaces import (
@@ -96,6 +97,8 @@ class Runner(ReprMixin):
             return self._run(section_path_str_or_list)
         elif isinstance(section_path_str_or_list, list):
             return [self._run(section_path_str) for section_path_str in section_path_str_or_list]
+        else:
+            raise ValueError('must pass str or list of strs of section paths to Runner.run')
 
     def _run(self, section_path_str: str) -> ResultOrResults:
         """
@@ -111,9 +114,9 @@ class Runner(ReprMixin):
         func_or_collection = self._get_func_or_collection(section_path_str)
         if isinstance(func_or_collection, PipelineCollection):
             return self._run_section(section_path_str)
-        elif type(func_or_collection) is type and issubclass(func_or_collection, Pipeline):
+        elif type(func_or_collection) is type and issubclass(type(func_or_collection), Pipeline):
             return self._run_one_pipeline(section_path_str)
-        elif isinstance(func_or_collection, Callable):
+        elif callable(func_or_collection):
             return self._run_one_func(section_path_str)
         else:
             raise ValueError(f'could not run section {section_path_str}. expected PipelineCollection or function,'
@@ -121,7 +124,8 @@ class Runner(ReprMixin):
 
 
     def _run_section(self, section_path_str: str) -> Results:
-        section: PipelineCollection = self._get_func_or_collection(section_path_str)
+        section = self._get_func_or_collection(section_path_str)
+        section = cast(PipelineCollection, section)
         results = []
         for section_or_object_view in section:
 
@@ -141,7 +145,7 @@ class Runner(ReprMixin):
             elif type(section_or_callable) is type and issubclass(section_or_callable, Pipeline):
                 # run pipeline
                 results.append(self._run_one_pipeline(subsection_path_str))
-            elif isinstance(section_or_callable, Callable):
+            elif callable(section_or_callable):
                 # run function
                 results.append(self._run_one_func(subsection_path_str))
             else:
@@ -165,7 +169,7 @@ class Runner(ReprMixin):
         pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
-        configured_pipeline = pipeline_class(**config_dict)
+        configured_pipeline = pipeline_class(**config_dict)  # type: ignore
 
         print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
         result = configured_pipeline.execute()
@@ -178,10 +182,10 @@ class Runner(ReprMixin):
         if isinstance(func_or_collection, PipelineCollection):
             # TODO [#17]: implement runner get sections
             raise NotImplementedError('have not implemented getting sections. works with run')
-        elif type(func_or_collection) is type and issubclass(func_or_collection, Pipeline):
+        elif type(func_or_collection) is type and issubclass(type(func_or_collection), Pipeline):
             # Got pipeline class
             return self._get_one_pipeline_with_config(section_path_str)
-        elif isinstance(func_or_collection, Callable):
+        elif callable(func_or_collection):
             return self._get_one_func_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
@@ -198,11 +202,14 @@ class Runner(ReprMixin):
         pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
-        return pipeline_class(**config_dict)
+        return pipeline_class(**config_dict)  # type: ignore
 
 
     def _get_config(self, section_path_str: str) -> ActiveFunctionConfig:
-        return self._config.get(section_path_str)
+        config = self._config.get(section_path_str)
+        if config is None:
+            raise ConfigManagerNotLoadedException('no config to get')
+        return config
 
     def _get_func_or_collection(self, section_path_str: str) -> PipelineOrFunctionOrCollection:
         return self._pipelines.get(section_path_str)
@@ -210,18 +217,28 @@ class Runner(ReprMixin):
     def _get_func_and_config(self, section_path_str: str) -> Tuple[Callable, dict]:
         config = self._get_config(section_path_str)
         func = self._get_func_or_collection(section_path_str)
+        func = cast(Callable, func)
 
         # Only pass items in config which are arguments of function
         config_dict = config.for_function(func)
 
         return func, config_dict
 
-    def _get_pipeline_and_config(self, section_path_str: str) -> Tuple[type, dict]:
+    def _get_pipeline_and_config(self, section_path_str: str) -> Tuple[Pipeline, dict]:
         config = self._get_config(section_path_str)
         # pipeline is an instance of the pipeline, without config
         pipeline = self._get_func_or_collection(section_path_str)
+        pipeline = cast(Pipeline, pipeline)
+
+        # TODO: verify whether pipeline is class or object in _get_pipeline_and_config
+        #
+        # Originally the return type from `_get_pipeline_and_config` was `Tuple[type, dict]`.
+        # That didn't seem like what it was doing so updated type to Pipeline. But later
+        # usage shows trying to construct an instance from a type. Type ignores have been
+        # added for those lines in `_run_one_pipeline` and `_get_one_pipeline_with_config`.
+        # Verify what is going on here and adjust.
 
         # Only pass items in config which are arguments of function
-        config_dict = config.for_function(pipeline.__init__)
+        config_dict = config.for_function(pipeline.__init__)  # type: ignore
 
         return pipeline, config_dict

@@ -1,6 +1,8 @@
 import builtins
+from typing import Any
 
-def _is_builtin(value: any) -> bool:
+
+def _is_builtin(value: Any) -> bool:
     if value is None:
         return True # None won't return True from the following check
 

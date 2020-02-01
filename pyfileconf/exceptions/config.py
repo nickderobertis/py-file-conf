@@ -1,0 +1,3 @@
+
+class ConfigManagerNotLoadedException(Exception):
+    pass

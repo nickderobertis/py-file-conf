@@ -6,7 +6,7 @@ import os
 @contextmanager
 def stdout_also_logged(log_folder: str = None):
     stdout_logger = Logger(log_folder)
-    sys.stdout = stdout_logger
+    sys.stdout = stdout_logger  # type: ignore
     yield log_folder
     sys.stdout = stdout_logger.terminal
     stdout_logger.log.close()

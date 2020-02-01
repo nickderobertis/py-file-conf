@@ -3,11 +3,10 @@ import os
 import traceback
 import pdb
 import bdb
-from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any
+from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type
+
 if TYPE_CHECKING:
-    from pyfileconf.selector.models.itemview import ItemView
-    StrOrView = Union[str, ItemView]
-    RunnerArgs = Union[str, List[str], ItemView, List[ItemView]]
+    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView
 
 from pyfileconf.config.models.manager import ConfigManager
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar
@@ -95,7 +94,7 @@ class PipelineManager:
         else:
             return self._run_depending_on_settings(section_path_str_or_list)
 
-    def _run_depending_on_settings(self, section_path_str_or_list: 'RunnerArgs') -> ResultOrResults:
+    def _run_depending_on_settings(self, section_path_str_or_list: Union[str, List[str]]) -> ResultOrResults:
         if self.auto_pdb:
             return self._run_with_auto_pdb(section_path_str_or_list)
 
@@ -118,7 +117,7 @@ class PipelineManager:
         else:
             return None
 
-    def _run_with_force_continue(self, section_path_str_or_list: 'RunnerArgs'):
+    def _run_with_force_continue(self, section_path_str_or_list: Union[str, List[str]]):
         if not isinstance(section_path_str_or_list, list):
             section_path_str_or_list = [section_path_str_or_list]
             strip_list_at_end = True
@@ -241,7 +240,7 @@ class PipelineManager:
         from pyfileconf.selector.models.itemview import _is_item_view
         if _is_item_view(section_path_str_or_view):
             # ItemView will have PipelineManager.name as first section, must strip
-            section_path = SectionPath(section_path_str_or_view.section_path_str)
+            section_path = SectionPath(section_path_str_or_view.section_path_str)  # type: ignore
             relative_section_path = SectionPath.from_section_str_list(section_path[1:])
             return relative_section_path.path_str
         elif isinstance(section_path_str_or_view, str):
@@ -256,8 +255,8 @@ class PipelineManager:
 
 
 
-def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func: callable = lambda x: x,
-                                                exceptions: Tuple[Exception] = (
+def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func: Callable = lambda x: x,
+                                                exceptions: Sequence[Type[BaseException]] = (
                                                         KeyboardInterrupt,
                                                         SystemExit,
                                                         bdb.BdbQuit
@@ -284,7 +283,7 @@ def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func:
 
     try:
         return try_func(**try_func_kwargs), True
-    except exceptions:
+    except exceptions:  # type: ignore
         quit()
     except Exception as e:
         if print_traceback:
@@ -300,7 +299,7 @@ def _return_with_traceback(any: Any) -> Tuple[Any, str]:
 
 class RunnerException(Exception):
 
-    def __init__(self, *args, section_path_str: 'StrOrView' = None, trace_back: str = None, **kwargs):
+    def __init__(self, *args, section_path_str: 'StrOrView' = None, trace_back: str = None):
         self.section_path_str = section_path_str
         self.trace_back = trace_back
 
@@ -309,7 +308,7 @@ class RunnerException(Exception):
         else:
             self.exc = None
 
-        super().__init__(*args, **kwargs)
+        super().__init__(*args)
 
     def __str__(self):
         output_str = f'Error while running {self.section_path_str}:\n\n'
