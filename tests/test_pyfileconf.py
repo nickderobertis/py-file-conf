@@ -93,9 +93,10 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         function_path = os.path.join(module_folder, 'a_function.py')
         with open(function_path, 'r') as f:
             contents = f.read()
-            assert 'a: str = None' in contents
+            assert 'a: ExampleClass = None' in contents
             assert 'b: List[str] = None' in contents
             assert 'from typing import List' in contents
             assert 'from pyfileconf import Selector, MergeOptions' in contents
+            assert 'from tests.input_files.bmodule import ExampleClass' in contents
             assert 's = Selector()' in contents
 
