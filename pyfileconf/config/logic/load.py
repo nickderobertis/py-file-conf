@@ -8,7 +8,11 @@ TwoTupleNoneOrStr = Union[TwoStrTuple, TwoNoneTuple]
 
 def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True) -> Tuple[ListOfStrs, ListOfStrs]:
     # TODO: deal with later imports
+    #
+    # Imports can currently only be read from the top of the file
+
     # TODO: deal with use of import other than the word import
+
     import_section = []
     assignment_section = []
     # We can have three cases for the following two booleans:

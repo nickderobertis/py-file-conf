@@ -40,7 +40,9 @@ class Selector:
         except AttributeError:
             return False
 
-        # TODO: converting all functions to pipelines would make this check safer
+        # TODO: convert all functions to pipelines
+        #
+        # it would make this check safer
         item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable, ObjectView)
         if isinstance(result, item_types):
             return True

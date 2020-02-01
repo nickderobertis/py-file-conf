@@ -167,8 +167,8 @@ class DataPipeline(Pipeline):
 
     def _touch_data_sources(self):
         """
-        Data sources may be passed using dero.manager.Selector, in which case they
-        are dero.manager.selector.models.itemview.ItemView objects. _get_merges uses isinstance, which will
+        Data sources may be passed using pyfileconf.Selector, in which case they
+        are pyfileconf.selector.models.itemview.ItemView objects. _get_merges uses isinstance, which will
         return ItemView, and so won't work correctly. By accessing the .item proprty of the ItemView,
         we get the original item back
         Returns:

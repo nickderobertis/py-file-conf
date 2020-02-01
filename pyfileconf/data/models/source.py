@@ -133,8 +133,8 @@ class DataSource:
 
     def _touch_pipeline(self):
         """
-        Pipeline may be passed using dero.manager.Selector, in which case it is
-        a dero.manager.selector.models.itemview.ItemView object. _set_data_loader accesses a property of
+        Pipeline may be passed using pyfileconf.Selector, in which case it is
+        a pyfileconf.selector.models.itemview.ItemView object. _set_data_loader accesses a property of
         the pipeline before it's configured, and so won't work correctly. By accessing the .item proprty of the ItemView,
         we get the original item back
         Returns:

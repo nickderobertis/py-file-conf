@@ -1,0 +1,17 @@
+{
+    "template": "https://github.com/nickderobertis/cookiecutter-pypi-sphinx",
+    "commit": "eab76af8f76141bfec561138ba8c8874d3ca5dab",
+    "context": {
+        "cookiecutter": {
+            "package_name": "pyfileconf",
+            "full_name": "Python File Configuration Framework",
+            "repo_name": "py-file-conf",
+            "repo_username": "nickderobertis",
+            "short_description": "Generate Python configuration files from functions and classes and run them from the command line or Python",
+            "package_author": "Nick DeRobertis",
+            "author_email": "whoopnip@gmail.com",
+            "google_analytics_id": "UA-157523037-1",
+            "_template": "https://github.com/nickderobertis/cookiecutter-pypi-sphinx"
+        }
+    }
+}
