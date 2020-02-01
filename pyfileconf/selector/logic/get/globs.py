@@ -7,6 +7,8 @@ def iter_globals():
     """
     for frame in _iter_frames():
         yield frame.f_globals
+    for frame in _iter_frames():
+        yield frame.f_locals
 
 def _iter_frames():
     """
