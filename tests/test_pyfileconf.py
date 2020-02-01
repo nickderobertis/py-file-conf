@@ -1,6 +1,7 @@
 import os
 
 from pyfileconf import PipelineManager, create_project, Selector
+from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.utils import delete_project, pipeline_dict_str_with_func
 from tests.input_files.amodule import a_function
 
@@ -106,5 +107,39 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
+
+
+class TestPipelineManagerConfig(PipelineManagerTestBase):
+
+    def test_config_update_function(self):
+        self.write_test_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        expected_b_result = ['a', 'b']
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        result = pipeline_manager.run(iv)
+        assert result == (None, expected_b_result)
+
+    def test_config_reload_function(self):
+        self.write_test_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        expected_b_result = ['a', 'b']
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        pipeline_manager.reload()
         result = pipeline_manager.run(iv)
         assert result == (None, None)
