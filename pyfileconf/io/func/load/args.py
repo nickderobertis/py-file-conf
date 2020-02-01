@@ -94,7 +94,7 @@ def get_module_filepath_from_import(imp: Optional[AnyImportStatement], import_se
     if imp is None:
         return None
 
-    # TODO [$5e35e4f2660dca0007cdea11]: figure out why mypy won't pick up that imp is not None in get_module_filepath_from_import
+    # TODO [#30]: figure out why mypy won't pick up that imp is not None in get_module_filepath_from_import
     #
     # Then type ignores can be removed
     if isinstance(imp, ObjectImportStatement):
