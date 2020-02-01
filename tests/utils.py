@@ -1,6 +1,6 @@
 import os
 import shutil
-from collections import Callable
+from typing import Callable
 
 
 def delete_project(path: str):
@@ -20,5 +20,5 @@ def delete_project(path: str):
             pass
 
 
-def pipeline_dict_str_with_func(func: Callable, func_key: str, func_module: str) -> str:
+def pipeline_dict_str_with_obj(func: Callable, func_key: str, func_module: str) -> str:
     return f'from {func_module} import {func.__name__}\n\npipeline_dict = {{\n\t"{func_key}": [{func.__name__}],\n}}\n'

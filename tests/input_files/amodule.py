@@ -1,7 +1,9 @@
 from typing import List, Tuple
 
+from tests.input_files.bmodule import ExampleClass
 
-def a_function(a: str, b: List[str]) -> Tuple[str, List[str]]:
+
+def a_function(a: ExampleClass, b: List[str]) -> Tuple[ExampleClass, List[str]]:
     """
     An example function
     """
