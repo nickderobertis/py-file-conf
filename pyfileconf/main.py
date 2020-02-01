@@ -324,3 +324,20 @@ def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
 
     if len(runner_exceptions) == 0:
         print('Everything ran successfully, no exceptions to report.\n\n')
+
+
+def create_project(path: str):
+    """
+    Creates a new pyfileconf project file structure
+    """
+    defaults_path = os.path.join(path, 'defaults')
+    pipeline_path = os.path.join(path, 'pipeline_dict.py')
+    data_dict_path = os.path.join(path, 'data_dict.py')
+    logs_path = os.path.join(path, 'Logs')
+
+    os.makedirs(defaults_path)
+    os.makedirs(logs_path)
+    with open(data_dict_path, 'w') as f:
+        f.write('\ndata_dict = {}\n')
+    with open(pipeline_path, 'w') as f:
+        f.write('\npipeline_dict = {}\n')
