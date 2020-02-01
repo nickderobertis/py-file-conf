@@ -14,7 +14,7 @@ class FunctionConfigFile(ConfigFileBase):
 
     # lines to always import. pass import objects
     always_imports = [
-        ObjectImportStatement.from_str('from dero.manager import Selector, MergeOptions', preferred_position='begin')
+        ObjectImportStatement.from_str('from pyfileconf import Selector, MergeOptions', preferred_position='begin')
     ]
 
     # assignment lines to always include at beginning. pass assign objects

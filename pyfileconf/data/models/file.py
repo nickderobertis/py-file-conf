@@ -10,7 +10,7 @@ from pyfileconf.io.file.interfaces.activeconfig import ActiveConfigFileInterface
 
 class DataConfigFile(ConfigFileBase):
     # lines to always import. pass import objects
-    always_imports = [ObjectImportStatement.from_str('from dero.manager import Selector', preferred_position='begin')]
+    always_imports = [ObjectImportStatement.from_str('from pyfileconf import Selector', preferred_position='begin')]
 
     # assignment lines to always include at beginning. pass assign objects
     always_assigns = [

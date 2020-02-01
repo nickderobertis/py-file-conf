@@ -3,7 +3,7 @@ if TYPE_CHECKING:
     from pyfileconf.data.models.merge import DataMerge
 
 from pyfileconf.data.logic.merge.summarize import get_summary_of_df
-from dero.data.display import display_df_dict
+from datacode.display import display_df_dict
 
 
 def display_merge_summary(merge: 'DataMerge', *summary_args, summary_method: str=None, summary_function: Callable=None,

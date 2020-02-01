@@ -6,7 +6,7 @@ from functools import partial
 from pyfileconf.data.logic.merge.display import display_merge_summary
 from pyfileconf.data.models.source import DataSource
 from pyfileconf.data.logic.merge import left_merge_df
-from dero.data.summarize import describe_df
+from datacode.summarize import describe_df
 
 StrList = List[str]
 StrListOrNone = Union[None, StrList]
