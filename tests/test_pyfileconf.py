@@ -49,6 +49,12 @@ class PipelineManagerTestBase:
     )
     test_name = 'test_pipeline_manager'
 
+    def setup_method(self, method):
+        create_project(BASE_GENERATED_DIR)
+
+    def teardown_method(self, method):
+        delete_project(BASE_GENERATED_DIR)
+
     def create_pm(self, **kwargs):
         all_kwargs = dict(
             pipeline_dict_path=self.pipeline_path,
@@ -61,30 +67,21 @@ class PipelineManagerTestBase:
         pipeline_manager = PipelineManager(**all_kwargs)
         return pipeline_manager
 
+    def write_test_a_function_to_pipeline_dict_file(self):
+        with open(self.pipeline_path, 'w') as f:
+            f.write(pipeline_dict_str_with_func(a_function, 'stuff', 'tests.input_files.amodule'))
+
 
 class TestPipelineManagerLoad(PipelineManagerTestBase):
 
-    def setup_method(self, method):
-        create_project(BASE_GENERATED_DIR)
-
-    def teardown_method(self, method):
-        delete_project(BASE_GENERATED_DIR)
-
     def test_create_empty_pm(self):
-        pipeline_manager = PipelineManager(
-            pipeline_dict_path=self.pipeline_path,
-            data_dict_path=self.data_dict_path,
-            basepath=self.defaults_path,
-            name=self.test_name,
-            log_folder=self.logs_path
-        )
+        pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager
 
     def test_create_pm_with_function(self):
-        with open(self.pipeline_path, 'w') as f:
-            f.write(pipeline_dict_str_with_func(a_function, 'stuff', 'tests.input_files.amodule'))
+        self.write_test_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
