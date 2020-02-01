@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, cast
 import ast
 import warnings
 
@@ -50,15 +50,15 @@ def _unique_external_names_from_default_dict_and_annotation_dict(default_dict: d
     return list(set(names))
 
 def _unique_external_names_from_multiple_assignment_dicts(*assignment_dicts) -> List[str]:
-    all_names = []
+    all_names: List[str] = []
     for assignment_dict in assignment_dicts:
         all_names += _unique_external_names_from_assignment_dict(assignment_dict)
     return list(set(all_names))
 
 def _unique_external_names_from_assignment_dict(assignment_dict: dict) -> List[str]:
     names = [extract_external_name_from_assign_value(value) for key, value in assignment_dict.items()]
-    names = [name for name in names if name is not None]
-    return list(set(names))
+    no_none_names: List[str] = [name for name in names if name is not None]
+    return list(set(no_none_names))
 
 def _unique_external_names_from_annotation_dict(annotation_dict: dict) -> List[str]:
     type_str_names = _extract_unique_type_str_names_from_annotation_dict(annotation_dict)
@@ -84,19 +84,25 @@ def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
 
 def _extract_str_names_from_subscript(subscript: ast.Subscript) -> List[str]:
     names = []
-    # e.g.: List[str]
-    names.append(subscript.value.id)  # e.g., gets List portion
-    if hasattr(subscript.slice.value, 'elts'):
+
+    # TODO: remove type ignores once typeshed has better ast support
+    #
+    # Hitting errors "expr" has no attribute "id" and  "slice" has no attribute "value"
+
+    # e.g.: List[str], gets List portion
+    names.append(subscript.value.id) # type: ignore
+    if hasattr(subscript.slice.value, 'elts'):  # type: ignore
         # got multiple values, e.g. List[str, bool]
         # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
-        names.extend(_extract_str_names_from_tuple(subscript.slice.value))
-    elif isinstance(subscript.slice.value, ast.Subscript):
+        names.extend(_extract_str_names_from_tuple(subscript.slice.value)) # type: ignore
+    elif isinstance(subscript.slice.value, ast.Subscript): # type: ignore
         # Recursively call extract from subscript if subscript found within subscript
         # e.g. Optional[List[str]]
-        names.extend(_extract_str_names_from_subscript(subscript.slice.value))
+        names.extend(_extract_str_names_from_subscript(subscript.slice.value)) # type: ignore
     else:
         # Got a single item, list List[str]
-        names.append(subscript.slice.value.id)  # e.g., gets str portion
+        # gets str portion
+        names.append(subscript.slice.value.id)  # type: ignore
 
     return names
 

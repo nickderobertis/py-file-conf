@@ -52,7 +52,7 @@ class Collection(Container, ReprMixin):
     def __dir__(self):
         return self.name_dict.keys()
 
-    @property
+    @property  # type: ignore
     def items(self):
         return self._items
 

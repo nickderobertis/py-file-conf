@@ -1,7 +1,9 @@
 from copy import deepcopy
+from typing import Any, List
+
 
 class Container:
-    items = []
+    items: List[Any] = []
 
     def __iter__(self):
         for item in self.items:

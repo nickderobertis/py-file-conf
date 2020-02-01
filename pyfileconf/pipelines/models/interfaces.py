@@ -9,8 +9,13 @@ PipelineOrFunction = Union[Pipeline, Callable]
 PipelineOrFunctionOrCollection = Union[PipelineOrFunction, 'PipelineCollection']
 PipelinesOrFunctions = List[PipelineOrFunction]
 PipelinesOrFunctionsOrCollections = List[PipelineOrFunctionOrCollection]
-PipelineDict = Dict[str, Union[PipelinesOrFunctions, 'PipelineDict']]
-PipelineDictOrPipelineOrFunction = Union[PipelineDict, PipelineOrFunction]
-PipelineDictsOrPipelinesOrFunctions = List[PipelineDictOrPipelineOrFunction]
+
+# TODO: remove type ignores for recursive type definitions once mypy supports them
+#
+# See https://github.com/python/mypy/issues/731
+PipelineDict = Dict[str, Union[PipelinesOrFunctions, 'PipelineDict']]  # type: ignore
+PipelineDictOrPipelineOrFunction = Union[PipelineDict, PipelineOrFunction]  # type: ignore
+PipelineDictsOrPipelinesOrFunctions = List[PipelineDictOrPipelineOrFunction]  # type: ignore
+
 StrList = List[str]
 ObjectViewOrCollection = Union[ObjectView, 'PipelineCollection']

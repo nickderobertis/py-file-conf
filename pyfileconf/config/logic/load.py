@@ -1,4 +1,4 @@
-from typing import Tuple, List, Union
+from typing import Tuple, List, Union, Sequence
 from copy import deepcopy
 
 ListOfStrs = List[str]
@@ -51,6 +51,7 @@ def _split_assignment_line_into_variable_name_and_assignment(line: str) -> TwoTu
     # Split into two parts by the first equals (handle multiple equals). Treating further equals as string
     # TODO [#4]: handle multiple assignments such as this = that = 5
     split_line = line.split('=')
+    parts: Sequence[str]
     if len(split_line) > 2:
         parts = split_line[0], '='.join(split_line[1:])
     else:

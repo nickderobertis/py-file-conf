@@ -1,3 +1,5 @@
+from typing import cast
+
 from pyfileconf.selector.logic.exc.typo import (
     handle_pipeline_manager_not_loaded_or_typo,
     handle_known_typo_at_end_of_section_path_str,
@@ -111,4 +113,6 @@ class ItemView:
 
 def _is_item_view(obj) -> bool:
     is_item_view = getattr(obj, '_is_item_view', False)
+    if is_item_view:
+        obj = cast(ItemView, obj)
     return is_item_view

@@ -13,6 +13,7 @@ from pyfileconf.data.models.astitems import ast_none
 
 if TYPE_CHECKING:
     from pyfileconf.data.models.pipeline import DataPipeline
+    from pyfileconf.data.models.config import DataConfig
 
 class DataSource:
     _scaffold_dict = {
@@ -44,9 +45,7 @@ class DataSource:
         self._df = df
         self.name_type = f'{name} {self.data_type}'
 
-    def apply_config(self, config) -> None:
-        from pyfileconf.data.models.config import DataConfig
-        config: DataConfig
+    def apply_config(self, config: 'DataConfig') -> None:
 
         for config_attr, config_item in config.items():
             # Skip irrelevant items
@@ -59,6 +58,10 @@ class DataSource:
             self._df = self._load()
         return self._df
 
+    @df.setter
+    def df(self, df):
+        self._df = df
+
     @property
     def data_type(self):
         return self._type
@@ -66,10 +69,6 @@ class DataSource:
     @data_type.setter
     def data_type(self, dtype):
         self._type = DataType(dtype)
-
-    @df.setter
-    def df(self, df):
-        self._df = df
 
     @property
     def last_modified(self):

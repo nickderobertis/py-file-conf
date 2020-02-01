@@ -51,10 +51,11 @@ class ConfigBase(dict):
     def __dir__(self):
         return self.keys()
 
-    def update(self, d: dict=None, **kwargs):
-        if d is None:
-            d = {}
-        super().update(d, **kwargs)
+    # argument names to match dict.update
+    def update(self, E=None, **F):
+        if E is None:
+            E = {}
+        super().update(E, **F)
 
     def to_file(self, filepath: str):
 

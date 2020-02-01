@@ -39,7 +39,7 @@ class DataConfig(ConfigBase):
         if data_source.loader_func_kwargs == {}:
             # If empty dict, must be where file doesn't exist, and so loader_func_kwargs were set to default
             # Need to convert to ast version
-            data_source.loader_func_kwargs = ast_dict_constructor
+            data_source.loader_func_kwargs = ast_dict_constructor  # type: ignore
 
         # Fill blank config dict
         for config_attr in config_dict:

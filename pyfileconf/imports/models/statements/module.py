@@ -5,6 +5,7 @@ from types import ModuleType
 
 from mixins.repr import ReprMixin
 
+from pyfileconf.exceptions.imports import CouldNotExtractModuleImportFromAstException
 from pyfileconf.imports.models.statements.importbase import ImportStatement
 from pyfileconf.imports.models.statements.rename import RenameStatementCollection
 from pyfileconf.imports.models.statements.comment import Comment
@@ -36,12 +37,15 @@ class ModuleImportStatement(ImportStatement, ReprMixin):
 
         return import_str
 
+    # TODO: handle renames in ModuleImportStatement.from_str
     @classmethod
     def from_str(cls, import_str: str, renames: RenameStatementCollection = None, comment: Comment=None,
                  preferred_position: str = None):
         from pyfileconf.io.file.load.parsers.imp import extract_module_import_from_ast
         ast_module = ast.parse(import_str)
         cls_obj = extract_module_import_from_ast(ast_module)
+        if cls_obj is None:
+            raise CouldNotExtractModuleImportFromAstException(f'Original str which was converted to ast: {import_str}')
         cls_obj.comment = comment
         cls_obj.preferred_position = preferred_position
 

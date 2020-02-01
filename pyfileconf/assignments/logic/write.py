@@ -1,15 +1,15 @@
-from typing import List
+from typing import List, Any, cast
 
 from pyfileconf.imports.logic.load.name import get_module_and_name_imported_from, get_imported_obj_variable_name
 from pyfileconf.logic.inspect import _is_builtin
 
 
-def _key_value_pair_to_assignment_str(key: str, value: any, module_strs: List[str]=None):
+def _key_value_pair_to_assignment_str(key: str, value: Any, module_strs: List[str] = None):
     value = _assignment_output_repr(value, module_strs=module_strs)
     return f'{key} = {value}'
 
 
-def _assignment_output_repr(value: any, module_strs: List[str]=None):
+def _assignment_output_repr(value: Any, module_strs: List[str] = None):
     """
     Main formatting function to produce executable python code
     Args:
@@ -19,7 +19,7 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
 
     """
     from pyfileconf.selector.models.selector import _is_selector
-    from pyfileconf.selector.models.itemview import _is_item_view
+    from pyfileconf.selector.models.itemview import _is_item_view, ItemView
     if _is_selector(value):
         # accessing porperties of selector object will cause issues. Only need to return Selector()
         return 'Selector()'
@@ -57,7 +57,7 @@ def _assignment_output_repr(value: any, module_strs: List[str]=None):
     return variable_name
 
 
-def _assignment_output_repr_for_builtins(value: any) -> any:
+def _assignment_output_repr_for_builtins(value: Any) -> Any:
     if isinstance(value, str):
         return f"r'{value}'"
 

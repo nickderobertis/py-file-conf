@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, cast
 import ast
 
 AstDictOrList = Union[ast.Dict, ast.List]
@@ -9,7 +9,7 @@ DictOrListOrNone = Union[DictOrList, None]
 class AstDictListConverter(ast.NodeVisitor):
 
     def __init__(self, convert_str_values: bool = False):
-        self.collections = []
+        self.collections: List[DictOrList] = []
         self.convert_str_values = convert_str_values
 
     def visit_Dict(self, node):
@@ -65,7 +65,7 @@ def _ast_dict_or_list_to_dict_or_list(node: AstDictOrList, convert_str_values: b
 def _ast_dict_to_dict(ast_dict: ast.Dict, convert_str_values: bool = False) -> dict:
     out_dict = {}
     for key, value in zip(ast_dict.keys, ast_dict.values):
-        key: ast.Str
+        key = cast(ast.Str, key)
         key_string = key.s
         if isinstance(value, (ast.Dict, ast.List)):
             store_value = _ast_dict_or_list_to_dict_or_list(value, convert_str_values=convert_str_values)

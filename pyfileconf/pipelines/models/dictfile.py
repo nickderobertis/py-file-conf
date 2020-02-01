@@ -16,5 +16,5 @@ class PipelineDictFile(ConfigFileBase):
     # no need to override default
     interface_class = PipelineDictInterface
 
-    def load(self) -> dict:
+    def load(self) -> dict:  # type: ignore
         return self.interface.load()

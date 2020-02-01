@@ -7,7 +7,7 @@ AstModuleAndStrListTuple = Tuple[ast.Module, List[str]]
 
 class PythonFileParser(FileParser):
 
-    def load(self) -> AstModuleAndStrListTuple:
+    def load(self) -> AstModuleAndStrListTuple:  # type: ignore
         # Get text of file
         file_lines = super().load()
 

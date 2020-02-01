@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, cast
 import os
 
 from pyfileconf.basemodels.collection import Collection
@@ -15,7 +15,7 @@ class DataCollection(Collection):
     def _set_name_map(self) -> None:
         source_map = {}
         for source_or_collection in self:
-            source_or_collection: SourceOrCollection
+            source_or_collection = cast(SourceOrCollection, source_or_collection)
             source_name = _get_public_name_or_special_name(source_or_collection)
             source_map[source_name] = source_or_collection
         self.name_dict = source_map
@@ -36,7 +36,8 @@ class DataCollection(Collection):
         if not os.path.exists(self.basepath):
             os.makedirs(self.basepath)
 
-        [self._output_config_file(item) for item in self]
+        for item in self:
+            self._output_config_file(item)
 
     def _output_config_file(self, item: SourceOrCollection) -> None:
         if isinstance(item, DataCollection):

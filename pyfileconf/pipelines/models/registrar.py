@@ -12,7 +12,7 @@ class PipelineRegistrar(Registrar):
     def get(self, section_path_str: str):
         obj_view_or_collection: ObjectViewOrCollection = super().get(section_path_str)
 
-        # Nothing futher needed for collections
+        # Nothing further needed for collections
         if isinstance(obj_view_or_collection, PipelineCollection):
             return obj_view_or_collection
 

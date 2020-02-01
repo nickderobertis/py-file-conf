@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Any
 import inspect
 
 
@@ -21,13 +21,16 @@ def function_args_as_dict(func: Callable):
 
     # Handle kwargs
     for kwarg in args.kwonlyargs:
-        default = args.kwonlydefaults[kwarg] if kwarg in args.kwonlydefaults else None
-        out_dict.update({kwarg: default})
+        if args.kwonlydefaults:
+            default = args.kwonlydefaults[kwarg] if kwarg in args.kwonlydefaults else None
+            out_dict.update({kwarg: default})
 
     return out_dict
 
-def get_variable_name_of_obj(obj: any) -> str:
+
+def get_variable_name_of_obj(obj: Any) -> str:
     return [key for key, value in globals().items() if value == obj][0]
+
 
 def _get_length_of_arg_section(section):
     if section is None:

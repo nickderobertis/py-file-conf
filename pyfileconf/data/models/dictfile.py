@@ -14,5 +14,5 @@ class DataDictFile(ConfigFileBase):
     # no need to override default
     interface_class = DataDictInterface
 
-    def load(self) -> dict:
+    def load(self) -> dict:  # type: ignore
         return self.interface.load()

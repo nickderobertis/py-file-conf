@@ -1,6 +1,8 @@
-from typing import Union, Any
+from typing import Union, Any, Optional
 
 from mixins.repr import ReprMixin
+
+from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.config.models.interfaces import ConfigSectionOrConfig
@@ -34,6 +36,8 @@ class ConfigManager(ReprMixin):
 
     def update(self, d: dict=None, section_path_str: str=None, **kwargs) -> None:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
+        if config_obj is None:
+            raise ConfigManagerNotLoadedException('no config to update')
         config_obj.update(d, **kwargs)
 
     def clear(self, section_path_str: str=None) -> None:
@@ -53,9 +57,11 @@ class ConfigManager(ReprMixin):
 
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
+        if config_obj is None:
+            raise ConfigManagerNotLoadedException('no config to pop')
         return config_obj.pop(key)
 
-    def get(self, section_path_str: str=None) -> ActiveFunctionConfig:
+    def get(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
         """
         Handles config inheritance to get the active config for a section or function
 
@@ -66,6 +72,9 @@ class ConfigManager(ReprMixin):
 
         """
         config = self._get_func_or_section_configs(section_path_str)
+
+        if self.section is None:
+            raise ConfigManagerNotLoadedException('call .load() on ConfigManager before .get()')
 
         # First override for function defaults is global project config
         section_configs = [self.section.config]
@@ -88,12 +97,13 @@ class ConfigManager(ReprMixin):
             # if is a section, not function/pipeline
             section_configs.append(self._get_func_or_section_configs(full_section))
 
-        # Override configs. Default config is base config, then gets updated by project, then high
-        # level sections to low level sections
-        [config.update(section_config) for section_config in section_configs]
+        if config:
+            # Override configs. Default config is base config, then gets updated by project, then high
+            # level sections to low level sections
+            [config.update(section_config) for section_config in section_configs]
 
-        # Last, override with local config
-        config.update(self.local_config)
+            # Last, override with local config
+            config.update(self.local_config)
 
         return config
 
@@ -120,7 +130,7 @@ class ConfigManager(ReprMixin):
         self._set_func_or_section_config(section_path_str, value=value)
 
 
-    def _get_func_or_section_configs(self, section_path_str: str=None) -> ActiveFunctionConfig:
+    def _get_func_or_section_configs(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
         """
         This get method is used to get only the config for the section path, without handling
         multiple levels of config and overriding. To get the active config for a function,
@@ -132,6 +142,9 @@ class ConfigManager(ReprMixin):
         Returns:
 
         """
+        if self.section is None:
+            raise ConfigManagerNotLoadedException('call .load() on ConfigManager before .get()')
+
         if section_path_str is None:
             section_path_str = self.section.name
 
@@ -141,7 +154,10 @@ class ConfigManager(ReprMixin):
         config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
         return _get_config_from_config_or_section(config_or_section)
 
-    def _set_func_or_section_config(self, section_path_str: str=None, value=None) -> None:
+    def _set_func_or_section_config(self, section_path_str: str, value=None) -> None:
+        if self.section is None:
+            raise ConfigManagerNotLoadedException('call .load() on ConfigManager before .set()')
+
         if section_path_str is None:
             section_path_str = self.section.name
 
@@ -194,7 +210,8 @@ class ConfigManager(ReprMixin):
         else:
             raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
 
-    def _get_project_config_or_local_config_by_section_path(self, section_path_str: str) -> ActiveFunctionConfig:
+    def _get_project_config_or_local_config_by_section_path(self, section_path_str: Optional[str]
+                                                            ) -> Optional[ActiveFunctionConfig]:
         if section_path_str is not None:
             config_obj = self._get_func_or_section_configs(section_path_str)
         else:
@@ -204,7 +221,7 @@ class ConfigManager(ReprMixin):
         return config_obj
 
 
-def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> ActiveFunctionConfig:
+def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Optional[ActiveFunctionConfig]:
     # Pull Config from ConfigSection
     if isinstance(config_or_section, ConfigSection):
         return config_or_section.config
