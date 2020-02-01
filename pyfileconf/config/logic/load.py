@@ -7,11 +7,11 @@ TwoStrTuple = Tuple[str, str]
 TwoTupleNoneOrStr = Union[TwoStrTuple, TwoNoneTuple]
 
 def _split_lines_into_import_and_assignment(lines: ListOfStrs, strip_lines=True) -> Tuple[ListOfStrs, ListOfStrs]:
-    # TODO: deal with later imports
+    # TODO [$5e34f65c6e8191000791e357]: deal with later imports
     #
     # Imports can currently only be read from the top of the file
 
-    # TODO: deal with use of import other than the word import
+    # TODO [$5e34f65c6e8191000791e358]: deal with use of import other than the word import
 
     import_section = []
     assignment_section = []
@@ -49,7 +49,7 @@ def _split_assignment_line_into_variable_name_and_assignment(line: str) -> TwoTu
         return None, None
 
     # Split into two parts by the first equals (handle multiple equals). Treating further equals as string
-    # TODO: handle multiple assignments such as this = that = 5
+    # TODO [$5e34f65c6e8191000791e359]: handle multiple assignments such as this = that = 5
     split_line = line.split('=')
     if len(split_line) > 2:
         parts = split_line[0], '='.join(split_line[1:])

@@ -24,7 +24,7 @@ class DataSource:
         'tags': ast_none
     }
 
-    # TODO: scaffold annotations
+    # TODO [$5e34f65c6e8191000791e35b]: scaffold annotations
 
     def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
                  name: str =None, data_type: str =None, tags: List[str]=None,
@@ -115,7 +115,7 @@ class DataSource:
             loader = pd.DataFrame
         else:
             if data_loader is None:
-                # TODO: determine filetype and use proper loader
+                # TODO [$5e34f65c6e8191000791e35c]: determine filetype and use proper loader
                 loader = partial(read_file_into_df, self.location, **loader_func_kwargs)
             else:
                 loader = partial(data_loader, self.location, **loader_func_kwargs)

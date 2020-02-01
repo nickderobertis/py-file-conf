@@ -30,8 +30,8 @@ class Runner(ReprMixin):
         self._full_getattr = ''
 
     def __getattr__(self, item):
-        # TODO: find way of doing runner look ups with fewer side effects
-        # TODO: find a way to get __getattr__ logic for runner working for sections
+        # TODO [$5e34f65c6e8191000791e363]: find way of doing runner look ups with fewer side effects
+        # TODO [$5e34f65c6e8191000791e364]: find a way to get __getattr__ logic for runner working for sections
         self._full_getattr += item
         try:
             func_or_collection = self._get_func_or_collection(self._full_getattr)
@@ -49,7 +49,7 @@ class Runner(ReprMixin):
             self._full_getattr = ''  # found the item, reset for next time
             return configured_func_or_pipeline
 
-    # TODO: this may work once __getattr__ works with sections
+    # TODO [$5e34f65c6e8191000791e365]: this may work once __getattr__ works with sections
     # def __dir__(self):
     #     exposed_methods = [
     #         'run',
@@ -176,7 +176,7 @@ class Runner(ReprMixin):
     def get(self, section_path_str: str) -> PipelineOrFunction:
         func_or_collection = self._get_func_or_collection(section_path_str)
         if isinstance(func_or_collection, PipelineCollection):
-            # TODO: implement runner get sections
+            # TODO [$5e34f65c6e8191000791e366]: implement runner get sections
             raise NotImplementedError('have not implemented getting sections. works with run')
         elif type(func_or_collection) is type and issubclass(func_or_collection, Pipeline):
             # Got pipeline class

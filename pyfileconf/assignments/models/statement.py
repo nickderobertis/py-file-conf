@@ -63,7 +63,7 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
             # Base assignment, no annotation. May be multiple targets
             target = ast_assign.targets[0]
 
-            # TODO: multiple assignments (multiple targets)
+            # TODO [$5e34f65c6e8191000791e356]: multiple assignments (multiple targets)
             if len(ast_assign.targets) > 1:
                 raise NotImplementedError(f'cannot yet handle multiple assignment to: {ast_assign.targets}')
 
