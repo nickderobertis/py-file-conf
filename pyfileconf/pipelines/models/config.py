@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional, Type, Sequence
 
 from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.imports.logic.load.func import function_args_as_dict
@@ -7,6 +7,19 @@ from pyfileconf.config.models.file import FunctionConfigFile
 class FunctionConfig(ConfigBase):
 
     config_file_class = FunctionConfigFile
+
+    @classmethod
+    def from_file(cls, filepath: str, name: str = None,
+                  klass: Optional[Type] = None, always_import_strs: Optional[Sequence[str]] = None,
+                  always_assign_strs: Optional[Sequence[str]] = None):
+        file = cls.config_file_class(
+            filepath,
+            name=name,
+            klass=klass,
+            always_import_strs=always_import_strs,
+            always_assign_strs=always_assign_strs
+        )
+        return file.load(cls)
 
     def for_function(self, func: Callable) -> dict:
         """

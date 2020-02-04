@@ -1,12 +1,12 @@
-from typing import Union
+from typing import Union, Any, Type
 
 from pyfileconf.data.models.source import DataSource
 
-StrOrDataSource = Union[str, DataSource]
+StrOrObj = Union[str, Any]
 
-def convert_to_data_source_if_necessary(item: StrOrDataSource) -> DataSource:
-    from pyfileconf.data.models.collection import DataCollection
-    if isinstance(item, (DataSource, DataCollection)):
+def convert_to_empty_obj_if_necessary(item: StrOrObj, item_class: Type) -> DataSource:
+    from pyfileconf.data.models.collection import SpecificClassCollection
+    if isinstance(item, (item_class, SpecificClassCollection)):
         return item
 
-    return DataSource(name=item)
+    return item_class(name=item)

@@ -13,19 +13,9 @@ from pyfileconf.data.models.astitems import ast_none
 
 if TYPE_CHECKING:
     from pyfileconf.data.models.pipeline import DataPipeline
-    from pyfileconf.data.models.config import DataConfig
+    from pyfileconf.data.models.config import SpecificClassConfig
 
 class DataSource:
-    _scaffold_dict = {
-        'name': ast_none,
-        'data_type': ast_none,
-        'location': ast_none,
-        'loader_func': ast_none,
-        'pipeline': ast_none,
-        'tags': ast_none
-    }
-
-    # TODO [#6]: scaffold annotations
 
     def __init__(self, location: str =None, df: pd.DataFrame =None, pipeline: 'DataPipeline' =None,
                  name: str =None, data_type: str =None, tags: List[str]=None,
@@ -44,13 +34,6 @@ class DataSource:
         self.loader_func_kwargs = loader_func_kwargs
         self._df = df
         self.name_type = f'{name} {self.data_type}'
-
-    def apply_config(self, config: 'DataConfig') -> None:
-
-        for config_attr, config_item in config.items():
-            # Skip irrelevant items
-            if hasattr(self, config_attr):
-                setattr(self, config_attr, config_item)
 
     @property
     def df(self):

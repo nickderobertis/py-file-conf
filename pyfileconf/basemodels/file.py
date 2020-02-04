@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, List, Dict, Type, Optional, Sequence
 
 from pyfileconf.assignments.models.statement import AssignmentStatement
 from pyfileconf.imports.models.statements.interfaces import AnyImportStatement
@@ -30,7 +30,9 @@ class ConfigFileBase:
 
     ##### Base class functions and attributes below. Shouldn't usually need to override in subclassing #####
 
-    def __init__(self, filepath: str, name: str=None):
+    def __init__(self, filepath: str, name: str=None, klass: Optional[Type] = None,
+                 always_import_strs: Optional[Sequence[str]] = None,
+                 always_assign_strs: Optional[Sequence[str]] = None):
         self.interface = self.interface_class(filepath)
 
         # TODO [#23]: check if setting filepath in ConfigFileBase.__init__ had side effects
@@ -43,9 +45,18 @@ class ConfigFileBase:
         if name is None:
             name = _strip_py(os.path.basename(filepath))
 
-        self.name = name
+        if always_assign_strs is None:
+            always_assign_strs = []
 
-    def load(self, config_class: type = None) -> 'ConfigBase':
+        if always_import_strs is None:
+            always_import_strs = []
+
+        self.name = name
+        self.klass = klass
+        self.always_import_strs = always_import_strs
+        self.always_assign_strs = always_assign_strs
+
+    def load(self, config_class: type = None, file_path: Optional[str] = None) -> 'ConfigBase':
         from pyfileconf.basemodels.config import ConfigBase
         config_dict, annotation_dict = self.interface.load()
 
@@ -57,7 +68,10 @@ class ConfigFileBase:
             annotations=annotation_dict,
             imports=self.interface.imports,
             _file=self,
-            name=self.name
+            name=self.name,
+            klass=self.klass,
+            always_import_strs=self.always_import_strs,
+            always_assign_strs=self.always_assign_strs,
         )
 
     def save(self, config: 'ConfigBase') -> None:

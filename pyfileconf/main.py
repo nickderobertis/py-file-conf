@@ -3,7 +3,11 @@ import os
 import traceback
 import pdb
 import bdb
-from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type
+from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
+
+from pyfileconf.basemodels.registrar import Registrar
+from pyfileconf.data.models.collection import SpecificClassCollection
+from pyfileconf.pipelines.models.collection import PipelineCollection
 
 if TYPE_CHECKING:
     from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView
@@ -11,8 +15,8 @@ if TYPE_CHECKING:
 from pyfileconf.config.models.manager import ConfigManager
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar
 from pyfileconf.pipelines.models.dictfile import PipelineDictFile
-from pyfileconf.data.models.registrar import DataRegistrar
-from pyfileconf.data.models.dictfile import DataDictFile
+from pyfileconf.data.models.registrar import SpecificRegistrar
+from pyfileconf.data.models.dictfile import SpecificClassDictFile
 from pyfileconf.runner.models.runner import Runner, ResultOrResults
 from pyfileconf.imports.models.tracker import ImportTracker
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -25,25 +29,35 @@ class PipelineManager:
     Main class for managing flow-based programming and configuration.
     """
 
-    def __init__(self, pipeline_dict_path: str, data_dict_path: str, basepath: str, name: str='project',
+    def __init__(self, pipeline_dict_folder: str, basepath: str,
+                 name: str= 'project',
+                 specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None,
                  auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None):
-        self.pipeline_dict_path = pipeline_dict_path
-        self.data_dict_path = data_dict_path
+
+        if specific_class_config_dicts is None:
+            specific_class_config_dicts = []
+
+        self.pipeline_dict_folder = pipeline_dict_folder
+        self.pipeline_dict_path = os.path.join(pipeline_dict_folder, 'pipeline_dict.py')
+        self.specific_class_config_dicts = specific_class_config_dicts
+        self.specific_class_names = [sc_dict['name'] for sc_dict in specific_class_config_dicts]
         self.basepath = basepath
-        self.sources_basepath = os.path.join(basepath, 'sources')
         self.name = name
         self.auto_pdb = auto_pdb
         self.force_continue = force_continue
         self.log_folder = log_folder
 
+        self._registrars: Optional[Sequence[Registrar]] = None
+        self._general_registrar: Optional[PipelineRegistrar] = None
+
         self._validate_options()
 
     def __getattr__(self, item):
 
-        if item in ('runner', 'sources'):
+        if item == 'runner':
             # must not be defined yet
             raise PipelineManagerNotLoadedException('call PipelineManager.load() before accessing '
-                                                    'functions or data sources')
+                                                    'functions and classes')
 
         # Must be getting function
         return getattr(self.runner, item)
@@ -55,14 +69,21 @@ class PipelineManager:
             'load',
             'reload'
         ]
-        exposed_attrs = ['sources', 'name']
+        exposed_attrs = ['name'] + self.specific_class_names
         exposed = exposed_methods + exposed_attrs
-        if hasattr(self, 'register'):
+        if hasattr(self, '_registrars'):
             skip_methods = [
                 'scaffold_config',
                 'basepath',
             ]
-            register_attrs = [attr for attr in dir(self.register) if attr not in exposed + skip_methods]
+
+            # Add specific registrar class dict names
+            for registrar in self._registrars:
+                if isinstance(registrar, SpecificRegistrar):
+                    exposed.append(registrar.name)
+
+            # Add general names to main namespace
+            register_attrs = [attr for attr in dir(self._general_registrar) if attr not in exposed + skip_methods]
             exposed += register_attrs
         return exposed
 
@@ -156,12 +177,7 @@ class PipelineManager:
     # TODO [#13]: multiple section path strs
     def get(self, section_path_str_or_view: 'StrOrView'):
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
-        section_path = SectionPath(section_path_str)
-
-        if section_path[0] == 'sources':
-            return self.sources.get(section_path_str)
-        else:
-            return self.runner.get(section_path_str)
+        return self.runner.get(section_path_str)
 
     def reload(self) -> None:
         """
@@ -201,31 +217,18 @@ class PipelineManager:
 
         """
         # Load dynamically instead of passing dict to ensure modules are loaded into sys now
-        pipeline_dict_file = PipelineDictFile(self.pipeline_dict_path, name='pipeline_dict')
-        pipeline_dict = pipeline_dict_file.load()
-        data_dict_file = DataDictFile(self.data_dict_path, name='data_dict')
-        data_dict = data_dict_file.load()
-
-        self.register = PipelineRegistrar.from_dict(
-            pipeline_dict,
-            basepath=self.basepath,
-            name=self.name,
-            imports=pipeline_dict_file.interface.imports
+        self._registrars, self._general_registrar = create_registrars(
+            self.specific_class_config_dicts,
+            self.basepath,
+            self.pipeline_dict_folder,
+            self.pipeline_dict_path,
+            manager_name=self.name,
         )
-        self.register.scaffold_config()
 
         self.config = ConfigManager(self.basepath)
         self.config.load()
 
-        self.sources = DataRegistrar.from_dict(
-            data_dict,
-            basepath=self.sources_basepath,
-            name=self.name,
-            imports=data_dict_file.interface.imports
-        )
-        self.sources.scaffold_config()
-
-        self.runner = Runner(config=self.config, pipelines=self.register)
+        self.runner = Runner(config=self.config, registrars=self._registrars, general_registrar=self._general_registrar)
 
     def _wipe_loaded_modules(self):
         [sys.modules.pop(module) for module in self._loaded_modules]
@@ -252,6 +255,7 @@ class PipelineManager:
     def _validate_options(self):
         if self.auto_pdb and self.force_continue:
             raise ValueError('cannot force continue and drop into pdb at the same time')
+
 
 
 
@@ -326,18 +330,123 @@ def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
         print('Everything ran successfully, no exceptions to report.\n\n')
 
 
-def create_project(path: str):
+def create_project(path: str,
+                   specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None):
     """
     Creates a new pyfileconf project file structure
     """
     defaults_path = os.path.join(path, 'defaults')
     pipeline_path = os.path.join(path, 'pipeline_dict.py')
-    data_dict_path = os.path.join(path, 'data_dict.py')
+
     logs_path = os.path.join(path, 'Logs')
 
     os.makedirs(defaults_path)
     os.makedirs(logs_path)
-    with open(data_dict_path, 'w') as f:
-        f.write('\ndata_dict = {}\n')
     with open(pipeline_path, 'w') as f:
         f.write('\npipeline_dict = {}\n')
+    for specific_class_config in specific_class_config_dicts:
+        name = specific_class_config['name']
+        dict_path = os.path.join(path, f'{name}_dict.py')
+        with open(dict_path, 'w') as f:
+            f.write(f'\nclass_dict = {{}}\n')
+
+
+
+def _validate_registrars(registrars: List[SpecificClassDictFile], general_registrar: PipelineRegistrar):
+    used_names = dir(general_registrar)
+    for registrar in registrars:
+        if registrar.name in used_names:
+            raise ValueError(f'cannot use a name for a specific class dict which is already specified in '
+                             f'top-level pipeline_dict. The issue is with {registrar.name}.')
+
+
+def create_registrars(specific_class_config_dicts: List[Dict[str, Union[str, Type, List[str]]]],
+                      basepath: str, pipeline_folder: str, pipeline_dict_path: str,
+                      manager_name: Optional[str] = None
+                      ) -> Tuple[List[SpecificRegistrar], PipelineRegistrar]:
+    registrars, general_registrar = _create_registrars_or_collections_from_dict(
+        specific_class_config_dicts,
+        basepath,
+        pipeline_folder,
+        pipeline_dict_path,
+        registrar=True,
+        manager_name=manager_name,
+    )
+    registrars = cast(List[SpecificRegistrar], registrars)
+    general_registrar = cast(PipelineRegistrar, general_registrar)
+    _validate_registrars(registrars, general_registrar)
+    for registrar in registrars:
+        registrar.scaffold_config()
+    general_registrar.scaffold_config()
+
+    return registrars, general_registrar
+
+
+def create_collections(specific_class_config_dicts: List[Dict[str, Union[str, Type, List[str]]]],
+                       basepath: str, pipeline_folder: str, pipeline_dict_path: str,
+                       manager_name: Optional[str] = None
+                       ) -> Tuple[List[SpecificClassCollection], PipelineCollection]:
+    collections, general_collection = _create_registrars_or_collections_from_dict(
+        specific_class_config_dicts,
+        basepath,
+        pipeline_folder,
+        pipeline_dict_path,
+        registrar=False,
+        manager_name=manager_name,
+    )
+    collections = cast(List[SpecificClassCollection], collections)
+    general_collection = cast(SpecificRegistrar, general_collection)
+    return collections, general_collection
+
+
+def _create_registrars_or_collections_from_dict(
+    specific_class_config_dicts: List[Dict[str, Union[str, Type, List[str]]]],
+    basepath: str, pipeline_folder: str, pipeline_dict_path: str, registrar: bool = True,
+    manager_name: Optional[str] = None
+) -> Tuple[
+        Union[List[SpecificRegistrar], List[SpecificClassCollection]],
+        Union[PipelineRegistrar, PipelineCollection]
+    ]:
+    if registrar:
+        pipeline_class = PipelineRegistrar
+        specific_class_class = SpecificRegistrar
+    else:
+        pipeline_class = PipelineCollection
+        specific_class_class = SpecificClassCollection
+
+    # Load dynamically instead of passing dict to ensure modules are loaded into sys now
+    pipeline_dict_file = PipelineDictFile(pipeline_dict_path, name='pipeline_dict')
+    pipeline_dict = pipeline_dict_file.load()
+
+    objs = []
+    for specific_class_config_dict in specific_class_config_dicts:
+
+        # Set defaults then update with actual config
+        config_dict = dict(
+            always_assign_strs=None,
+            always_import_strs=None,
+        )
+        config_dict.update(specific_class_config_dict)
+
+        name = config_dict['name']
+        file_path = os.path.join(pipeline_folder, f'{name}_dict.py')
+        specific_class_dict_file = SpecificClassDictFile(file_path, name=name + '_dict')
+        specific_dict = specific_class_dict_file.load()
+        obj = specific_class_class.from_dict(
+            specific_dict,
+            basepath=os.path.join(basepath, name),
+            name=name,
+            imports=specific_class_dict_file.interface.imports,
+            always_assign_strs=config_dict['always_assign_strs'],
+            always_import_strs=config_dict['always_import_strs'],
+            klass=config_dict['class']
+        )
+        objs.append(obj)
+
+    general_obj = pipeline_class.from_dict(
+        pipeline_dict,
+        basepath=basepath,
+        name=manager_name,
+        imports=pipeline_dict_file.interface.imports
+    )
+    return objs, general_obj

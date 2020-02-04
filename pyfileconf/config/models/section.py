@@ -21,7 +21,7 @@ class ConfigSection(Container, ReprMixin):
     def __getattr__(self, item):
 
         # Handle if trying to get this section's config
-        if item == self.config.name:
+        if self.config is not None and item == self.config.name:
             return self.config
 
         return self.config_map[item]
