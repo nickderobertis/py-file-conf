@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import Union, cast, Any
 import os
 
@@ -68,8 +69,8 @@ class SpecificClassCollection(Collection):
             )
             existing_imports = existing_config._file.interface.imports
             # Here using the ast config, for the purpose of writing to file
-            file_config_item = item.copy()
-            file_config_item.apply_config(existing_config)
+            file_config_item = deepcopy(item)
+            apply_config(file_config_item, existing_config)
             # also use to update DataSource object in memory. Here use the actual objects instead of ast
             apply_config(item, existing_config.active_config_dict)
         else:
