@@ -6,6 +6,11 @@ from pyfileconf.basemodels.collection import Collection
 from pyfileconf.data.logic.convert import convert_to_empty_obj_if_necessary
 from pyfileconf.logic.get import _get_public_name_or_special_name
 from pyfileconf.data.models.config import SpecificClassConfig
+from pyfileconf.io.func.load.args import extract_function_args_and_arg_imports_from_import
+from pyfileconf.imports.models.statements.obj import ObjectImportStatement
+from pyfileconf.imports.logic.load.name import get_module_and_name_imported_from
+from pyfileconf.data.models.astitems import ast_str
+from pyfileconf.io.func.load.config import function_args_as_arg_and_annotation_dict
 
 
 ObjOrCollection = Union[Any, 'SpecificClassCollection']
@@ -80,6 +85,26 @@ class SpecificClassCollection(Collection):
 
         item_config = SpecificClassConfig.from_obj(file_config_item, imports=existing_imports,
                                                    file_path=item_filepath, **class_config)
+
+        # Get config by extracting from class __init__
+        # First need to create dummy import for compatibility
+        mod, import_base = get_module_and_name_imported_from(self.klass)
+        obj_import = ObjectImportStatement([item.name], import_base)
+        # Now get the arguments and the imports for any type annotations
+        args, func_arg_imports = extract_function_args_and_arg_imports_from_import(
+            self.klass.__name__,
+            obj_import
+        )
+        # Convert into a usable formats:
+        # defaults_dict: a dictionary where keys are variable names and values are ast defaults
+        # annotation_dict: a dicrionary where keys are variable names and values are ast type annotations
+        defaults_dict, annotation_dict = function_args_as_arg_and_annotation_dict(args)
+        defaults_dict['name'] = ast_str(item.name)  # set name attribute as item name by default
+        # Apply all the new extracted defaults to the created config
+        item_config.update(defaults_dict)
+        item_config.annotations.update(annotation_dict)
+        item_config.imports.extend(func_arg_imports)
+
         item_config.to_file(item_filepath)
 
         if not file_existed:

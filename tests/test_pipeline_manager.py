@@ -142,12 +142,10 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         class_path = os.path.join(module_folder, 'data.py')
         with open(class_path, 'r') as f:
             contents = f.read()
-            # TODO: once specific class file includes annotations, include them here
-            assert "name = 'data'" in contents
-
-
-def partialExampleClass(param):
-    pass
+            assert "from typing import Optional" in contents
+            assert "from typing import Tuple" in contents
+            assert "a: Optional[Tuple[int, int]] = None" in contents
+            assert "name: Optional[str] = 'data'" in contents
 
 
 class TestPipelineManagerRun(PipelineManagerTestBase):
@@ -180,6 +178,8 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         expect_ec = ExampleClass(name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
+
+    # TODO: test adding imports, assigns with specific class dict
 
 
 
