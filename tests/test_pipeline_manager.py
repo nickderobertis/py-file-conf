@@ -169,7 +169,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(None)
 
-    def test_create_data_source(self):
+    def test_create_from_specific_class_dict(self):
         self.write_example_class_dict_to_file()
         pipeline_manager = self.create_pm(
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
@@ -215,24 +215,24 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
 
-    # TODO [#33]: create update data source test should work after refactor for any arbitrary class as dict
-
-    # def test_create_update_data_source(self):
-    #     self.write_data_dict_to_file()
-    #     pipeline_manager = self.create_pm()
-    #     pipeline_manager.load()
-    #     sel = Selector()
-    #     iv = sel.test_pipeline_manager.sources.stuff.data
-    #     expected_location_result = 'abc'
-    #     section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-    #     pipeline_manager.config.update(
-    #         location=expected_location_result,
-    #         section_path_str=section_path.path_str
-    #     )
-    #     ds = sel.test_pipeline_manager.sources.stuff.data.item
-    #     expect_ds = DataSource(name='data', location=expected_location_result)
-    #     assert ds.name == expect_ds.name
-    #     assert ds.location == expect_ds.location
+    def test_create_update_from_specific_class_dict(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
 
 
     def test_config_reload_function(self):
@@ -251,7 +251,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == (None, None)
 
-    def test_create_reload_class(self):
+    def test_config_reload_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
@@ -266,3 +266,23 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         pipeline_manager.reload()
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(None)
+
+    def test_config_reload_specific_class_dict(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        pipeline_manager.reload()
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
