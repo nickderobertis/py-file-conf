@@ -1,4 +1,5 @@
 import os
+from copy import deepcopy
 
 from pyfileconf import PipelineManager, create_project, Selector
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -144,6 +145,93 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             contents = f.read()
             assert "from typing import Optional" in contents
             assert "from typing import Tuple" in contents
+            assert "a: Optional[Tuple[int, int]] = None" in contents
+            assert "name: Optional[str] = 'data'" in contents
+
+    def test_create_pm_with_class_dict_and_imports(self):
+        self.write_example_class_dict_to_file()
+        class_config_dict_list = deepcopy(CLASS_CONFIG_DICT_LIST)
+        class_config_dict_list[0].update(
+            always_import_strs=[
+                'from copy import deepcopy',
+                'from functools import partial'
+            ]
+        )
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=class_config_dict_list,
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            assert "from typing import Optional" in contents
+            assert "from typing import Tuple" in contents
+            assert "from copy import deepcopy" in contents
+            assert "from functools import partial" in contents
+            assert "a: Optional[Tuple[int, int]] = None" in contents
+            assert "name: Optional[str] = 'data'" in contents
+
+    def test_create_pm_with_class_dict_and_assigns(self):
+        self.write_example_class_dict_to_file()
+        class_config_dict_list = deepcopy(CLASS_CONFIG_DICT_LIST)
+        class_config_dict_list[0].update(
+            always_assign_strs=[
+                'my_var = 6',
+                'stuff = list((1,))'
+            ]
+        )
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=class_config_dict_list,
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            assert "from typing import Optional" in contents
+            assert "from typing import Tuple" in contents
+            assert "my_var = 6" in contents
+            assert "stuff = list((1,))" in contents
+            assert "a: Optional[Tuple[int, int]] = None" in contents
+            assert "name: Optional[str] = 'data'" in contents
+
+    def test_create_pm_with_class_dict_imports_and_assigns(self):
+        self.write_example_class_dict_to_file()
+        class_config_dict_list = deepcopy(CLASS_CONFIG_DICT_LIST)
+        class_config_dict_list[0].update(
+            always_import_strs=[
+                'from copy import deepcopy',
+                'from functools import partial'
+            ],
+            always_assign_strs=[
+                'my_var = 6',
+                'stuff = deepcopy(my_var)'
+            ]
+        )
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=class_config_dict_list,
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            assert "from typing import Optional" in contents
+            assert "from typing import Tuple" in contents
+            assert "from copy import deepcopy" in contents
+            assert "from functools import partial" in contents
+            assert "my_var = 6" in contents
+            assert "stuff = deepcopy(my_var)" in contents
             assert "a: Optional[Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
 
