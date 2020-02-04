@@ -107,7 +107,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         function_path = os.path.join(module_folder, 'a_function.py')
         with open(function_path, 'r') as f:
             contents = f.read()
-            assert 'from pyfileconf import Selector, MergeOptions' in contents
+            assert 'from pyfileconf import Selector' in contents
             assert 'from typing import List' in contents
             assert 'from tests.input_files.bmodule import ExampleClass' in contents
             assert 's = Selector()' in contents
@@ -124,7 +124,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         class_path = os.path.join(module_folder, 'ExampleClass.py')
         with open(class_path, 'r') as f:
             contents = f.read()
-            assert 'from pyfileconf import Selector, MergeOptions' in contents
+            assert 'from pyfileconf import Selector' in contents
             assert 'from typing import Tuple' in contents
             assert 's = Selector()' in contents
             assert 'a: Optional[Tuple[int, int]] = None' in contents
@@ -145,6 +145,8 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             contents = f.read()
             assert "from typing import Optional" in contents
             assert "from typing import Tuple" in contents
+            assert "from pyfileconf import Selector" in contents
+            assert "s = Selector()" in contents
             assert "a: Optional[Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
 
@@ -155,7 +157,8 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             always_import_strs=[
                 'from copy import deepcopy',
                 'from functools import partial'
-            ]
+            ],
+            always_assign_strs=[],
         )
         pipeline_manager = self.create_pm(
             specific_class_config_dicts=class_config_dict_list,
@@ -182,7 +185,8 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             always_assign_strs=[
                 'my_var = 6',
                 'stuff = list((1,))'
-            ]
+            ],
+            always_import_strs=[],
         )
         pipeline_manager = self.create_pm(
             specific_class_config_dicts=class_config_dict_list,
@@ -234,6 +238,9 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "stuff = deepcopy(my_var)" in contents
             assert "a: Optional[Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
+
+    # TODO: test multiple specific class dicts at once
+
 
 
 class TestPipelineManagerRun(PipelineManagerTestBase):

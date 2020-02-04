@@ -1,5 +1,8 @@
 from typing import TYPE_CHECKING, Optional, Type, Sequence
 
+from pyfileconf.exceptions.imports import ExtractedIncorrectTypeOfImportException
+from pyfileconf.imports.models.statements.module import ModuleImportStatement
+
 if TYPE_CHECKING:
     from pyfileconf.data.models.config import SpecificClassConfig
 
@@ -11,10 +14,14 @@ from pyfileconf.io.file.interfaces.activeconfig import ActiveConfigFileInterface
 
 class SpecificClassConfigFile(ConfigFileBase):
     # lines to always import. pass import objects
-    always_imports = []
+    always_imports = [
+        ObjectImportStatement.from_str('from pyfileconf import Selector', preferred_position='begin')
+    ]
 
     # assignment lines to always include at beginning. pass assign objects
-    always_assigns = []
+    always_assigns = [
+        AssignmentStatement.from_str('s = Selector()', preferred_position='begin'),
+    ]
 
     def __init__(self, filepath: str, name: str = None, klass: Optional[Type] = None,
                  always_import_strs: Optional[Sequence[str]] = None,
@@ -26,11 +33,25 @@ class SpecificClassConfigFile(ConfigFileBase):
             always_import_strs=always_import_strs,
             always_assign_strs=always_assign_strs
         )
+        # Override class definitions with object specific definitions, if specifics are passed
+        if self.always_import_strs:
+            imports = []
+            for import_str in self.always_import_strs:
+                try:
+                    imports.append(ObjectImportStatement.from_str(import_str))
+                except ExtractedIncorrectTypeOfImportException:
+                    imports.append(ModuleImportStatement.from_str(import_str))
+            self.always_imports = imports
+        elif self.always_import_strs == []:
+            # None passed, remove default imports
+            self.always_imports = []
 
-        # Override class definitions with object specific definitions
-        # TODO: handle both object imports and module imports
-        self.always_imports = [ObjectImportStatement.from_str(import_str) for import_str in self.always_import_strs]
-        self.always_assigns = [AssignmentStatement.from_str(assign_str) for assign_str in self.always_assign_strs]
+        if self.always_assign_strs:
+            self.always_assigns = [AssignmentStatement.from_str(assign_str) for assign_str in self.always_assign_strs]
+        elif self.always_assign_strs == []:
+            # None passed, remove default assignments
+            self.always_assigns = []
+
 
     def __call__(self, *args, **kwargs):
         """

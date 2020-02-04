@@ -1,6 +1,7 @@
 import ast
 from typing import Union
 
+from pyfileconf.exceptions.imports import ExtractedIncorrectTypeOfImportException
 from pyfileconf.imports.models.statements.interfaces import (
     ObjectImportStatement,
     ModuleImportStatement,
@@ -61,5 +62,7 @@ def _validate_import_type(import_statement: AnyImportStatementOrNone, enforce_ty
         return
 
     if not isinstance(import_statement, enforce_type):
-        raise ValueError(f'expected import of type {enforce_type}, got {import_statement} of '
-                         f'type {type(import_statement)}')
+        raise ExtractedIncorrectTypeOfImportException(
+            f'expected import of type {enforce_type}, got {import_statement} of '
+            f'type {type(import_statement)}'
+        )

@@ -33,3 +33,7 @@ class CouldNotExtractRenameException(ImportException):
 
 class CouldNotDetermineModuleForObjectException(ImportException):
     pass
+
+
+class ExtractedIncorrectTypeOfImportException(ImportException):
+    pass

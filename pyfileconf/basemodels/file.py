@@ -45,12 +45,6 @@ class ConfigFileBase:
         if name is None:
             name = _strip_py(os.path.basename(filepath))
 
-        if always_assign_strs is None:
-            always_assign_strs = []
-
-        if always_import_strs is None:
-            always_import_strs = []
-
         self.name = name
         self.klass = klass
         self.always_import_strs = always_import_strs
