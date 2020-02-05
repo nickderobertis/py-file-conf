@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.models.statements.container &mdash; pyfileconf 0.2.3 documentation</title>
+  <title>pyfileconf.imports.models.statements.container &mdash; pyfileconf 0.2.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.3
+                0.2.4
               </div>
             
           
@@ -278,7 +278,7 @@
                         <span class="p">[</span><span class="n">rename</span> <span class="k">for</span> <span class="n">rename</span> <span class="ow">in</span> <span class="n">imp</span><span class="o">.</span><span class="n">renames</span> <span class="k">if</span> <span class="n">rename</span><span class="o">.</span><span class="n">new_name</span> <span class="o">==</span> <span class="n">name</span><span class="p">]</span>
                     <span class="p">)</span>
                     <span class="c1"># grab original module matching this rename</span>
-                    <span class="n">modules</span> <span class="o">=</span> <span class="n">renames</span><span class="o">.</span><span class="n">reverse_name_map</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                    <span class="n">modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">renames</span><span class="o">.</span><span class="n">reverse_name_map</span><span class="p">[</span><span class="n">name</span><span class="p">]]</span>
                 <span class="k">if</span> <span class="n">found_import</span><span class="p">:</span>
                     <span class="c1"># May be multiple modules imported in this one statement. Create a new statement with just this module</span>
                     <span class="k">return</span> <span class="n">ModuleImportStatement</span><span class="p">(</span><span class="n">modules</span><span class="o">=</span><span class="n">modules</span><span class="p">,</span> <span class="n">renames</span><span class="o">=</span><span class="n">renames</span><span class="p">)</span>
