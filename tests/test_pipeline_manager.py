@@ -5,7 +5,7 @@ from typing import Sequence, Type, Union, Dict, List
 from pyfileconf import PipelineManager, Selector
 from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from tests.input_files.bmodule import ExampleClass
+from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.utils import delete_project, pipeline_dict_str_with_obj, class_dict_str
 from tests.input_files.amodule import a_function, SecondExampleClass
 
@@ -117,7 +117,7 @@ class PipelineManagerTestBase:
 
     def write_example_class_to_pipeline_dict_file(self):
         with open(self.pipeline_dict_path, 'w') as f:
-            f.write(pipeline_dict_str_with_obj(ExampleClass, 'stuff', 'tests.input_files.bmodule'))
+            f.write(pipeline_dict_str_with_obj(ExampleClass, 'stuff', 'tests.input_files.mypackage.cmodule'))
 
     def write_example_class_dict_to_file(self, idx: int = 0):
         with open(self.example_class_dict_paths[idx], 'w') as f:
@@ -151,7 +151,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             contents = f.read()
             assert 'from pyfileconf import Selector' in contents
             assert 'from typing import List' in contents
-            assert 'from tests.input_files.bmodule import ExampleClass' in contents
+            assert 'from tests.input_files.mypackage.cmodule import ExampleClass' in contents
             assert 's = Selector()' in contents
             assert 'a: ExampleClass = None' in contents
             assert 'b: List[str] = None' in contents
@@ -330,7 +330,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         with open(class_paths[1], 'r') as f:
             contents = f.read()
             assert "from typing import Optional" in contents
-            assert "from tests.input_files.bmodule import ExampleClass" in contents
+            assert "from tests.input_files.mypackage.cmodule import ExampleClass" in contents
             assert "s = Selector()" in contents
             assert "b: ExampleClass = None" in contents
             assert "name: Optional[str] = 'data'" in contents

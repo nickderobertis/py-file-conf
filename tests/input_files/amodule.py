@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Optional
 
-from tests.input_files.bmodule import ExampleClass
+from tests.input_files.mypackage.cmodule import ExampleClass
 
 
 def a_function(a: ExampleClass, b: List[str]) -> Tuple[ExampleClass, List[str]]:
