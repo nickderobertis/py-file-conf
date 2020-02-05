@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.parsers.collections &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.file.load.parsers.collections &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.io.file.load.parsers.collections</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">import</span> <span class="nn">ast</span>
 
 <span class="n">AstDictOrList</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Dict</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">List</span><span class="p">]</span>
@@ -174,7 +174,7 @@
 <div class="viewcode-block" id="AstDictListConverter"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.collections.AstDictListConverter">[docs]</a><span class="k">class</span> <span class="nc">AstDictListConverter</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeVisitor</span><span class="p">):</span>
 
 <div class="viewcode-block" id="AstDictListConverter.__init__"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">convert_str_values</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">collections</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collections</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DictOrList</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_str_values</span> <span class="o">=</span> <span class="n">convert_str_values</span></div>
 
 <div class="viewcode-block" id="AstDictListConverter.visit_Dict"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_Dict">[docs]</a>    <span class="k">def</span> <span class="nf">visit_Dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
@@ -230,7 +230,7 @@
 <span class="k">def</span> <span class="nf">_ast_dict_to_dict</span><span class="p">(</span><span class="n">ast_dict</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Dict</span><span class="p">,</span> <span class="n">convert_str_values</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ast_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span> <span class="n">ast_dict</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
-        <span class="n">key</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Str</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Str</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
         <span class="n">key_string</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">s</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Dict</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">List</span><span class="p">)):</span>
             <span class="n">store_value</span> <span class="o">=</span> <span class="n">_ast_dict_or_list_to_dict_or_list</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">convert_str_values</span><span class="o">=</span><span class="n">convert_str_values</span><span class="p">)</span>

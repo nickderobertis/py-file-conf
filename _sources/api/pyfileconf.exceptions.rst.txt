@@ -9,6 +9,14 @@ pyfileconf.exceptions package
 Submodules
 ----------
 
+pyfileconf.exceptions.assignments module
+----------------------------------------
+
+.. automodule:: pyfileconf.exceptions.assignments
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.exceptions.base module
 ---------------------------------
 
@@ -17,10 +25,34 @@ pyfileconf.exceptions.base module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.exceptions.config module
+-----------------------------------
+
+.. automodule:: pyfileconf.exceptions.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.exceptions.imports module
+------------------------------------
+
+.. automodule:: pyfileconf.exceptions.imports
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.exceptions.pipelinemanager module
 --------------------------------------------
 
 .. automodule:: pyfileconf.exceptions.pipelinemanager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.exceptions.registrar module
+--------------------------------------
+
+.. automodule:: pyfileconf.exceptions.registrar
    :members:
    :undoc-members:
    :show-inheritance:

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.lazy.base.loader &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.file.load.lazy.base.loader &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.io.file.load.lazy.base.loader</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span></span><span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">AST</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
@@ -187,7 +187,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ast</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">ast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">ast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AST</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_getattr_else_register</span><span class="p">(</span><span class="s1">&#39;_ast&#39;</span><span class="p">)</span>
 
     <span class="nd">@property</span>

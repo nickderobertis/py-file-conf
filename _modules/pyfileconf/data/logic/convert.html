@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.logic.convert &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.logic.convert &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,18 +163,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.data.logic.convert</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.source</span> <span class="kn">import</span> <span class="n">DataSource</span>
 
-<span class="n">StrOrDataSource</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataSource</span><span class="p">]</span>
+<span class="n">StrOrObj</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
-<div class="viewcode-block" id="convert_to_data_source_if_necessary"><a class="viewcode-back" href="../../../../api/pyfileconf.data.logic.html#pyfileconf.data.logic.convert.convert_to_data_source_if_necessary">[docs]</a><span class="k">def</span> <span class="nf">convert_to_data_source_if_necessary</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">StrOrDataSource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSource</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">DataCollection</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="n">DataSource</span><span class="p">,</span> <span class="n">DataCollection</span><span class="p">)):</span>
+<div class="viewcode-block" id="convert_to_empty_obj_if_necessary"><a class="viewcode-back" href="../../../../api/pyfileconf.data.logic.html#pyfileconf.data.logic.convert.convert_to_empty_obj_if_necessary">[docs]</a><span class="k">def</span> <span class="nf">convert_to_empty_obj_if_necessary</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">StrOrObj</span><span class="p">,</span> <span class="n">item_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSource</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="n">item_class</span><span class="p">,</span> <span class="n">SpecificClassCollection</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">item</span>
 
-    <span class="k">return</span> <span class="n">DataSource</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">item_class</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

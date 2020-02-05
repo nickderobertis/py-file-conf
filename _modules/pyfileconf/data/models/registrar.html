@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.registrar &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.models.registrar &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -165,10 +165,15 @@
   <h1>Source code for pyfileconf.data.models.registrar</h1><div class="highlight"><pre>
 <span></span>
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">DataCollection</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 
-<div class="viewcode-block" id="DataRegistrar"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.registrar.DataRegistrar">[docs]</a><span class="k">class</span> <span class="nc">DataRegistrar</span><span class="p">(</span><span class="n">Registrar</span><span class="p">):</span>
-    <span class="n">collection_class</span> <span class="o">=</span> <span class="n">DataCollection</span></div>
+<div class="viewcode-block" id="SpecificRegistrar"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.registrar.SpecificRegistrar">[docs]</a><span class="k">class</span> <span class="nc">SpecificRegistrar</span><span class="p">(</span><span class="n">Registrar</span><span class="p">):</span>
+    <span class="n">collection_class</span> <span class="o">=</span> <span class="n">SpecificClassCollection</span>
+
+<div class="viewcode-block" id="SpecificRegistrar.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.registrar.SpecificRegistrar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">klass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;must pass class for SpecificRegistrar&#39;</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

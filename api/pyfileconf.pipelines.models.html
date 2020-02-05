@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pipelines.models package &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.pipelines.models package &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -206,7 +206,7 @@
 <span id="pyfileconf-pipelines-models-collection-module"></span><h2>pyfileconf.pipelines.models.collection module<a class="headerlink" href="#module-pyfileconf.pipelines.models.collection" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.pipelines.models.collection.PipelineCollection">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.collection.</code><code class="sig-name descname">PipelineCollection</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">items</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/collection.html#PipelineCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.collection.PipelineCollection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.collection.</code><code class="sig-name descname">PipelineCollection</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">items</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/collection.html#PipelineCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.collection.PipelineCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection" title="pyfileconf.basemodels.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.collection.Collection</span></code></a></p>
 </dd></dl>
 
@@ -215,7 +215,7 @@
 <span id="pyfileconf-pipelines-models-config-module"></span><h2>pyfileconf.pipelines.models.config module<a class="headerlink" href="#module-pyfileconf.pipelines.models.config" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.pipelines.models.config.FunctionConfig">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.config.</code><code class="sig-name descname">FunctionConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/config.html#FunctionConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.config.FunctionConfig" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.config.</code><code class="sig-name descname">FunctionConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/config.html#FunctionConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.config.FunctionConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.config.ConfigBase</span></code></a></p>
 <dl class="attribute">
 <dt id="pyfileconf.pipelines.models.config.FunctionConfig.config_file_class">
@@ -240,6 +240,11 @@ of config items for passing to the function.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="pyfileconf.pipelines.models.config.FunctionConfig.from_file">
+<em class="property">classmethod </em><code class="sig-name descname">from_file</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/config.html#FunctionConfig.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.config.FunctionConfig.from_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -247,7 +252,7 @@ of config items for passing to the function.</p>
 <span id="pyfileconf-pipelines-models-dictfile-module"></span><h2>pyfileconf.pipelines.models.dictfile module<a class="headerlink" href="#module-pyfileconf.pipelines.models.dictfile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.pipelines.models.dictfile.PipelineDictFile">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.dictfile.</code><code class="sig-name descname">PipelineDictFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/dictfile.html#PipelineDictFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.dictfile.PipelineDictFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.dictfile.</code><code class="sig-name descname">PipelineDictFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/dictfile.html#PipelineDictFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.dictfile.PipelineDictFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase" title="pyfileconf.basemodels.file.ConfigFileBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.file.ConfigFileBase</span></code></a></p>
 <dl class="attribute">
 <dt id="pyfileconf.pipelines.models.dictfile.PipelineDictFile.always_imports">
@@ -277,7 +282,7 @@ of config items for passing to the function.</p>
 <span id="pyfileconf-pipelines-models-file-module"></span><h2>pyfileconf.pipelines.models.file module<a class="headerlink" href="#module-pyfileconf.pipelines.models.file" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.pipelines.models.file.FunctionConfigFile">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.file.</code><code class="sig-name descname">FunctionConfigFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/file.html#FunctionConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.file.FunctionConfigFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.file.</code><code class="sig-name descname">FunctionConfigFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/file.html#FunctionConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.file.FunctionConfigFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase" title="pyfileconf.basemodels.file.ConfigFileBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.file.ConfigFileBase</span></code></a></p>
 <p>Represents config file on filesystem. Handles low-level functions for writing and reading config file</p>
 <dl class="attribute">
@@ -319,7 +324,7 @@ of config items for passing to the function.</p>
 <span id="pyfileconf-pipelines-models-registrar-module"></span><h2>pyfileconf.pipelines.models.registrar module<a class="headerlink" href="#module-pyfileconf.pipelines.models.registrar" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.pipelines.models.registrar.PipelineRegistrar">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.registrar.</code><code class="sig-name descname">PipelineRegistrar</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/registrar.html#PipelineRegistrar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.registrar.PipelineRegistrar" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.registrar.</code><code class="sig-name descname">PipelineRegistrar</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/registrar.html#PipelineRegistrar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.registrar.PipelineRegistrar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar" title="pyfileconf.basemodels.registrar.Registrar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.registrar.Registrar</span></code></a></p>
 <dl class="attribute">
 <dt id="pyfileconf.pipelines.models.registrar.PipelineRegistrar.collection_class">

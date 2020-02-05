@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pipelines.models.registrar &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.pipelines.models.registrar &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -177,7 +177,7 @@
 <div class="viewcode-block" id="PipelineRegistrar.get"><a class="viewcode-back" href="../../../../api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.registrar.PipelineRegistrar.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">obj_view_or_collection</span><span class="p">:</span> <span class="n">ObjectViewOrCollection</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
-        <span class="c1"># Nothing futher needed for collections</span>
+        <span class="c1"># Nothing further needed for collections</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_view_or_collection</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">obj_view_or_collection</span>
 

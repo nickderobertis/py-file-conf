@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -289,8 +289,12 @@ the config file, and finally by any local config updates in a script.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.assignments">pyfileconf.exceptions.assignments module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.base">pyfileconf.exceptions.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.config">pyfileconf.exceptions.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.imports">pyfileconf.exceptions.imports module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.pipelinemanager">pyfileconf.exceptions.pipelinemanager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.exceptions.html#module-pyfileconf.exceptions.registrar">pyfileconf.exceptions.registrar module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a><ul>
@@ -509,12 +513,12 @@ the config file, and finally by any local config updates in a script.</p>
 <span id="pyfileconf-main-module"></span><h2>pyfileconf.main module<a class="headerlink" href="#module-pyfileconf.main" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.main.PipelineManager">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">data_dict_path</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param">pipeline_dict_folder</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">specific_class_config_dicts=None</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Main class for managing flow-based programming and configuration.</p>
 <dl class="method">
 <dt id="pyfileconf.main.PipelineManager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">data_dict_path</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">pipeline_dict_folder</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">specific_class_config_dicts=None</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -582,14 +586,40 @@ or when running multiple functions/sections, e.g.</p>
 
 <dl class="exception">
 <dt id="pyfileconf.main.RunnerException">
-<em class="property">exception </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">RunnerException</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">RunnerException</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <dl class="method">
 <dt id="pyfileconf.main.RunnerException.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.main.create_collections">
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_collections</code><span class="sig-paren">(</span><em class="sig-param">specific_class_config_dicts</em>, <em class="sig-param">basepath</em>, <em class="sig-param">pipeline_folder</em>, <em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">manager_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_collections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_collections" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="pyfileconf.data.models.html#pyfileconf.data.models.collection.SpecificClassCollection" title="pyfileconf.data.models.collection.SpecificClassCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificClassCollection</span></code></a>], <a class="reference internal" href="pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.collection.PipelineCollection" title="pyfileconf.pipelines.models.collection.PipelineCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCollection</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.main.create_project">
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_project</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">specific_class_config_dicts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new pyfileconf project file structure</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.main.create_registrars">
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_registrars</code><span class="sig-paren">(</span><em class="sig-param">specific_class_config_dicts</em>, <em class="sig-param">basepath</em>, <em class="sig-param">pipeline_folder</em>, <em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">manager_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_registrars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_registrars" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="pyfileconf.data.models.html#pyfileconf.data.models.registrar.SpecificRegistrar" title="pyfileconf.data.models.registrar.SpecificRegistrar"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificRegistrar</span></code></a>], <a class="reference internal" href="pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.registrar.PipelineRegistrar" title="pyfileconf.pipelines.models.registrar.PipelineRegistrar"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineRegistrar</span></code></a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

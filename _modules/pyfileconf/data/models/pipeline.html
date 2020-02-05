@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.pipeline &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.models.pipeline &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -252,7 +252,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_merge_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="c1"># TODO: add output considering path in merge options</span>
+        <span class="c1"># TODO [#5]: add output considering path in merge options</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">merges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -359,27 +359,28 @@
 <span class="sd">    :param merge_options: MergeOptions</span>
 <span class="sd">    :return: list of DataMerge objects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">merges</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">final_merge_sources</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">merges</span><span class="p">:</span> <span class="n">DataMerges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">final_merge_sources</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataSource</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Add any pipeline merges first, as the results from the pipeline must be ready before we can merge the results</span>
     <span class="c1"># to other data sources or pipeline results</span>
     <span class="k">if</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">):</span>
-        <span class="n">merges</span> <span class="o">+=</span> <span class="n">data_source_1</span><span class="o">.</span><span class="n">merges</span>
-        <span class="n">pipeline_1_result</span> <span class="o">=</span> <span class="n">data_source_1</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span>
+        <span class="n">merges</span> <span class="o">+=</span> <span class="n">data_source_1</span><span class="o">.</span><span class="n">merges</span>  <span class="c1"># type: ignore</span>
+        <span class="n">pipeline_1_result</span> <span class="o">=</span> <span class="n">data_source_1</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span>  <span class="c1"># type: ignore</span>
         <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipeline_1_result</span><span class="p">)</span> <span class="c1"># result of first pipeline will be first source in final merge</span>
 
     <span class="k">if</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">):</span>
-        <span class="n">merges</span> <span class="o">+=</span> <span class="n">data_source_2</span><span class="o">.</span><span class="n">merges</span>
-        <span class="n">pipeline_2_result</span> <span class="o">=</span> <span class="n">data_source_2</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span> <span class="c1"># result of second pipeline will be second source in final merge</span>
+        <span class="n">merges</span> <span class="o">+=</span> <span class="n">data_source_2</span><span class="o">.</span><span class="n">merges</span>  <span class="c1"># type: ignore</span>
+        <span class="c1"># result of second pipeline will be second source in final merge</span>
+        <span class="n">pipeline_2_result</span> <span class="o">=</span> <span class="n">data_source_2</span><span class="o">.</span><span class="n">merges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span> <span class="c1"># type: ignore</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">):</span>
-        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">)</span>
+        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_1</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="c1"># Now final merge source 1 is filled, may add 2</span>
     <span class="k">if</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">):</span>
         <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipeline_2_result</span><span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="n">_is_data_pipeline</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">):</span>
-        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">)</span>
+        <span class="n">final_merge_sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_source_2</span><span class="p">)</span> <span class="c1"># type: ignore</span>
 
     <span class="c1"># Add last (or only) merge</span>
     <span class="n">merges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DataMerge</span><span class="p">(</span><span class="n">final_merge_sources</span><span class="p">,</span> <span class="n">merge_options</span><span class="p">))</span>

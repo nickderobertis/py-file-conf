@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.func.load.args &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.func.load.args &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -164,7 +164,10 @@
             
   <h1>Source code for pyfileconf.io.func.load.args</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">ast</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.imports</span> <span class="kn">import</span> <span class="n">NoImportStatementException</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 <span class="kn">from</span> <span class="nn">importlib.util</span> <span class="kn">import</span> <span class="n">resolve_name</span>
@@ -194,9 +197,12 @@
         <span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="extract_function_args_and_arg_imports_from_import"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.extract_function_args_and_arg_imports_from_import">[docs]</a><span class="k">def</span> <span class="nf">extract_function_args_and_arg_imports_from_import</span><span class="p">(</span><span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">imp</span><span class="p">:</span> <span class="n">AnyImportStatement</span><span class="p">,</span>
-                                                      <span class="n">import_section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentsAndImports</span><span class="p">:</span>
+<div class="viewcode-block" id="extract_function_args_and_arg_imports_from_import"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.extract_function_args_and_arg_imports_from_import">[docs]</a><span class="k">def</span> <span class="nf">extract_function_args_and_arg_imports_from_import</span><span class="p">(</span><span class="n">function_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">imp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AnyImportStatement</span><span class="p">],</span>
+                                                      <span class="n">import_section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentsAndImports</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.io.func.load.extractimp</span> <span class="kn">import</span> <span class="n">extract_import_statements_from_function_args_imports_and_assigns</span>
+
+    <span class="k">if</span> <span class="n">imp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NoImportStatementException</span><span class="p">(</span><span class="s1">&#39;no import passed to extract function and imports&#39;</span><span class="p">)</span>
 
     <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_module_filepath_from_import</span><span class="p">(</span>
         <span class="n">imp</span><span class="p">,</span>
@@ -217,7 +223,7 @@
 
     <span class="k">if</span> <span class="n">ast_function_def</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Found function definition in this import</span>
-        <span class="c1"># TODO: handle other class methods - also update extract_function_definition function</span>
+        <span class="c1"># TODO [#12]: handle other class methods - also update extract_function_definition function</span>
         <span class="k">if</span> <span class="n">ast_function_def</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;__init__&#39;</span><span class="p">:</span>
             <span class="c1"># Got class init</span>
             <span class="k">del</span> <span class="n">ast_function_def</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># delete first arg (self)</span>
@@ -249,18 +255,19 @@
     <span class="p">)</span></div>
 
 
-
-
-<div class="viewcode-block" id="get_module_filepath_from_import"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.get_module_filepath_from_import">[docs]</a><span class="k">def</span> <span class="nf">get_module_filepath_from_import</span><span class="p">(</span><span class="n">imp</span><span class="p">:</span> <span class="n">AnyImportStatement</span><span class="p">,</span> <span class="n">import_section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="get_module_filepath_from_import"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.args.get_module_filepath_from_import">[docs]</a><span class="k">def</span> <span class="nf">get_module_filepath_from_import</span><span class="p">(</span><span class="n">imp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AnyImportStatement</span><span class="p">],</span> <span class="n">import_section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
     <span class="k">if</span> <span class="n">imp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
 
+    <span class="c1"># TODO [#30]: figure out why mypy won&#39;t pick up that imp is not None in get_module_filepath_from_import</span>
+    <span class="c1">#</span>
+    <span class="c1"># Then type ignores can be removed</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">ObjectImportStatement</span><span class="p">):</span>
         <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">imp</span><span class="o">.</span><span class="n">get_module_filepath</span><span class="p">(</span><span class="n">import_section_path_str</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imp</span><span class="p">,</span> <span class="n">ModuleImportStatement</span><span class="p">):</span>
         <span class="c1"># have already ensured in creating ObjectView that there should be only one module</span>
         <span class="c1"># in the module import statement. So just take the first filepath</span>
-        <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">imp</span><span class="o">.</span><span class="n">get_module_filepaths</span><span class="p">(</span><span class="n">import_section_path_str</span><span class="p">)[</span><span class="n">imp</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">imp</span><span class="o">.</span><span class="n">get_module_filepaths</span><span class="p">(</span><span class="n">import_section_path_str</span><span class="p">)[</span><span class="n">imp</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>  <span class="c1"># type: ignore</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected import statement to be ObjectImportStatement or ModuleImportStatement.&#39;</span>
                          <span class="sa">f</span><span class="s1">&#39; Got </span><span class="si">{imp}</span><span class="s1"> of type {type(imp)}&#39;</span><span class="p">)</span>

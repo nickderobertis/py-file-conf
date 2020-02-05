@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.merge &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.models.merge &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.data.models.merge</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
@@ -182,8 +182,9 @@
 <div class="viewcode-block" id="MergeOptions.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.merge.MergeOptions.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">merge_function_args</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">merge_function</span><span class="o">=</span><span class="n">left_merge_df</span><span class="p">,</span>
                  <span class="n">left_df_keep_cols</span><span class="p">:</span> <span class="n">StrListOrNone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">right_df_keep_cols</span><span class="p">:</span> <span class="n">StrListOrNone</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">left_df_pre_process_func</span><span class="p">:</span> <span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">right_df_pre_process_func</span><span class="p">:</span> <span class="n">Callable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">left_df_pre_process_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">right_df_pre_process_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">post_merge_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">post_merge_func_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">left_df_pre_process_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">right_df_pre_process_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">post_merge_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">post_merge_func_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">**</span><span class="n">merge_function_kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -210,22 +211,22 @@
 <span class="sd">            **merge_function_kwargs:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">left_df_pre_process_kwargs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">left_df_pre_process_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">left_df_pre_process_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="n">right_df_pre_process_kwargs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">right_df_pre_process_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">right_df_pre_process_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="n">post_merge_func_kwargs</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">post_merge_func_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">post_merge_func_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="n">left_df_pre_process_func</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">left_df_pre_process_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">left_df_pre_process_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
 
-        <span class="k">if</span> <span class="n">right_df_pre_process_func</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">right_df_pre_process_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">right_df_pre_process_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
 
-        <span class="k">if</span> <span class="n">post_merge_func</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">post_merge_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">post_merge_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">merge_function_args</span>
@@ -252,7 +253,7 @@
 
 <div class="viewcode-block" id="DataMerge"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.merge.DataMerge">[docs]</a><span class="k">class</span> <span class="nc">DataMerge</span><span class="p">:</span>
 
-<div class="viewcode-block" id="DataMerge.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.merge.DataMerge.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_sources</span><span class="p">:</span> <span class="p">[</span><span class="n">DataSource</span><span class="p">],</span> <span class="n">merge_options</span><span class="p">:</span> <span class="n">MergeOptions</span><span class="p">):</span>
+<div class="viewcode-block" id="DataMerge.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.merge.DataMerge.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_sources</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DataSource</span><span class="p">],</span> <span class="n">merge_options</span><span class="p">:</span> <span class="n">MergeOptions</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span> <span class="o">=</span> <span class="n">data_sources</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">merge_options</span> <span class="o">=</span> <span class="n">merge_options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_merged_name</span> <span class="o">=</span> <span class="kc">None</span>

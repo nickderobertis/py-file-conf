@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.models.statements.module &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.imports.models.statements.module &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -170,6 +170,7 @@
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.imports</span> <span class="kn">import</span> <span class="n">CouldNotExtractModuleImportFromAstException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.importbase</span> <span class="kn">import</span> <span class="n">ImportStatement</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.rename</span> <span class="kn">import</span> <span class="n">RenameStatementCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.comment</span> <span class="kn">import</span> <span class="n">Comment</span>
@@ -201,12 +202,15 @@
 
         <span class="k">return</span> <span class="n">import_str</span>
 
+    <span class="c1"># TODO [#24]: handle renames in ModuleImportStatement.from_str</span>
 <div class="viewcode-block" id="ModuleImportStatement.from_str"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.module.ModuleImportStatement.from_str">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">import_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">renames</span><span class="p">:</span> <span class="n">RenameStatementCollection</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">comment</span><span class="p">:</span> <span class="n">Comment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.imp</span> <span class="kn">import</span> <span class="n">extract_module_import_from_ast</span>
         <span class="n">ast_module</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">import_str</span><span class="p">)</span>
         <span class="n">cls_obj</span> <span class="o">=</span> <span class="n">extract_module_import_from_ast</span><span class="p">(</span><span class="n">ast_module</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cls_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CouldNotExtractModuleImportFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original str which was converted to ast: </span><span class="si">{import_str}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">preferred_position</span> <span class="o">=</span> <span class="n">preferred_position</span>
 

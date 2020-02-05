@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,27 +163,38 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.data.models.collection</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.data.models.source</span> <span class="kn">import</span> <span class="n">DataSource</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.data.logic.convert</span> <span class="kn">import</span> <span class="n">convert_to_data_source_if_necessary</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.logic.convert</span> <span class="kn">import</span> <span class="n">convert_to_empty_obj_if_necessary</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_public_name_or_special_name</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">DataConfig</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">SpecificClassConfig</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.io.func.load.args</span> <span class="kn">import</span> <span class="n">extract_function_args_and_arg_imports_from_import</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.obj</span> <span class="kn">import</span> <span class="n">ObjectImportStatement</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.logic.load.name</span> <span class="kn">import</span> <span class="n">get_module_and_name_imported_from</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.astitems</span> <span class="kn">import</span> <span class="n">ast_str</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.io.func.load.config</span> <span class="kn">import</span> <span class="n">function_args_as_arg_and_annotation_dict</span>
 
 
-<span class="n">SourceOrCollection</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataSource</span><span class="p">,</span> <span class="s1">&#39;DataCollection&#39;</span><span class="p">]</span>
+<span class="n">ObjOrCollection</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="s1">&#39;SpecificClassCollection&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="DataCollection"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.DataCollection">[docs]</a><span class="k">class</span> <span class="nc">DataCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+<div class="viewcode-block" id="SpecificClassCollection"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.SpecificClassCollection">[docs]</a><span class="k">class</span> <span class="nc">SpecificClassCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">):</span>
+    <span class="n">klass</span><span class="p">:</span> <span class="n">Type</span>
+
+<div class="viewcode-block" id="SpecificClassCollection.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.SpecificClassCollection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">klass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;must pass class for SpecificClassCollection&#39;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_set_name_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">source_map</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">source_or_collection</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">source_or_collection</span><span class="p">:</span> <span class="n">SourceOrCollection</span>
-            <span class="n">source_name</span> <span class="o">=</span> <span class="n">_get_public_name_or_special_name</span><span class="p">(</span><span class="n">source_or_collection</span><span class="p">)</span>
-            <span class="n">source_map</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">source_or_collection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name_dict</span> <span class="o">=</span> <span class="n">source_map</span>
+        <span class="n">obj_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">obj_or_collection</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">obj_or_collection</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ObjOrCollection</span><span class="p">,</span> <span class="n">obj_or_collection</span><span class="p">)</span>
+            <span class="n">obj_name</span> <span class="o">=</span> <span class="n">_get_public_name_or_special_name</span><span class="p">(</span><span class="n">obj_or_collection</span><span class="p">)</span>
+            <span class="n">obj_map</span><span class="p">[</span><span class="n">obj_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj_or_collection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_dict</span> <span class="o">=</span> <span class="n">obj_map</span>
 
     <span class="k">def</span> <span class="nf">_transform_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -195,46 +206,85 @@
 <span class="sd">        Returns: item or Collection</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">convert_to_data_source_if_necessary</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">convert_to_empty_obj_if_necessary</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_output_config_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span>
 
-        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_config_file</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output_config_file</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_output_config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">SourceOrCollection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">DataCollection</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_output_config_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ObjOrCollection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">SpecificClassCollection</span><span class="p">):</span>
             <span class="c1"># if collection, recursively call creating config files</span>
             <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">_output_config_files</span><span class="p">()</span>
 
-        <span class="c1"># Dealing with DataSource</span>
+        <span class="c1"># Dealing with object itself</span>
         <span class="n">item_name</span> <span class="o">=</span> <span class="n">_get_public_name_or_special_name</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="n">item_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span> <span class="n">item_name</span> <span class="o">+</span> <span class="s1">&#39;.py&#39;</span><span class="p">)</span>
+
+        <span class="n">class_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">):</span>
             <span class="n">file_existed</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="c1"># if config file already exists, load confguration from file, use to update file defaults</span>
-            <span class="n">existing_config</span> <span class="o">=</span> <span class="n">DataConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">,</span> <span class="n">item_name</span><span class="p">)</span>
+            <span class="n">existing_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span>
+                <span class="n">item_filepath</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">item_name</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">class_config</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
             <span class="n">existing_imports</span> <span class="o">=</span> <span class="n">existing_config</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span>
             <span class="c1"># Here using the ast config, for the purpose of writing to file</span>
-            <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">file_config_item</span><span class="o">.</span><span class="n">apply_config</span><span class="p">(</span><span class="n">existing_config</span><span class="p">)</span>
+            <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">apply_config</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">existing_config</span><span class="p">)</span>
             <span class="c1"># also use to update DataSource object in memory. Here use the actual objects instead of ast</span>
-            <span class="n">item</span><span class="o">.</span><span class="n">apply_config</span><span class="p">(</span><span class="n">existing_config</span><span class="o">.</span><span class="n">active_config_dict</span><span class="p">)</span>
+            <span class="n">apply_config</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">existing_config</span><span class="o">.</span><span class="n">active_config_dict</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">file_existed</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">existing_imports</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">item</span>
 
-        <span class="n">item_config</span> <span class="o">=</span> <span class="n">DataConfig</span><span class="o">.</span><span class="n">from_source</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">existing_imports</span><span class="p">)</span>
+        <span class="n">item_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">existing_imports</span><span class="p">,</span>
+                                                   <span class="n">file_path</span><span class="o">=</span><span class="n">item_filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">class_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+        <span class="c1"># Get config by extracting from class __init__</span>
+        <span class="c1"># First need to create dummy import for compatibility</span>
+        <span class="n">mod</span><span class="p">,</span> <span class="n">import_base</span> <span class="o">=</span> <span class="n">get_module_and_name_imported_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">)</span>
+        <span class="n">obj_import</span> <span class="o">=</span> <span class="n">ObjectImportStatement</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">import_base</span><span class="p">)</span>
+        <span class="c1"># Now get the arguments and the imports for any type annotations</span>
+        <span class="n">args</span><span class="p">,</span> <span class="n">func_arg_imports</span> <span class="o">=</span> <span class="n">extract_function_args_and_arg_imports_from_import</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">obj_import</span>
+        <span class="p">)</span>
+        <span class="c1"># Convert into a usable formats:</span>
+        <span class="c1"># defaults_dict: a dictionary where keys are variable names and values are ast defaults</span>
+        <span class="c1"># annotation_dict: a dicrionary where keys are variable names and values are ast type annotations</span>
+        <span class="n">defaults_dict</span><span class="p">,</span> <span class="n">annotation_dict</span> <span class="o">=</span> <span class="n">function_args_as_arg_and_annotation_dict</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">defaults_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ast_str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># set name attribute as item name by default</span>
+        <span class="c1"># Apply all the new extracted defaults to the created config</span>
+        <span class="n">item_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">defaults_dict</span><span class="p">)</span>
+        <span class="n">item_config</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">annotation_dict</span><span class="p">)</span>
+        <span class="n">item_config</span><span class="o">.</span><span class="n">imports</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">func_arg_imports</span><span class="p">)</span>
+
         <span class="n">item_config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">file_existed</span><span class="p">:</span>
             <span class="c1"># If this was a new output, we now need to load again to get the object representation</span>
             <span class="c1"># instead of just the ast representation</span>
-            <span class="n">existing_config</span> <span class="o">=</span> <span class="n">DataConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">,</span> <span class="n">item_name</span><span class="p">)</span>
-            <span class="n">item</span><span class="o">.</span><span class="n">apply_config</span><span class="p">(</span><span class="n">existing_config</span><span class="o">.</span><span class="n">active_config_dict</span><span class="p">)</span></div>
+            <span class="n">existing_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">,</span> <span class="n">item_name</span><span class="p">,</span> <span class="o">**</span><span class="n">class_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="n">apply_config</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">existing_config</span><span class="o">.</span><span class="n">active_config_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="apply_config"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.apply_config">[docs]</a><span class="k">def</span> <span class="nf">apply_config</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;SpecificClassConfig&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">config_attr</span><span class="p">,</span> <span class="n">config_item</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Skip irrelevant items</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">config_attr</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">config_attr</span><span class="p">,</span> <span class="n">config_item</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -169,12 +169,10 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.main</span> <span class="kn">import</span> <span class="n">get_dict_of_any_defined_pipeline_manager_names_and_instances</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.dictfile</span> <span class="kn">import</span> <span class="n">PipelineDictFile</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictfile</span> <span class="kn">import</span> <span class="n">DataDictFile</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.frommanager</span> <span class="kn">import</span> <span class="n">get_pipeline_dict_path_and_data_dict_path_from_manager</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.frommanager</span> <span class="kn">import</span> <span class="n">get_pipeline_dict_path_and_specific_class_config_dicts_from_manager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">DataCollection</span><span class="p">,</span> <span class="n">DataSource</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 
 <div class="viewcode-block" id="Selector"><a class="viewcode-back" href="../../../../api/pyfileconf.selector.models.html#pyfileconf.selector.models.selector.Selector">[docs]</a><span class="k">class</span> <span class="nc">Selector</span><span class="p">:</span>
@@ -205,10 +203,11 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="c1"># TODO: convert all functions to pipelines</span>
+        <span class="c1"># TODO [#19]: convert all functions to pipelines</span>
         <span class="c1">#</span>
         <span class="c1"># it would make this check safer</span>
-        <span class="n">item_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">DataSource</span><span class="p">,</span> <span class="n">DataCollection</span><span class="p">,</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">ObjectView</span><span class="p">)</span>
+
+        <span class="n">item_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">SpecificClassCollection</span><span class="p">,</span> <span class="n">Pipeline</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">ObjectView</span><span class="p">,</span> <span class="n">collection_obj</span><span class="o">.</span><span class="n">klass</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">item_types</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
 
@@ -254,17 +253,16 @@
             <span class="c1"># return only the manager itself</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">],</span> <span class="kc">None</span>
 
-
-        <span class="k">if</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;sources&#39;</span><span class="p">:</span>
-            <span class="c1"># got a data path</span>
+        <span class="k">if</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span><span class="o">.</span><span class="n">specific_class_names</span><span class="p">:</span>
+            <span class="c1"># got a specific class path</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">section_path</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="c1"># got only the root data path, e.g. project.sources</span>
                 <span class="c1"># return the collection object itself</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">[</span><span class="n">manager_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="kc">None</span>
-            <span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span><span class="p">[</span><span class="n">manager_name</span><span class="p">][</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="kc">None</span>
+            <span class="n">collection_name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">section_path_begin_index</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;funcs&#39;</span>
+            <span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;_general&#39;</span>
             <span class="n">section_path_begin_index</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="n">section_path_begin_index</span><span class="p">:]))</span>
@@ -281,7 +279,7 @@
             <span class="c1"># got only the root data path, e.g. project.sources. Return the collection object itself</span>
             <span class="k">return</span> <span class="n">collection_obj</span>
 
-        <span class="c1"># TODO: nicer error than KeyError for typo</span>
+        <span class="c1"># TODO [#20]: nicer error than KeyError for typo</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="n">collection_obj</span><span class="p">,</span> <span class="n">relative_section_path</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
@@ -297,20 +295,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span> <span class="o">=</span> <span class="n">get_dict_of_any_defined_pipeline_manager_names_and_instances</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_load_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">create_collections</span>
         <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">manager_name</span><span class="p">,</span> <span class="n">manager</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">pipeline_dict_path</span><span class="p">,</span> <span class="n">data_dict_path</span> <span class="o">=</span> <span class="n">get_pipeline_dict_path_and_data_dict_path_from_manager</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
-            <span class="n">pipeline_dict_file</span> <span class="o">=</span> <span class="n">PipelineDictFile</span><span class="p">(</span><span class="n">pipeline_dict_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pipeline_dict&#39;</span><span class="p">)</span>
-            <span class="n">pipeline_dict</span> <span class="o">=</span> <span class="n">pipeline_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-            <span class="n">data_dict</span> <span class="o">=</span> <span class="n">DataDictFile</span><span class="p">(</span><span class="n">data_dict_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;data_dict&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="n">pipeline_dict_path</span><span class="p">,</span> <span class="n">specific_class_name_config_dict</span> <span class="o">=</span> <span class="n">get_pipeline_dict_path_and_specific_class_config_dicts_from_manager</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
+            <span class="n">collections</span><span class="p">,</span> <span class="n">general_collection</span> <span class="o">=</span> <span class="n">create_collections</span><span class="p">(</span>
+                <span class="n">specific_class_name_config_dict</span><span class="p">,</span>
+                <span class="n">manager</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span>
+                <span class="n">manager</span><span class="o">.</span><span class="n">pipeline_dict_folder</span><span class="p">,</span>
+                <span class="n">pipeline_dict_path</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">manager_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;funcs&#39;</span><span class="p">:</span> <span class="n">PipelineCollection</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
-                    <span class="n">pipeline_dict</span><span class="p">,</span>
-                    <span class="n">manager</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span>
-                    <span class="n">imports</span><span class="o">=</span><span class="n">pipeline_dict_file</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span>
-                <span class="p">),</span>
-                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">DataCollection</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span> <span class="n">manager</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span>
+                <span class="s1">&#39;_general&#39;</span><span class="p">:</span> <span class="n">general_collection</span><span class="p">,</span>
             <span class="p">}</span>
+            <span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">collections</span><span class="p">:</span>
+                <span class="n">manager_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="n">collection</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">collection</span>
+                <span class="p">})</span>
             <span class="n">out_dict</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">manager_dict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_structure</span> <span class="o">=</span> <span class="n">out_dict</span></div>
 

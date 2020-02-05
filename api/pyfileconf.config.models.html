@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models package &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.config.models package &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -206,7 +206,7 @@
 <span id="pyfileconf-config-models-config-module"></span><h2>pyfileconf.config.models.config module<a class="headerlink" href="#module-pyfileconf.config.models.config" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.config.models.config.ActiveFunctionConfig">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.config.models.config.</code><code class="sig-name descname">ActiveFunctionConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/config.html#ActiveFunctionConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.config.ActiveFunctionConfig" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.config.models.config.</code><code class="sig-name descname">ActiveFunctionConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/config.html#ActiveFunctionConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.config.ActiveFunctionConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.config.FunctionConfig" title="pyfileconf.pipelines.models.config.FunctionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.pipelines.models.config.FunctionConfig</span></code></a></p>
 <dl class="attribute">
 <dt id="pyfileconf.config.models.config.ActiveFunctionConfig.config_file_class">
@@ -221,7 +221,7 @@
 <span id="pyfileconf-config-models-file-module"></span><h2>pyfileconf.config.models.file module<a class="headerlink" href="#module-pyfileconf.config.models.file" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.config.models.file.ActiveFunctionConfigFile">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.config.models.file.</code><code class="sig-name descname">ActiveFunctionConfigFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/file.html#ActiveFunctionConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.file.ActiveFunctionConfigFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.config.models.file.</code><code class="sig-name descname">ActiveFunctionConfigFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/file.html#ActiveFunctionConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.file.ActiveFunctionConfigFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.file.FunctionConfigFile" title="pyfileconf.pipelines.models.file.FunctionConfigFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.pipelines.models.file.FunctionConfigFile</span></code></a></p>
 <dl class="attribute">
 <dt id="pyfileconf.config.models.file.ActiveFunctionConfigFile.interface_class">
@@ -276,7 +276,7 @@
 
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles config inheritance to get the active config for a section or function</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>section_path_str:</p>
@@ -285,7 +285,7 @@
 <p>Returns:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#pyfileconf.config.models.config.ActiveFunctionConfig" title="pyfileconf.config.models.config.ActiveFunctionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActiveFunctionConfig</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="#pyfileconf.config.models.config.ActiveFunctionConfig" title="pyfileconf.config.models.config.ActiveFunctionConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActiveFunctionConfig</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>

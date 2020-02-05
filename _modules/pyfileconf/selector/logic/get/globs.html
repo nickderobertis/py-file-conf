@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.logic.get.globs &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.selector.logic.get.globs &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -171,7 +171,9 @@
 <span class="sd">    Generator which first returns globals for current module, then next level up, and so on</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">_iter_frames</span><span class="p">():</span>
-        <span class="k">yield</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span></div>
+        <span class="k">yield</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span>
+    <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">_iter_frames</span><span class="p">():</span>
+        <span class="k">yield</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span></div>
 
 <span class="k">def</span> <span class="nf">_iter_frames</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>

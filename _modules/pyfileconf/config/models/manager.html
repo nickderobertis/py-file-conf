@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,9 +163,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.config.models.manager</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.config</span> <span class="kn">import</span> <span class="n">ConfigManagerNotLoadedException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.set</span> <span class="kn">import</span> <span class="n">_set_in_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.interfaces</span> <span class="kn">import</span> <span class="n">ConfigSectionOrConfig</span>
@@ -199,6 +201,8 @@
 
 <div class="viewcode-block" id="ConfigManager.update"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to update&#39;</span><span class="p">)</span>
         <span class="n">config_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConfigManager.clear"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -218,9 +222,11 @@
 
 <div class="viewcode-block" id="ConfigManager.pop"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to pop&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">config_obj</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConfigManager.get"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActiveFunctionConfig</span><span class="p">:</span>
+<div class="viewcode-block" id="ConfigManager.get"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Handles config inheritance to get the active config for a section or function</span>
 
@@ -231,6 +237,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_or_section_configs</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;call .load() on ConfigManager before .get()&#39;</span><span class="p">)</span>
 
         <span class="c1"># First override for function defaults is global project config</span>
         <span class="n">section_configs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">config</span><span class="p">]</span>
@@ -253,12 +262,13 @@
             <span class="c1"># if is a section, not function/pipeline</span>
             <span class="n">section_configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_func_or_section_configs</span><span class="p">(</span><span class="n">full_section</span><span class="p">))</span>
 
-        <span class="c1"># Override configs. Default config is base config, then gets updated by project, then high</span>
-        <span class="c1"># level sections to low level sections</span>
-        <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">section_config</span><span class="p">)</span> <span class="k">for</span> <span class="n">section_config</span> <span class="ow">in</span> <span class="n">section_configs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">:</span>
+            <span class="c1"># Override configs. Default config is base config, then gets updated by project, then high</span>
+            <span class="c1"># level sections to low level sections</span>
+            <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">section_config</span><span class="p">)</span> <span class="k">for</span> <span class="n">section_config</span> <span class="ow">in</span> <span class="n">section_configs</span><span class="p">]</span>
 
-        <span class="c1"># Last, override with local config</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_config</span><span class="p">)</span>
+            <span class="c1"># Last, override with local config</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_config</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">config</span></div>
 
@@ -285,7 +295,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_func_or_section_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_get_func_or_section_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActiveFunctionConfig</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_get_func_or_section_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This get method is used to get only the config for the section path, without handling</span>
 <span class="sd">        multiple levels of config and overriding. To get the active config for a function,</span>
@@ -297,6 +307,9 @@
 <span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;call .load() on ConfigManager before .get()&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">name</span>
 
@@ -306,7 +319,10 @@
         <span class="n">config_or_section</span><span class="p">:</span> <span class="n">ConfigSectionOrConfig</span> <span class="o">=</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_get_config_from_config_or_section</span><span class="p">(</span><span class="n">config_or_section</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_set_func_or_section_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_set_func_or_section_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;call .load() on ConfigManager before .set()&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">name</span>
 
@@ -359,7 +375,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected Config or ConfigSection, got </span><span class="si">{config_or_section}</span><span class="s1"> of type </span><span class="si">{config_or_section}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActiveFunctionConfig</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+                                                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_or_section_configs</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -369,7 +386,7 @@
         <span class="k">return</span> <span class="n">config_obj</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_config_from_config_or_section</span><span class="p">(</span><span class="n">config_or_section</span><span class="p">:</span> <span class="n">ConfigSectionOrConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActiveFunctionConfig</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_get_config_from_config_or_section</span><span class="p">(</span><span class="n">config_or_section</span><span class="p">:</span> <span class="n">ConfigSectionOrConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
     <span class="c1"># Pull Config from ConfigSection</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_or_section</span><span class="p">,</span> <span class="n">ConfigSection</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">config_or_section</span><span class="o">.</span><span class="n">config</span>

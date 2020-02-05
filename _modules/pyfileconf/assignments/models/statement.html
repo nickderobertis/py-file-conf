@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.assignments.models.statement &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.assignments.models.statement &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,16 +163,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.assignments.models.statement</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">import</span> <span class="nn">ast</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.assignments</span> <span class="kn">import</span> <span class="n">CouldNotExtractAssignmentFromAstException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.write.asttosource</span> <span class="kn">import</span> <span class="n">ast_node_to_source</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.assign</span> <span class="kn">import</span> <span class="n">extract_assignment_from_ast</span>
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.mixins.orderpref</span> <span class="kn">import</span> <span class="n">OrderPreferenceMixin</span>
 
 <span class="n">AnyAstAssign</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">]</span>
-<span class="n">DictTuple</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
 
 <div class="viewcode-block" id="AssignmentStatement"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement">[docs]</a><span class="k">class</span> <span class="nc">AssignmentStatement</span><span class="p">(</span><span class="n">ReprMixin</span><span class="p">,</span> <span class="n">OrderPreferenceMixin</span><span class="p">):</span>
     <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;varname&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;annotation&#39;</span><span class="p">]</span>
@@ -188,7 +188,7 @@
         <span class="c1"># Will get set to True if creating using classmethod self.from_str.</span>
         <span class="c1"># When set to True, will simply use the original str to output back to str</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">created_from_str</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">orig_str</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orig_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Created from str, just return that str back (keeps whitespace, comments, etc.)</span>
@@ -228,7 +228,7 @@
             <span class="c1"># Base assignment, no annotation. May be multiple targets</span>
             <span class="n">target</span> <span class="o">=</span> <span class="n">ast_assign</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-            <span class="c1"># TODO: multiple assignments (multiple targets)</span>
+            <span class="c1"># TODO [#1]: multiple assignments (multiple targets)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ast_assign</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot yet handle multiple assignment to: </span><span class="si">{ast_assign.targets}</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -240,14 +240,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected ast.Assign or ast.AnnAssign. got </span><span class="si">{ast_assign}</span><span class="s1"> of type {type(ast_assign)}&#39;</span><span class="p">)</span>
 
+        <span class="c1"># TODO [#22]: remove type ignores in AssignmentStatement.from_ast_assign once ast has proper type definitions</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">target</span><span class="p">,</span>
-            <span class="n">ast_assign</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-            <span class="n">annotation</span><span class="p">,</span>
+            <span class="n">target</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+            <span class="n">ast_assign</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+            <span class="n">annotation</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
             <span class="n">preferred_position</span><span class="o">=</span><span class="n">preferred_position</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="AssignmentStatement.to_default_dict_and_annotation_dict"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.to_default_dict_and_annotation_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_default_dict_and_annotation_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DictTuple</span><span class="p">:</span>
+<div class="viewcode-block" id="AssignmentStatement.to_default_dict_and_annotation_dict"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.to_default_dict_and_annotation_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_default_dict_and_annotation_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">},</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span><span class="p">}</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="AssignmentStatement.to_ast"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.to_ast">[docs]</a>    <span class="k">def</span> <span class="nf">to_ast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyAstAssign</span><span class="p">:</span>
@@ -275,6 +276,8 @@
     <span class="k">def</span> <span class="nf">from_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assign_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ast_module</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">assign_str</span><span class="p">)</span>
         <span class="n">cls_obj</span> <span class="o">=</span> <span class="n">extract_assignment_from_ast</span><span class="p">(</span><span class="n">ast_module</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cls_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CouldNotExtractAssignmentFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original str which created ast: </span><span class="si">{assign_str}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">preferred_position</span> <span class="o">=</span> <span class="n">preferred_position</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">created_from_str</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">orig_str</span> <span class="o">=</span> <span class="n">assign_str</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.logic.load.name &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.imports.logic.load.name &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,10 +163,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.imports.logic.load.name</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Iterator</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">ModuleType</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.imports</span> <span class="kn">import</span> <span class="n">CouldNotDetermineModuleForObjectException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.logic.load.skipmodules</span> <span class="kn">import</span> <span class="n">skip_modules</span>
 
 <div class="viewcode-block" id="get_imported_obj_variable_name"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.name.get_imported_obj_variable_name">[docs]</a><span class="k">def</span> <span class="nf">get_imported_obj_variable_name</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -186,7 +187,9 @@
 
         <span class="n">module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_name</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">_obj_in_module</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">module</span><span class="p">,</span> <span class="n">module_name</span></div>
+            <span class="k">return</span> <span class="n">module</span><span class="p">,</span> <span class="n">module_name</span>
+
+    <span class="k">raise</span> <span class="n">CouldNotDetermineModuleForObjectException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not find </span><span class="si">{obj}</span><span class="s1"> in </span><span class="si">{search_list}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="is_imported_name"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.name.is_imported_name">[docs]</a><span class="k">def</span> <span class="nf">is_imported_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">search_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">search_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -241,6 +244,7 @@
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">match_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">value_list</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">match_value</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">key_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not find </span><span class="si">{value}</span><span class="s1"> in </span><span class="si">{value_list}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_get_module_keys_and_values_lists</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
@@ -253,7 +257,7 @@
     <span class="k">return</span> <span class="n">key_list</span><span class="p">,</span> <span class="n">value_list</span>
 
 
-<span class="k">def</span> <span class="nf">_module_key_value_generator</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">_module_key_value_generator</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
         <span class="k">yield</span> <span class="n">key</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
 

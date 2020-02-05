@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.file &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.basemodels.file &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -164,7 +164,11 @@
             
   <h1>Source code for pyfileconf.basemodels.file</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.assignments.models.statement</span> <span class="kn">import</span> <span class="n">AssignmentStatement</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.interfaces</span> <span class="kn">import</span> <span class="n">AnyImportStatement</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
 
@@ -178,26 +182,38 @@
     <span class="c1">##### Scaffolding functions or attributes. Need to override when subclassing  ####</span>
 
     <span class="c1"># lines to always import. pass import objects</span>
-    <span class="n">always_imports</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">always_imports</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AnyImportStatement</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># assignment lines to always include at beginning. pass assignment objects</span>
-    <span class="n">always_assigns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">always_assigns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AssignmentStatement</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># always assign dict, where assigns will get added if item name matches dict key</span>
-    <span class="n">always_assign_with_names_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">always_assign_with_names_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AssignmentStatement</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># class to use for interfacing with file</span>
     <span class="n">interface_class</span> <span class="o">=</span> <span class="n">ConfigFileInterface</span>
 
     <span class="c1">##### Base class functions and attributes below. Shouldn&#39;t usually need to override in subclassing #####</span>
 
-<div class="viewcode-block" id="ConfigFileBase.__init__"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigFileBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigFileBase.__init__"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigFileBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interface</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface_class</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+        <span class="c1"># TODO [#23]: check if setting filepath in ConfigFileBase.__init__ had side effects</span>
+        <span class="c1">#</span>
+        <span class="c1"># added this because filepath was being set after object creation in</span>
+        <span class="c1"># `pyfileconf.basemodels.config.ConfigBase.to_file` and was causing mypy errors. Check</span>
+        <span class="c1"># to ensure this didn&#39;t cause any issues.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">_strip_py</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">klass</span> <span class="o">=</span> <span class="n">klass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span> <span class="o">=</span> <span class="n">always_import_strs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span> <span class="o">=</span> <span class="n">always_assign_strs</span></div>
 
 <div class="viewcode-block" id="ConfigFileBase.load"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigFileBase.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ConfigBase&#39;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
@@ -211,7 +227,10 @@
             <span class="n">annotations</span><span class="o">=</span><span class="n">annotation_dict</span><span class="p">,</span>
             <span class="n">imports</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
             <span class="n">_file</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConfigFileBase.save"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigFileBase.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;ConfigBase&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.exceptions.pipelinemanager &mdash; pyfileconf 0.2.0 documentation</title>
+  <title>pyfileconf.exceptions.imports &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -147,7 +147,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pyfileconf.exceptions.pipelinemanager</li>
+      <li>pyfileconf.exceptions.imports</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,10 +162,45 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyfileconf.exceptions.pipelinemanager</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pyfileconf.exceptions.base</span> <span class="kn">import</span> <span class="n">ManagerException</span>
+  <h1>Source code for pyfileconf.exceptions.imports</h1><div class="highlight"><pre>
+<span></span>
+<div class="viewcode-block" id="ImportException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.ImportException">[docs]</a><span class="k">class</span> <span class="nc">ImportException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="PipelineManagerNotLoadedException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.pipelinemanager.PipelineManagerNotLoadedException">[docs]</a><span class="k">class</span> <span class="nc">PipelineManagerNotLoadedException</span><span class="p">(</span><span class="n">ManagerException</span><span class="p">):</span>
+
+<div class="viewcode-block" id="NoImportStatementException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.NoImportStatementException">[docs]</a><span class="k">class</span> <span class="nc">NoImportStatementException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CouldNotImportException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotImportException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotImportException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="NoImportMatchingNameException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.NoImportMatchingNameException">[docs]</a><span class="k">class</span> <span class="nc">NoImportMatchingNameException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CouldNotExtractImportException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotExtractImportException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotExtractImportException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CouldNotExtractModuleImportFromAstException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotExtractModuleImportFromAstException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotExtractModuleImportFromAstException</span><span class="p">(</span><span class="n">CouldNotExtractImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CouldNotExtractObjectImportFromAstException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotExtractObjectImportFromAstException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotExtractObjectImportFromAstException</span><span class="p">(</span><span class="n">CouldNotExtractImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CouldNotExtractRenameException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotExtractRenameException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotExtractRenameException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CouldNotDetermineModuleForObjectException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotDetermineModuleForObjectException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotDetermineModuleForObjectException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ExtractedIncorrectTypeOfImportException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.ExtractedIncorrectTypeOfImportException">[docs]</a><span class="k">class</span> <span class="nc">ExtractedIncorrectTypeOfImportException</span><span class="p">(</span><span class="n">ImportException</span><span class="p">):</span>
     <span class="k">pass</span></div>
 </pre></div>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.func.load.extractimp &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.func.load.extractimp &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.io.func.load.extractimp</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
@@ -215,15 +215,15 @@
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">_unique_external_names_from_multiple_assignment_dicts</span><span class="p">(</span><span class="o">*</span><span class="n">assignment_dicts</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="n">all_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">assignment_dict</span> <span class="ow">in</span> <span class="n">assignment_dicts</span><span class="p">:</span>
         <span class="n">all_names</span> <span class="o">+=</span> <span class="n">_unique_external_names_from_assignment_dict</span><span class="p">(</span><span class="n">assignment_dict</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_names</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">_unique_external_names_from_assignment_dict</span><span class="p">(</span><span class="n">assignment_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">extract_external_name_from_assign_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">assignment_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+    <span class="n">no_none_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">no_none_names</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">_unique_external_names_from_annotation_dict</span><span class="p">(</span><span class="n">annotation_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">type_str_names</span> <span class="o">=</span> <span class="n">_extract_unique_type_str_names_from_annotation_dict</span><span class="p">(</span><span class="n">annotation_dict</span><span class="p">)</span>
@@ -249,19 +249,25 @@
 
 <span class="k">def</span> <span class="nf">_extract_str_names_from_subscript</span><span class="p">(</span><span class="n">subscript</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="c1"># e.g.: List[str]</span>
-    <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># e.g., gets List portion</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;elts&#39;</span><span class="p">):</span>
+
+    <span class="c1"># TODO [#26]: remove type ignores once typeshed has better ast support</span>
+    <span class="c1">#</span>
+    <span class="c1"># Hitting errors &quot;expr&quot; has no attribute &quot;id&quot; and  &quot;slice&quot; has no attribute &quot;value&quot;</span>
+
+    <span class="c1"># e.g.: List[str], gets List portion</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="c1"># type: ignore</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;elts&#39;</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="c1"># got multiple values, e.g. List[str, bool]</span>
         <span class="c1"># in this case, value.slice.value is a Tuple, and Tuple.elts contains the items</span>
-        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_extract_str_names_from_tuple</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">):</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_extract_str_names_from_tuple</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">))</span> <span class="c1"># type: ignore</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">):</span> <span class="c1"># type: ignore</span>
         <span class="c1"># Recursively call extract from subscript if subscript found within subscript</span>
         <span class="c1"># e.g. Optional[List[str]]</span>
-        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_extract_str_names_from_subscript</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_extract_str_names_from_subscript</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="p">))</span> <span class="c1"># type: ignore</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Got a single item, list List[str]</span>
-        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># e.g., gets str portion</span>
+        <span class="c1"># gets str portion</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subscript</span><span class="o">.</span><span class="n">slice</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">return</span> <span class="n">names</span>
 

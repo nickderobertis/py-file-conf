@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models package &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.models package &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -228,33 +228,43 @@
 <div class="section" id="module-pyfileconf.data.models.collection">
 <span id="pyfileconf-data-models-collection-module"></span><h2>pyfileconf.data.models.collection module<a class="headerlink" href="#module-pyfileconf.data.models.collection" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pyfileconf.data.models.collection.DataCollection">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.collection.</code><code class="sig-name descname">DataCollection</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">items</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/collection.html#DataCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.collection.DataCollection" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.collection.SpecificClassCollection">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.collection.</code><code class="sig-name descname">SpecificClassCollection</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/collection.html#SpecificClassCollection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.collection.SpecificClassCollection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection" title="pyfileconf.basemodels.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.collection.Collection</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.data.models.collection.SpecificClassCollection.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/collection.html#SpecificClassCollection.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.collection.SpecificClassCollection.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.data.models.collection.apply_config">
+<code class="sig-prename descclassname">pyfileconf.data.models.collection.</code><code class="sig-name descname">apply_config</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/collection.html#apply_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.collection.apply_config" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 <div class="section" id="module-pyfileconf.data.models.config">
 <span id="pyfileconf-data-models-config-module"></span><h2>pyfileconf.data.models.config module<a class="headerlink" href="#module-pyfileconf.data.models.config" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pyfileconf.data.models.config.DataConfig">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.config.</code><code class="sig-name descname">DataConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">active_config_dict=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/config.html#DataConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.config.DataConfig" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.config.SpecificClassConfig">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.config.</code><code class="sig-name descname">SpecificClassConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">active_config_dict=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">file_path=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/config.html#SpecificClassConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.config.SpecificClassConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.config.ConfigBase</span></code></a></p>
 <dl class="method">
-<dt id="pyfileconf.data.models.config.DataConfig.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">active_config_dict=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/config.html#DataConfig.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.config.DataConfig.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.config.SpecificClassConfig.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">active_config_dict=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">file_path=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/config.html#SpecificClassConfig.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.config.SpecificClassConfig.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="pyfileconf.data.models.config.DataConfig.config_file_class">
-<code class="sig-name descname">config_file_class</code><a class="headerlink" href="#pyfileconf.data.models.config.DataConfig.config_file_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#pyfileconf.data.models.file.DataConfigFile" title="pyfileconf.data.models.file.DataConfigFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.data.models.file.DataConfigFile</span></code></a></p>
-</dd></dl>
-
 <dl class="method">
-<dt id="pyfileconf.data.models.config.DataConfig.from_source">
-<em class="property">classmethod </em><code class="sig-name descname">from_source</code><span class="sig-paren">(</span><em class="sig-param">data_source</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/config.html#DataConfig.from_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.config.DataConfig.from_source" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.config.SpecificClassConfig.from_obj">
+<em class="property">classmethod </em><code class="sig-name descname">from_obj</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">klass</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/config.html#SpecificClassConfig.from_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.config.SpecificClassConfig.from_obj" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -263,18 +273,18 @@
 <div class="section" id="module-pyfileconf.data.models.dictfile">
 <span id="pyfileconf-data-models-dictfile-module"></span><h2>pyfileconf.data.models.dictfile module<a class="headerlink" href="#module-pyfileconf.data.models.dictfile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pyfileconf.data.models.dictfile.DataDictFile">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.dictfile.</code><code class="sig-name descname">DataDictFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/dictfile.html#DataDictFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.dictfile.DataDictFile" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.dictfile.SpecificClassDictFile">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.dictfile.</code><code class="sig-name descname">SpecificClassDictFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/dictfile.html#SpecificClassDictFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.dictfile.SpecificClassDictFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase" title="pyfileconf.basemodels.file.ConfigFileBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.file.ConfigFileBase</span></code></a></p>
 <dl class="attribute">
-<dt id="pyfileconf.data.models.dictfile.DataDictFile.interface_class">
-<code class="sig-name descname">interface_class</code><a class="headerlink" href="#pyfileconf.data.models.dictfile.DataDictFile.interface_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.DataDictInterface" title="pyfileconf.io.file.interfaces.datadict.DataDictInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.interfaces.datadict.DataDictInterface</span></code></a></p>
+<dt id="pyfileconf.data.models.dictfile.SpecificClassDictFile.interface_class">
+<code class="sig-name descname">interface_class</code><a class="headerlink" href="#pyfileconf.data.models.dictfile.SpecificClassDictFile.interface_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassInterface" title="pyfileconf.io.file.interfaces.datadict.SpecificClassInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.interfaces.datadict.SpecificClassInterface</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyfileconf.data.models.dictfile.DataDictFile.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/dictfile.html#DataDictFile.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.dictfile.DataDictFile.load" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.dictfile.SpecificClassDictFile.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/dictfile.html#SpecificClassDictFile.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.dictfile.SpecificClassDictFile.load" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
@@ -288,25 +298,31 @@
 <div class="section" id="module-pyfileconf.data.models.file">
 <span id="pyfileconf-data-models-file-module"></span><h2>pyfileconf.data.models.file module<a class="headerlink" href="#module-pyfileconf.data.models.file" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pyfileconf.data.models.file.DataConfigFile">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.file.</code><code class="sig-name descname">DataConfigFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/file.html#DataConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.file.DataConfigFile" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.file.SpecificClassConfigFile">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.file.</code><code class="sig-name descname">SpecificClassConfigFile</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/file.html#SpecificClassConfigFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase" title="pyfileconf.basemodels.file.ConfigFileBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.file.ConfigFileBase</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.data.models.file.SpecificClassConfigFile.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/file.html#SpecificClassConfigFile.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
 <dl class="attribute">
-<dt id="pyfileconf.data.models.file.DataConfigFile.always_assigns">
-<code class="sig-name descname">always_assigns</code><em class="property"> = [mixins.repr.ReprMixin, mixins.repr.ReprMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.DataConfigFile.always_assigns" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.file.SpecificClassConfigFile.always_assigns">
+<code class="sig-name descname">always_assigns</code><em class="property"> = [mixins.repr.ReprMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.always_assigns" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="pyfileconf.data.models.file.DataConfigFile.always_imports">
-<code class="sig-name descname">always_imports</code><em class="property"> = [mixins.attrequals.EqOnAttrsMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.DataConfigFile.always_imports" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.file.SpecificClassConfigFile.always_imports">
+<code class="sig-name descname">always_imports</code><em class="property"> = [mixins.attrequals.EqOnAttrsMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.always_imports" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="pyfileconf.data.models.file.DataConfigFile.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">config_class=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/file.html#DataConfigFile.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.file.DataConfigFile.load" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.file.SpecificClassConfigFile.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">config_class=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/file.html#SpecificClassConfigFile.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.load" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#pyfileconf.data.models.config.DataConfig" title="pyfileconf.data.models.config.DataConfig">DataConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#pyfileconf.data.models.config.SpecificClassConfig" title="pyfileconf.data.models.config.SpecificClassConfig">SpecificClassConfig</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -484,13 +500,19 @@ post_merge_func_kwargs: kwargs to be passed to post_merge_func
 <div class="section" id="module-pyfileconf.data.models.registrar">
 <span id="pyfileconf-data-models-registrar-module"></span><h2>pyfileconf.data.models.registrar module<a class="headerlink" href="#module-pyfileconf.data.models.registrar" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="pyfileconf.data.models.registrar.DataRegistrar">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.registrar.</code><code class="sig-name descname">DataRegistrar</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/registrar.html#DataRegistrar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.registrar.DataRegistrar" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.data.models.registrar.SpecificRegistrar">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.registrar.</code><code class="sig-name descname">SpecificRegistrar</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/registrar.html#SpecificRegistrar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.registrar.SpecificRegistrar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar" title="pyfileconf.basemodels.registrar.Registrar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.registrar.Registrar</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.data.models.registrar.SpecificRegistrar.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/registrar.html#SpecificRegistrar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.registrar.SpecificRegistrar.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
 <dl class="attribute">
-<dt id="pyfileconf.data.models.registrar.DataRegistrar.collection_class">
-<code class="sig-name descname">collection_class</code><a class="headerlink" href="#pyfileconf.data.models.registrar.DataRegistrar.collection_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#pyfileconf.data.models.collection.DataCollection" title="pyfileconf.data.models.collection.DataCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.data.models.collection.DataCollection</span></code></a></p>
+<dt id="pyfileconf.data.models.registrar.SpecificRegistrar.collection_class">
+<code class="sig-name descname">collection_class</code><a class="headerlink" href="#pyfileconf.data.models.registrar.SpecificRegistrar.collection_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#pyfileconf.data.models.collection.SpecificClassCollection" title="pyfileconf.data.models.collection.SpecificClassCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.data.models.collection.SpecificClassCollection</span></code></a></p>
 </dd></dl>
 
 </dd></dl>
@@ -506,16 +528,6 @@ post_merge_func_kwargs: kwargs to be passed to post_merge_func
 <dt id="pyfileconf.data.models.source.DataSource.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">location=None</em>, <em class="sig-param">df=None</em>, <em class="sig-param">pipeline=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">data_type=None</em>, <em class="sig-param">tags=None</em>, <em class="sig-param">loader_func=None</em>, <em class="sig-param">loader_func_kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/source.html#DataSource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.source.DataSource.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.data.models.source.DataSource.apply_config">
-<code class="sig-name descname">apply_config</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/source.html#DataSource.apply_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.source.DataSource.apply_config" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.file &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.data.models.file &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,9 +163,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.data.models.file</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.imports</span> <span class="kn">import</span> <span class="n">ExtractedIncorrectTypeOfImportException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.module</span> <span class="kn">import</span> <span class="n">ModuleImportStatement</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">DataConfig</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">SpecificClassConfig</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.file</span> <span class="kn">import</span> <span class="n">ConfigFileBase</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.obj</span> <span class="kn">import</span> <span class="n">ObjectImportStatement</span>
@@ -173,19 +177,66 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.interfaces.activeconfig</span> <span class="kn">import</span> <span class="n">ActiveConfigFileInterface</span>
 
 
-<div class="viewcode-block" id="DataConfigFile"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.config.DataConfigFile">[docs]</a><span class="k">class</span> <span class="nc">DataConfigFile</span><span class="p">(</span><span class="n">ConfigFileBase</span><span class="p">):</span>
+<div class="viewcode-block" id="SpecificClassConfigFile"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.file.SpecificClassConfigFile">[docs]</a><span class="k">class</span> <span class="nc">SpecificClassConfigFile</span><span class="p">(</span><span class="n">ConfigFileBase</span><span class="p">):</span>
     <span class="c1"># lines to always import. pass import objects</span>
-    <span class="n">always_imports</span> <span class="o">=</span> <span class="p">[</span><span class="n">ObjectImportStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="s1">&#39;from pyfileconf import Selector&#39;</span><span class="p">,</span> <span class="n">preferred_position</span><span class="o">=</span><span class="s1">&#39;begin&#39;</span><span class="p">)]</span>
+    <span class="n">always_imports</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">ObjectImportStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="s1">&#39;from pyfileconf import Selector&#39;</span><span class="p">,</span> <span class="n">preferred_position</span><span class="o">=</span><span class="s1">&#39;begin&#39;</span><span class="p">)</span>
+    <span class="p">]</span>
 
     <span class="c1"># assignment lines to always include at beginning. pass assign objects</span>
     <span class="n">always_assigns</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">AssignmentStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="s1">&#39;s = Selector()&#39;</span><span class="p">,</span> <span class="n">preferred_position</span><span class="o">=</span><span class="s1">&#39;begin&#39;</span><span class="p">),</span>
-        <span class="n">AssignmentStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="s1">&#39;loader_func_kwargs = dict(</span><span class="se">\n</span><span class="s1">    </span><span class="se">\n</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">preferred_position</span><span class="o">=</span><span class="s1">&#39;end&#39;</span><span class="p">)</span>
     <span class="p">]</span>
 
-<div class="viewcode-block" id="DataConfigFile.load"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.config.DataConfigFile.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;DataConfig&#39;</span><span class="p">:</span>
+<div class="viewcode-block" id="SpecificClassConfigFile.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.file.SpecificClassConfigFile.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">filepath</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span>
+        <span class="p">)</span>
+        <span class="c1"># Override class definitions with object specific definitions, if specifics are passed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">:</span>
+            <span class="n">imports</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">import_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">imports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ObjectImportStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">import_str</span><span class="p">))</span>
+                <span class="k">except</span> <span class="n">ExtractedIncorrectTypeOfImportException</span><span class="p">:</span>
+                    <span class="n">imports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ModuleImportStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">import_str</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">always_imports</span> <span class="o">=</span> <span class="n">imports</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="c1"># None passed, remove default imports</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">always_imports</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">always_assigns</span> <span class="o">=</span> <span class="p">[</span><span class="n">AssignmentStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">assign_str</span><span class="p">)</span> <span class="k">for</span> <span class="n">assign_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="c1"># None passed, remove default assignments</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">always_assigns</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For compatibility with BaseConfig which expects to call class, while here an object will be used</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create new object</span>
+        <span class="c1"># Use defaults from this object</span>
+        <span class="n">obj_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span>
+        <span class="p">)</span>
+        <span class="n">obj_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">obj_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+<div class="viewcode-block" id="SpecificClassConfigFile.load"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.file.SpecificClassConfigFile.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_class</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SpecificClassConfig&#39;</span><span class="p">:</span>
         <span class="c1"># Override base class method to pull a single dict, and not pass annotations</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">DataConfig</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">SpecificClassConfig</span>
 
         <span class="c1"># Data configs are a hybrid of the ast/static config and the active config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active_interface</span> <span class="o">=</span> <span class="n">ActiveConfigFileInterface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
@@ -194,7 +245,7 @@
         <span class="n">user_defined_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_interface</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">config_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">config_class</span> <span class="o">=</span> <span class="n">DataConfig</span>
+            <span class="n">config_class</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span>
 
         <span class="k">return</span> <span class="n">config_class</span><span class="p">(</span>
             <span class="n">d</span><span class="o">=</span><span class="n">config_dict</span><span class="p">,</span>
@@ -202,7 +253,10 @@
             <span class="n">active_config_dict</span><span class="o">=</span><span class="n">user_defined_dict</span><span class="p">,</span>
             <span class="n">imports</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
             <span class="n">_file</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">,</span>
+            <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span>
         <span class="p">)</span></div></div>
 </pre></div>
 

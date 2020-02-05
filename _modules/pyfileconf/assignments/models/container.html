@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.assignments.models.container &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.assignments.models.container &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.assignments.models.container</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.container</span> <span class="kn">import</span> <span class="n">Container</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.assignments.models.statement</span> <span class="kn">import</span> <span class="n">AssignmentStatement</span>
@@ -181,9 +182,9 @@
 <div class="viewcode-block" id="AssignmentStatementContainer.contains_varname"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer.contains_varname">[docs]</a>    <span class="k">def</span> <span class="nf">contains_varname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">([</span><span class="n">assign</span><span class="o">.</span><span class="n">varname</span> <span class="o">==</span> <span class="n">varname</span> <span class="k">for</span> <span class="n">assign</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="AssignmentStatementContainer.to_default_dict_and_annotation_dict"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer.to_default_dict_and_annotation_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_default_dict_and_annotation_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-        <span class="n">default_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">annotation_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="viewcode-block" id="AssignmentStatementContainer.to_default_dict_and_annotation_dict"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer.to_default_dict_and_annotation_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_default_dict_and_annotation_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">]]:</span>
+        <span class="n">default_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">annotation_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">assign_statement</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
             <span class="n">default_item</span><span class="p">,</span> <span class="n">annotation_item</span> <span class="o">=</span> <span class="n">assign_statement</span><span class="o">.</span><span class="n">to_default_dict_and_annotation_dict</span><span class="p">()</span>
             <span class="n">default_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">default_item</span><span class="p">)</span>
@@ -192,12 +193,17 @@
         <span class="k">return</span> <span class="n">default_dict</span><span class="p">,</span> <span class="n">annotation_dict</span></div>
 
 <div class="viewcode-block" id="AssignmentStatementContainer.from_dict_of_varnames_and_ast"><a class="viewcode-back" href="../../../../api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer.from_dict_of_varnames_and_ast">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict_of_varnames_and_ast</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assignment_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">annotation_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">from_dict_of_varnames_and_ast</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">assignment_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">],</span>
+                                      <span class="n">annotation_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                       <span class="n">preferred_position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">annotation_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">annotation_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="n">assigns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">varname</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">assignment_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
             <span class="c1"># Extract annotation if exists</span>
+            <span class="n">annotation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">varname</span> <span class="ow">in</span> <span class="n">annotation_dict</span><span class="p">:</span>
                 <span class="n">annotation</span> <span class="o">=</span> <span class="n">annotation_dict</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>

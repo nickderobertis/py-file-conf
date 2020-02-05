@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.models.statements.rename &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.imports.models.statements.rename &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.imports.models.statements.rename</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.imports</span> <span class="kn">import</span> <span class="n">CouldNotExtractRenameException</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.interfaces</span> <span class="kn">import</span> <span class="n">AnyAstImport</span>
 <span class="kn">import</span> <span class="nn">ast</span>
@@ -185,6 +188,9 @@
 <div class="viewcode-block" id="RenameStatement.from_ast_alias"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatement.from_ast_alias">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_ast_alias</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">alias</span><span class="p">):</span>
         <span class="c1"># Note: will fail if ast alias does not have a rename. See RenameStatementCollection.from_ast_import</span>
+        <span class="k">if</span> <span class="n">alias</span><span class="o">.</span><span class="n">asname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CouldNotExtractRenameException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;must pass alias which as .asname. passed alias: </span><span class="si">{alias}</span><span class="s1">&#39;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">alias</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">alias</span><span class="o">.</span><span class="n">asname</span>
@@ -194,7 +200,7 @@
 <div class="viewcode-block" id="RenameStatementCollection"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatementCollection">[docs]</a><span class="k">class</span> <span class="nc">RenameStatementCollection</span><span class="p">(</span><span class="n">ReprMixin</span><span class="p">):</span>
     <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="RenameStatementCollection.__init__"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatementCollection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="p">[</span><span class="n">RenameStatement</span><span class="p">]):</span>
+<div class="viewcode-block" id="RenameStatementCollection.__init__"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatementCollection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">RenameStatement</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span></div>
 
     <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
@@ -237,7 +243,7 @@
         <span class="c1"># For RenameStatement objects, they only exist when there is a rename. Need to filter</span>
         <span class="n">renames</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">ast_import</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-            <span class="n">alias</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">alias</span>
+            <span class="n">alias</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">alias</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">alias</span><span class="o">.</span><span class="n">asname</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">renames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RenameStatement</span><span class="o">.</span><span class="n">from_ast_alias</span><span class="p">(</span><span class="n">alias</span><span class="p">))</span>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.parsers.funcdef &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.file.load.parsers.funcdef &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -220,7 +220,7 @@
         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">:</span>
             <span class="c1"># Found a class definition matching the name we&#39;re looking for</span>
             <span class="c1"># Now look for the init method of that class</span>
-            <span class="c1"># TODO: deal with subclassing where __init__ will not be in class definition</span>
+            <span class="c1"># TODO [#11]: deal with subclassing where __init__ will not be in class definition</span>
             <span class="n">orig_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;__init__&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>

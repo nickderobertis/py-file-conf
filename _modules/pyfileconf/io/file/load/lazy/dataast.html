@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.lazy.dataast &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.file.load.lazy.dataast &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -166,18 +166,18 @@
 <span></span><span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.lazy.base.impassign</span> <span class="kn">import</span> <span class="n">ImportAssignmentLazyLoader</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.assign</span> <span class="kn">import</span> <span class="n">extract_assignment_from_ast_by_name</span>
 
-<div class="viewcode-block" id="DataDictAstLoader"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.dataast.DataDictAstLoader">[docs]</a><span class="k">class</span> <span class="nc">DataDictAstLoader</span><span class="p">(</span><span class="n">ImportAssignmentLazyLoader</span><span class="p">):</span>
+<div class="viewcode-block" id="SpecificClassDictAstLoader"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.dataast.SpecificClassDictAstLoader">[docs]</a><span class="k">class</span> <span class="nc">SpecificClassDictAstLoader</span><span class="p">(</span><span class="n">ImportAssignmentLazyLoader</span><span class="p">):</span>
 
-<div class="viewcode-block" id="DataDictAstLoader.load"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.dataast.DataDictAstLoader.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SpecificClassDictAstLoader.load"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.dataast.SpecificClassDictAstLoader.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Get ast, imports, assigns</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 
         <span class="c1"># Store pipeline dict assignment</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_data_dict_assign</span> <span class="o">=</span> <span class="n">extract_assignment_from_ast_by_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ast</span><span class="p">,</span> <span class="s1">&#39;data_dict&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_class_dict_assign</span> <span class="o">=</span> <span class="n">extract_assignment_from_ast_by_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ast</span><span class="p">,</span> <span class="s1">&#39;class_dict&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data_dict_assign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_getattr_else_load</span><span class="p">(</span><span class="s1">&#39;_data_dict_assign&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">class_dict_assign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_getattr_else_load</span><span class="p">(</span><span class="s1">&#39;_class_dict_assign&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_try_getattr_else_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_getattr_else_call_func</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">)</span></div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.selector.models.itemview</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.exc.typo</span> <span class="kn">import</span> <span class="p">(</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.exc.typo</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">handle_pipeline_manager_not_loaded_or_typo</span><span class="p">,</span>
     <span class="n">handle_known_typo_at_end_of_section_path_str</span><span class="p">,</span>
     <span class="n">handle_known_typo_after_pipeline_manager_name</span>
@@ -203,7 +205,7 @@
             <span class="c1"># check whether this is an item attribute or a typo, and raise error if needed</span>
             <span class="k">return</span> <span class="n">handle_pipeline_manager_not_loaded_or_typo</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_managers</span><span class="p">)</span>
 
-        <span class="c1"># TODO: refactor item view lookup errors</span>
+        <span class="c1"># TODO [#18]: refactor item view lookup errors</span>
         <span class="c1">#</span>
         <span class="c1">#  So that there is a better way of catching a known typo than python throwing a RecursionError</span>
 
@@ -276,6 +278,8 @@
 
 <span class="k">def</span> <span class="nf">_is_item_view</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="n">is_item_view</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_item_view</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ItemView</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">is_item_view</span>
 </pre></div>
 

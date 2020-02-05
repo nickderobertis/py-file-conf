@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.lazy.datadict &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.io.file.load.lazy.datadict &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,25 +163,25 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.io.file.load.lazy.datadict</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.lazy.dataast</span> <span class="kn">import</span> <span class="n">DataDictAstLoader</span>
+<span></span><span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.lazy.dataast</span> <span class="kn">import</span> <span class="n">SpecificClassDictAstLoader</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.collections</span> <span class="kn">import</span> <span class="n">extract_collection_from_ast</span>
 
-<div class="viewcode-block" id="DataDictLoader"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.DataDictLoader">[docs]</a><span class="k">class</span> <span class="nc">DataDictLoader</span><span class="p">(</span><span class="n">DataDictAstLoader</span><span class="p">):</span>
+<div class="viewcode-block" id="SpecificClassDictLoader"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader">[docs]</a><span class="k">class</span> <span class="nc">SpecificClassDictLoader</span><span class="p">(</span><span class="n">SpecificClassDictAstLoader</span><span class="p">):</span>
 
-<div class="viewcode-block" id="DataDictLoader.load"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.DataDictLoader.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SpecificClassDictLoader.load"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Get pipeline_dict_ast</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
         <span class="c1"># Convert ast dicts and ast lists to normal dicts and lists, store as self.pipeline_dict</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_data_dict_assign_to_dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_class_dict_assign_to_dict</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_dict</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_dict</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_getattr_else_load</span><span class="p">(</span><span class="s1">&#39;_data_dict&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">class_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_getattr_else_load</span><span class="p">(</span><span class="s1">&#39;_class_dict&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_data_dict_assign_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_class_dict_assign_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterates through ast tree of pipeline dict, producing a dict/list structure, while leaving</span>
 <span class="sd">        other objects as ast representations</span>
@@ -189,7 +189,7 @@
 <span class="sd">        Returns:</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_data_dict</span> <span class="o">=</span> <span class="n">extract_collection_from_ast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dict_assign</span><span class="o">.</span><span class="n">to_ast</span><span class="p">(),</span> <span class="n">convert_str_values</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_class_dict</span> <span class="o">=</span> <span class="n">extract_collection_from_ast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_dict_assign</span><span class="o">.</span><span class="n">to_ast</span><span class="p">(),</span> <span class="n">convert_str_values</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.logger &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.logger &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -171,7 +171,7 @@
 <div class="viewcode-block" id="stdout_also_logged"><a class="viewcode-back" href="../../api/pyfileconf.logger.html#pyfileconf.logger.stdout_also_logged">[docs]</a><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">stdout_also_logged</span><span class="p">(</span><span class="n">log_folder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">stdout_logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="n">log_folder</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout_logger</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout_logger</span>  <span class="c1"># type: ignore</span>
     <span class="k">yield</span> <span class="n">log_folder</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout_logger</span><span class="o">.</span><span class="n">terminal</span>
     <span class="n">stdout_logger</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>

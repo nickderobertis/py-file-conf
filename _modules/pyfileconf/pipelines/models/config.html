@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pipelines.models.config &mdash; pyfileconf 0.1.0 documentation</title>
+  <title>pyfileconf.pipelines.models.config &mdash; pyfileconf 0.2.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.pipelines.models.config</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Sequence</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.logic.load.func</span> <span class="kn">import</span> <span class="n">function_args_as_dict</span>
@@ -172,6 +172,19 @@
 <div class="viewcode-block" id="FunctionConfig"><a class="viewcode-back" href="../../../../api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.config.FunctionConfig">[docs]</a><span class="k">class</span> <span class="nc">FunctionConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
 
     <span class="n">config_file_class</span> <span class="o">=</span> <span class="n">FunctionConfigFile</span>
+
+<div class="viewcode-block" id="FunctionConfig.from_file"><a class="viewcode-back" href="../../../../api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.config.FunctionConfig.from_file">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">config_file_class</span><span class="p">(</span>
+            <span class="n">filepath</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FunctionConfig.for_function"><a class="viewcode-back" href="../../../../api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.config.FunctionConfig.for_function">[docs]</a>    <span class="k">def</span> <span class="nf">for_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
