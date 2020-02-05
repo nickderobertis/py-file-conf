@@ -9,5 +9,3 @@ the config file, and finally by any local config updates in a script.
 
 from pyfileconf.main import PipelineManager, create_project
 from pyfileconf.selector.models.selector import Selector
-from pyfileconf.data.models.merge import MergeOptions
-from pyfileconf.data.models.source import DataSource
