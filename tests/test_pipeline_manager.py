@@ -267,7 +267,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "a: Optional[Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
 
-    # TODO: test multiple specific class dicts at once
+    # TODO [$5e3a1d0aa8106200077ff205]: test multiple specific class dicts at once
     #
     # both same class and two different classes
 
@@ -325,7 +325,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "b: ExampleClass = None" in contents
             assert "name: Optional[str] = 'data'" in contents
 
-    # TODO: test invalid inputs
+    # TODO [$5e3a1d0aa8106200077ff206]: test invalid inputs
     #
     # such as specific class name matching pipeline name, passing two of the same names for classes, etc.
 

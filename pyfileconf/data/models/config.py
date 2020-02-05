@@ -53,7 +53,7 @@ class SpecificClassConfig(ConfigBase):
         # Initialize a blank config dictionary
         config_dict = function_args_as_dict(klass.__init__)
 
-        # TODO: handle removing first argument from __init__, may not be named self
+        # TODO [$5e3a1d0aa8106200077ff204]: handle removing first argument from __init__, may not be named self
         #
         # Current implementation depends on the argument being named self
 
