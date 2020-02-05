@@ -339,11 +339,11 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
     #
     # such as specific class name matching pipeline name, passing two of the same names for classes, etc.
 
-    # TODO [$5e3aa4e33deb200008f8a0ce]: test multiple simultaneous pipeline managers
+    # TODO [#41]: test multiple simultaneous pipeline managers
     #
     # need create, get, run tests
 
-    # TODO [$5e3aa4e33deb200008f8a0cf]: test referencing object in a function config through selector and updating that object
+    # TODO [#42]: test referencing object in a function config through selector and updating that object
     #
     # Should see that updating the object with `config.update` will cause the function pointing to
     # the selector for that object to use the updated object.
