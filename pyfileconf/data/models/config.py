@@ -1,7 +1,6 @@
 from typing import Optional, Type, Any, Sequence, Union
 
 from pyfileconf.basemodels.config import ConfigBase
-from pyfileconf.data.models.source import DataSource
 from pyfileconf.data.models.file import SpecificClassConfigFile, ConfigFileBase
 from pyfileconf.imports.logic.load.func import function_args_as_dict
 from pyfileconf.imports.models.statements.container import ImportStatementContainer

@@ -9,11 +9,9 @@ from typing import Callable, TYPE_CHECKING, List
 from pd_utils.optimize.load import read_file as read_file_into_df
 
 from pyfileconf.data.models.type import DataType
-from pyfileconf.data.models.astitems import ast_none
 
 if TYPE_CHECKING:
     from pyfileconf.data.models.pipeline import DataPipeline
-    from pyfileconf.data.models.config import SpecificClassConfig
 
 class DataSource:
 
