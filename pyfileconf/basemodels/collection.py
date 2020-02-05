@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Sequence, Type
 import os
 
 from pyfileconf.basemodels.container import Container
@@ -7,7 +7,7 @@ from pyfileconf.imports.models.statements.container import ImportStatementContai
 
 StrList = List[str]
 
-scaffolding_error = NotImplementedError('must use DataCollection or PipelineCollection, not base class Collection')
+scaffolding_error = NotImplementedError('must use SpecificClassCollection or PipelineCollection, not base class Collection')
 
 class Collection(Container, ReprMixin):
 
@@ -36,12 +36,17 @@ class Collection(Container, ReprMixin):
     repr_cols = ['name', 'basepath', 'items']
 
     def __init__(self, basepath: str, items, name: str = None,
-                 imports: ImportStatementContainer = None):
+                 imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
+                 always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
         self.basepath = basepath
         self.imports = imports
-        self.items = self._transform_items(items)
         self.name = name
 
+        self.always_import_strs = always_import_strs
+        self.always_assign_strs = always_assign_strs
+        self.klass = klass
+        self.items = self._transform_items(items)
+        self._set_name_map()
 
     def __getattr__(self, item):
         try:
@@ -63,7 +68,8 @@ class Collection(Container, ReprMixin):
 
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str = None,
-                  imports: ImportStatementContainer = None):
+                  imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
+                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
         items = []
         for section_name, dict_or_list in dict_.items():
             section_basepath = os.path.join(basepath, section_name)
@@ -71,22 +77,28 @@ class Collection(Container, ReprMixin):
                 # Got another pipeline dict. Recursively process
                 items.append(
                     cls.from_dict(
-                        dict_or_list, basepath=section_basepath, name=section_name, imports=imports
+                        dict_or_list, basepath=section_basepath, name=section_name, imports=imports,
+                        always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
                     )
                 )
             elif isinstance(dict_or_list, list):
                 # Got a list of functions or pipelines. Create a collection directly from items
                 items.append(
                     cls.from_list(
-                        dict_or_list, basepath=section_basepath, name=section_name, imports=imports
+                        dict_or_list, basepath=section_basepath, name=section_name, imports=imports,
+                        always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
                     )
                 )
 
-        return cls(basepath=basepath, items=items, name=name)
+        return cls(
+            basepath=basepath, items=items, name=name,
+            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+        )
 
     @classmethod
     def from_list(cls, list_: list, basepath: str, name: str = None,
-                  imports: ImportStatementContainer = None):
+                  imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
+                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
         items = []
         for dict_or_item in list_:
             if isinstance(dict_or_item, dict):
@@ -96,11 +108,13 @@ class Collection(Container, ReprMixin):
                     section_basepath = os.path.join(basepath, section_name)
                     if isinstance(dict_list_or_item, dict):
                         collection = cls.from_dict(
-                            dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports
+                            dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports,
+                            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
                         )
                     elif isinstance(dict_list_or_item, list):
                         collection = cls.from_list(
-                            dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports
+                            dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports,
+                            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
                         )
                     else:
                         collection = dict_list_or_item
@@ -109,7 +123,10 @@ class Collection(Container, ReprMixin):
                 # pipeline or function
                 items.append(dict_or_item)
 
-        return cls(basepath=basepath, items=items, name=name, imports=imports)
+        return cls(
+            basepath=basepath, items=items, name=name, imports=imports,
+            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+        )
 
     def _transform_items(self, items):
         return [self._transform_item(item) for item in items]

@@ -28,6 +28,9 @@ class Container:
     def append(self, item):
         self.items.append(item)
 
+    def extend(self, items):
+        self.items.extend(items)
+
     def insert(self, index, item):
         self.items.insert(index, item)
 

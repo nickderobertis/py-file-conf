@@ -4,12 +4,10 @@ import warnings
 from pyfileconf.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from pyfileconf.pipelines.models.dictfile import PipelineDictFile
-from pyfileconf.data.models.dictfile import DataDictFile
-from pyfileconf.selector.logic.get.frommanager import get_pipeline_dict_path_and_data_dict_path_from_manager
+from pyfileconf.selector.logic.get.frommanager import get_pipeline_dict_path_and_specific_class_config_dicts_from_manager
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.basemodels.pipeline import Pipeline
-from pyfileconf.data.models.collection import DataCollection, DataSource
+from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.views.object import ObjectView
 
 class Selector:
@@ -43,7 +41,8 @@ class Selector:
         # TODO [#19]: convert all functions to pipelines
         #
         # it would make this check safer
-        item_types = (DataSource, DataCollection, Pipeline, PipelineCollection, Callable, ObjectView)
+
+        item_types = (SpecificClassCollection, Pipeline, PipelineCollection, Callable, ObjectView, collection_obj.klass)
         if isinstance(result, item_types):
             return True
 
@@ -89,17 +88,16 @@ class Selector:
             # return only the manager itself
             return self._managers[manager_name], None
 
-
-        if section_path[1] == 'sources':
-            # got a data path
+        if section_path[1] in self._managers[manager_name].specific_class_names:
+            # got a specific class path
             if len(section_path) == 2:
                 # got only the root data path, e.g. project.sources
                 # return the collection object itself
-                return self._structure[manager_name]['data'], None
-            collection_name = 'data'
+                return self._structure[manager_name][section_path[1]], None
+            collection_name = section_path[1]
             section_path_begin_index = 2
         else:
-            collection_name = 'funcs'
+            collection_name = '_general'
             section_path_begin_index = 1
 
         relative_section_path = SectionPath('.'.join(section_path[section_path_begin_index:]))
@@ -132,20 +130,23 @@ class Selector:
         self._managers = get_dict_of_any_defined_pipeline_manager_names_and_instances()
 
     def _load_structure(self):
+        from pyfileconf.main import create_collections
         out_dict = {}
         for manager_name, manager in self._managers.items():
-            pipeline_dict_path, data_dict_path = get_pipeline_dict_path_and_data_dict_path_from_manager(manager)
-            pipeline_dict_file = PipelineDictFile(pipeline_dict_path, name='pipeline_dict')
-            pipeline_dict = pipeline_dict_file.load()
-            data_dict = DataDictFile(data_dict_path, name='data_dict').load()
+            pipeline_dict_path, specific_class_name_config_dict = get_pipeline_dict_path_and_specific_class_config_dicts_from_manager(manager)
+            collections, general_collection = create_collections(
+                specific_class_name_config_dict,
+                manager.basepath,
+                manager.pipeline_dict_folder,
+                pipeline_dict_path,
+            )
             manager_dict = {
-                'funcs': PipelineCollection.from_dict(
-                    pipeline_dict,
-                    manager.basepath,
-                    imports=pipeline_dict_file.interface.imports
-                ),
-                'data': DataCollection.from_dict(data_dict, manager.basepath)
+                '_general': general_collection,
             }
+            for collection in collections:
+                manager_dict.update({
+                    collection.name: collection
+                })
             out_dict[manager_name] = manager_dict
         self._structure = out_dict
 

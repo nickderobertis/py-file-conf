@@ -1,22 +1,34 @@
+from typing import Optional, Type, Any, Sequence, Union
 
 from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.data.models.source import DataSource
-from pyfileconf.data.models.file import DataConfigFile, ConfigFileBase
+from pyfileconf.data.models.file import SpecificClassConfigFile, ConfigFileBase
+from pyfileconf.imports.logic.load.func import function_args_as_dict
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
 from pyfileconf.assignments.models.container import AssignmentStatementContainer
-from pyfileconf.data.models.astitems import ast_str, ast_dict_constructor
+from pyfileconf.data.models.astitems import ast_str, ast_none
 
 
-class DataConfig(ConfigBase):
-    config_file_class = DataConfigFile
+class SpecificClassConfig(ConfigBase):
+    config_file_class: Union[SpecificClassConfigFile, Type[ConfigFileBase]]  # type: ignore
 
     def __init__(self, d: dict = None, name: str = None, annotations: dict = None,
                  imports: ImportStatementContainer = None,
                  _file: ConfigFileBase = None, begin_assignments: AssignmentStatementContainer = None,
-                 active_config_dict: dict = None, **kwargs):
+                 active_config_dict: dict = None, always_import_strs: Optional[Sequence[str]] = None,
+                 always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
+                 file_path: Optional[str] = None, **kwargs):
 
         if active_config_dict is None:
             active_config_dict = {}
+
+        self.config_file_class = SpecificClassConfigFile(
+            file_path,  # type: ignore
+            name=name,
+            klass=klass,
+            always_import_strs=always_import_strs,
+            always_assign_strs=always_assign_strs
+        )
 
         super().__init__(
             d=d,
@@ -25,6 +37,9 @@ class DataConfig(ConfigBase):
             imports=imports,
             _file=_file,
             begin_assignments=begin_assignments,
+            klass=klass,
+            always_import_strs=always_import_strs,
+            always_assign_strs=always_assign_strs,
             **kwargs
         )
 
@@ -32,31 +47,47 @@ class DataConfig(ConfigBase):
 
 
     @classmethod
-    def from_source(cls, data_source: DataSource, name: str=None, imports: ImportStatementContainer = None):
+    def from_obj(cls, obj: Any, klass: Type, name: str=None, imports: ImportStatementContainer = None,
+                 always_import_strs: Optional[Sequence[str]] = None,
+                 always_assign_strs: Optional[Sequence[str]] = None, file_path: Optional[str] = None):
         # Initialize a blank config dictionary
-        config_dict = DataSource._scaffold_dict.copy()
+        config_dict = function_args_as_dict(klass.__init__)
 
-        if data_source.loader_func_kwargs == {}:
-            # If empty dict, must be where file doesn't exist, and so loader_func_kwargs were set to default
-            # Need to convert to ast version
-            data_source.loader_func_kwargs = ast_dict_constructor  # type: ignore
+        # TODO: handle removing first argument from __init__, may not be named self
+        #
+        # Current implementation depends on the argument being named self
+
+        # Remove self from arguments
+        config_dict = {key: value for key, value in config_dict.items() if key != 'self'}
+
+        # Replace obj None with ast None
+        config_dict = {key: value if value is not None else ast_none for key, value in config_dict.items()}
 
         # Fill blank config dict
         for config_attr in config_dict:
-            if not _source_attr_is_none(data_source, config_attr):
-                config_dict[config_attr] = getattr(data_source, config_attr)
+            if not _obj_attr_is_none(obj, config_attr):
+                config_dict[config_attr] = getattr(obj, config_attr)
 
         # Special handling for name, which will be set even before creating file
         if isinstance(config_dict['name'], str):
             config_dict['name'] = ast_str(config_dict['name'])  # convert str to ast
 
+        return cls(
+            config_dict,
+            name=name,
+            imports=imports,
+            klass=klass,
+            always_import_strs=always_import_strs,
+            always_assign_strs=always_assign_strs,
+            file_path=file_path
+        )
 
-        return cls(config_dict, name=name, imports=imports)
 
-def _source_attr_is_none(source: DataSource, source_attr: str) -> bool:
-    source_value = getattr(source, source_attr, None)
+
+
+def _obj_attr_is_none(obj: Any, source_attr: str) -> bool:
+    source_value = getattr(obj, source_attr, None)
     if source_value == None:  # using equals to call __eq__ method of DataType
         return True
 
     return False
-

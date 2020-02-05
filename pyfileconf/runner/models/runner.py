@@ -1,9 +1,13 @@
-from typing import Callable, Tuple, cast
+from typing import Callable, Tuple, cast, Sequence, Type
 from functools import partial
 
 from mixins.repr import ReprMixin
+
+from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.config.models.manager import ConfigManager, ActiveFunctionConfig
+from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
+from pyfileconf.exceptions.registrar import NoRegistrarWithNameException
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from pyfileconf.logic.get import _get_public_name_or_special_name
 from pyfileconf.runner.models.interfaces import (
@@ -25,10 +29,13 @@ class Runner(ReprMixin):
     repr_cols = ['_config', '_pipelines']
 
 
-    def __init__(self, config: ConfigManager, pipelines: PipelineRegistrar):
+    def __init__(self, config: ConfigManager, registrars: Sequence[Registrar], general_registrar: PipelineRegistrar):
         self._config = config
-        self._pipelines = pipelines
+        self._registrars = registrars
+        self._general_registrar = general_registrar
         self._full_getattr = ''
+
+        self._all_specific_classes = tuple([registrar.klass for registrar in self._registrars])
 
     def __getattr__(self, item):
         # TODO [#14]: find way of doing runner look ups with fewer side effects
@@ -40,7 +47,7 @@ class Runner(ReprMixin):
             self._full_getattr = '' # didn't find an item, must be incorrect path. reset total path
             raise e
 
-        if isinstance(func_or_collection, PipelineCollection):
+        if isinstance(func_or_collection, (PipelineCollection, SpecificClassCollection)):
             # Got section, need to keep going. Return self
             self._full_getattr += '.' # add period to separate next section
             return self
@@ -187,6 +194,8 @@ class Runner(ReprMixin):
             return self._get_one_pipeline_with_config(section_path_str)
         elif callable(func_or_collection):
             return self._get_one_func_with_config(section_path_str)
+        elif self._all_specific_classes and isinstance(func_or_collection, self._all_specific_classes):  # type: ignore
+            return self._get_one_obj_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
                              f'got {func_or_collection} of type {type(func_or_collection)}')
@@ -204,6 +213,10 @@ class Runner(ReprMixin):
         # Construct new pipeline instance with config args
         return pipeline_class(**config_dict)  # type: ignore
 
+    def _get_one_obj_with_config(self, section_path_str: str) -> Type:
+        klass, config_dict = self._get_class_and_config(section_path_str)
+
+        return klass(**config_dict)
 
     def _get_config(self, section_path_str: str) -> ActiveFunctionConfig:
         config = self._config.get(section_path_str)
@@ -212,7 +225,23 @@ class Runner(ReprMixin):
         return config
 
     def _get_func_or_collection(self, section_path_str: str) -> PipelineOrFunctionOrCollection:
-        return self._pipelines.get(section_path_str)
+        section_path = SectionPath(section_path_str)
+        registrar_name = section_path[0]
+
+        # Check for specific class dict matching name
+        for registrar in self._registrars:
+            if registrar.name == registrar_name:
+                lookup_in_registrar_section_path = SectionPath.from_section_str_list(section_path[1:]).path_str
+                if not lookup_in_registrar_section_path:
+                    # Was looking up registrar collection itself
+                    return registrar.collection
+                # Looking up within registrary
+                return registrar.get(lookup_in_registrar_section_path)
+
+        # Try to return from general registrar
+        return self._general_registrar.get(section_path_str)
+
+        # raise NoRegistrarWithNameException(registrar_name)
 
     def _get_func_and_config(self, section_path_str: str) -> Tuple[Callable, dict]:
         config = self._get_config(section_path_str)
@@ -242,3 +271,13 @@ class Runner(ReprMixin):
         config_dict = config.for_function(pipeline.__init__)  # type: ignore
 
         return pipeline, config_dict
+
+    def _get_class_and_config(self, section_path_str: str) -> Tuple[Callable, dict]:
+        config = self._get_config(section_path_str)
+        obj = self._get_func_or_collection(section_path_str)
+        func = obj.__class__
+
+        # Only pass items in config which are arguments of function
+        config_dict = config.for_function(func)
+
+        return func, config_dict
