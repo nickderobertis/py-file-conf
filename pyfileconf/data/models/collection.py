@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Union, cast, Any
+from typing import Union, cast, Any, Type
 import os
 
 from pyfileconf.basemodels.collection import Collection
@@ -16,6 +16,7 @@ from pyfileconf.io.func.load.config import function_args_as_arg_and_annotation_d
 ObjOrCollection = Union[Any, 'SpecificClassCollection']
 
 class SpecificClassCollection(Collection):
+    klass: Type
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -70,7 +71,7 @@ class SpecificClassCollection(Collection):
             existing_config = SpecificClassConfig.from_file(
                 item_filepath,
                 name=item_name,
-                **class_config
+                **class_config,  # type: ignore
             )
             existing_imports = existing_config._file.interface.imports
             # Here using the ast config, for the purpose of writing to file
@@ -84,7 +85,7 @@ class SpecificClassCollection(Collection):
             file_config_item = item
 
         item_config = SpecificClassConfig.from_obj(file_config_item, imports=existing_imports,
-                                                   file_path=item_filepath, **class_config)
+                                                   file_path=item_filepath, **class_config)  # type: ignore
 
         # Get config by extracting from class __init__
         # First need to create dummy import for compatibility
@@ -110,7 +111,7 @@ class SpecificClassCollection(Collection):
         if not file_existed:
             # If this was a new output, we now need to load again to get the object representation
             # instead of just the ast representation
-            existing_config = SpecificClassConfig.from_file(item_filepath, item_name, **class_config)
+            existing_config = SpecificClassConfig.from_file(item_filepath, item_name, **class_config)  # type: ignore
             apply_config(item, existing_config.active_config_dict)
 
 

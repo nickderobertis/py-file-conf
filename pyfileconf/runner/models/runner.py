@@ -194,7 +194,7 @@ class Runner(ReprMixin):
             return self._get_one_pipeline_with_config(section_path_str)
         elif callable(func_or_collection):
             return self._get_one_func_with_config(section_path_str)
-        elif isinstance(func_or_collection, self._all_specific_classes):
+        elif self._all_specific_classes and isinstance(func_or_collection, self._all_specific_classes):  # type: ignore
             return self._get_one_obj_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'

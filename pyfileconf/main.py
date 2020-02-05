@@ -344,15 +344,16 @@ def create_project(path: str,
     os.makedirs(logs_path)
     with open(pipeline_path, 'w') as f:
         f.write('\npipeline_dict = {}\n')
-    for specific_class_config in specific_class_config_dicts:
-        name = specific_class_config['name']
-        dict_path = os.path.join(path, f'{name}_dict.py')
-        with open(dict_path, 'w') as f:
-            f.write(f'\nclass_dict = {{}}\n')
+    if specific_class_config_dicts:
+        for specific_class_config in specific_class_config_dicts:
+            name = specific_class_config['name']
+            dict_path = os.path.join(path, f'{name}_dict.py')
+            with open(dict_path, 'w') as f:
+                f.write(f'\nclass_dict = {{}}\n')
 
 
 
-def _validate_registrars(registrars: List[SpecificClassDictFile], general_registrar: PipelineRegistrar):
+def _validate_registrars(registrars: List[SpecificRegistrar], general_registrar: PipelineRegistrar):
     used_names = dir(general_registrar)
     for registrar in registrars:
         if registrar.name in used_names:
@@ -407,6 +408,8 @@ def _create_registrars_or_collections_from_dict(
         Union[List[SpecificRegistrar], List[SpecificClassCollection]],
         Union[PipelineRegistrar, PipelineCollection]
     ]:
+    pipeline_class: Union[Type[PipelineRegistrar], Type[PipelineCollection]]
+    specific_class_class: Union[Type[SpecificRegistrar], Type[SpecificClassCollection]]
     if registrar:
         pipeline_class = PipelineRegistrar
         specific_class_class = SpecificRegistrar
@@ -418,7 +421,7 @@ def _create_registrars_or_collections_from_dict(
     pipeline_dict_file = PipelineDictFile(pipeline_dict_path, name='pipeline_dict')
     pipeline_dict = pipeline_dict_file.load()
 
-    objs = []
+    objs: Union[List[SpecificRegistrar], List[SpecificClassCollection]] = []
     for specific_class_config_dict in specific_class_config_dicts:
 
         # Set defaults then update with actual config
@@ -426,7 +429,10 @@ def _create_registrars_or_collections_from_dict(
             always_assign_strs=None,
             always_import_strs=None,
         )
-        config_dict.update(specific_class_config_dict)
+        config_dict.update(specific_class_config_dict)  # type: ignore
+
+        if 'name' not in config_dict or config_dict['name'] is None:
+            raise ValueError('name is required')
 
         name = config_dict['name']
         file_path = os.path.join(pipeline_folder, f'{name}_dict.py')

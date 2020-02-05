@@ -1,4 +1,4 @@
-from typing import Optional, Type, Any, Sequence
+from typing import Optional, Type, Any, Sequence, Union
 
 from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.data.models.source import DataSource
@@ -10,6 +10,7 @@ from pyfileconf.data.models.astitems import ast_str, ast_none
 
 
 class SpecificClassConfig(ConfigBase):
+    config_file_class: Union[SpecificClassConfigFile, Type[ConfigFileBase]]  # type: ignore
 
     def __init__(self, d: dict = None, name: str = None, annotations: dict = None,
                  imports: ImportStatementContainer = None,
@@ -22,7 +23,7 @@ class SpecificClassConfig(ConfigBase):
             active_config_dict = {}
 
         self.config_file_class = SpecificClassConfigFile(
-            file_path,
+            file_path,  # type: ignore
             name=name,
             klass=klass,
             always_import_strs=always_import_strs,

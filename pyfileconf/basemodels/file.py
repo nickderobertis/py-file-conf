@@ -50,7 +50,7 @@ class ConfigFileBase:
         self.always_import_strs = always_import_strs
         self.always_assign_strs = always_assign_strs
 
-    def load(self, config_class: type = None, file_path: Optional[str] = None) -> 'ConfigBase':
+    def load(self, config_class: type = None) -> 'ConfigBase':
         from pyfileconf.basemodels.config import ConfigBase
         config_dict, annotation_dict = self.interface.load()
 
