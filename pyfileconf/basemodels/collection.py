@@ -128,5 +128,19 @@ class Collection(Container, ReprMixin):
             always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
         )
 
+    def to_nested_dict(self):
+        return to_nested_dict(self)
+
     def _transform_items(self, items):
         return [self._transform_item(item) for item in items]
+
+
+def to_nested_dict(collection: Collection):
+    out_dict = {}
+    for item in collection:
+        if isinstance(item, Collection):
+            nested = to_nested_dict(item)
+            out_dict[item.name] = nested
+        else:
+            out_dict[item.name] = item
+    return out_dict
