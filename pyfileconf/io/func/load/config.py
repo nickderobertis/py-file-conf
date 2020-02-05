@@ -34,14 +34,14 @@ def function_args_as_arg_and_annotation_dict(args: ast.arguments) -> Tuple[dict,
         default = all_defaults[i]
         arg_dict[arg.arg] = default
         if arg.annotation is not None:
-            annotation_dict[arg.arg] = arg.annotation
+            annotation_dict[arg.arg] = _strip_ast_quotes_if_necessary(arg.annotation)
 
     # Handle kwargs
     for i, kwarg in enumerate(args.kwonlyargs):
         default = args.kw_defaults[i]
         arg_dict[kwarg.arg] = default
         if kwarg.annotation is not None:
-            annotation_dict[kwarg.arg] = kwarg.annotation
+            annotation_dict[kwarg.arg] = _strip_ast_quotes_if_necessary(kwarg.annotation)
 
     return arg_dict, annotation_dict
 
@@ -58,3 +58,11 @@ def _get_list_of_arg_section(section):
         return []
 
     return list(section)
+
+
+def _strip_ast_quotes_if_necessary(node: ast.AST) -> ast.AST:
+    if isinstance(node, ast.Str):
+        # Got a quoted annotation such as 'DataPipeline'. Strip the quotes
+        str_value = node.s
+        return ast.Name(str_value)
+    return node
