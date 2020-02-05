@@ -80,7 +80,7 @@ def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
         names.extend(_extract_str_names_from_subscript(annotation))
     elif isinstance(annotation, ast.Attribute):
         # E.g. pd.DataFrame
-        names.append(annotation.value.id)
+        names.append(annotation.value.id)  # type: ignore
     elif isinstance(annotation, ast.Str):
         # E.g. 'DataPipeline' (quoted type declaration where type was imported if TYPE_CHECKING)
         names.append(annotation.s)

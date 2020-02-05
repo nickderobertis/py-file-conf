@@ -348,6 +348,11 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
     # Should see that updating the object with `config.update` will cause the function pointing to
     # the selector for that object to use the updated object.
 
+    # TODO: test attribute and string type annotations
+    #
+    # Need to cover cases such as: `def my_func(a: pd.DataFrame, b: 'DataPipeline'):`
+    # Looking up from an attribute within the type annotation, as well as string type annotations
+
 
 class TestPipelineManagerRun(PipelineManagerTestBase):
 
