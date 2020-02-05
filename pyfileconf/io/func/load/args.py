@@ -51,7 +51,7 @@ def extract_function_args_and_arg_imports_from_import(function_name: str, imp: O
 
     loader = ImportAssignmentLazyLoader(filepath)
 
-    # TODO [$5e3aafe55466b50007d4fd50]: handle relative nested imports such as from .this import that
+    # TODO [#44]: handle relative nested imports such as from .this import that
     #
     # This code keeps importing and checking whether the name is defined in the file. If not,
     # it follows the next import. This doesn't properly work if one of those followed imports
