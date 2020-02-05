@@ -70,7 +70,8 @@ def test_create_project():
 
 
 class PipelineManagerTestBase:
-    defaults_path = os.path.join(BASE_GENERATED_DIR, 'defaults')
+    defaults_folder_name = 'custom_defaults'
+    defaults_path = os.path.join(BASE_GENERATED_DIR, defaults_folder_name)
     pipeline_folder = BASE_GENERATED_DIR
     pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
     example_class_file_names = [
@@ -96,10 +97,10 @@ class PipelineManagerTestBase:
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(
-            pipeline_dict_folder=self.pipeline_folder,
-            basepath=self.defaults_path,
+            folder=self.pipeline_folder,
             name=self.test_name,
             log_folder=self.logs_path,
+            default_config_folder_name=self.defaults_folder_name,
         )
         all_kwargs.update(**kwargs)
         pipeline_manager = PipelineManager(**all_kwargs)
@@ -324,6 +325,15 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
     # TODO [#37]: test invalid inputs
     #
     # such as specific class name matching pipeline name, passing two of the same names for classes, etc.
+
+    # TODO: test multiple simultaneous pipeline managers
+    #
+    # need create, get, run tests
+
+    # TODO: test referencing object in a function config through selector and updating that object
+    #
+    # Should see that updating the object with `config.update` will cause the function pointing to
+    # the selector for that object to use the updated object.
 
 
 class TestPipelineManagerRun(PipelineManagerTestBase):

@@ -4,9 +4,10 @@ from typing import Callable, Type, Optional, List, Dict, Union
 
 
 def delete_project(path: str,
-                   specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None):
+                   specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None,):
     all_paths = [
         os.path.join(path, 'defaults'),
+        os.path.join(path, 'custom_defaults'),
         os.path.join(path, 'pipeline_dict.py'),
         os.path.join(path, 'Logs'),
     ]

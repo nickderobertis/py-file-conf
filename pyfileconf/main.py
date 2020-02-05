@@ -29,19 +29,20 @@ class PipelineManager:
     Main class for managing flow-based programming and configuration.
     """
 
-    def __init__(self, pipeline_dict_folder: str, basepath: str,
+    def __init__(self, folder: str,
                  name: str= 'project',
                  specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None,
-                 auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None):
+                 auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None,
+                 default_config_folder_name: str = 'defaults'):
 
         if specific_class_config_dicts is None:
             specific_class_config_dicts = []
 
-        self.pipeline_dict_folder = pipeline_dict_folder
-        self.pipeline_dict_path = os.path.join(pipeline_dict_folder, 'pipeline_dict.py')
+        self.folder = folder
+        self.pipeline_dict_path = os.path.join(folder, 'pipeline_dict.py')
         self.specific_class_config_dicts = specific_class_config_dicts
         self.specific_class_names = [sc_dict['name'] for sc_dict in specific_class_config_dicts]
-        self.basepath = basepath
+        self.default_config_path = os.path.join(self.folder, default_config_folder_name)
         self.name = name
         self.auto_pdb = auto_pdb
         self.force_continue = force_continue
@@ -219,13 +220,13 @@ class PipelineManager:
         # Load dynamically instead of passing dict to ensure modules are loaded into sys now
         self._registrars, self._general_registrar = create_registrars(
             self.specific_class_config_dicts,
-            self.basepath,
-            self.pipeline_dict_folder,
+            self.default_config_path,
+            self.folder,
             self.pipeline_dict_path,
             manager_name=self.name,
         )
 
-        self.config = ConfigManager(self.basepath)
+        self.config = ConfigManager(self.default_config_path)
         self.config.load()
 
         self.runner = Runner(config=self.config, registrars=self._registrars, general_registrar=self._general_registrar)
