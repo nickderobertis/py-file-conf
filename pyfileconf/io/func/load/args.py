@@ -51,6 +51,13 @@ def extract_function_args_and_arg_imports_from_import(function_name: str, imp: O
 
     loader = ImportAssignmentLazyLoader(filepath)
 
+    # TODO: handle relative nested imports such as from .this import that
+    #
+    # This code keeps importing and checking whether the name is defined in the file. If not,
+    # it follows the next import. This doesn't properly work if one of those followed imports
+    # is a relative import such as `from .this import that`. Add test to show this and
+    # also fix it.
+
     ast_function_def = extract_function_definition_or_class_init_from_ast_by_name(
         loader.ast,
         function_name

@@ -45,6 +45,14 @@ class SectionPath(ReprMixin):
         relative_path = _section_path_to_relative_filepath(self)
         return os.path.join(basepath, relative_path)
 
+    def endswith(self, sp: 'SectionPath'):
+        num_to_match = len(sp)
+        match_parts = self[-num_to_match:]
+        for i, part in enumerate(match_parts):
+            if part != sp[i]:
+                return False
+        return True
+
 
 def _section_path_str_to_section_strs(section_path_str: str) -> List[str]:
     return section_path_str.split('.')
