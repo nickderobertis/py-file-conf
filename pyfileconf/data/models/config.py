@@ -86,7 +86,7 @@ class SpecificClassConfig(ConfigBase):
 
 def _obj_attr_is_none(obj: Any, source_attr: str) -> bool:
     source_value = getattr(obj, source_attr, None)
-    if source_value == None:  # using equals to call __eq__ method of DataType
+    if source_value is None:
         return True
 
     return False

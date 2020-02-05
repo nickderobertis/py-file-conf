@@ -76,7 +76,14 @@ def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
     if isinstance(annotation, ast.Name):
         names.append(annotation.id)  # handles most types
     elif isinstance(annotation, ast.Subscript):
+        # E.g. Tuple[int]
         names.extend(_extract_str_names_from_subscript(annotation))
+    elif isinstance(annotation, ast.Attribute):
+        # E.g. pd.DataFrame
+        names.append(annotation.value.id)  # type: ignore
+    elif isinstance(annotation, ast.Str):
+        # E.g. 'DataPipeline' (quoted type declaration where type was imported if TYPE_CHECKING)
+        names.append(annotation.s)
     else:
         raise NotImplementedError(f'no handling for {annotation} of type {type(annotation)}')
 

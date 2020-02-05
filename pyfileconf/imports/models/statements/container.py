@@ -113,7 +113,7 @@ class ImportStatementContainer(Container, ReprMixin):
                         [rename for rename in imp.renames if rename.new_name == name]
                     )
                     # grab original module matching this rename
-                    modules = renames.reverse_name_map[name]
+                    modules = [renames.reverse_name_map[name]]
                 if found_import:
                     # May be multiple modules imported in this one statement. Create a new statement with just this module
                     return ModuleImportStatement(modules=modules, renames=renames)
