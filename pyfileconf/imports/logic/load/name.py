@@ -4,6 +4,8 @@ import sys
 
 from pyfileconf.exceptions.imports import CouldNotDetermineModuleForObjectException
 from pyfileconf.imports.logic.load.skipmodules import skip_modules
+from pyfileconf.sectionpath.sectionpath import SectionPath
+
 
 def get_imported_obj_variable_name(obj, module: ModuleType) -> str:
     key_list, value_list = _get_module_keys_and_values_lists(module)
@@ -17,7 +19,7 @@ def get_module_and_name_imported_from(obj, search_list: List[str]=None) -> Tuple
     for module_name in search_list:
 
         # skip modules which were causing issues
-        if module_name in skip_modules:
+        if _should_skip_module(module_name):
             continue
 
         module = sys.modules[module_name]
@@ -33,7 +35,7 @@ def is_imported_name(name: str, search_list: List[str]=None) -> bool:
     for module_name in search_list:
 
         # skip modules which were causing issues
-        if module_name in skip_modules:
+        if _should_skip_module(module_name):
             continue
 
         module = sys.modules[module_name]
@@ -49,7 +51,7 @@ def is_imported_obj(obj, search_list: List[str]=None) -> bool:
     for module_name in search_list:
 
         # skip modules which were causing issues
-        if module_name in skip_modules:
+        if _should_skip_module(module_name):
             continue
 
         module = sys.modules[module_name]
@@ -66,7 +68,7 @@ def _is_imported_from(name: str, search_list: List[str]=None) -> List[str]:
     for module_name in search_list:
 
         # skip modules which were causing issues
-        if module_name in skip_modules:
+        if _should_skip_module(module_name):
             continue
 
         module = sys.modules[module_name]
@@ -106,3 +108,15 @@ def _obj_in_module(obj, module: ModuleType) -> bool:
 
 def _name_in_module(name: str, module: ModuleType) -> bool:
     return name in dir(module)
+
+
+def _should_skip_module(name: str) -> bool:
+    """
+    Check if module section path ends with a section path in skip_models
+    """
+    module_section_path = SectionPath(name)
+    for skip_name in skip_modules:
+        skip_sp = SectionPath(skip_name)
+        if module_section_path.endswith(skip_sp):
+            return True
+    return False
