@@ -58,3 +58,6 @@ class Registrar(ReprMixin):
 
         # Goes into nested sections, until it pulls the final section or pipeline
         return _get_from_nested_obj_by_section_path(self, section_path)
+
+    def to_nested_dict(self):
+        return self.collection.to_nested_dict()
