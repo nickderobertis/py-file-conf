@@ -1,7 +1,9 @@
 import os
 from copy import deepcopy
+from typing import Sequence, Type, Union, Dict, List
 
-from pyfileconf import PipelineManager, create_project, Selector
+from pyfileconf import PipelineManager, Selector
+from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.bmodule import ExampleClass
 from tests.utils import delete_project, pipeline_dict_str_with_obj, class_dict_str
@@ -39,16 +41,12 @@ FULL_CLASS_DICT_LIST = [
     SEC_CLASS_DICT
 ]
 
-
-def test_create_project():
-    delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
-    create_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
-
-    defaults_path = os.path.join(BASE_GENERATED_DIR, 'defaults')
-    pipeline_folder = BASE_GENERATED_DIR
+def _assert_project_has_correct_files(folder: str):
+    defaults_path = os.path.join(folder, 'defaults')
+    pipeline_folder = folder
     pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
-    example_class_dict_path = os.path.join(BASE_GENERATED_DIR, 'example_class_dict.py')
-    logs_path = os.path.join(BASE_GENERATED_DIR, 'Logs')
+    example_class_dict_path = os.path.join(folder, 'example_class_dict.py')
+    logs_path = os.path.join(folder, 'Logs')
     all_paths = [
         defaults_path,
         pipeline_dict_path,
@@ -65,6 +63,13 @@ def test_create_project():
     with open(example_class_dict_path, 'r') as f:
         contents = f.read()
         assert 'class_dict = {}' in contents
+
+
+def test_create_project():
+    delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
+    create_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
+
+    _assert_project_has_correct_files(BASE_GENERATED_DIR)
 
     delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
 
@@ -125,6 +130,14 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager
+
+    def test_create_project_with_pm(self):
+        delete_project(BASE_GENERATED_DIR, FULL_CLASS_DICT_LIST)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=FULL_CLASS_DICT_LIST
+        )
+        pipeline_manager.load()
+        _assert_project_has_correct_files(BASE_GENERATED_DIR)
 
     def test_create_pm_with_function(self):
         self.write_a_function_to_pipeline_dict_file()

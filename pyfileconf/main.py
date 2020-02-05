@@ -52,6 +52,7 @@ class PipelineManager:
         self._general_registrar: Optional[PipelineRegistrar] = None
 
         self._validate_options()
+        self._create_project_if_needed()
 
     def __getattr__(self, item):
 
@@ -257,6 +258,21 @@ class PipelineManager:
         if self.auto_pdb and self.force_continue:
             raise ValueError('cannot force continue and drop into pdb at the same time')
 
+    def _create_project_if_needed(self):
+        if self._need_to_create_project():
+            create_project(self.folder, self.specific_class_config_dicts)
+
+    def _need_to_create_project(self) -> bool:
+        return any([
+            not os.path.exists(self.folder),
+            not os.path.exists(self.pipeline_dict_path),
+            not os.path.exists(self.default_config_path),
+            *[
+                not os.path.exists(path) for path in
+                [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
+            ],
+        ])
+
 
 
 
@@ -341,16 +357,20 @@ def create_project(path: str,
 
     logs_path = os.path.join(path, 'Logs')
 
-    os.makedirs(defaults_path)
-    os.makedirs(logs_path)
-    with open(pipeline_path, 'w') as f:
-        f.write('\npipeline_dict = {}\n')
+    if not os.path.exists(defaults_path):
+        os.makedirs(defaults_path)
+    if not os.path.exists(logs_path):
+        os.makedirs(logs_path)
+    if not os.path.exists(pipeline_path):
+        with open(pipeline_path, 'w') as f:
+            f.write('\npipeline_dict = {}\n')
     if specific_class_config_dicts:
         for specific_class_config in specific_class_config_dicts:
             name = specific_class_config['name']
             dict_path = os.path.join(path, f'{name}_dict.py')
-            with open(dict_path, 'w') as f:
-                f.write(f'\nclass_dict = {{}}\n')
+            if not os.path.exists(dict_path):
+                with open(dict_path, 'w') as f:
+                    f.write(f'\nclass_dict = {{}}\n')
 
 
 
