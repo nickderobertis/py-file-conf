@@ -1,7 +1,9 @@
 import os
 from copy import deepcopy
+from typing import Sequence, Type, Union, Dict, List
 
-from pyfileconf import PipelineManager, create_project, Selector
+from pyfileconf import PipelineManager, Selector
+from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.bmodule import ExampleClass
 from tests.utils import delete_project, pipeline_dict_str_with_obj, class_dict_str
@@ -39,16 +41,12 @@ FULL_CLASS_DICT_LIST = [
     SEC_CLASS_DICT
 ]
 
-
-def test_create_project():
-    delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
-    create_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
-
-    defaults_path = os.path.join(BASE_GENERATED_DIR, 'defaults')
-    pipeline_folder = BASE_GENERATED_DIR
+def _assert_project_has_correct_files(folder: str):
+    defaults_path = os.path.join(folder, 'defaults')
+    pipeline_folder = folder
     pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
-    example_class_dict_path = os.path.join(BASE_GENERATED_DIR, 'example_class_dict.py')
-    logs_path = os.path.join(BASE_GENERATED_DIR, 'Logs')
+    example_class_dict_path = os.path.join(folder, 'example_class_dict.py')
+    logs_path = os.path.join(folder, 'Logs')
     all_paths = [
         defaults_path,
         pipeline_dict_path,
@@ -66,11 +64,19 @@ def test_create_project():
         contents = f.read()
         assert 'class_dict = {}' in contents
 
+
+def test_create_project():
+    delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
+    create_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
+
+    _assert_project_has_correct_files(BASE_GENERATED_DIR)
+
     delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
 
 
 class PipelineManagerTestBase:
-    defaults_path = os.path.join(BASE_GENERATED_DIR, 'defaults')
+    defaults_folder_name = 'custom_defaults'
+    defaults_path = os.path.join(BASE_GENERATED_DIR, defaults_folder_name)
     pipeline_folder = BASE_GENERATED_DIR
     pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
     example_class_file_names = [
@@ -96,10 +102,10 @@ class PipelineManagerTestBase:
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(
-            pipeline_dict_folder=self.pipeline_folder,
-            basepath=self.defaults_path,
+            folder=self.pipeline_folder,
             name=self.test_name,
             log_folder=self.logs_path,
+            default_config_folder_name=self.defaults_folder_name,
         )
         all_kwargs.update(**kwargs)
         pipeline_manager = PipelineManager(**all_kwargs)
@@ -124,6 +130,14 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager
+
+    def test_create_project_with_pm(self):
+        delete_project(BASE_GENERATED_DIR, FULL_CLASS_DICT_LIST)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=FULL_CLASS_DICT_LIST
+        )
+        pipeline_manager.load()
+        _assert_project_has_correct_files(BASE_GENERATED_DIR)
 
     def test_create_pm_with_function(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -324,6 +338,15 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
     # TODO [#37]: test invalid inputs
     #
     # such as specific class name matching pipeline name, passing two of the same names for classes, etc.
+
+    # TODO: test multiple simultaneous pipeline managers
+    #
+    # need create, get, run tests
+
+    # TODO: test referencing object in a function config through selector and updating that object
+    #
+    # Should see that updating the object with `config.update` will cause the function pointing to
+    # the selector for that object to use the updated object.
 
 
 class TestPipelineManagerRun(PipelineManagerTestBase):

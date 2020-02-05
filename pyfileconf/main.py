@@ -29,19 +29,20 @@ class PipelineManager:
     Main class for managing flow-based programming and configuration.
     """
 
-    def __init__(self, pipeline_dict_folder: str, basepath: str,
+    def __init__(self, folder: str,
                  name: str= 'project',
                  specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None,
-                 auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None):
+                 auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None,
+                 default_config_folder_name: str = 'defaults'):
 
         if specific_class_config_dicts is None:
             specific_class_config_dicts = []
 
-        self.pipeline_dict_folder = pipeline_dict_folder
-        self.pipeline_dict_path = os.path.join(pipeline_dict_folder, 'pipeline_dict.py')
+        self.folder = folder
+        self.pipeline_dict_path = os.path.join(folder, 'pipeline_dict.py')
         self.specific_class_config_dicts = specific_class_config_dicts
         self.specific_class_names = [sc_dict['name'] for sc_dict in specific_class_config_dicts]
-        self.basepath = basepath
+        self.default_config_path = os.path.join(self.folder, default_config_folder_name)
         self.name = name
         self.auto_pdb = auto_pdb
         self.force_continue = force_continue
@@ -51,6 +52,7 @@ class PipelineManager:
         self._general_registrar: Optional[PipelineRegistrar] = None
 
         self._validate_options()
+        self._create_project_if_needed()
 
     def __getattr__(self, item):
 
@@ -219,13 +221,13 @@ class PipelineManager:
         # Load dynamically instead of passing dict to ensure modules are loaded into sys now
         self._registrars, self._general_registrar = create_registrars(
             self.specific_class_config_dicts,
-            self.basepath,
-            self.pipeline_dict_folder,
+            self.default_config_path,
+            self.folder,
             self.pipeline_dict_path,
             manager_name=self.name,
         )
 
-        self.config = ConfigManager(self.basepath)
+        self.config = ConfigManager(self.default_config_path)
         self.config.load()
 
         self.runner = Runner(config=self.config, registrars=self._registrars, general_registrar=self._general_registrar)
@@ -255,6 +257,21 @@ class PipelineManager:
     def _validate_options(self):
         if self.auto_pdb and self.force_continue:
             raise ValueError('cannot force continue and drop into pdb at the same time')
+
+    def _create_project_if_needed(self):
+        if self._need_to_create_project():
+            create_project(self.folder, self.specific_class_config_dicts)
+
+    def _need_to_create_project(self) -> bool:
+        return any([
+            not os.path.exists(self.folder),
+            not os.path.exists(self.pipeline_dict_path),
+            not os.path.exists(self.default_config_path),
+            *[
+                not os.path.exists(path) for path in
+                [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
+            ],
+        ])
 
 
 
@@ -340,16 +357,20 @@ def create_project(path: str,
 
     logs_path = os.path.join(path, 'Logs')
 
-    os.makedirs(defaults_path)
-    os.makedirs(logs_path)
-    with open(pipeline_path, 'w') as f:
-        f.write('\npipeline_dict = {}\n')
+    if not os.path.exists(defaults_path):
+        os.makedirs(defaults_path)
+    if not os.path.exists(logs_path):
+        os.makedirs(logs_path)
+    if not os.path.exists(pipeline_path):
+        with open(pipeline_path, 'w') as f:
+            f.write('\npipeline_dict = {}\n')
     if specific_class_config_dicts:
         for specific_class_config in specific_class_config_dicts:
             name = specific_class_config['name']
             dict_path = os.path.join(path, f'{name}_dict.py')
-            with open(dict_path, 'w') as f:
-                f.write(f'\nclass_dict = {{}}\n')
+            if not os.path.exists(dict_path):
+                with open(dict_path, 'w') as f:
+                    f.write(f'\nclass_dict = {{}}\n')
 
 
 

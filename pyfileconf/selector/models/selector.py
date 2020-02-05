@@ -131,13 +131,15 @@ class Selector:
 
     def _load_structure(self):
         from pyfileconf.main import create_collections
+        from pyfileconf import PipelineManager
         out_dict = {}
+        manager: PipelineManager
         for manager_name, manager in self._managers.items():
             pipeline_dict_path, specific_class_name_config_dict = get_pipeline_dict_path_and_specific_class_config_dicts_from_manager(manager)
             collections, general_collection = create_collections(
                 specific_class_name_config_dict,
-                manager.basepath,
-                manager.pipeline_dict_folder,
+                manager.default_config_path,
+                manager.folder,
                 pipeline_dict_path,
             )
             manager_dict = {
