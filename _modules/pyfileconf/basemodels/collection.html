@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.collection &mdash; pyfileconf 0.2.2 documentation</title>
+  <title>pyfileconf.basemodels.collection &mdash; pyfileconf 0.2.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.2.3
               </div>
             
           
@@ -293,8 +293,22 @@
             <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
         <span class="p">)</span></div>
 
+<div class="viewcode-block" id="Collection.to_nested_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.to_nested_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">to_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_transform_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_transform_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="to_nested_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.to_nested_dict">[docs]</a><span class="k">def</span> <span class="nf">to_nested_dict</span><span class="p">(</span><span class="n">collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">):</span>
+    <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
+            <span class="n">nested</span> <span class="o">=</span> <span class="n">to_nested_dict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">out_dict</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">nested</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out_dict</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="n">out_dict</span></div>
 </pre></div>
 
            </div>

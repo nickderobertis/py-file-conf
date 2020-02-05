@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.2.2 documentation</title>
+  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.2.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.2.3
               </div>
             
           
@@ -222,7 +222,10 @@
         <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
         <span class="c1"># Goes into nested sections, until it pulls the final section or pipeline</span>
-        <span class="k">return</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Registrar.to_nested_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.to_nested_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_nested_dict</span><span class="p">()</span></div></div>
 </pre></div>
 
            </div>
