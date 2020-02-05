@@ -267,10 +267,6 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "a: Optional[Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
 
-    # TODO [#36]: test multiple specific class dicts at once
-    #
-    # both same class and two different classes
-
     def test_create_pm_with_multiple_class_dicts_same_class(self):
         self.write_example_class_dict_to_file()  # example_class
         self.write_example_class_dict_to_file(1)  # example_class2
