@@ -49,42 +49,10 @@ pyfileconf.data.models.file module
    :undoc-members:
    :show-inheritance:
 
-pyfileconf.data.models.merge module
------------------------------------
-
-.. automodule:: pyfileconf.data.models.merge
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyfileconf.data.models.pipeline module
---------------------------------------
-
-.. automodule:: pyfileconf.data.models.pipeline
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyfileconf.data.models.registrar module
 ---------------------------------------
 
 .. automodule:: pyfileconf.data.models.registrar
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyfileconf.data.models.source module
-------------------------------------
-
-.. automodule:: pyfileconf.data.models.source
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyfileconf.data.models.type module
-----------------------------------
-
-.. automodule:: pyfileconf.data.models.type
    :members:
    :undoc-members:
    :show-inheritance:
