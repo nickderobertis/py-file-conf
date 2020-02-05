@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.func.load.args &mdash; pyfileconf 0.2.1 documentation</title>
+  <title>pyfileconf.io.func.load.args &mdash; pyfileconf 0.2.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.1
+                0.2.2
               </div>
             
           
@@ -215,6 +215,13 @@
         <span class="n">function_name</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">renames</span><span class="o">.</span><span class="n">reverse_name_map</span><span class="p">[</span><span class="n">function_name</span><span class="p">]</span>
 
     <span class="n">loader</span> <span class="o">=</span> <span class="n">ImportAssignmentLazyLoader</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+
+    <span class="c1"># TODO: handle relative nested imports such as from .this import that</span>
+    <span class="c1">#</span>
+    <span class="c1"># This code keeps importing and checking whether the name is defined in the file. If not,</span>
+    <span class="c1"># it follows the next import. This doesn&#39;t properly work if one of those followed imports</span>
+    <span class="c1"># is a relative import such as `from .this import that`. Add test to show this and</span>
+    <span class="c1"># also fix it.</span>
 
     <span class="n">ast_function_def</span> <span class="o">=</span> <span class="n">extract_function_definition_or_class_init_from_ast_by_name</span><span class="p">(</span>
         <span class="n">loader</span><span class="o">.</span><span class="n">ast</span><span class="p">,</span>
