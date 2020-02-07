@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.collection &mdash; pyfileconf 0.2.4 documentation</title>
+  <title>pyfileconf.basemodels.collection &mdash; pyfileconf 0.2.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.4
+                0.2.5
               </div>
             
           
@@ -202,13 +202,15 @@
 
 <div class="viewcode-block" id="Collection.__init__"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">imports</span><span class="p">:</span> <span class="n">ImportStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                 <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span> <span class="o">=</span> <span class="n">basepath</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imports</span> <span class="o">=</span> <span class="n">imports</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span> <span class="o">=</span> <span class="n">always_import_strs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span> <span class="o">=</span> <span class="n">always_assign_strs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span> <span class="o">=</span> <span class="n">key_attr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">klass</span> <span class="o">=</span> <span class="n">klass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_items</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_name_map</span><span class="p">()</span></div>
@@ -234,7 +236,8 @@
 <div class="viewcode-block" id="Collection.from_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                   <span class="n">imports</span><span class="p">:</span> <span class="n">ImportStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
         <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">dict_or_list</span> <span class="ow">in</span> <span class="n">dict_</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">section_basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">section_name</span><span class="p">)</span>
@@ -243,7 +246,8 @@
                 <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
                         <span class="n">dict_or_list</span><span class="p">,</span> <span class="n">basepath</span><span class="o">=</span><span class="n">section_basepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">section_name</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
-                        <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
+                        <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+                        <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_or_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -251,19 +255,22 @@
                 <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="bp">cls</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
                         <span class="n">dict_or_list</span><span class="p">,</span> <span class="n">basepath</span><span class="o">=</span><span class="n">section_basepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">section_name</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
-                        <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
+                        <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+                        <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">basepath</span><span class="o">=</span><span class="n">basepath</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Collection.from_list"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.from_list">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">list_</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                   <span class="n">imports</span><span class="p">:</span> <span class="n">ImportStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
         <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">dict_or_item</span> <span class="ow">in</span> <span class="n">list_</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_or_item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -274,12 +281,14 @@
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_list_or_item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                         <span class="n">collection</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
                             <span class="n">dict_list_or_item</span><span class="p">,</span> <span class="n">basepath</span><span class="o">=</span><span class="n">section_basepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">section_name</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
-                            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
+                            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+                            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
                         <span class="p">)</span>
                     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_list_or_item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                         <span class="n">collection</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
                             <span class="n">dict_list_or_item</span><span class="p">,</span> <span class="n">basepath</span><span class="o">=</span><span class="n">section_basepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">section_name</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
-                            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
+                            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+                            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">collection</span> <span class="o">=</span> <span class="n">dict_list_or_item</span>
@@ -290,7 +299,8 @@
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">basepath</span><span class="o">=</span><span class="n">basepath</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
-            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span>
+            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
+            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Collection.to_nested_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.to_nested_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

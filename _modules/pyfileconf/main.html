@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.2.4 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.2.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.4
+                0.2.5
               </div>
             
           
@@ -168,6 +168,7 @@
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">bdb</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
@@ -188,6 +189,8 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logger</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
 
+<span class="n">SpecificClassConfigDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span>
+
 
 <div class="viewcode-block" id="PipelineManager"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager">[docs]</a><span class="k">class</span> <span class="nc">PipelineManager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -196,7 +199,7 @@
 
 <div class="viewcode-block" id="PipelineManager.__init__"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
-                 <span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">auto_pdb</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_continue</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">default_config_folder_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;defaults&#39;</span><span class="p">):</span>
 
@@ -547,7 +550,7 @@
                              <span class="sa">f</span><span class="s1">&#39;top-level pipeline_dict. The issue is with </span><span class="si">{registrar.name}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="create_registrars"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_registrars">[docs]</a><span class="k">def</span> <span class="nf">create_registrars</span><span class="p">(</span><span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]],</span>
+<div class="viewcode-block" id="create_registrars"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_registrars">[docs]</a><span class="k">def</span> <span class="nf">create_registrars</span><span class="p">(</span><span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">],</span>
                       <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_dict_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                       <span class="n">manager_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                       <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SpecificRegistrar</span><span class="p">],</span> <span class="n">PipelineRegistrar</span><span class="p">]:</span>
@@ -569,7 +572,7 @@
     <span class="k">return</span> <span class="n">registrars</span><span class="p">,</span> <span class="n">general_registrar</span></div>
 
 
-<div class="viewcode-block" id="create_collections"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_collections">[docs]</a><span class="k">def</span> <span class="nf">create_collections</span><span class="p">(</span><span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]],</span>
+<div class="viewcode-block" id="create_collections"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_collections">[docs]</a><span class="k">def</span> <span class="nf">create_collections</span><span class="p">(</span><span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">],</span>
                        <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_dict_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                        <span class="n">manager_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SpecificClassCollection</span><span class="p">],</span> <span class="n">PipelineCollection</span><span class="p">]:</span>
@@ -587,7 +590,7 @@
 
 
 <span class="k">def</span> <span class="nf">_create_registrars_or_collections_from_dict</span><span class="p">(</span>
-    <span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]],</span>
+    <span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">],</span>
     <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_dict_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">registrar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">manager_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
@@ -611,27 +614,30 @@
     <span class="k">for</span> <span class="n">specific_class_config_dict</span> <span class="ow">in</span> <span class="n">specific_class_config_dicts</span><span class="p">:</span>
 
         <span class="c1"># Set defaults then update with actual config</span>
-        <span class="n">config_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">config_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">always_assign_strs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">always_import_strs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">config_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">specific_class_config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
-        <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_dict</span> <span class="ow">or</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;name is required&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;class&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_dict</span> <span class="ow">or</span> <span class="n">config_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{key}</span><span class="s1"> is required in </span><span class="si">{config_dict}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-        <span class="n">name</span> <span class="o">=</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="c1"># Kwargs require &#39;klass&#39; while config dict is &#39;class&#39;</span>
+        <span class="n">kwargs_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
+        <span class="n">kwargs_dict</span><span class="p">[</span><span class="s1">&#39;klass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+        <span class="n">kwargs_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
         <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipeline_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
         <span class="n">specific_class_dict_file</span> <span class="o">=</span> <span class="n">SpecificClassDictFile</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_dict&#39;</span><span class="p">)</span>
         <span class="n">specific_dict</span> <span class="o">=</span> <span class="n">specific_class_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">specific_class_class</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
             <span class="n">specific_dict</span><span class="p">,</span>
             <span class="n">basepath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">imports</span><span class="o">=</span><span class="n">specific_class_dict_file</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
-            <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;always_assign_strs&#39;</span><span class="p">],</span>
-            <span class="n">always_import_strs</span><span class="o">=</span><span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;always_import_strs&#39;</span><span class="p">],</span>
-            <span class="n">klass</span><span class="o">=</span><span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+            <span class="o">**</span><span class="n">kwargs_dict</span>  <span class="c1"># type: ignore</span>
         <span class="p">)</span>
         <span class="n">objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
