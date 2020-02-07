@@ -12,7 +12,8 @@ class Registrar(ReprMixin):
 
     def __init__(self, collection: Collection, basepath: str, name=None,
                  always_import_strs: Optional[Sequence[str]] = None,
-                 always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
+                 always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
+                 key_attr: str = 'name'):
         self.collection = collection
         self.basepath = basepath
         self.name = name
@@ -20,6 +21,7 @@ class Registrar(ReprMixin):
         self.always_import_strs = always_import_strs
         self.always_assign_strs = always_assign_strs
         self.klass = klass
+        self.key_attr = key_attr
 
     def __getattr__(self, item):
         return getattr(self.collection, item)
@@ -39,15 +41,18 @@ class Registrar(ReprMixin):
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str=None,
                   imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
-                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
+                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
+                  key_attr: str = 'name'):
         collection = cls.collection_class.from_dict(
             dict_, basepath=basepath, name=name, imports=imports,
-            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+            key_attr=key_attr
         )
 
         return cls(
             collection, basepath=basepath, name=name,
-            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+            key_attr=key_attr
         )
 
     def scaffold_config(self):

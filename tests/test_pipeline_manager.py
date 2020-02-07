@@ -192,6 +192,30 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "a: Optional[Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
 
+    def test_create_pm_with_class_dict_and_custom_key_attr(self):
+        self.write_example_class_dict_to_file()
+        class_config_dict_list = deepcopy(CLASS_CONFIG_DICT_LIST)
+        class_config_dict_list[0].update(
+            key_attr='a'
+        )
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=class_config_dict_list
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            assert "from typing import Optional" in contents
+            assert "from typing import Tuple" in contents
+            assert "from pyfileconf import Selector" in contents
+            assert "s = Selector()" in contents
+            assert "a: Optional[Tuple[int, int]] = 'data'" in contents
+            assert "name: Optional[str] = None" in contents
+
     def test_create_pm_with_class_dict_and_imports(self):
         self.write_example_class_dict_to_file()
         class_config_dict_list = deepcopy(CLASS_CONFIG_DICT_LIST)
