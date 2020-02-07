@@ -3,6 +3,7 @@ import os
 import traceback
 import pdb
 import bdb
+from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
 
 from pyfileconf.basemodels.registrar import Registrar
@@ -23,6 +24,8 @@ from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedException
 from pyfileconf.logger import stdout_also_logged
 
+SpecificClassConfigDict = Dict[str, Optional[Union[str, Type, List[str]]]]
+
 
 class PipelineManager:
     """
@@ -31,7 +34,7 @@ class PipelineManager:
 
     def __init__(self, folder: str,
                  name: str= 'project',
-                 specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None,
+                 specific_class_config_dicts: Optional[List[SpecificClassConfigDict]] = None,
                  auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None,
                  default_config_folder_name: str = 'defaults'):
 
@@ -382,7 +385,7 @@ def _validate_registrars(registrars: List[SpecificRegistrar], general_registrar:
                              f'top-level pipeline_dict. The issue is with {registrar.name}.')
 
 
-def create_registrars(specific_class_config_dicts: List[Dict[str, Union[str, Type, List[str]]]],
+def create_registrars(specific_class_config_dicts: List[SpecificClassConfigDict],
                       basepath: str, pipeline_folder: str, pipeline_dict_path: str,
                       manager_name: Optional[str] = None
                       ) -> Tuple[List[SpecificRegistrar], PipelineRegistrar]:
@@ -404,7 +407,7 @@ def create_registrars(specific_class_config_dicts: List[Dict[str, Union[str, Typ
     return registrars, general_registrar
 
 
-def create_collections(specific_class_config_dicts: List[Dict[str, Union[str, Type, List[str]]]],
+def create_collections(specific_class_config_dicts: List[SpecificClassConfigDict],
                        basepath: str, pipeline_folder: str, pipeline_dict_path: str,
                        manager_name: Optional[str] = None
                        ) -> Tuple[List[SpecificClassCollection], PipelineCollection]:
@@ -422,7 +425,7 @@ def create_collections(specific_class_config_dicts: List[Dict[str, Union[str, Ty
 
 
 def _create_registrars_or_collections_from_dict(
-    specific_class_config_dicts: List[Dict[str, Union[str, Type, List[str]]]],
+    specific_class_config_dicts: List[SpecificClassConfigDict],
     basepath: str, pipeline_folder: str, pipeline_dict_path: str, registrar: bool = True,
     manager_name: Optional[str] = None
 ) -> Tuple[
@@ -446,27 +449,30 @@ def _create_registrars_or_collections_from_dict(
     for specific_class_config_dict in specific_class_config_dicts:
 
         # Set defaults then update with actual config
-        config_dict = dict(
+        config_dict: Dict[str, Optional[Union[str, Type, List[str]]]] = dict(
             always_assign_strs=None,
             always_import_strs=None,
         )
         config_dict.update(specific_class_config_dict)  # type: ignore
 
-        if 'name' not in config_dict or config_dict['name'] is None:
-            raise ValueError('name is required')
+        for key in ('name', 'class'):
+            if key not in config_dict or config_dict[key] is None:
+                raise ValueError(f'{key} is required in {config_dict}')
 
-        name = config_dict['name']
+        # Kwargs require 'klass' while config dict is 'class'
+        kwargs_dict = deepcopy(config_dict)
+        kwargs_dict['klass'] = config_dict['class']
+        kwargs_dict.pop('class')
+
+        name = cast(str, config_dict['name'])
         file_path = os.path.join(pipeline_folder, f'{name}_dict.py')
         specific_class_dict_file = SpecificClassDictFile(file_path, name=name + '_dict')
         specific_dict = specific_class_dict_file.load()
         obj = specific_class_class.from_dict(
             specific_dict,
             basepath=os.path.join(basepath, name),
-            name=name,
             imports=specific_class_dict_file.interface.imports,
-            always_assign_strs=config_dict['always_assign_strs'],
-            always_import_strs=config_dict['always_import_strs'],
-            klass=config_dict['class']
+            **kwargs_dict  # type: ignore
         )
         objs.append(obj)
 

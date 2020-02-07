@@ -37,13 +37,15 @@ class Collection(Container, ReprMixin):
 
     def __init__(self, basepath: str, items, name: str = None,
                  imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
-                 always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
+                 always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
+                 key_attr: str = 'name'):
         self.basepath = basepath
         self.imports = imports
         self.name = name
 
         self.always_import_strs = always_import_strs
         self.always_assign_strs = always_assign_strs
+        self.key_attr = key_attr
         self.klass = klass
         self.items = self._transform_items(items)
         self._set_name_map()
@@ -69,7 +71,8 @@ class Collection(Container, ReprMixin):
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str = None,
                   imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
-                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
+                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
+                  key_attr: str = 'name'):
         items = []
         for section_name, dict_or_list in dict_.items():
             section_basepath = os.path.join(basepath, section_name)
@@ -78,7 +81,8 @@ class Collection(Container, ReprMixin):
                 items.append(
                     cls.from_dict(
                         dict_or_list, basepath=section_basepath, name=section_name, imports=imports,
-                        always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+                        always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+                        key_attr=key_attr
                     )
                 )
             elif isinstance(dict_or_list, list):
@@ -86,19 +90,22 @@ class Collection(Container, ReprMixin):
                 items.append(
                     cls.from_list(
                         dict_or_list, basepath=section_basepath, name=section_name, imports=imports,
-                        always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+                        always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+                        key_attr=key_attr
                     )
                 )
 
         return cls(
             basepath=basepath, items=items, name=name,
-            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+            key_attr=key_attr
         )
 
     @classmethod
     def from_list(cls, list_: list, basepath: str, name: str = None,
                   imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
-                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None):
+                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
+                  key_attr: str = 'name'):
         items = []
         for dict_or_item in list_:
             if isinstance(dict_or_item, dict):
@@ -109,12 +116,14 @@ class Collection(Container, ReprMixin):
                     if isinstance(dict_list_or_item, dict):
                         collection = cls.from_dict(
                             dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports,
-                            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+                            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+                            key_attr=key_attr
                         )
                     elif isinstance(dict_list_or_item, list):
                         collection = cls.from_list(
                             dict_list_or_item, basepath=section_basepath, name=section_name, imports=imports,
-                            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+                            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+                            key_attr=key_attr
                         )
                     else:
                         collection = dict_list_or_item
@@ -125,7 +134,8 @@ class Collection(Container, ReprMixin):
 
         return cls(
             basepath=basepath, items=items, name=name, imports=imports,
-            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass
+            always_assign_strs=always_assign_strs, always_import_strs=always_import_strs, klass=klass,
+            key_attr=key_attr
         )
 
     def to_nested_dict(self):

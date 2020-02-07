@@ -72,9 +72,21 @@ def _extract_unique_type_str_names_from_annotation_dict(annotation_dict: dict) -
     return list(set(names))
 
 def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
+    # TODO [#26]: remove type ignores once typeshed has better ast support
+    #
+    # Hitting errors "expr" has no attribute "id" and  "slice" has no attribute "value"
+
     names = []
     if isinstance(annotation, ast.Name):
         names.append(annotation.id)  # handles most types
+    elif hasattr(annotation, 'elts'):  # type: ignore
+        # got multiple values, e.g. List[str, bool]
+        # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
+        names.extend(_extract_str_names_from_tuple(annotation)) # type: ignore
+    elif isinstance(annotation, ast.Index):
+        # e.g. [str]
+        # use .value to extract the str part, but then as it can be anything, call recursively on this
+        names.extend(_extract_str_names_from_ambiguous_annotation(annotation.value))
     elif isinstance(annotation, ast.Subscript):
         # E.g. Tuple[int]
         names.extend(_extract_str_names_from_subscript(annotation))
@@ -92,24 +104,12 @@ def _extract_str_names_from_ambiguous_annotation(annotation) -> List[str]:
 def _extract_str_names_from_subscript(subscript: ast.Subscript) -> List[str]:
     names = []
 
-    # TODO [#26]: remove type ignores once typeshed has better ast support
-    #
-    # Hitting errors "expr" has no attribute "id" and  "slice" has no attribute "value"
+    # for example, List[str]
+    outer_ast = subscript.value  # List portion
+    inner_ast = subscript.slice  # [str] portion
 
-    # e.g.: List[str], gets List portion
-    names.append(subscript.value.id) # type: ignore
-    if hasattr(subscript.slice.value, 'elts'):  # type: ignore
-        # got multiple values, e.g. List[str, bool]
-        # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
-        names.extend(_extract_str_names_from_tuple(subscript.slice.value)) # type: ignore
-    elif isinstance(subscript.slice.value, ast.Subscript): # type: ignore
-        # Recursively call extract from subscript if subscript found within subscript
-        # e.g. Optional[List[str]]
-        names.extend(_extract_str_names_from_subscript(subscript.slice.value)) # type: ignore
-    else:
-        # Got a single item, list List[str]
-        # gets str portion
-        names.append(subscript.slice.value.id)  # type: ignore
+    names.extend(_extract_str_names_from_ambiguous_annotation(outer_ast))
+    names.extend(_extract_str_names_from_ambiguous_annotation(inner_ast))
 
     return names
 
