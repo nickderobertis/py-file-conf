@@ -3,6 +3,7 @@ import os
 import traceback
 import pdb
 import bdb
+from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
 
 from pyfileconf.basemodels.registrar import Registrar
@@ -452,8 +453,14 @@ def _create_registrars_or_collections_from_dict(
         )
         config_dict.update(specific_class_config_dict)  # type: ignore
 
-        if 'name' not in config_dict or config_dict['name'] is None:
-            raise ValueError('name is required')
+        for key in ('name', 'class'):
+            if key not in config_dict or config_dict[key] is None:
+                raise ValueError(f'{key} is required in {config_dict}')
+
+        # Kwargs require 'klass' while config dict is 'class'
+        kwargs_dict = deepcopy(config_dict)
+        kwargs_dict['klass'] = config_dict['class']
+        kwargs_dict.pop('class')
 
         name = config_dict['name']
         file_path = os.path.join(pipeline_folder, f'{name}_dict.py')
@@ -462,11 +469,8 @@ def _create_registrars_or_collections_from_dict(
         obj = specific_class_class.from_dict(
             specific_dict,
             basepath=os.path.join(basepath, name),
-            name=name,
             imports=specific_class_dict_file.interface.imports,
-            always_assign_strs=config_dict['always_assign_strs'],
-            always_import_strs=config_dict['always_import_strs'],
-            klass=config_dict['class']
+            **kwargs_dict
         )
         objs.append(obj)
 
