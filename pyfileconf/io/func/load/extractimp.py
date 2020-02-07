@@ -96,20 +96,33 @@ def _extract_str_names_from_subscript(subscript: ast.Subscript) -> List[str]:
     #
     # Hitting errors "expr" has no attribute "id" and  "slice" has no attribute "value"
 
-    # e.g.: List[str], gets List portion
-    names.append(subscript.value.id) # type: ignore
-    if hasattr(subscript.slice.value, 'elts'):  # type: ignore
+    # for example, List[str]
+    outer_ast = subscript.value  # List portion
+    inner_ast = subscript.slice  # [str] portion
+
+    # first handle List portion
+    if hasattr(outer_ast, 'id'):
+        # Regular name such as List
+        names.append(outer_ast.id) # type: ignore
+    else:
+        # Attribute name such as pd.DataFrame
+        names.append(outer_ast.value.id)  # e.g. pd
+
+    # now handle [str] portion
+    if hasattr(inner_ast.value, 'elts'):  # type: ignore
         # got multiple values, e.g. List[str, bool]
         # in this case, value.slice.value is a Tuple, and Tuple.elts contains the items
-        names.extend(_extract_str_names_from_tuple(subscript.slice.value)) # type: ignore
-    elif isinstance(subscript.slice.value, ast.Subscript): # type: ignore
+        names.extend(_extract_str_names_from_tuple(inner_ast.value)) # type: ignore
+    elif isinstance(inner_ast.value, ast.Subscript): # type: ignore
         # Recursively call extract from subscript if subscript found within subscript
         # e.g. Optional[List[str]]
-        names.extend(_extract_str_names_from_subscript(subscript.slice.value)) # type: ignore
+        names.extend(_extract_str_names_from_subscript(inner_ast.value)) # type: ignore
+    elif isinstance(inner_ast.value, ast.Attribute):
+        # got an attribute such as pd.DataFrame
+        names.append(inner_ast.value.value.id)
     else:
-        # Got a single item, list List[str]
-        # gets str portion
-        names.append(subscript.slice.value.id)  # type: ignore
+        # regular final annotation such as str
+        names.append(inner_ast.value.id)  # type: ignore
 
     return names
 
