@@ -188,11 +188,13 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "from typing import Optional" in contents
             assert "import typing" in contents
             assert "import collections" in contents
+            assert "from traceback import TracebackException" in contents
             assert "from pyfileconf import Selector" in contents
             assert "s = Selector()" in contents
             assert "a: Optional[typing.Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
             assert "c: Optional[collections.defaultdict] = None" in contents
+            assert "d: Optional['TracebackException'] = None" in contents
 
     def test_create_pm_with_class_dict_and_custom_key_attr(self):
         self.write_example_class_dict_to_file()
@@ -214,11 +216,13 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "from typing import Optional" in contents
             assert "import typing" in contents
             assert "import collections" in contents
+            assert "from traceback import TracebackException" in contents
             assert "from pyfileconf import Selector" in contents
             assert "s = Selector()" in contents
             assert "a: Optional[typing.Tuple[int, int]] = 'data'" in contents
             assert "name: Optional[str] = None" in contents
             assert "c: Optional[collections.defaultdict] = None" in contents
+            assert "d: Optional['TracebackException'] = None" in contents
 
     def test_create_pm_with_class_dict_and_imports(self):
         self.write_example_class_dict_to_file()
@@ -244,11 +248,13 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "from typing import Optional" in contents
             assert "import typing" in contents
             assert "import collections" in contents
+            assert "from traceback import TracebackException" in contents
             assert "from copy import deepcopy" in contents
             assert "from functools import partial" in contents
             assert "a: Optional[typing.Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
             assert "c: Optional[collections.defaultdict] = None" in contents
+            assert "d: Optional['TracebackException'] = None" in contents
 
     def test_create_pm_with_class_dict_and_assigns(self):
         self.write_example_class_dict_to_file()
@@ -274,11 +280,13 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "from typing import Optional" in contents
             assert "import typing" in contents
             assert "import collections" in contents
+            assert "from traceback import TracebackException" in contents
             assert "my_var = 6" in contents
             assert "stuff = list((1,))" in contents
             assert "a: Optional[typing.Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
             assert "c: Optional[collections.defaultdict] = None" in contents
+            assert "d: Optional['TracebackException'] = None" in contents
 
     def test_create_pm_with_class_dict_imports_and_assigns(self):
         self.write_example_class_dict_to_file()
@@ -307,6 +315,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "from typing import Optional" in contents
             assert "import typing" in contents
             assert "import collections" in contents
+            assert "from traceback import TracebackException" in contents
             assert "from copy import deepcopy" in contents
             assert "from functools import partial" in contents
             assert "my_var = 6" in contents
@@ -314,6 +323,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "a: Optional[typing.Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
             assert "c: Optional[collections.defaultdict] = None" in contents
+            assert "d: Optional['TracebackException'] = None" in contents
 
     def test_create_pm_with_multiple_class_dicts_same_class(self):
         self.write_example_class_dict_to_file()  # example_class
@@ -336,10 +346,12 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
                 assert "from typing import Optional" in contents
                 assert "import typing" in contents
                 assert "import collections" in contents
+                assert "from traceback import TracebackException" in contents
                 assert "s = Selector()" in contents
                 assert "a: Optional[typing.Tuple[int, int]] = None" in contents
                 assert "name: Optional[str] = 'data'" in contents
                 assert "c: Optional[collections.defaultdict] = None" in contents
+                assert "d: Optional['TracebackException'] = None" in contents
 
     def test_create_pm_with_multiple_class_dicts_different_class(self):
         self.write_example_class_dict_to_file()  # example_class
@@ -361,10 +373,12 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             assert "from typing import Optional" in contents
             assert "import typing" in contents
             assert "import collections" in contents
+            assert "from traceback import TracebackException" in contents
             assert "s = Selector()" in contents
             assert "a: Optional[typing.Tuple[int, int]] = None" in contents
             assert "name: Optional[str] = 'data'" in contents
             assert "c: Optional[collections.defaultdict] = None" in contents
+            assert "d: Optional['TracebackException'] = None" in contents
         with open(class_paths[1], 'r') as f:
             contents = f.read()
             assert "from typing import Optional" in contents
