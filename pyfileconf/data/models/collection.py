@@ -89,7 +89,8 @@ class SpecificClassCollection(Collection):
             file_config_item = item
 
         item_config = SpecificClassConfig.from_obj(file_config_item, imports=existing_imports,
-                                                   file_path=item_filepath, **class_config)  # type: ignore
+                                                   file_path=item_filepath, key_attr=self.key_attr,
+                                                   **class_config)  # type: ignore
 
         # Get config by extracting from class __init__
         # First need to create dummy import for compatibility

@@ -48,7 +48,8 @@ class SpecificClassConfig(ConfigBase):
     @classmethod
     def from_obj(cls, obj: Any, klass: Type, name: str=None, imports: ImportStatementContainer = None,
                  always_import_strs: Optional[Sequence[str]] = None,
-                 always_assign_strs: Optional[Sequence[str]] = None, file_path: Optional[str] = None):
+                 always_assign_strs: Optional[Sequence[str]] = None, file_path: Optional[str] = None,
+                 key_attr: str = 'name'):
         # Initialize a blank config dictionary
         config_dict = function_args_as_dict(klass.__init__)
 
@@ -68,8 +69,8 @@ class SpecificClassConfig(ConfigBase):
                 config_dict[config_attr] = getattr(obj, config_attr)
 
         # Special handling for name, which will be set even before creating file
-        if isinstance(config_dict['name'], str):
-            config_dict['name'] = ast_str(config_dict['name'])  # convert str to ast
+        if isinstance(config_dict[key_attr], str):
+            config_dict[key_attr] = ast_str(config_dict[key_attr])  # convert str to ast
 
         return cls(
             config_dict,
