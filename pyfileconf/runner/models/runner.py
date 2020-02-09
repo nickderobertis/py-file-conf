@@ -201,7 +201,7 @@ class Runner(ReprMixin):
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
                              f'got {func_or_collection} of type {type(func_or_collection)}')
 
-    # TODO [$5e4022f1fa68db000789cd44]: restructure runner get and run
+    # TODO [#50]: restructure runner get and run
     #
     # Currently the checks for section, function, specific class are very repetitive across the
     # various get and run functions. Standardize these and offload into a single function.
