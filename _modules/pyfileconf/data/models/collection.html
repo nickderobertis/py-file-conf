@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.3.0 documentation</title>
+  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.3.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.1
               </div>
             
           
@@ -254,7 +254,8 @@
             <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">item</span>
 
         <span class="n">item_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">existing_imports</span><span class="p">,</span>
-                                                   <span class="n">file_path</span><span class="o">=</span><span class="n">item_filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">class_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+                                                   <span class="n">file_path</span><span class="o">=</span><span class="n">item_filepath</span><span class="p">,</span> <span class="n">key_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span><span class="p">,</span>
+                                                   <span class="o">**</span><span class="n">class_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
         <span class="c1"># Get config by extracting from class __init__</span>
         <span class="c1"># First need to create dummy import for compatibility</span>

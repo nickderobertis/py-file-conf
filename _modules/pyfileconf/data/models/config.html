@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.config &mdash; pyfileconf 0.3.0 documentation</title>
+  <title>pyfileconf.data.models.config &mdash; pyfileconf 0.3.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.1
               </div>
             
           
@@ -213,7 +213,8 @@
 <div class="viewcode-block" id="SpecificClassConfig.from_obj"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.config.SpecificClassConfig.from_obj">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imports</span><span class="p">:</span> <span class="n">ImportStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                 <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
         <span class="c1"># Initialize a blank config dictionary</span>
         <span class="n">config_dict</span> <span class="o">=</span> <span class="n">function_args_as_dict</span><span class="p">(</span><span class="n">klass</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
 
@@ -233,8 +234,8 @@
                 <span class="n">config_dict</span><span class="p">[</span><span class="n">config_attr</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">config_attr</span><span class="p">)</span>
 
         <span class="c1"># Special handling for name, which will be set even before creating file</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ast_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>  <span class="c1"># convert str to ast</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_dict</span><span class="p">[</span><span class="n">key_attr</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">config_dict</span><span class="p">[</span><span class="n">key_attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">ast_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">[</span><span class="n">key_attr</span><span class="p">])</span>  <span class="c1"># convert str to ast</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">config_dict</span><span class="p">,</span>
