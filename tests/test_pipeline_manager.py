@@ -1,12 +1,13 @@
 import os
 from copy import deepcopy
-from typing import Sequence, Type, Union, Dict, List
+from typing import Sequence, Type, Union, Dict, List, Optional
 
 from pyfileconf import PipelineManager, Selector
 from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.mypackage.cmodule import ExampleClass
-from tests.utils import delete_project, pipeline_dict_str_with_obj, class_dict_str
+from tests.utils import delete_project, pipeline_dict_str_with_obj, class_dict_str, nested_pipeline_dict_str_with_obj, \
+    nested_class_dict_str
 from tests.input_files.amodule import a_function, SecondExampleClass
 
 BASE_GENERATED_DIR = os.path.join('tests', 'generated_files')
@@ -111,17 +112,27 @@ class PipelineManagerTestBase:
         pipeline_manager = PipelineManager(**all_kwargs)
         return pipeline_manager
 
-    def write_a_function_to_pipeline_dict_file(self):
+    def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False):
+        if nest_section:
+            write_str = nested_pipeline_dict_str_with_obj(
+                a_function, 'my_section', 'stuff', 'tests.input_files.amodule'
+            )
+        else:
+            write_str = pipeline_dict_str_with_obj(a_function, 'stuff', 'tests.input_files.amodule')
         with open(self.pipeline_dict_path, 'w') as f:
-            f.write(pipeline_dict_str_with_obj(a_function, 'stuff', 'tests.input_files.amodule'))
+            f.write(write_str)
 
     def write_example_class_to_pipeline_dict_file(self):
         with open(self.pipeline_dict_path, 'w') as f:
             f.write(pipeline_dict_str_with_obj(ExampleClass, 'stuff', 'tests.input_files.mypackage.cmodule'))
 
-    def write_example_class_dict_to_file(self, idx: int = 0):
+    def write_example_class_dict_to_file(self, idx: int = 0, nest_section: bool = False):
+        if nest_section:
+            write_str = nested_class_dict_str('class_dict', 'my_section', 'stuff', 'data')
+        else:
+            write_str = class_dict_str('class_dict', 'stuff', 'data')
         with open(self.example_class_dict_paths[idx], 'w') as f:
-            f.write(class_dict_str('class_dict', 'stuff', 'data'))
+            f.write(write_str)
 
 class TestPipelineManagerLoad(PipelineManagerTestBase):
 
@@ -400,11 +411,6 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
     # Should see that updating the object with `config.update` will cause the function pointing to
     # the selector for that object to use the updated object.
 
-    # TODO [#47]: test attribute and string type annotations
-    #
-    # Need to cover cases such as: `def my_func(a: pd.DataFrame, b: 'DataPipeline'):`
-    # Looking up from an attribute within the type annotation, as well as string type annotations
-
 
 class TestPipelineManagerRun(PipelineManagerTestBase):
 
@@ -621,3 +627,127 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_ec = ExampleClass(name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
+
+
+class TestPipelineManagerGetOne(PipelineManagerTestBase):
+
+    def test_get_function(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv_func = pipeline_manager.get(iv)
+        iv_result = iv_func()
+        str_func = pipeline_manager.get('stuff.a_function')
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
+    def test_get_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv_class = pipeline_manager.get(iv)
+        iv_obj = iv_class()
+        str_class = pipeline_manager.get('stuff.ExampleClass')
+        str_obj = str_class()
+        assert iv_obj == str_obj == ExampleClass(None)
+
+    def test_get_class_from_specific_config_dict(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+
+class TestPipelineManagerGetSection(PipelineManagerTestBase):
+
+    def test_get_main_dict_section(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff
+        iv_section = pipeline_manager.get(iv)
+        iv_func = iv_section[0]
+        iv_result = iv_func()
+        str_section = pipeline_manager.get('stuff')
+        str_func = str_section[0]
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
+    def test_get_main_dict_nested_section(self):
+        self.write_a_function_to_pipeline_dict_file(nest_section=True)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.my_section
+        iv_section = pipeline_manager.get(iv)
+        iv_func = iv_section['stuff'][0]
+        iv_result = iv_func()
+        str_section = pipeline_manager.get('my_section')
+        str_func = str_section['stuff'][0]
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
+    def test_get_specific_class_dict_section(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff
+        expect_ec = ExampleClass(name='data')
+        iv_section = pipeline_manager.get(iv)
+        iv_obj = iv_section[0]
+        str_section = pipeline_manager.get('example_class.stuff')
+        str_obj = str_section[0]
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+    def test_get_specific_class_dict_nested_section(self):
+        self.write_example_class_dict_to_file(nest_section=True)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class
+        expect_ec = ExampleClass(name='data')
+        iv_section = pipeline_manager.get(iv)
+        iv_obj = iv_section['my_section']['stuff'][0]
+        str_section = pipeline_manager.get('example_class')
+        str_obj = str_section['my_section']['stuff'][0]
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+    def test_get_specific_class_dict_custom_key_attr_section(self):
+        self.write_example_class_dict_to_file()
+        class_config_dict_list = deepcopy(CLASS_CONFIG_DICT_LIST)
+        class_config_dict_list[0].update(
+            key_attr='a'
+        )
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=class_config_dict_list
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff
+        expect_ec = ExampleClass(a='data')
+        iv_section = pipeline_manager.get(iv)
+        iv_obj = iv_section[0]
+        str_section = pipeline_manager.get('example_class.stuff')
+        str_obj = str_section[0]
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a

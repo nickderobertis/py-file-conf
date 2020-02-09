@@ -1,8 +1,9 @@
-from typing import Callable, Tuple, cast, Sequence, Type
+from typing import Callable, Tuple, cast, Sequence, Type, Union, Dict, Any, List
 from functools import partial
 
 from mixins.repr import ReprMixin
 
+from pyfileconf.basemodels.collection import Collection
 from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.config.models.manager import ConfigManager, ActiveFunctionConfig
 from pyfileconf.data.models.collection import SpecificClassCollection
@@ -36,6 +37,7 @@ class Runner(ReprMixin):
         self._full_getattr = ''
 
         self._all_specific_classes = tuple([registrar.klass for registrar in self._registrars])
+        self._specific_class_registrar_map = {registrar.klass: registrar for registrar in self._registrars}
 
     def __getattr__(self, item):
         # TODO [#14]: find way of doing runner look ups with fewer side effects
@@ -184,21 +186,82 @@ class Runner(ReprMixin):
 
         return configured_pipeline
 
-    def get(self, section_path_str: str) -> PipelineOrFunction:
+    def get(self, section_path_str: str):
         func_or_collection = self._get_func_or_collection(section_path_str)
-        if isinstance(func_or_collection, PipelineCollection):
-            # TODO [#17]: implement runner get sections
-            raise NotImplementedError('have not implemented getting sections. works with run')
+        if isinstance(func_or_collection, Collection):
+            return self._get_section(section_path_str)
         elif type(func_or_collection) is type and issubclass(type(func_or_collection), Pipeline):
             # Got pipeline class
             return self._get_one_pipeline_with_config(section_path_str)
         elif callable(func_or_collection):
             return self._get_one_func_with_config(section_path_str)
-        elif self._all_specific_classes and isinstance(func_or_collection, self._all_specific_classes):  # type: ignore
+        elif self._is_specific_class(func_or_collection):  # type: ignore
             return self._get_one_obj_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
                              f'got {func_or_collection} of type {type(func_or_collection)}')
+
+    # TODO: restructure runner get and run
+    #
+    # Currently the checks for section, function, specific class are very repetitive across the
+    # various get and run functions. Standardize these and offload into a single function.
+
+    def _get_section(self, section_path_str: str):
+        section = self._get_func_or_collection(section_path_str)
+        section = cast(Collection, section)
+
+        # Need to handle definition structure which can be lists inside dicts or more dicts inside dicts
+        # This method will be called recursively on each section. Check to see if there are any sections
+        # inside this section. If so, then that section would be defined by a dict key in the definition,
+        # and therefore results should be put in a dict. If there are no sections within this section, then
+        # a list was used to store the items in this section and so results will be put in a list.
+        results: Union[Dict[str, Union[Collection, Any]], List[Any]]
+        if any(isinstance(item, Collection) for item in section):
+            results = {}
+        else:
+            results = []
+
+        for section_or_object_view in section:
+
+            # Get from object view if necessary
+            if isinstance(section_or_object_view, ObjectView):
+                section_or_callable = section_or_object_view.item
+            else:
+                section_or_callable = section_or_object_view
+
+            # Get section path by which to call this item
+            if self._is_specific_class(section_or_callable):
+                # If specific class, need to look up which key holds the name
+                item_registrar = self._specific_class_registrar_map[type(section_or_callable)]
+                item_key_attr = item_registrar.key_attr
+                subsection_name = getattr(section_or_callable, item_key_attr)
+            else:
+                # If in the main dict, or is a collection, the name attribute or function/class name holds the name
+                subsection_name = _get_public_name_or_special_name(section_or_object_view, accept_output_names=False)
+
+            subsection_path_str = SectionPath.join(section_path_str, subsection_name).path_str
+
+            if isinstance(section_or_callable, Collection):
+                # got another section within this section. recursively call get section
+                results[section_or_callable.name] = self._get_section(subsection_path_str)
+            elif isinstance(results, dict):
+                # got a non-collection, but results were defined as a dict. Should only have collections in dict
+                raise ValueError(
+                    f'section {section_or_object_view.name} has both collections and items, must only '
+                    f'have collections if there is at least one collection. '
+                    f'Got {section_or_callable} as non-collection.'
+                )
+            elif callable(section_or_callable):
+                # get function
+                results.append(self._get_one_func_with_config(subsection_path_str))
+            elif self._is_specific_class(section_or_callable):
+                results.append(self._get_one_obj_with_config(subsection_path_str))
+            else:
+                raise ValueError(f'could not get section {subsection_path_str}. expected Collection or '
+                                 f'function or specific class,'
+                                 f'got {section_or_callable} of type {type(section_or_callable)}')
+
+        return results
 
     def _get_one_func_with_config(self, section_path_str: str) -> Callable:
         func, config_dict = self._get_func_and_config(section_path_str)
@@ -281,3 +344,6 @@ class Runner(ReprMixin):
         config_dict = config.for_function(func)
 
         return func, config_dict
+
+    def _is_specific_class(self, obj: Any) -> bool:
+        return self._all_specific_classes and isinstance(obj, self._all_specific_classes)
