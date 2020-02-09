@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.2.5 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.3.0 documentation</title>
   
 
   
@@ -22,13 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
-        <script type="text/javascript" src="../../../../_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="../../../../_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+        <script src="../../../../_static/clipboard.min.js"></script>
+        <script src="../../../../_static/copybutton.js"></script>
+        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.2.5
+                0.3.0
               </div>
             
           
@@ -163,11 +163,12 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.runner.models.runner</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.basemodels.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span><span class="p">,</span> <span class="n">ActiveFunctionConfig</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
@@ -200,7 +201,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span> <span class="o">=</span> <span class="n">general_registrar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_full_getattr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span><span class="p">:</span> <span class="n">registrar</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">}</span></div>
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="c1"># TODO [#14]: find way of doing runner look ups with fewer side effects</span>
@@ -349,21 +351,85 @@
 
         <span class="k">return</span> <span class="n">configured_pipeline</span>
 
-<div class="viewcode-block" id="Runner.get"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PipelineOrFunction</span><span class="p">:</span>
+<div class="viewcode-block" id="Runner.get"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">func_or_collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_or_collection</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">):</span>
-            <span class="c1"># TODO [#17]: implement runner get sections</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;have not implemented getting sections. works with run&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">),</span> <span class="n">Pipeline</span><span class="p">):</span>
             <span class="c1"># Got pipeline class</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_pipeline_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_func_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{section_path_str}</span><span class="s1">. expected PipelineCollection or function,&#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{func_or_collection}</span><span class="s1"> of type {type(func_or_collection)}&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># TODO: restructure runner get and run</span>
+    <span class="c1">#</span>
+    <span class="c1"># Currently the checks for section, function, specific class are very repetitive across the</span>
+    <span class="c1"># various get and run functions. Standardize these and offload into a single function.</span>
+
+    <span class="k">def</span> <span class="nf">_get_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_or_collection</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Collection</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
+
+        <span class="c1"># Need to handle definition structure which can be lists inside dicts or more dicts inside dicts</span>
+        <span class="c1"># This method will be called recursively on each section. Check to see if there are any sections</span>
+        <span class="c1"># inside this section. If so, then that section would be defined by a dict key in the definition,</span>
+        <span class="c1"># and therefore results should be put in a dict. If there are no sections within this section, then</span>
+        <span class="c1"># a list was used to store the items in this section and so results will be put in a list.</span>
+        <span class="n">results</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Collection</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Collection</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">section</span><span class="p">):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">section_or_object_view</span> <span class="ow">in</span> <span class="n">section</span><span class="p">:</span>
+
+            <span class="c1"># Get from object view if necessary</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_or_object_view</span><span class="p">,</span> <span class="n">ObjectView</span><span class="p">):</span>
+                <span class="n">section_or_callable</span> <span class="o">=</span> <span class="n">section_or_object_view</span><span class="o">.</span><span class="n">item</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">section_or_callable</span> <span class="o">=</span> <span class="n">section_or_object_view</span>
+
+            <span class="c1"># Get section path by which to call this item</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
+                <span class="c1"># If specific class, need to look up which key holds the name</span>
+                <span class="n">item_registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">)]</span>
+                <span class="n">item_key_attr</span> <span class="o">=</span> <span class="n">item_registrar</span><span class="o">.</span><span class="n">key_attr</span>
+                <span class="n">subsection_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">,</span> <span class="n">item_key_attr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If in the main dict, or is a collection, the name attribute or function/class name holds the name</span>
+                <span class="n">subsection_name</span> <span class="o">=</span> <span class="n">_get_public_name_or_special_name</span><span class="p">(</span><span class="n">section_or_object_view</span><span class="p">,</span> <span class="n">accept_output_names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">subsection_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">subsection_name</span><span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
+                <span class="c1"># not expected to hit these, for mypy</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">section_or_callable</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="c1"># got another section within this section. recursively call get section</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">section_or_callable</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="c1"># got a non-collection, but results were defined as a dict. Should only have collections in dict</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;section </span><span class="si">{section_or_object_view.name}</span><span class="s1"> has both collections and items, must only &#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;have collections if there is at least one collection. &#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{section_or_callable}</span><span class="s1"> as non-collection.&#39;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
+                <span class="c1"># get function</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_one_func_with_config</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{subsection_path_str}</span><span class="s1">. expected Collection or &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;function or specific class,&#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{section_or_callable}</span><span class="s1"> of type {type(section_or_callable)}&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">results</span>
 
     <span class="k">def</span> <span class="nf">_get_one_func_with_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
         <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
@@ -445,7 +511,10 @@
         <span class="c1"># Only pass items in config which are arguments of function</span>
         <span class="n">config_dict</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">for_function</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span></div>
+        <span class="k">return</span> <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span>
+
+    <span class="k">def</span> <span class="nf">_is_specific_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 </pre></div>
 
            </div>

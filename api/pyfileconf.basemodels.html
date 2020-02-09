@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.2.5 documentation</title>
+  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.3.0 documentation</title>
   
 
   
@@ -22,13 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="../_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.2.5
+                0.3.0
               </div>
             
           
@@ -349,7 +349,7 @@ If False, or doesn’t have attr, append to end.</p>
 
 <dl class="attribute">
 <dt id="pyfileconf.basemodels.container.Container.items">
-<code class="sig-name descname">items</code><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.container.Container.items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">items</code><em class="property">: List[Any]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.container.Container.items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -369,17 +369,17 @@ If False, or doesn’t have attr, append to end.</p>
 
 <dl class="attribute">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict">
-<code class="sig-name descname">always_assign_with_names_dict</code><em class="property"> = {}</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_assign_with_names_dict</code><em class="property">: Dict[str, List[pyfileconf.assignments.models.statement.AssignmentStatement]]</em><em class="property"> = {}</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.always_assigns">
-<code class="sig-name descname">always_assigns</code><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assigns" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_assigns</code><em class="property">: List[pyfileconf.assignments.models.statement.AssignmentStatement]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assigns" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.always_imports">
-<code class="sig-name descname">always_imports</code><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_imports" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_imports</code><em class="property">: List[Union[pyfileconf.imports.models.statements.module.ModuleImportStatement, pyfileconf.imports.models.statements.obj.ObjectImportStatement]]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_imports" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models package &mdash; pyfileconf 0.2.5 documentation</title>
+  <title>pyfileconf.data.models package &mdash; pyfileconf 0.3.0 documentation</title>
   
 
   
@@ -22,13 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script type="text/javascript" src="../_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="../_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.2.5
+                0.3.0
               </div>
             
           
@@ -237,6 +237,11 @@
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="pyfileconf.data.models.collection.SpecificClassCollection.klass">
+<code class="sig-name descname">klass</code><em class="property">: Type</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.data.models.collection.SpecificClassCollection.klass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="function">
@@ -309,12 +314,12 @@
 
 <dl class="attribute">
 <dt id="pyfileconf.data.models.file.SpecificClassConfigFile.always_assigns">
-<code class="sig-name descname">always_assigns</code><em class="property"> = [mixins.repr.ReprMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.always_assigns" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_assigns</code><em class="property">: List[pyfileconf.assignments.models.statement.AssignmentStatement]</em><em class="property"> = [mixins.repr.ReprMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.always_assigns" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="pyfileconf.data.models.file.SpecificClassConfigFile.always_imports">
-<code class="sig-name descname">always_imports</code><em class="property"> = [mixins.attrequals.EqOnAttrsMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.always_imports" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_imports</code><em class="property">: List[Union[pyfileconf.imports.models.statements.module.ModuleImportStatement, pyfileconf.imports.models.statements.obj.ObjectImportStatement]]</em><em class="property"> = [mixins.attrequals.EqOnAttrsMixin]</em><a class="headerlink" href="#pyfileconf.data.models.file.SpecificClassConfigFile.always_imports" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
