@@ -195,7 +195,7 @@ class Runner(ReprMixin):
             return self._get_one_pipeline_with_config(section_path_str)
         elif callable(func_or_collection):
             return self._get_one_func_with_config(section_path_str)
-        elif self._is_specific_class(func_or_collection):  # type: ignore
+        elif self._is_specific_class(func_or_collection):
             return self._get_one_obj_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
@@ -242,6 +242,9 @@ class Runner(ReprMixin):
             subsection_path_str = SectionPath.join(section_path_str, subsection_name).path_str
 
             if isinstance(section_or_callable, Collection):
+                # not expected to hit these, for mypy
+                assert isinstance(results, dict)
+                assert section_or_callable.name is not None
                 # got another section within this section. recursively call get section
                 results[section_or_callable.name] = self._get_section(subsection_path_str)
             elif isinstance(results, dict):
@@ -346,4 +349,4 @@ class Runner(ReprMixin):
         return func, config_dict
 
     def _is_specific_class(self, obj: Any) -> bool:
-        return self._all_specific_classes and isinstance(obj, self._all_specific_classes)
+        return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
