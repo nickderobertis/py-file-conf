@@ -384,6 +384,11 @@ def _validate_registrars(registrars: List[SpecificRegistrar], general_registrar:
             raise ValueError(f'cannot use a name for a specific class dict which is already specified in '
                              f'top-level pipeline_dict. The issue is with {registrar.name}.')
 
+    all_registrar_names = [registrar.name for registrar in registrars]
+    if len(set(all_registrar_names)) != len(all_registrar_names):
+        raise ValueError(f'cannot have multiple specific class dicts with the same '
+                         f'name attribute. Got names: {all_registrar_names}')
+
 
 def create_registrars(specific_class_config_dicts: List[SpecificClassConfigDict],
                       basepath: str, pipeline_folder: str, pipeline_dict_path: str,

@@ -1,5 +1,6 @@
 import os
 from typing import Optional
+from unittest import TestCase
 
 from pyfileconf import PipelineManager
 from pyfileconf.main import create_project
@@ -40,7 +41,7 @@ FULL_CLASS_DICT_LIST = [
 ]
 
 
-class PipelineManagerTestBase:
+class PipelineManagerTestBase(TestCase):
     defaults_folder_name = 'custom_defaults'
     pm_folder = os.path.join(BASE_GENERATED_DIR, 'first')
     second_pm_folder = os.path.join(BASE_GENERATED_DIR, 'second')
