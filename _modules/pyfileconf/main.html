@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.3.1 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.3.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.1
+                0.3.2
               </div>
             
           
@@ -548,6 +548,11 @@
         <span class="k">if</span> <span class="n">registrar</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">used_names</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot use a name for a specific class dict which is already specified in &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;top-level pipeline_dict. The issue is with </span><span class="si">{registrar.name}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="n">all_registrar_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">registrar</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="n">registrars</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_registrar_names</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_registrar_names</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot have multiple specific class dicts with the same &#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39;name attribute. Got names: </span><span class="si">{all_registrar_names}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="create_registrars"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_registrars">[docs]</a><span class="k">def</span> <span class="nf">create_registrars</span><span class="p">(</span><span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">],</span>
