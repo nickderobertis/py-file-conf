@@ -402,11 +402,6 @@ class TestPipelineManagerLoad(PipelineManagerLoadTestBase):
             contents = f.read()
             self.assert_second_example_class_dict_config_file_contents(contents)
 
-    # TODO [#42]: test referencing object in a function config through selector and updating that object
-    #
-    # Should see that updating the object with `config.update` will cause the function pointing to
-    # the selector for that object to use the updated object.
-
 
 class TestPipelineManagerInvalidLoad(PipelineManagerLoadTestBase):
 
