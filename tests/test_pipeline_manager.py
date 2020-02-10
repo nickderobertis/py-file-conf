@@ -80,8 +80,9 @@ class PipelineManagerTestBase:
     pm_folder = os.path.join(BASE_GENERATED_DIR, 'first')
     second_pm_folder = os.path.join(BASE_GENERATED_DIR, 'second')
     defaults_path = os.path.join(pm_folder, defaults_folder_name)
-    pipeline_folder = pm_folder
-    pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
+    second_defaults_path = os.path.join(pm_folder, defaults_folder_name)
+    pipeline_dict_path = os.path.join(pm_folder, 'pipeline_dict.py')
+    second_pipeline_dict_path = os.path.join(second_pm_folder, 'pipeline_dict.py')
     example_class_file_names = [
         'example_class_dict.py',
         'example_class2_dict.py',
@@ -90,24 +91,30 @@ class PipelineManagerTestBase:
     example_class_dict_paths = []
     for name in example_class_file_names:
         example_class_dict_paths.append(os.path.join(pm_folder, name))
+    second_example_class_dict_paths = []
+    for name in example_class_file_names:
+        second_example_class_dict_paths.append(os.path.join(second_pm_folder, name))
     logs_path = os.path.join(pm_folder, 'Logs')
     all_paths = (
         defaults_path,
-        pipeline_folder,
+        pm_folder,
         *example_class_dict_paths,
         logs_path
     )
     test_name = 'test_pipeline_manager'
+    second_test_name = 'test_pipeline_manager2'
 
     def setup_method(self, method):
         create_project(self.pm_folder, FULL_CLASS_DICT_LIST)
+        create_project(self.second_pm_folder, FULL_CLASS_DICT_LIST)
 
     def teardown_method(self, method):
         delete_project(self.pm_folder, FULL_CLASS_DICT_LIST)
+        delete_project(self.second_pm_folder, FULL_CLASS_DICT_LIST)
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(
-            folder=self.pipeline_folder,
+            folder=self.pm_folder,
             name=self.test_name,
             log_folder=self.logs_path,
             default_config_folder_name=self.defaults_folder_name,
@@ -116,26 +123,40 @@ class PipelineManagerTestBase:
         pipeline_manager = PipelineManager(**all_kwargs)
         return pipeline_manager
 
-    def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False):
+    def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):
+        if file_path is None:
+            file_path = self.pipeline_dict_path
+
         if nest_section:
             write_str = nested_pipeline_dict_str_with_obj(
                 a_function, 'my_section', 'stuff', 'tests.input_files.amodule'
             )
         else:
             write_str = pipeline_dict_str_with_obj(a_function, 'stuff', 'tests.input_files.amodule')
-        with open(self.pipeline_dict_path, 'w') as f:
+        with open(file_path, 'w') as f:
             f.write(write_str)
 
-    def write_example_class_to_pipeline_dict_file(self):
-        with open(self.pipeline_dict_path, 'w') as f:
+    def write_example_class_to_pipeline_dict_file(self, file_path: Optional[str] = None):
+        if file_path is None:
+            file_path = self.pipeline_dict_path
+        with open(file_path, 'w') as f:
             f.write(pipeline_dict_str_with_obj(ExampleClass, 'stuff', 'tests.input_files.mypackage.cmodule'))
 
-    def write_example_class_dict_to_file(self, idx: int = 0, nest_section: bool = False):
+    def write_example_class_dict_to_file(self, idx: int = 0, nest_section: bool = False,
+                                         pm_index: Optional[int] = 0):
+        if pm_index == 0:
+            ecdp = self.example_class_dict_paths
+        elif pm_index == 1:
+            ecdp = self.second_example_class_dict_paths
+        else:
+            raise ValueError(f'must pass 0 or 1 for pm_index, got {pm_index}')
+
+        file_path = ecdp[idx]
         if nest_section:
             write_str = nested_class_dict_str('class_dict', 'my_section', 'stuff', 'data')
         else:
             write_str = class_dict_str('class_dict', 'stuff', 'data')
-        with open(self.example_class_dict_paths[idx], 'w') as f:
+        with open(file_path, 'w') as f:
             f.write(write_str)
 
 class TestPipelineManagerLoad(PipelineManagerTestBase):
@@ -219,8 +240,34 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             contents = f.read()
             self.assert_a_function_config_file_contents(contents)
 
-    # def test_create_multiple_pms_with_function(self):
+    def test_create_multiple_pms_with_function(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
 
+        # Assert pipeline manager 1 contents
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        module_folder = os.path.join(self.defaults_path, 'stuff')
+        function_path = os.path.join(module_folder, 'a_function.py')
+        with open(function_path, 'r') as f:
+            contents = f.read()
+            self.assert_a_function_config_file_contents(contents)
+
+        # Assert pipeline manager 2 contents
+        sel = Selector()
+        iv = sel.test_pipeline_manager2.stuff.a_function
+        module_folder = os.path.join(self.second_defaults_path, 'stuff')
+        function_path = os.path.join(module_folder, 'a_function.py')
+        with open(function_path, 'r') as f:
+            contents = f.read()
+            self.assert_a_function_config_file_contents(contents)
 
     def test_create_pm_with_class(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -229,6 +276,35 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.ExampleClass
         module_folder = os.path.join(self.defaults_path, 'stuff')
+        class_path = os.path.join(module_folder, 'ExampleClass.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_config_file_contents(contents)
+
+    def test_create_multiple_pms_with_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+
+        # Assert pipeline manager 1 contents
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        module_folder = os.path.join(self.defaults_path, 'stuff')
+        class_path = os.path.join(module_folder, 'ExampleClass.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_config_file_contents(contents)
+
+        # Assert pipeline manager 2 contents
+        sel = Selector()
+        iv = sel.test_pipeline_manager2.stuff.ExampleClass
+        module_folder = os.path.join(self.second_defaults_path, 'stuff')
         class_path = os.path.join(module_folder, 'ExampleClass.py')
         with open(class_path, 'r') as f:
             contents = f.read()
@@ -243,6 +319,39 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_dict_config_file_contents(contents)
+
+    def test_create_multiple_pms_with_class_dict(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Assert pipeline manager 1 contents
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_dict_config_file_contents(contents)
+
+        # Assert pipeline manager 2 contents
+        iv = sel.test_pipeline_manager2.example_class.stuff.data
+        class_folder = os.path.join(self.second_defaults_path, 'example_class')
         module_folder = os.path.join(class_folder, 'stuff')
         class_path = os.path.join(module_folder, 'data.py')
         with open(class_path, 'r') as f:
@@ -433,12 +542,54 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == (None, None)
 
+    def test_run_function_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Assert pipeline manager 1 run
+        iv = sel.test_pipeline_manager.stuff.a_function
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
+
+        # Assert pipeline manager 2 run
+        iv = sel.test_pipeline_manager2.stuff.a_function
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
+
     def test_create_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(None)
+
+    def test_create_class_multiple_pms(self):
+        self.write_example_class_to_pipeline_dict_file()
+        self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Assert pipeline manager 1 create
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(None)
+
+        # Assert pipeline manager 2 create
+        ec = sel.test_pipeline_manager2.stuff.ExampleClass()
         assert ec == ExampleClass(None)
 
     def test_create_from_specific_class_dict(self):
@@ -449,6 +600,33 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+    def test_create_from_specific_class_dict_multiple_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Assert pipeline manager 1 create
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+        # Assert pipeline manager 2 create
+        ec = sel.test_pipeline_manager2.example_class.stuff.data
         expect_ec = ExampleClass(name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
@@ -501,6 +679,43 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == (None, expected_b_result)
 
+    def test_config_update_function_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        expected_b_result = ['a', 'b']
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 = sel.test_pipeline_manager2.stuff.a_function
+
+        # Assert update pipeline manager 1
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        result = pipeline_manager.run(iv)
+        assert result == (None, expected_b_result)
+
+        # Assert that pipeline manager 2 is not updated yet
+        result2 = pipeline_manager2.run(iv2)
+        assert result2 == (None, None)
+
+        # Assert update pipeline manager 2
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.config.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        result = pipeline_manager2.run(iv2)
+        assert result == (None, expected_b_result)
+
     def test_create_update_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -514,6 +729,43 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
+
+    def test_create_update_class_multiple_pms(self):
+        self.write_example_class_to_pipeline_dict_file()
+        self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        expected_a_result = (1, 2)
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv2 = sel.test_pipeline_manager2.stuff.ExampleClass
+
+        # Assert update pipeline manager 1
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
+
+        # Assert that pipeline manager 2 is not updated yet
+        ec = sel.test_pipeline_manager2.stuff.ExampleClass()
+        assert ec == ExampleClass(None)
+
+        # Assert update pipeline manager 2
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager2.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
 
     def test_create_update_from_specific_class_dict(self):
@@ -531,6 +783,52 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+    def test_create_update_from_specific_class_dict_multiple_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        expected_a_result = (1, 2)
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Assert update pipeline manager 1
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+        # Assert that pipeline manager 2 is not updated yet
+        ec = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+        # Assert update pipeline manager 2
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager2.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
@@ -602,6 +900,42 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == (None, None)
 
+    def test_config_reload_function_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 = sel.test_pipeline_manager2.stuff.a_function
+        expected_b_result = ['a', 'b']
+
+        # Update both pipeline manager configs
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.config.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+
+        # Assert that reloading pipeline manager 1 resets its config
+        pipeline_manager.reload()
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
+
+        # Assert that the reload of pipeline manager 1 did not affect pipeline manager 2
+        result = pipeline_manager2.run(iv2)
+        assert result == (None, expected_b_result)
+
     def test_config_reload_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -617,6 +951,42 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         pipeline_manager.reload()
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(None)
+
+    def test_config_reload_class_multiple_pms(self):
+        self.write_example_class_to_pipeline_dict_file()
+        self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        expected_a_result = (1, 2)
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv2 = sel.test_pipeline_manager2.stuff.ExampleClass
+
+        # Update both pipeline manager configs
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+
+        # Assert that reloading pipeline manager 1 resets its config
+        pipeline_manager.reload()
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(None)
+
+        # Assert that the reload of pipeline manager 1 did not affect pipeline manager 2
+        ec = sel.test_pipeline_manager2.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
 
     def test_config_reload_specific_class_dict(self):
         self.write_example_class_dict_to_file()
@@ -638,6 +1008,48 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 
+    def test_config_reload_specific_class_dict_multiple_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        expected_a_result = (1, 2)
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Update both pipeline manager configs
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.config.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+
+        # Assert that reloading pipeline manager 1 resets its config
+        pipeline_manager.reload()
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+        # Assert that the reload of pipeline manager 1 did not affect pipeline manager 2
+        ec = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
 
 class TestPipelineManagerGetOne(PipelineManagerTestBase):
 
@@ -653,6 +1065,34 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         str_result = str_func()
         assert iv_result == str_result == (None, None)
 
+    def test_get_function_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Get from pipeline manager 1
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv_func = pipeline_manager.get(iv)
+        iv_result = iv_func()
+        str_func = pipeline_manager.get('stuff.a_function')
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
+        # Get from pipeline manager 2
+        iv = sel.test_pipeline_manager2.stuff.a_function
+        iv_func = pipeline_manager2.get(iv)
+        iv_result = iv_func()
+        str_func = pipeline_manager2.get('stuff.a_function')
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
     def test_get_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -662,6 +1102,34 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         iv_class = pipeline_manager.get(iv)
         iv_obj = iv_class()
         str_class = pipeline_manager.get('stuff.ExampleClass')
+        str_obj = str_class()
+        assert iv_obj == str_obj == ExampleClass(None)
+
+    def test_get_class_multiple_pms(self):
+        self.write_example_class_to_pipeline_dict_file()
+        self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Get from pipeline manager 1
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv_class = pipeline_manager.get(iv)
+        iv_obj = iv_class()
+        str_class = pipeline_manager.get('stuff.ExampleClass')
+        str_obj = str_class()
+        assert iv_obj == str_obj == ExampleClass(None)
+
+        # Get from pipeline manager 2
+        iv = sel.test_pipeline_manager2.stuff.ExampleClass
+        iv_class = pipeline_manager2.get(iv)
+        iv_obj = iv_class()
+        str_class = pipeline_manager2.get('stuff.ExampleClass')
         str_obj = str_class()
         assert iv_obj == str_obj == ExampleClass(None)
 
@@ -679,6 +1147,37 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
 
+    def test_get_class_from_specific_config_dict_multiple_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Get from pipeline manager 1
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+        # Get from pipeline manager 2
+        iv = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_ec = ExampleClass(name='data')
+        iv_obj = pipeline_manager2.get(iv)
+        str_obj = pipeline_manager2.get('example_class.stuff.data')
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
 
 class TestPipelineManagerGetSection(PipelineManagerTestBase):
 
@@ -692,6 +1191,38 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         iv_func = iv_section[0]
         iv_result = iv_func()
         str_section = pipeline_manager.get('stuff')
+        str_func = str_section[0]
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
+    def test_get_main_dict_section_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Get pipeline manager 1 section
+        iv = sel.test_pipeline_manager.stuff
+        iv_section = pipeline_manager.get(iv)
+        iv_func = iv_section[0]
+        iv_result = iv_func()
+        str_section = pipeline_manager.get('stuff')
+        str_func = str_section[0]
+        str_result = str_func()
+        assert iv_result == str_result == (None, None)
+
+        # Get pipeline manager 2 section
+        iv = sel.test_pipeline_manager2.stuff
+        iv_section = pipeline_manager2.get(iv)
+        iv_func = iv_section[0]
+        iv_result = iv_func()
+        str_section = pipeline_manager2.get('stuff')
         str_func = str_section[0]
         str_result = str_func()
         assert iv_result == str_result == (None, None)
@@ -722,6 +1253,41 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         iv_section = pipeline_manager.get(iv)
         iv_obj = iv_section[0]
         str_section = pipeline_manager.get('example_class.stuff')
+        str_obj = str_section[0]
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+    def test_get_specific_class_dict_section_multiple_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+
+        # Get pipeline manager 1 section
+        iv = sel.test_pipeline_manager.example_class.stuff
+        expect_ec = ExampleClass(name='data')
+        iv_section = pipeline_manager.get(iv)
+        iv_obj = iv_section[0]
+        str_section = pipeline_manager.get('example_class.stuff')
+        str_obj = str_section[0]
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+        # Get pipeline manager 2 section
+        iv = sel.test_pipeline_manager2.example_class.stuff
+        expect_ec = ExampleClass(name='data')
+        iv_section = pipeline_manager2.get(iv)
+        iv_obj = iv_section[0]
+        str_section = pipeline_manager2.get('example_class.stuff')
         str_obj = str_section[0]
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
