@@ -77,16 +77,20 @@ def test_create_project():
 
 class PipelineManagerTestBase:
     defaults_folder_name = 'custom_defaults'
-    defaults_path = os.path.join(BASE_GENERATED_DIR, defaults_folder_name)
-    pipeline_folder = BASE_GENERATED_DIR
+    pm_folder = os.path.join(BASE_GENERATED_DIR, 'first')
+    second_pm_folder = os.path.join(BASE_GENERATED_DIR, 'second')
+    defaults_path = os.path.join(pm_folder, defaults_folder_name)
+    pipeline_folder = pm_folder
     pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
     example_class_file_names = [
         'example_class_dict.py',
         'example_class2_dict.py',
         'second_example_class_dict.py',
     ]
-    example_class_dict_paths = [os.path.join(BASE_GENERATED_DIR, name) for name in example_class_file_names]
-    logs_path = os.path.join(BASE_GENERATED_DIR, 'Logs')
+    example_class_dict_paths = []
+    for name in example_class_file_names:
+        example_class_dict_paths.append(os.path.join(pm_folder, name))
+    logs_path = os.path.join(pm_folder, 'Logs')
     all_paths = (
         defaults_path,
         pipeline_folder,
@@ -96,10 +100,10 @@ class PipelineManagerTestBase:
     test_name = 'test_pipeline_manager'
 
     def setup_method(self, method):
-        create_project(BASE_GENERATED_DIR, FULL_CLASS_DICT_LIST)
+        create_project(self.pm_folder, FULL_CLASS_DICT_LIST)
 
     def teardown_method(self, method):
-        delete_project(BASE_GENERATED_DIR, FULL_CLASS_DICT_LIST)
+        delete_project(self.pm_folder, FULL_CLASS_DICT_LIST)
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(
@@ -201,7 +205,7 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             specific_class_config_dicts=FULL_CLASS_DICT_LIST
         )
         pipeline_manager.load()
-        _assert_project_has_correct_files(BASE_GENERATED_DIR)
+        _assert_project_has_correct_files(self.pm_folder)
 
     def test_create_pm_with_function(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -214,6 +218,9 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         with open(function_path, 'r') as f:
             contents = f.read()
             self.assert_a_function_config_file_contents(contents)
+
+    # def test_create_multiple_pms_with_function(self):
+
 
     def test_create_pm_with_class(self):
         self.write_example_class_to_pipeline_dict_file()
