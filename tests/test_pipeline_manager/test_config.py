@@ -1,3 +1,5 @@
+import os
+
 from pyfileconf import Selector
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.amodule import SecondExampleClass
@@ -7,6 +9,25 @@ from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONF
 
 
 class TestPipelineManagerConfig(PipelineManagerTestBase):
+
+    def append_to_a_function_config(self, to_add: str):
+        section_folder = os.path.join(self.defaults_path, 'stuff')
+        config_path = os.path.join(section_folder, 'a_function.py')
+        with open(config_path, 'a') as f:
+            f.write(to_add)
+
+    def append_to_example_class_config(self, to_add: str):
+        section_folder = os.path.join(self.defaults_path, 'stuff')
+        config_path = os.path.join(section_folder, 'ExampleClass.py')
+        with open(config_path, 'a') as f:
+            f.write(to_add)
+
+    def append_to_specific_class_config(self, to_add: str):
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        section_folder = os.path.join(class_folder, 'stuff')
+        config_path = os.path.join(section_folder, 'data.py')
+        with open(config_path, 'a') as f:
+            f.write(to_add)
 
     def test_config_update_function(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -20,6 +41,19 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
+        result = pipeline_manager.run(iv)
+        assert result == (None, expected_b_result)
+
+    def test_config_update_by_file_for_function(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        expected_b_result = ['a', 'b']
+        b_str = f'b = {expected_b_result}'
+        self.append_to_a_function_config(b_str)
+        pipeline_manager.reload()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
         result = pipeline_manager.run(iv)
         assert result == (None, expected_b_result)
 
@@ -75,6 +109,18 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
 
+    def test_config_update_by_file_for_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        expected_a_result = (1, 2)
+        a_str = f'a = {expected_a_result}'
+        self.append_to_example_class_config(a_str)
+        pipeline_manager.reload()
+        sel = Selector()
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
+
     def test_create_update_class_multiple_pms(self):
         self.write_example_class_to_pipeline_dict_file()
         self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
@@ -126,6 +172,22 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+
+    def test_config_update_by_file_for_specific_class_dict(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        expected_a_result = (1, 2)
+        a_str = f'a = {expected_a_result}'
+        self.append_to_specific_class_config(a_str)
+        pipeline_manager.reload()
+        sel = Selector()
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
@@ -394,3 +456,49 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
+
+    def test_config_update_class_used_by_function_through_selector(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager.load()
+
+        # Link function to specific class object
+        b_str = 'b = s.test_pipeline_manager.example_class.stuff.data'
+        self.append_to_a_function_config(b_str)
+
+        # Update specific class object config file to ensure we are getting the correct one later
+        expected_a_result = (1, 2)
+        a_str = f'a = {expected_a_result}'
+        self.append_to_specific_class_config(a_str)
+
+        pipeline_manager.reload()
+        sel = Selector()
+
+        # Assert that we can already get the specific class object returned before updating config
+        f_iv = sel.test_pipeline_manager.stuff.a_function
+        sc_iv = sel.test_pipeline_manager.example_class.stuff.data
+        result = pipeline_manager.run(f_iv)
+        sc = pipeline_manager.get(sc_iv)
+        expect_sc = ExampleClass(a=expected_a_result, name='data')
+        result_none, result_sc = result
+        assert result_none is None
+        assert result_sc.name == sc.name == expect_sc.name
+        assert result_sc.a == sc.a == expect_sc.a
+
+        # Assert that updating the specific class object updates the result from the function
+        second_expected_a_result = (3, 4)
+        section_path = SectionPath.from_section_str_list(SectionPath(sc_iv.section_path_str)[1:])
+        pipeline_manager.config.update(
+            a=second_expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        result = pipeline_manager.run(f_iv)
+        sc = pipeline_manager.get(sc_iv)
+        expect_sc = ExampleClass(a=second_expected_a_result, name='data')
+        result_none, result_sc = result
+        assert result_none is None
+        assert result_sc.name == sc.name == expect_sc.name
+        assert result_sc.a == sc.a == expect_sc.a
