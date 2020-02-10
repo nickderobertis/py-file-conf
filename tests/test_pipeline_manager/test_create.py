@@ -42,7 +42,7 @@ def test_create_project():
     delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
 
 
-class TestPipelineManagerLoad(PipelineManagerTestBase):
+class PipelineManagerLoadTestBase(PipelineManagerTestBase):
 
     def assert_default_imports_and_assigns_in_contents(self, contents: str):
         assert 'from pyfileconf import Selector' in contents
@@ -96,6 +96,8 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
         assert "b: ExampleClass = None" in contents
         assert "name: Optional[str] = 'data'" in contents
 
+
+class TestPipelineManagerLoad(PipelineManagerLoadTestBase):
 
     def test_create_empty_pm(self):
         pipeline_manager = self.create_pm()
@@ -400,11 +402,38 @@ class TestPipelineManagerLoad(PipelineManagerTestBase):
             contents = f.read()
             self.assert_second_example_class_dict_config_file_contents(contents)
 
-    # TODO [#37]: test invalid inputs
-    #
-    # such as specific class name matching pipeline name, passing two of the same names for classes, etc.
-
     # TODO [#42]: test referencing object in a function config through selector and updating that object
     #
     # Should see that updating the object with `config.update` will cause the function pointing to
     # the selector for that object to use the updated object.
+
+
+class TestPipelineManagerInvalidLoad(PipelineManagerLoadTestBase):
+
+    def test_create_pm_with_specific_class_name_matching_pipeline_name(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_example_class_dict_to_file()
+        specific_class_config = deepcopy(CLASS_CONFIG_DICT_LIST)
+        specific_class_config[0].update(name='stuff')  # make name match section in main dict
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=specific_class_config
+        )
+        with self.assertRaises(ValueError) as cm:
+            pipeline_manager.load()
+            exc = cm.exception
+            assert 'cannot use a name for a specific class dict which is already specified ' \
+                   'in top-level pipeline_dict' in str(exc)
+
+    def test_create_pm_with_two_identical_specific_class_dicts(self):
+        self.write_example_class_dict_to_file()  # example_class
+        self.write_example_class_dict_to_file(1)  # example_class2
+        specific_class_config = deepcopy(SAME_CLASS_CONFIG_DICT_LIST)
+        # make name in second specific dict match that of first
+        specific_class_config[1].update(name=specific_class_config[0]['name'])
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=specific_class_config,
+        )
+        with self.assertRaises(ValueError) as cm:
+            pipeline_manager.load()
+            exc = cm.exception
+            assert 'cannot have multiple specific class dicts with the same name attribute. Got names' in str(exc)
