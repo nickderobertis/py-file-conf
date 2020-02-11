@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.3.2 documentation</title>
+  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.3.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.3
               </div>
             
           
@@ -253,8 +253,8 @@
             <span class="n">existing_imports</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">item</span>
 
-        <span class="n">item_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">existing_imports</span><span class="p">,</span>
-                                                   <span class="n">file_path</span><span class="o">=</span><span class="n">item_filepath</span><span class="p">,</span> <span class="n">key_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span><span class="p">,</span>
+        <span class="n">item_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="p">(</span><span class="n">imports</span><span class="o">=</span><span class="n">existing_imports</span><span class="p">,</span>
+                                                   <span class="n">file_path</span><span class="o">=</span><span class="n">item_filepath</span><span class="p">,</span>
                                                    <span class="o">**</span><span class="n">class_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
         <span class="c1"># Get config by extracting from class __init__</span>
@@ -286,9 +286,10 @@
 
 
 <div class="viewcode-block" id="apply_config"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.apply_config">[docs]</a><span class="k">def</span> <span class="nf">apply_config</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;SpecificClassConfig&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">config_attr</span><span class="p">,</span> <span class="n">config_item</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># Skip irrelevant items</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">config_attr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">config_attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">config_attr</span><span class="p">,</span> <span class="n">config_item</span><span class="p">)</span></div>
 </pre></div>
 
