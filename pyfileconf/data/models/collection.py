@@ -88,8 +88,8 @@ class SpecificClassCollection(Collection):
             existing_imports = None
             file_config_item = item
 
-        item_config = SpecificClassConfig.from_obj(file_config_item, imports=existing_imports,
-                                                   file_path=item_filepath, key_attr=self.key_attr,
+        item_config = SpecificClassConfig(imports=existing_imports,
+                                                   file_path=item_filepath,
                                                    **class_config)  # type: ignore
 
         # Get config by extracting from class __init__
@@ -121,7 +121,8 @@ class SpecificClassCollection(Collection):
 
 
 def apply_config(obj: Any, config: 'SpecificClassConfig') -> None:
+    attributes = dir(obj)
     for config_attr, config_item in config.items():
         # Skip irrelevant items
-        if hasattr(obj, config_attr):
+        if config_attr in attributes:
             setattr(obj, config_attr, config_item)

@@ -15,3 +15,11 @@ class ExampleClass:
         self.name = name
         self.c = c
         self.d = d
+
+    @property
+    def d(self):
+        raise NotImplementedError('pipeline_manager should not access this')
+
+    @d.setter
+    def d(self, d):
+        self._d = d
