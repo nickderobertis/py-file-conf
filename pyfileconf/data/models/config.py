@@ -2,7 +2,7 @@ from typing import Optional, Type, Any, Sequence, Union
 
 from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.data.models.file import SpecificClassConfigFile, ConfigFileBase
-from pyfileconf.imports.logic.load.func import function_args_as_dict
+from pyfileconf.imports.logic.load.klass import class_function_args_as_dict
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
 from pyfileconf.assignments.models.container import AssignmentStatementContainer
 from pyfileconf.data.models.astitems import ast_str, ast_none
@@ -51,14 +51,7 @@ class SpecificClassConfig(ConfigBase):
                  always_assign_strs: Optional[Sequence[str]] = None, file_path: Optional[str] = None,
                  key_attr: str = 'name'):
         # Initialize a blank config dictionary
-        config_dict = function_args_as_dict(klass.__init__)
-
-        # TODO [#35]: handle removing first argument from __init__, may not be named self
-        #
-        # Current implementation depends on the argument being named self
-
-        # Remove self from arguments
-        config_dict = {key: value for key, value in config_dict.items() if key != 'self'}
+        config_dict = class_function_args_as_dict(klass)
 
         # Replace obj None with ast None
         config_dict = {key: value if value is not None else ast_none for key, value in config_dict.items()}
