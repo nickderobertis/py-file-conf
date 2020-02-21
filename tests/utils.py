@@ -3,13 +3,13 @@ import shutil
 from typing import Callable, Type, Optional, List, Dict, Union
 
 
-def delete_project(path: str,
+def delete_project(path: str, logs_path: str,
                    specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None,):
     all_paths = [
         os.path.join(path, 'defaults'),
         os.path.join(path, 'custom_defaults'),
         os.path.join(path, 'pipeline_dict.py'),
-        os.path.join(path, 'Logs'),
+        logs_path,
     ]
     for specific_class_config in specific_class_config_dicts:
         name = specific_class_config['name']
