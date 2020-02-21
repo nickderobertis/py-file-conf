@@ -270,7 +270,7 @@ class PipelineManager:
             not os.path.exists(self.folder),
             not os.path.exists(self.pipeline_dict_path),
             not os.path.exists(self.default_config_path),
-            not os.path.exists(self.log_folder),
+            self.log_folder is not None and not os.path.exists(self.log_folder),
             *[
                 not os.path.exists(path) for path in
                 [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
