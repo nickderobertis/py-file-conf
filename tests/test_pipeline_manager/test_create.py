@@ -59,12 +59,12 @@ class PipelineManagerLoadTestBase(PipelineManagerTestBase):
         self.assert_default_imports_and_assigns_in_contents(contents)
         assert 'import typing' in contents
         assert 'from typing import Optional' in contents
-        assert 'a: Optional[typing.Tuple[int, int]] = None' in contents
+        assert 'a: typing.Tuple[int, int] = None' in contents
         assert 'name: Optional[str] = None' in contents
 
     def assert_example_class_dict_config_file_contents(self, contents: str, imports: Optional[Sequence[str]] = None,
                                                        assigns: Optional[Sequence[str]] = None,
-                                                       a_value: str = 'a: Optional[typing.Tuple[int, int]] = None',
+                                                       a_value: str = 'a: typing.Tuple[int, int] = None',
                                                        name_value: str = "name: Optional[str] = 'data'"):
         if imports is None:
             imports = [
@@ -262,7 +262,7 @@ class TestPipelineManagerLoad(PipelineManagerLoadTestBase):
             contents = f.read()
             self.assert_example_class_dict_config_file_contents(
                 contents,
-                a_value="a: Optional[typing.Tuple[int, int]] = 'data'",
+                a_value="a: typing.Tuple[int, int] = 'data'",
                 name_value="name: Optional[str] = None"
             )
 

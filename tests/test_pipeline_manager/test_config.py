@@ -224,7 +224,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert that pipeline manager 2 is not updated yet
         ec = sel.test_pipeline_manager2.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 
@@ -410,7 +410,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         pipeline_manager.reload()
         ec = sel.test_pipeline_manager.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 
@@ -447,7 +447,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         # Assert that reloading pipeline manager 1 resets its config
         pipeline_manager.reload()
         ec = sel.test_pipeline_manager.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 

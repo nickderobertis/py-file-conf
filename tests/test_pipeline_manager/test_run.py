@@ -74,7 +74,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         ec = sel.test_pipeline_manager.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 
@@ -95,13 +95,13 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
 
         # Assert pipeline manager 1 create
         ec = sel.test_pipeline_manager.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 
         # Assert pipeline manager 2 create
         ec = sel.test_pipeline_manager2.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
 
@@ -115,7 +115,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         ec = sel.test_pipeline_manager.example_class.stuff.data
         ec2 = sel.test_pipeline_manager.example_class2.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         assert ec.name == ec2.name == expect_ec.name
         assert ec.a == ec2.a == expect_ec.a
 
@@ -129,7 +129,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         ec = sel.test_pipeline_manager.example_class.stuff.data
         sec = sel.test_pipeline_manager.second_example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         expect_sec = SecondExampleClass(name='data')
         assert ec.name == expect_sec.name == expect_ec.name
         assert ec.a == expect_ec.a
