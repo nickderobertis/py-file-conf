@@ -14,7 +14,7 @@ def _assert_project_has_correct_files(folder: str):
     pipeline_folder = folder
     pipeline_dict_path = os.path.join(pipeline_folder, 'pipeline_dict.py')
     example_class_dict_path = os.path.join(folder, 'example_class_dict.py')
-    logs_path = os.path.join(folder, 'Logs')
+    logs_path = os.path.join(folder, 'MyLogs')
     all_paths = [
         defaults_path,
         pipeline_dict_path,
@@ -34,12 +34,13 @@ def _assert_project_has_correct_files(folder: str):
 
 
 def test_create_project():
-    delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
-    create_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
+    logs_path = os.path.join(BASE_GENERATED_DIR, 'MyLogs')
+    delete_project(BASE_GENERATED_DIR, logs_path, CLASS_CONFIG_DICT_LIST)
+    create_project(BASE_GENERATED_DIR, logs_path, CLASS_CONFIG_DICT_LIST)
 
     _assert_project_has_correct_files(BASE_GENERATED_DIR)
 
-    delete_project(BASE_GENERATED_DIR, CLASS_CONFIG_DICT_LIST)
+    delete_project(BASE_GENERATED_DIR, logs_path, CLASS_CONFIG_DICT_LIST)
 
 
 class PipelineManagerLoadTestBase(PipelineManagerTestBase):
@@ -106,7 +107,7 @@ class TestPipelineManagerLoad(PipelineManagerLoadTestBase):
         iv = sel.test_pipeline_manager
 
     def test_create_project_with_pm(self):
-        delete_project(BASE_GENERATED_DIR, FULL_CLASS_DICT_LIST)
+        delete_project(BASE_GENERATED_DIR, self.logs_path, FULL_CLASS_DICT_LIST)
         pipeline_manager = self.create_pm(
             specific_class_config_dicts=FULL_CLASS_DICT_LIST
         )

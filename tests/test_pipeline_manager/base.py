@@ -60,7 +60,7 @@ class PipelineManagerTestBase(TestCase):
     second_example_class_dict_paths = []
     for name in example_class_file_names:
         second_example_class_dict_paths.append(os.path.join(second_pm_folder, name))
-    logs_path = os.path.join(pm_folder, 'Logs')
+    logs_path = os.path.join(pm_folder, 'MyLogs')
     all_paths = (
         defaults_path,
         pm_folder,
@@ -71,12 +71,12 @@ class PipelineManagerTestBase(TestCase):
     second_test_name = 'test_pipeline_manager2'
 
     def setup_method(self, method):
-        create_project(self.pm_folder, FULL_CLASS_DICT_LIST)
-        create_project(self.second_pm_folder, FULL_CLASS_DICT_LIST)
+        create_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
+        create_project(self.second_pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
 
     def teardown_method(self, method):
-        delete_project(self.pm_folder, FULL_CLASS_DICT_LIST)
-        delete_project(self.second_pm_folder, FULL_CLASS_DICT_LIST)
+        delete_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
+        delete_project(self.second_pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(

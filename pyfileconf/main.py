@@ -263,13 +263,14 @@ class PipelineManager:
 
     def _create_project_if_needed(self):
         if self._need_to_create_project():
-            create_project(self.folder, self.specific_class_config_dicts)
+            create_project(self.folder, self.log_folder, self.specific_class_config_dicts)
 
     def _need_to_create_project(self) -> bool:
         return any([
             not os.path.exists(self.folder),
             not os.path.exists(self.pipeline_dict_path),
             not os.path.exists(self.default_config_path),
+            not os.path.exists(self.log_folder),
             *[
                 not os.path.exists(path) for path in
                 [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
@@ -350,15 +351,13 @@ def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
         print('Everything ran successfully, no exceptions to report.\n\n')
 
 
-def create_project(path: str,
+def create_project(path: str, logs_path: str,
                    specific_class_config_dicts: Optional[List[Dict[str, Union[str, Type, List[str]]]]] = None):
     """
     Creates a new pyfileconf project file structure
     """
     defaults_path = os.path.join(path, 'defaults')
     pipeline_path = os.path.join(path, 'pipeline_dict.py')
-
-    logs_path = os.path.join(path, 'Logs')
 
     if not os.path.exists(defaults_path):
         os.makedirs(defaults_path)
