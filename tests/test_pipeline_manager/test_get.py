@@ -95,7 +95,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
         assert iv_obj.name == str_obj.name == expect_ec.name
@@ -118,7 +118,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
 
         # Get from pipeline manager 1
         iv = sel.test_pipeline_manager.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
         assert iv_obj.name == str_obj.name == expect_ec.name
@@ -126,7 +126,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
 
         # Get from pipeline manager 2
         iv = sel.test_pipeline_manager2.example_class.stuff.data
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_obj = pipeline_manager2.get(iv)
         str_obj = pipeline_manager2.get('example_class.stuff.data')
         assert iv_obj.name == str_obj.name == expect_ec.name
@@ -203,7 +203,7 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_section = pipeline_manager.get(iv)
         iv_obj = iv_section[0]
         str_section = pipeline_manager.get('example_class.stuff')
@@ -228,7 +228,7 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
 
         # Get pipeline manager 1 section
         iv = sel.test_pipeline_manager.example_class.stuff
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_section = pipeline_manager.get(iv)
         iv_obj = iv_section[0]
         str_section = pipeline_manager.get('example_class.stuff')
@@ -238,7 +238,7 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
 
         # Get pipeline manager 2 section
         iv = sel.test_pipeline_manager2.example_class.stuff
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_section = pipeline_manager2.get(iv)
         iv_obj = iv_section[0]
         str_section = pipeline_manager2.get('example_class.stuff')
@@ -254,7 +254,7 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class
-        expect_ec = ExampleClass(name='data')
+        expect_ec = ExampleClass(None, name='data')
         iv_section = pipeline_manager.get(iv)
         iv_obj = iv_section['my_section']['stuff'][0]
         str_section = pipeline_manager.get('example_class')

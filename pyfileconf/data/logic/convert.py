@@ -1,5 +1,7 @@
 from typing import Union, Any, Type
 
+from pyfileconf.imports.logic.load.klass import class_function_args_as_dict
+
 StrOrObj = Union[str, Any]
 
 
@@ -12,4 +14,7 @@ def convert_to_empty_obj_if_necessary(item: StrOrObj, item_class: Type, key_attr
         key_attr: item
     }
 
-    return item_class(**defaults)
+    args_dict = class_function_args_as_dict(item_class)
+    args_dict.update(defaults)
+
+    return item_class(**args_dict)

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 @dataclass
 class ExampleClass:
 
-    def __init__(self, a: Optional[typing.Tuple[int, int]] = None, name: Optional[str] = None,
+    def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None,
                  c: Optional[collections.defaultdict] = None, d: Optional['TracebackException'] = None):
         self.a = a
         self.name = name
