@@ -25,6 +25,14 @@ pyfileconf.imports.logic.load.func module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.imports.logic.load.klass module
+------------------------------------------
+
+.. automodule:: pyfileconf.imports.logic.load.klass
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.imports.logic.load.name module
 -----------------------------------------
 

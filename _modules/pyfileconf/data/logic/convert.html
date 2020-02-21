@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.logic.convert &mdash; pyfileconf 0.3.3 documentation</title>
+  <title>pyfileconf.data.logic.convert &mdash; pyfileconf 0.3.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.3
+                0.3.4
               </div>
             
           
@@ -165,6 +165,8 @@
   <h1>Source code for pyfileconf.data.logic.convert</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.imports.logic.load.klass</span> <span class="kn">import</span> <span class="n">class_function_args_as_dict</span>
+
 <span class="n">StrOrObj</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
 
@@ -177,7 +179,10 @@
         <span class="n">key_attr</span><span class="p">:</span> <span class="n">item</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">item_class</span><span class="p">(</span><span class="o">**</span><span class="n">defaults</span><span class="p">)</span></div>
+    <span class="n">args_dict</span> <span class="o">=</span> <span class="n">class_function_args_as_dict</span><span class="p">(</span><span class="n">item_class</span><span class="p">)</span>
+    <span class="n">args_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">defaults</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">item_class</span><span class="p">(</span><span class="o">**</span><span class="n">args_dict</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
