@@ -1,4 +1,5 @@
 import os
+from copy import deepcopy
 
 from pyfileconf import Selector
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -539,3 +540,15 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
+
+    def test_deep_copy_specific_class_dict_item_view(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        new_item = deepcopy(iv)
+        assert isinstance(new_item, ExampleClass)
+        assert iv.item is not new_item
