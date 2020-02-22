@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from traceback import TracebackException
 
 
-@dataclass
 class ExampleClass:
 
     def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None,
@@ -23,3 +22,10 @@ class ExampleClass:
     @d.setter
     def d(self, d):
         self._d = d
+
+    def __eq__(self, other):
+        return all([
+            self.a == other.a,
+            self.name == other.name,
+            self.c == other.c,
+        ])
