@@ -94,7 +94,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager2.run(iv2)
         assert result == (None, expected_b_result)
 
-    def test_create_update_class(self):
+    def test_config_update_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
@@ -502,6 +502,28 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert result_none is None
         assert result_sc.name == sc.name == expect_sc.name
         assert result_sc.a == sc.a == expect_sc.a
+
+    def test_config_update_function_by_item_view(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        expected_b_result = ['a', 'b']
+        iv.b = expected_b_result
+        result = pipeline_manager.run(iv)
+        assert result == (None, expected_b_result)
+
+    def test_config_update_class_by_item_view(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        expected_a_result = (1, 2)
+        iv.a = expected_a_result
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
 
     def test_update_specific_class_config_attr_by_item_view(self):
         self.write_example_class_dict_to_file()

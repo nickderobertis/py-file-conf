@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable, List, Any
 import warnings
 
 from pyfileconf.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
@@ -125,6 +125,16 @@ class Selector:
         manager = self._managers[manager_name]
         relative_section_path = SectionPath('.'.join(section_path[1:]))
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)
+
+    def _set_attr_for_item(self, item: str, attr: str, value: Any):
+        section_path = SectionPath(item)
+        manager_name = section_path[0]
+        manager = self._managers[manager_name]
+        relative_section_path_str = '.'.join(section_path[1:])
+        manager.config.update(
+            {attr: value},
+            section_path_str=relative_section_path_str
+        )
 
     def _attach_to_pipeline_manager(self):
         self._managers = get_dict_of_any_defined_pipeline_manager_names_and_instances()
