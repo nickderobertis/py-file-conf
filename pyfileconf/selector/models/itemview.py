@@ -57,6 +57,19 @@ class ItemView:
             ### END TEMP
             return handle_known_typo_at_end_of_section_path_str(full_section_path_str)
 
+    def __setattr__(self, key: str, value):
+        # Set these items on ItemView itself
+        item_view_set_attrs = [
+            'section_path_str',
+            'selector',
+            '_is_item_view',
+        ]
+        if key in item_view_set_attrs:
+            super().__setattr__(key, value)
+        else:
+            # Set any others on the original object via updating PipelineManager config
+            self.selector._set_attr_for_item(self.section_path_str, key, value)
+
     def __dir__(self):
         exposed_properties = [
             'type',
