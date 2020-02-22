@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.4.0 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.4.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.4.1
               </div>
             
           
@@ -236,6 +236,7 @@
         <span class="n">exposed_methods</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s1">&#39;run&#39;</span><span class="p">,</span>
             <span class="s1">&#39;get&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;update&#39;</span><span class="p">,</span>
             <span class="s1">&#39;load&#39;</span><span class="p">,</span>
             <span class="s1">&#39;reload&#39;</span>
         <span class="p">]</span>
@@ -379,6 +380,17 @@
             <span class="k">raise</span> <span class="n">e</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span></div>
+
+<div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the configuration for an item by section path</span>
+
+<span class="sd">        :param d: dictionary of updates</span>
+<span class="sd">        :param section_path_str: section path of item to be updated</span>
+<span class="sd">        :param kwargs: kwarg updates</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_load_pipeline_config_and_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>

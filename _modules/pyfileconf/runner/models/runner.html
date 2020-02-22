@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.4.0 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.4.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.4.1
               </div>
             
           
@@ -202,7 +202,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_full_getattr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span><span class="p">:</span> <span class="n">registrar</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">}</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span><span class="p">:</span> <span class="n">registrar</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="c1"># TODO [#14]: find way of doing runner look ups with fewer side effects</span>
@@ -445,9 +446,16 @@
         <span class="k">return</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">def</span> <span class="nf">_get_one_obj_with_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">]</span>
+
         <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_class_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+
+        <span class="k">return</span> <span class="n">obj</span>
 
     <span class="k">def</span> <span class="nf">_get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActiveFunctionConfig</span><span class="p">:</span>
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
@@ -512,6 +520,16 @@
         <span class="n">config_dict</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">for_function</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span>
+
+<div class="viewcode-block" id="Runner.update"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_is_specific_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
