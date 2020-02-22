@@ -502,3 +502,18 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert result_none is None
         assert result_sc.name == sc.name == expect_sc.name
         assert result_sc.a == sc.a == expect_sc.a
+
+    def test_update_specific_class_config_attr_by_item_view(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expected_a_result = (1, 2)
+        iv.a = expected_a_result
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
