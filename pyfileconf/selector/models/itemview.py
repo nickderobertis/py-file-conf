@@ -84,16 +84,7 @@ class ItemView:
         return actual_item(*args, **kwargs)
 
     def __deepcopy__(self, memodict={}):
-        cls = self.__class__
-        result = cls.__new__(cls)
-        memodict[id(self)] = result
-        deepcopy_skip_items = ['selector']
-        deepcopy_dict = {key: value for key, value in self.__dict__.items() if key not in deepcopy_skip_items}
-        shallow_copy_dict = {key: value for key, value in self.__dict__.items() if key in deepcopy_skip_items}
-        for k, v in deepcopy_dict.items():
-            setattr(result, k, deepcopy(v, memodict))
-        result.__dict__.update(shallow_copy_dict)
-        return result
+        return deepcopy(self.item, memodict)
 
     def __eq__(self, other):
         equal_attrs = ['section_path_str']
