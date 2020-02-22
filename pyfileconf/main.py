@@ -71,6 +71,7 @@ class PipelineManager:
         exposed_methods = [
             'run',
             'get',
+            'update',
             'load',
             'reload'
         ]
@@ -214,6 +215,17 @@ class PipelineManager:
             raise e
 
         self._loaded_modules = self._import_tracker.imported_modules
+
+    def update(self, d: dict=None, section_path_str: str=None, **kwargs):
+        """
+        Update the configuration for an item by section path
+
+        :param d: dictionary of updates
+        :param section_path_str: section path of item to be updated
+        :param kwargs: kwarg updates
+        :return:
+        """
+        self.runner.update(d, section_path_str, **kwargs)
 
     def _load_pipeline_config_and_runner(self) -> None:
         """

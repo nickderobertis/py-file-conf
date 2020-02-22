@@ -37,7 +37,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.a_function
         expected_b_result = ['a', 'b']
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
@@ -74,7 +74,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert update pipeline manager 1
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
@@ -87,7 +87,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert update pipeline manager 2
         section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.config.update(
+        pipeline_manager2.update(
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
@@ -102,7 +102,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.ExampleClass
         expected_a_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -138,7 +138,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert update pipeline manager 1
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -151,7 +151,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert update pipeline manager 2
         section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.config.update(
+        pipeline_manager2.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -168,7 +168,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.example_class.stuff.data
         expected_a_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -213,7 +213,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert update pipeline manager 1
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -230,7 +230,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Assert update pipeline manager 2
         section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.config.update(
+        pipeline_manager2.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -252,11 +252,11 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expected_a_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(ec.section_path_str)[1:])
         section_path2 = SectionPath.from_section_str_list(SectionPath(ec2.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path2.path_str
         )
@@ -277,11 +277,11 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expected_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(ec.section_path_str)[1:])
         section_path_s = SectionPath.from_section_str_list(SectionPath(sec.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_result,
             section_path_str=section_path.path_str
         )
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             b=expected_result,
             section_path_str=section_path_s.path_str
         )
@@ -298,7 +298,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.a_function
         expected_b_result = ['a', 'b']
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
@@ -323,12 +323,12 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Update both pipeline manager configs
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
         section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.config.update(
+        pipeline_manager2.update(
             b=expected_b_result,
             section_path_str=section_path.path_str
         )
@@ -350,7 +350,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.ExampleClass
         expected_a_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -375,12 +375,12 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Update both pipeline manager configs
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
         section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.config.update(
+        pipeline_manager2.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -404,7 +404,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.example_class.stuff.data
         expected_a_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -434,12 +434,12 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
 
         # Update both pipeline manager configs
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
         section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.config.update(
+        pipeline_manager2.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
@@ -491,7 +491,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         # Assert that updating the specific class object updates the result from the function
         second_expected_a_result = (3, 4)
         section_path = SectionPath.from_section_str_list(SectionPath(sc_iv.section_path_str)[1:])
-        pipeline_manager.config.update(
+        pipeline_manager.update(
             a=second_expected_a_result,
             section_path_str=section_path.path_str
         )
