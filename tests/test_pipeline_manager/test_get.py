@@ -132,6 +132,18 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
 
+    def test_consistent_specific_config_obj(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv.item is iv_obj is str_obj
+
 
 class TestPipelineManagerGetSection(PipelineManagerTestBase):
 

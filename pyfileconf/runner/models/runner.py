@@ -38,6 +38,7 @@ class Runner(ReprMixin):
 
         self._all_specific_classes = tuple([registrar.klass for registrar in self._registrars])
         self._specific_class_registrar_map = {registrar.klass: registrar for registrar in self._registrars}
+        self._loaded_objects: Dict[str, Any] = {}
 
     def __getattr__(self, item):
         # TODO [#14]: find way of doing runner look ups with fewer side effects
@@ -280,9 +281,16 @@ class Runner(ReprMixin):
         return pipeline_class(**config_dict)  # type: ignore
 
     def _get_one_obj_with_config(self, section_path_str: str) -> Type:
+        if section_path_str in self._loaded_objects:
+            return self._loaded_objects[section_path_str]
+
         klass, config_dict = self._get_class_and_config(section_path_str)
 
-        return klass(**config_dict)
+        obj = klass(**config_dict)
+
+        self._loaded_objects[section_path_str] = obj
+
+        return obj
 
     def _get_config(self, section_path_str: str) -> ActiveFunctionConfig:
         config = self._config.get(section_path_str)
@@ -347,6 +355,16 @@ class Runner(ReprMixin):
         config_dict = config.for_function(func)
 
         return func, config_dict
+
+    def update(self, d: dict=None, section_path_str: str=None, **kwargs):
+        self._config.update(d, section_path_str, **kwargs)
+
+        if section_path_str in self._loaded_objects:
+            if d is None:
+                d = {}
+            d.update(**kwargs)
+            for key, value in d.items():
+                setattr(self._loaded_objects[section_path_str], key, value)
 
     def _is_specific_class(self, obj: Any) -> bool:
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
