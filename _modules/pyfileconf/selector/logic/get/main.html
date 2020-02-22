@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.logic.get.main &mdash; pyfileconf 0.3.5 documentation</title>
+  <title>pyfileconf.selector.logic.get.main &mdash; pyfileconf 0.4.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.4.0
               </div>
             
           
@@ -163,11 +163,16 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.selector.logic.get.main</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.fromglobs</span> <span class="kn">import</span> <span class="n">get_dict_of_pipeline_manager_names_and_instances_from_globals</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.globs</span> <span class="kn">import</span> <span class="n">iter_globals</span>
 
-<div class="viewcode-block" id="get_dict_of_any_defined_pipeline_manager_names_and_instances"><a class="viewcode-back" href="../../../../../api/pyfileconf.selector.logic.get.html#pyfileconf.selector.logic.get.main.get_dict_of_any_defined_pipeline_manager_names_and_instances">[docs]</a><span class="k">def</span> <span class="nf">get_dict_of_any_defined_pipeline_manager_names_and_instances</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_dict_of_any_defined_pipeline_manager_names_and_instances"><a class="viewcode-back" href="../../../../../api/pyfileconf.selector.logic.get.html#pyfileconf.selector.logic.get.main.get_dict_of_any_defined_pipeline_manager_names_and_instances">[docs]</a><span class="k">def</span> <span class="nf">get_dict_of_any_defined_pipeline_manager_names_and_instances</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">]:</span>
     <span class="n">pm_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">globs</span> <span class="ow">in</span> <span class="n">iter_globals</span><span class="p">():</span>
         <span class="n">pm_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_dict_of_pipeline_manager_names_and_instances_from_globals</span><span class="p">(</span><span class="n">globs</span><span class="o">=</span><span class="n">globs</span><span class="p">))</span>

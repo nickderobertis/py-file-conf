@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.3.5 documentation</title>
+  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.4.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.4.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.selector.models.selector</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.main</span> <span class="kn">import</span> <span class="n">get_dict_of_any_defined_pipeline_manager_names_and_instances</span>
@@ -290,6 +290,16 @@
         <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span>
         <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
         <span class="k">return</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="n">manager</span><span class="p">,</span> <span class="n">relative_section_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_attr_for_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">manager_name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span>
+        <span class="n">relative_section_path_str</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span><span class="n">attr</span><span class="p">:</span> <span class="n">value</span><span class="p">},</span>
+            <span class="n">section_path_str</span><span class="o">=</span><span class="n">relative_section_path_str</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_attach_to_pipeline_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span> <span class="o">=</span> <span class="n">get_dict_of_any_defined_pipeline_manager_names_and_instances</span><span class="p">()</span>

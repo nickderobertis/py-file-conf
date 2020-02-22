@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.3.5 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.4.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.4.0
               </div>
             
           
@@ -221,6 +221,19 @@
             <span class="k">raise</span> <span class="n">e</span>
             <span class="c1">### END TEMP</span>
             <span class="k">return</span> <span class="n">handle_known_typo_at_end_of_section_path_str</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># Set these items on ItemView itself</span>
+        <span class="n">item_view_set_attrs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;section_path_str&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;selector&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">item_view_set_attrs</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Set any others on the original object via updating PipelineManager config</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_set_attr_for_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">exposed_properties</span> <span class="o">=</span> <span class="p">[</span>

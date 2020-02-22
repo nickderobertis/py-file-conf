@@ -1,7 +1,7 @@
-astor
-datacode
-pd_utils
-pandas
-mixins
-IPython
 pyfileconf
+datacode
+astor
+pd_utils
+IPython
+mixins
+pandas
