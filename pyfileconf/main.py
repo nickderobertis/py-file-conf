@@ -259,7 +259,7 @@ class PipelineManager:
                 raise ValueError('when adding creating item in main pipeline dict, must pass function or class')
             self._create_pipeline_dict_entry(section_path, func_or_class)
 
-        # TODO: create items without reloading by inserting directly into registrar and config manager
+        # TODO [$5e52dc143d19620007e39164]: create items without reloading by inserting directly into registrar and config manager
         self.reload()
 
     def _create_specific_class_dict_entry(self, section_path: SectionPath):
