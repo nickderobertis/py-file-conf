@@ -88,3 +88,22 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         with open(class_path, 'r') as f:
             contents = f.read()
             self.assert_example_class_dict_config_file_contents(contents)
+
+    def test_create_entry_for_specific_class_dict_in_same_section_as_existing_entry(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager.create('example_class.stuff.data2')
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data2
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        module_folder = os.path.join(class_folder, 'stuff')
+        class_path = os.path.join(module_folder, 'data2.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_dict_config_file_contents(
+                contents,
+                name_value="name: Optional[str] = 'data2'"
+            )

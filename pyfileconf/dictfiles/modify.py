@@ -1,5 +1,5 @@
 import ast
-from typing import Type, Callable, Union, Optional
+from typing import Optional
 
 import black
 
@@ -49,7 +49,7 @@ def add_item_into_nested_dict_at_section_path(nested_dict: dict, section_path: S
 
             if not isinstance(last_container, list):
                 raise ValueError('trying to insert item into existing dictionary section, must be existing '
-                                 'list section or non-existent sectionj')
+                                 'list section or non-existent section')
 
             last_container.append(new_entry)
 
