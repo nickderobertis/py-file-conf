@@ -32,7 +32,7 @@ class PipelineManager:
     """
     Main class for managing flow-based programming and configuration.
     """
-    _active_managers = {}
+    _active_managers: Dict[str, 'PipelineManager'] = {}
 
     def __init__(self, folder: str,
                  name: str= 'project',
@@ -295,6 +295,11 @@ class PipelineManager:
                 [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
             ],
         ])
+
+    def __del__(self):
+        current_manager_under_this_key = self._active_managers[self.name]
+        if current_manager_under_this_key is self:
+            del self._active_managers[self.name]
 
 
 def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func: Callable = lambda x: x,
