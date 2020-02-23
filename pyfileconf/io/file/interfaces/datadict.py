@@ -1,3 +1,8 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pyfileconf.basemodels.config import ConfigBase
+
 from pyfileconf.assignments.models.container import AssignmentStatementContainer
 from pyfileconf.io.file.load.lazy.datadict import SpecificClassDictLoader
 from pyfileconf.io.file.write.base import FileStr

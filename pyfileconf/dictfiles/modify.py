@@ -1,5 +1,5 @@
 import ast
-from typing import Optional
+from typing import Optional, Union
 
 import black
 
@@ -34,6 +34,7 @@ def add_item_into_nested_dict_at_section_path(nested_dict: dict, section_path: S
             # the item to be stored.
 
             # Need to create entry in this section.
+            new_entry: Union[str, ast.Name]
             if add_as_ast_name:
                 new_entry = ast.Name(item)
             else:
