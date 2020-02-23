@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.4.4 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.5.0
               </div>
             
           
@@ -174,7 +174,11 @@
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictconfig</span> <span class="kn">import</span> <span class="n">SpecificClassDictConfig</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.dictfiles.modify</span> <span class="kn">import</span> <span class="n">add_item_into_nested_dict_at_section_path</span><span class="p">,</span> \
+    <span class="n">create_dict_assignment_str_from_nested_dict_with_ast_names</span><span class="p">,</span> <span class="n">pretty_format_str</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.dictconfig</span> <span class="kn">import</span> <span class="n">PipelineDictConfig</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">StrOrView</span>
@@ -395,6 +399,75 @@
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PipelineManager.create"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">func_or_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new configuration entry dynamically rather than manually modifying dict file</span>
+
+<span class="sd">        :param func_or_class: function or class to use to generate config</span>
+<span class="sd">        :param section_path_str: section path at which the config should be stored</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_names</span><span class="p">:</span>
+            <span class="c1"># Got path for a specific class dict, add to specific class dict</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">section_path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;when targeting a specific class dict, section path must have minimum length of &#39;</span>
+                                 <span class="s1">&#39;3, e.g. example_class.thing.stuff&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">func_or_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;only pass func_or_class when targeting main pipeline dict, not specific class dict&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_specific_class_dict_entry</span><span class="p">(</span><span class="n">section_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Got path for main pipeline dict, add to main pipeline dict</span>
+            <span class="k">if</span> <span class="n">func_or_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;when adding creating item in main pipeline dict, must pass function or class&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_pipeline_dict_entry</span><span class="p">(</span><span class="n">section_path</span><span class="p">,</span> <span class="n">func_or_class</span><span class="p">)</span>
+
+        <span class="c1"># TODO: create items without reloading by inserting directly into registrar and config manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_create_specific_class_dict_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">:</span> <span class="n">SectionPath</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
+        <span class="n">specific_class_dict_file</span> <span class="o">=</span> <span class="n">SpecificClassDictFile</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_dict&#39;</span><span class="p">)</span>
+        <span class="n">specific_dict</span> <span class="o">=</span> <span class="n">specific_class_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="c1"># Modify specific class dict to add entry</span>
+        <span class="n">add_item_into_nested_dict_at_section_path</span><span class="p">(</span>
+            <span class="n">specific_dict</span><span class="p">,</span>
+            <span class="c1"># skip first section as that is name of specific class, skip last section as</span>
+            <span class="c1"># that&#39;s name which should be created</span>
+            <span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>  <span class="c1"># last section is name that should be created</span>
+            <span class="n">add_as_ast_name</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">specific_dict_str</span> <span class="o">=</span> <span class="n">pretty_format_str</span><span class="p">(</span><span class="s1">&#39;class_dict = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">specific_dict</span><span class="p">))</span>
+
+        <span class="n">specific_class_dict_config</span> <span class="o">=</span> <span class="n">SpecificClassDictConfig</span><span class="p">(</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">class_dict</span><span class="o">=</span><span class="n">specific_dict_str</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;specific_class_dict&#39;</span><span class="p">,</span>
+            <span class="n">_file</span><span class="o">=</span><span class="n">specific_class_dict_file</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">specific_class_dict_file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">specific_class_dict_config</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_pipeline_dict_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">:</span> <span class="n">SectionPath</span><span class="p">,</span> <span class="n">func_or_class</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">]):</span>
+        <span class="n">pipeline_dict_file</span> <span class="o">=</span> <span class="n">PipelineDictFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_dict_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pipeline_dict&#39;</span><span class="p">)</span>
+        <span class="n">pipeline_dict</span> <span class="o">=</span> <span class="n">pipeline_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="c1"># Modify pipeline dict to add entry</span>
+        <span class="n">add_item_into_nested_dict_at_section_path</span><span class="p">(</span><span class="n">pipeline_dict</span><span class="p">,</span> <span class="n">section_path</span><span class="p">,</span> <span class="n">func_or_class</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="c1"># Convert pipeline dict to string for output</span>
+        <span class="n">pipeline_dict_str</span> <span class="o">=</span> <span class="n">create_dict_assignment_str_from_nested_dict_with_ast_names</span><span class="p">(</span><span class="n">pipeline_dict</span><span class="p">)</span>
+
+        <span class="n">pipeline_dict_config</span> <span class="o">=</span> <span class="n">PipelineDictConfig</span><span class="p">(</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">pipeline_dict</span><span class="o">=</span><span class="n">pipeline_dict_str</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pipeline_dict&#39;</span><span class="p">,</span>
+            <span class="n">_file</span><span class="o">=</span><span class="n">pipeline_dict_file</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">pipeline_dict_file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">pipeline_dict_config</span><span class="p">)</span>
+
 
     <span class="k">def</span> <span class="nf">_load_pipeline_config_and_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>

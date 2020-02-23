@@ -33,6 +33,14 @@ pyfileconf.data.models.config module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.data.models.dictconfig module
+----------------------------------------
+
+.. automodule:: pyfileconf.data.models.dictconfig
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.data.models.dictfile module
 --------------------------------------
 

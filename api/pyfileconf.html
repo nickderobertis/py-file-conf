@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.4.4 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.5.0
               </div>
             
           
@@ -107,6 +107,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.dictfiles.html">pyfileconf.dictfiles package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
@@ -274,6 +275,7 @@ the config file, and finally by any local config updates in a script.</p>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.astitems">pyfileconf.data.models.astitems module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.collection">pyfileconf.data.models.collection module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.config">pyfileconf.data.models.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.dictconfig">pyfileconf.data.models.dictconfig module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.dictfile">pyfileconf.data.models.dictfile module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.file">pyfileconf.data.models.file module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.models.html#module-pyfileconf.data.models.registrar">pyfileconf.data.models.registrar module</a></li>
@@ -281,6 +283,11 @@ the config file, and finally by any local config updates in a script.</p>
 </li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.dictfiles.html">pyfileconf.dictfiles package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.dictfiles.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.dictfiles.html#module-pyfileconf.dictfiles.modify">pyfileconf.dictfiles.modify module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a><ul>
@@ -436,6 +443,7 @@ the config file, and finally by any local config updates in a script.</p>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.collection">pyfileconf.pipelines.models.collection module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.config">pyfileconf.pipelines.models.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.dictconfig">pyfileconf.pipelines.models.dictconfig module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.dictfile">pyfileconf.pipelines.models.dictfile module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.file">pyfileconf.pipelines.models.file module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.interfaces">pyfileconf.pipelines.models.interfaces module</a></li>
@@ -514,6 +522,23 @@ the config file, and finally by any local config updates in a script.</p>
 <dt id="pyfileconf.main.PipelineManager.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">specific_class_config_dicts=None</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em>, <em class="sig-param">default_config_folder_name='defaults'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.create">
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">func_or_class=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new configuration entry dynamically rather than manually modifying dict file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.create.params.func_or_class"></span><strong>func_or_class</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.create.params.func_or_class">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – function or class to use to generate config</p></li>
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.create.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.create.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – section path at which the config should be stored</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">

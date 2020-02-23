@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pipelines.models package &mdash; pyfileconf 0.4.4 documentation</title>
+  <title>pyfileconf.pipelines.models package &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.5.0
               </div>
             
           
@@ -107,6 +107,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.dictfiles.html">pyfileconf.dictfiles package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
@@ -248,6 +249,31 @@ of config items for passing to the function.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-pyfileconf.pipelines.models.dictconfig">
+<span id="pyfileconf-pipelines-models-dictconfig-module"></span><h2>pyfileconf.pipelines.models.dictconfig module<a class="headerlink" href="#module-pyfileconf.pipelines.models.dictconfig" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.pipelines.models.dictconfig.PipelineDictConfig">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pipelines.models.dictconfig.</code><code class="sig-name descname">PipelineDictConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/dictconfig.html#PipelineDictConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.dictconfig.PipelineDictConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.config.ConfigBase</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.pipelines.models.dictconfig.PipelineDictConfig.as_imports_and_assignments">
+<code class="sig-name descname">as_imports_and_assignments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pipelines/models/dictconfig.html#PipelineDictConfig.as_imports_and_assignments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pipelines.models.dictconfig.PipelineDictConfig.as_imports_and_assignments" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a>, <a class="reference internal" href="pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer" title="pyfileconf.assignments.models.container.AssignmentStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssignmentStatementContainer</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.pipelines.models.dictconfig.PipelineDictConfig.config_file_class">
+<code class="sig-name descname">config_file_class</code><a class="headerlink" href="#pyfileconf.pipelines.models.dictconfig.PipelineDictConfig.config_file_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#pyfileconf.pipelines.models.dictfile.PipelineDictFile" title="pyfileconf.pipelines.models.dictfile.PipelineDictFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.pipelines.models.dictfile.PipelineDictFile</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-pyfileconf.pipelines.models.dictfile">
 <span id="pyfileconf-pipelines-models-dictfile-module"></span><h2>pyfileconf.pipelines.models.dictfile module<a class="headerlink" href="#module-pyfileconf.pipelines.models.dictfile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -256,7 +282,7 @@ of config items for passing to the function.</p>
 <dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase" title="pyfileconf.basemodels.file.ConfigFileBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.file.ConfigFileBase</span></code></a></p>
 <dl class="attribute">
 <dt id="pyfileconf.pipelines.models.dictfile.PipelineDictFile.always_imports">
-<code class="sig-name descname">always_imports</code><em class="property">: List[Union[pyfileconf.imports.models.statements.module.ModuleImportStatement, pyfileconf.imports.models.statements.obj.ObjectImportStatement]]</em><em class="property"> = [mixins.attrequals.EqOnAttrsMixin]</em><a class="headerlink" href="#pyfileconf.pipelines.models.dictfile.PipelineDictFile.always_imports" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_imports</code><em class="property">: List[pyfileconf.assignments.models.statement.AssignmentStatement]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.pipelines.models.dictfile.PipelineDictFile.always_imports" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

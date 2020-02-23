@@ -25,6 +25,14 @@ pyfileconf.pipelines.models.config module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.pipelines.models.dictconfig module
+---------------------------------------------
+
+.. automodule:: pyfileconf.pipelines.models.dictconfig
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.pipelines.models.dictfile module
 -------------------------------------------
 

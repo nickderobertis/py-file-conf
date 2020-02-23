@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pipelines.models.registrar &mdash; pyfileconf 0.5.0 documentation</title>
+  <title>pyfileconf.data.models.dictconfig &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -147,7 +147,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>pyfileconf.pipelines.models.registrar</li>
+      <li>pyfileconf.data.models.dictconfig</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,32 +162,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyfileconf.pipelines.models.registrar</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-
-<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
-
-<span class="n">ObjectViewOrCollection</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ObjectView</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">]</span>
-
-<div class="viewcode-block" id="PipelineRegistrar"><a class="viewcode-back" href="../../../../api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.registrar.PipelineRegistrar">[docs]</a><span class="k">class</span> <span class="nc">PipelineRegistrar</span><span class="p">(</span><span class="n">Registrar</span><span class="p">):</span>
-    <span class="n">collection_class</span> <span class="o">=</span> <span class="n">PipelineCollection</span>
-
-<div class="viewcode-block" id="PipelineRegistrar.get"><a class="viewcode-back" href="../../../../api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.registrar.PipelineRegistrar.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">obj_view_or_collection</span><span class="p">:</span> <span class="n">ObjectViewOrCollection</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
-
-        <span class="c1"># Nothing further needed for collections</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj_view_or_collection</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">obj_view_or_collection</span>
-
-        <span class="c1"># Need to load ObjectView, return actual object</span>
-        <span class="k">return</span> <span class="n">obj_view_or_collection</span><span class="o">.</span><span class="n">load</span><span class="p">()</span></div></div>
+  <h1>Source code for pyfileconf.data.models.dictconfig</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pyfileconf.assignments.models.container</span> <span class="kn">import</span> <span class="n">AssignmentStatementContainer</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.assignments.models.statement</span> <span class="kn">import</span> <span class="n">AssignmentStatement</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">ImportsAndAssigns</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictfile</span> <span class="kn">import</span> <span class="n">SpecificClassDictFile</span>
 
 
+<div class="viewcode-block" id="SpecificClassDictConfig"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.dictconfig.SpecificClassDictConfig">[docs]</a><span class="k">class</span> <span class="nc">SpecificClassDictConfig</span><span class="p">(</span><span class="n">ConfigBase</span><span class="p">):</span>
 
+    <span class="n">config_file_class</span> <span class="o">=</span> <span class="n">SpecificClassDictFile</span>
 
-
+<div class="viewcode-block" id="SpecificClassDictConfig.as_imports_and_assignments"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.dictconfig.SpecificClassDictConfig.as_imports_and_assignments">[docs]</a>    <span class="k">def</span> <span class="nf">as_imports_and_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImportsAndAssigns</span><span class="p">:</span>
+        <span class="n">pipeline_dict_assign</span> <span class="o">=</span> <span class="n">AssignmentStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;class_dict&#39;</span><span class="p">])</span>
+        <span class="n">assigns</span> <span class="o">=</span> <span class="n">AssignmentStatementContainer</span><span class="p">([</span><span class="n">pipeline_dict_assign</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span> <span class="n">assigns</span></div></div>
 </pre></div>
 
            </div>

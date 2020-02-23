@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.interfaces.pipeline &mdash; pyfileconf 0.4.4 documentation</title>
+  <title>pyfileconf.io.file.interfaces.pipeline &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.5.0
               </div>
             
           
@@ -163,14 +163,29 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.io.file.interfaces.pipeline</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.assignments.models.container</span> <span class="kn">import</span> <span class="n">AssignmentStatementContainer</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.lazy.pipeline</span> <span class="kn">import</span> <span class="n">PipelineDictLoader</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.io.file.write.base</span> <span class="kn">import</span> <span class="n">FileStr</span>
+
 
 <div class="viewcode-block" id="PipelineDictInterface"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface">[docs]</a><span class="k">class</span> <span class="nc">PipelineDictInterface</span><span class="p">(</span><span class="n">PipelineDictLoader</span><span class="p">):</span>
 
-<div class="viewcode-block" id="PipelineDictInterface.save"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># TODO [#9]: write pipeline dict to file</span>
-        <span class="k">pass</span></div></div>
+<div class="viewcode-block" id="PipelineDictInterface.save"><a class="viewcode-back" href="../../../../../api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;ConfigBase&#39;</span><span class="p">):</span>
+        <span class="c1"># Set existing assigns and body to empty because should be completely replaced by new pipeline dict</span>
+        <span class="n">file_str_obj</span> <span class="o">=</span> <span class="n">FileStr</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span>
+            <span class="n">existing_assigns</span><span class="o">=</span><span class="n">AssignmentStatementContainer</span><span class="p">([]),</span>
+            <span class="n">existing_imports</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
+            <span class="n">existing_body</span><span class="o">=</span><span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_str_obj</span><span class="o">.</span><span class="n">file_str</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

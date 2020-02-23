@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models package &mdash; pyfileconf 0.4.4 documentation</title>
+  <title>pyfileconf.data.models package &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -43,7 +43,7 @@
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pyfileconf.exceptions package" href="pyfileconf.exceptions.html" />
+    <link rel="next" title="pyfileconf.dictfiles package" href="pyfileconf.dictfiles.html" />
     <link rel="prev" title="pyfileconf.data.logic.merge package" href="pyfileconf.data.logic.merge.html" /> 
 </head>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.5.0
               </div>
             
           
@@ -107,6 +107,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.dictfiles.html">pyfileconf.dictfiles package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
@@ -275,6 +276,31 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-pyfileconf.data.models.dictconfig">
+<span id="pyfileconf-data-models-dictconfig-module"></span><h2>pyfileconf.data.models.dictconfig module<a class="headerlink" href="#module-pyfileconf.data.models.dictconfig" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.data.models.dictconfig.SpecificClassDictConfig">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.data.models.dictconfig.</code><code class="sig-name descname">SpecificClassDictConfig</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/dictconfig.html#SpecificClassDictConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.dictconfig.SpecificClassDictConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.config.ConfigBase</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.data.models.dictconfig.SpecificClassDictConfig.as_imports_and_assignments">
+<code class="sig-name descname">as_imports_and_assignments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/data/models/dictconfig.html#SpecificClassDictConfig.as_imports_and_assignments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.data.models.dictconfig.SpecificClassDictConfig.as_imports_and_assignments" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a>, <a class="reference internal" href="pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer" title="pyfileconf.assignments.models.container.AssignmentStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssignmentStatementContainer</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.data.models.dictconfig.SpecificClassDictConfig.config_file_class">
+<code class="sig-name descname">config_file_class</code><a class="headerlink" href="#pyfileconf.data.models.dictconfig.SpecificClassDictConfig.config_file_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#pyfileconf.data.models.dictfile.SpecificClassDictFile" title="pyfileconf.data.models.dictfile.SpecificClassDictFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.data.models.dictfile.SpecificClassDictFile</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-pyfileconf.data.models.dictfile">
 <span id="pyfileconf-data-models-dictfile-module"></span><h2>pyfileconf.data.models.dictfile module<a class="headerlink" href="#module-pyfileconf.data.models.dictfile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -284,7 +310,7 @@
 <dl class="attribute">
 <dt id="pyfileconf.data.models.dictfile.SpecificClassDictFile.interface_class">
 <code class="sig-name descname">interface_class</code><a class="headerlink" href="#pyfileconf.data.models.dictfile.SpecificClassDictFile.interface_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassInterface" title="pyfileconf.io.file.interfaces.datadict.SpecificClassInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.interfaces.datadict.SpecificClassInterface</span></code></a></p>
+<dd><p>alias of <a class="reference internal" href="pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface" title="pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
@@ -366,7 +392,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pyfileconf.exceptions.html" class="btn btn-neutral float-right" title="pyfileconf.exceptions package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pyfileconf.dictfiles.html" class="btn btn-neutral float-right" title="pyfileconf.dictfiles package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pyfileconf.data.logic.merge.html" class="btn btn-neutral float-left" title="pyfileconf.data.logic.merge package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

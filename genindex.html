@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyfileconf 0.4.4 documentation</title>
+  <title>Index &mdash; pyfileconf 0.5.0 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.5.0
               </div>
             
           
@@ -297,6 +297,8 @@
 </li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.add_if_missing">add_if_missing() (pyfileconf.basemodels.container.Container method)</a>
 </li>
+      <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path">add_item_into_nested_dict_at_section_path() (in module pyfileconf.dictfiles.modify)</a>
+</li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict">always_assign_with_names_dict (pyfileconf.basemodels.file.ConfigFileBase attribute)</a>
 
       <ul>
@@ -321,16 +323,22 @@
         <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.file.FunctionConfigFile.always_imports">(pyfileconf.pipelines.models.file.FunctionConfigFile attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.append">append() (pyfileconf.basemodels.container.Container method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.append_if_missing">append_if_missing() (pyfileconf.basemodels.container.Container method)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.collection.apply_config">apply_config() (in module pyfileconf.data.models.collection)</a>
 </li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.as_imports_and_assignments">as_imports_and_assignments() (pyfileconf.basemodels.config.ConfigBase method)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.dictconfig.SpecificClassDictConfig.as_imports_and_assignments">(pyfileconf.data.models.dictconfig.SpecificClassDictConfig method)</a>
 </li>
+        <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.dictconfig.PipelineDictConfig.as_imports_and_assignments">(pyfileconf.pipelines.models.dictconfig.PipelineDictConfig method)</a>
+</li>
+      </ul></li>
       <li><a href="api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.config.ConfigFileLoader.assignment_body">assignment_body() (pyfileconf.io.file.load.lazy.config.ConfigFileLoader property)</a>
 </li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor">AssignmentByVarnameExtractor (class in pyfileconf.io.file.load.parsers.assign)</a>
@@ -392,7 +400,11 @@
       <ul>
         <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.config.ActiveFunctionConfig.config_file_class">(pyfileconf.config.models.config.ActiveFunctionConfig attribute)</a>
 </li>
+        <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.dictconfig.SpecificClassDictConfig.config_file_class">(pyfileconf.data.models.dictconfig.SpecificClassDictConfig attribute)</a>
+</li>
         <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.config.FunctionConfig.config_file_class">(pyfileconf.pipelines.models.config.FunctionConfig attribute)</a>
+</li>
+        <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.dictconfig.PipelineDictConfig.config_file_class">(pyfileconf.pipelines.models.dictconfig.PipelineDictConfig attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.config_map">config_map() (pyfileconf.config.models.section.ConfigSection property)</a>
@@ -443,7 +455,11 @@
 </li>
       <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.CouldNotImportException">CouldNotImportException</a>
 </li>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.create">create() (pyfileconf.main.PipelineManager method)</a>
+</li>
       <li><a href="api/pyfileconf.html#pyfileconf.main.create_collections">create_collections() (in module pyfileconf.main)</a>
+</li>
+      <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.create_dict_assignment_str_from_nested_dict_with_ast_names">create_dict_assignment_str_from_nested_dict_with_ast_names() (in module pyfileconf.dictfiles.modify)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.main.create_project">create_project() (in module pyfileconf.main)</a>
 </li>
@@ -587,10 +603,10 @@
       </ul></li>
       <li><a href="api/pyfileconf.sectionpath.html#pyfileconf.sectionpath.sectionpath.SectionPath.from_filepath">from_filepath() (pyfileconf.sectionpath.sectionpath.SectionPath class method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.from_files">from_files() (pyfileconf.config.models.section.ConfigSection class method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.from_list">from_list() (pyfileconf.basemodels.collection.Collection class method)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.config.SpecificClassConfig.from_obj">from_obj() (pyfileconf.data.models.config.SpecificClassConfig class method)</a>
@@ -606,6 +622,8 @@
 </li>
       </ul></li>
       <li><a href="api/pyfileconf.assignments.models.html#pyfileconf.assignments.models.statement.AssignmentStatement.from_varname_and_ast_value">from_varname_and_ast_value() (pyfileconf.assignments.models.statement.AssignmentStatement class method)</a>
+</li>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.create.params.func_or_class">func_or_class (pyfileconf.main.PipelineManager.create parameter)</a>
 </li>
       <li><a href="api/pyfileconf.io.func.load.html#pyfileconf.io.func.load.config.function_args_as_arg_and_annotation_dict">function_args_as_arg_and_annotation_dict() (in module pyfileconf.io.func.load.config)</a>
 </li>
@@ -730,6 +748,8 @@
       <li><a href="api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.name.is_imported_name">is_imported_name() (in module pyfileconf.imports.logic.load.name)</a>
 </li>
       <li><a href="api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.name.is_imported_obj">is_imported_obj() (in module pyfileconf.imports.logic.load.name)</a>
+</li>
+      <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path.params.item">item (pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path parameter)</a>
 </li>
       <li><a href="api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.ItemView.item">item() (pyfileconf.selector.models.itemview.ItemView property)</a>
 
@@ -857,10 +877,12 @@
 </li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.extname.NameExtractor">NameExtractor (class in pyfileconf.io.file.load.parsers.extname)</a>
 </li>
-      <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline.new_instance_with_config">new_instance_with_config() (pyfileconf.basemodels.pipeline.Pipeline method)</a>
+      <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path.params.nested_dict">nested_dict (pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path parameter)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline.new_instance_with_config">new_instance_with_config() (pyfileconf.basemodels.pipeline.Pipeline method)</a>
+</li>
       <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatementCollection.new_names">new_names() (pyfileconf.imports.models.statements.rename.RenameStatementCollection property)</a>
 </li>
       <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.NoImportMatchingNameException">NoImportMatchingNameException</a>
@@ -909,6 +931,8 @@
 </li>
       <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.collection.PipelineCollection">PipelineCollection (class in pyfileconf.pipelines.models.collection)</a>
 </li>
+      <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.dictconfig.PipelineDictConfig">PipelineDictConfig (class in pyfileconf.pipelines.models.dictconfig)</a>
+</li>
       <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.dictfile.PipelineDictFile">PipelineDictFile (class in pyfileconf.pipelines.models.dictfile)</a>
 </li>
       <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface">PipelineDictInterface (class in pyfileconf.io.file.interfaces.pipeline)</a>
@@ -924,6 +948,8 @@
       <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.pop">pop() (pyfileconf.config.models.manager.ConfigManager method)</a>
 </li>
       <li><a href="api/pyfileconf.mixins.html#pyfileconf.mixins.orderpref.OrderPreferenceMixin.preferred_position">preferred_position() (pyfileconf.mixins.orderpref.OrderPreferenceMixin property)</a>
+</li>
+      <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.pretty_format_str">pretty_format_str() (in module pyfileconf.dictfiles.modify)</a>
 </li>
       <li><a href="api/pyfileconf.html#module-pyfileconf">pyfileconf (module)</a>
 </li>
@@ -995,11 +1021,17 @@
 </li>
       <li><a href="api/pyfileconf.data.models.html#module-pyfileconf.data.models.config">pyfileconf.data.models.config (module)</a>
 </li>
+      <li><a href="api/pyfileconf.data.models.html#module-pyfileconf.data.models.dictconfig">pyfileconf.data.models.dictconfig (module)</a>
+</li>
       <li><a href="api/pyfileconf.data.models.html#module-pyfileconf.data.models.dictfile">pyfileconf.data.models.dictfile (module)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#module-pyfileconf.data.models.file">pyfileconf.data.models.file (module)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#module-pyfileconf.data.models.registrar">pyfileconf.data.models.registrar (module)</a>
+</li>
+      <li><a href="api/pyfileconf.dictfiles.html#module-pyfileconf.dictfiles">pyfileconf.dictfiles (module)</a>
+</li>
+      <li><a href="api/pyfileconf.dictfiles.html#module-pyfileconf.dictfiles.modify">pyfileconf.dictfiles.modify (module)</a>
 </li>
       <li><a href="api/pyfileconf.exceptions.html#module-pyfileconf.exceptions">pyfileconf.exceptions (module)</a>
 </li>
@@ -1045,12 +1077,12 @@
 </li>
       <li><a href="api/pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.module">pyfileconf.imports.models.statements.module (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.obj">pyfileconf.imports.models.statements.obj (module)</a>
 </li>
       <li><a href="api/pyfileconf.imports.models.statements.html#module-pyfileconf.imports.models.statements.rename">pyfileconf.imports.models.statements.rename (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.imports.models.html#module-pyfileconf.imports.models.tracker">pyfileconf.imports.models.tracker (module)</a>
 </li>
       <li><a href="api/pyfileconf.io.html#module-pyfileconf.io">pyfileconf.io (module)</a>
@@ -1156,6 +1188,8 @@
       <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.collection">pyfileconf.pipelines.models.collection (module)</a>
 </li>
       <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.config">pyfileconf.pipelines.models.config (module)</a>
+</li>
+      <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.dictconfig">pyfileconf.pipelines.models.dictconfig (module)</a>
 </li>
       <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.dictfile">pyfileconf.pipelines.models.dictfile (module)</a>
 </li>
@@ -1298,7 +1332,7 @@
 </li>
         <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.config.ConfigFileInterface.save">(pyfileconf.io.file.interfaces.config.ConfigFileInterface method)</a>
 </li>
-        <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassInterface.save">(pyfileconf.io.file.interfaces.datadict.SpecificClassInterface method)</a>
+        <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface.save">(pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface method)</a>
 </li>
         <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface.save">(pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface method)</a>
 </li>
@@ -1307,14 +1341,20 @@
       </ul></li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.scaffold_config">scaffold_config() (pyfileconf.basemodels.registrar.Registrar method)</a>
 </li>
-      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update.params.section_path_str">section_path_str (pyfileconf.main.PipelineManager.update parameter)</a>
+      <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path.params.section_path">section_path (pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path parameter)</a>
 </li>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.create.params.section_path_str">section_path_str (pyfileconf.main.PipelineManager.create parameter)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update.params.section_path_str">(pyfileconf.main.PipelineManager.update parameter)</a>
+</li>
+      </ul></li>
       <li><a href="api/pyfileconf.sectionpath.html#pyfileconf.sectionpath.sectionpath.SectionPath">SectionPath (class in pyfileconf.sectionpath.sectionpath)</a>
-</li>
-      <li><a href="api/pyfileconf.selector.models.html#pyfileconf.selector.models.selector.Selector">Selector (class in pyfileconf.selector.models.selector)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.selector.models.html#pyfileconf.selector.models.selector.Selector">Selector (class in pyfileconf.selector.models.selector)</a>
+</li>
       <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.set">set() (pyfileconf.config.models.manager.ConfigManager method)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.collection.SpecificClassCollection">SpecificClassCollection (class in pyfileconf.data.models.collection)</a>
@@ -1325,11 +1365,13 @@
 </li>
       <li><a href="api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.dataast.SpecificClassDictAstLoader">SpecificClassDictAstLoader (class in pyfileconf.io.file.load.lazy.dataast)</a>
 </li>
+      <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.dictconfig.SpecificClassDictConfig">SpecificClassDictConfig (class in pyfileconf.data.models.dictconfig)</a>
+</li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.dictfile.SpecificClassDictFile">SpecificClassDictFile (class in pyfileconf.data.models.dictfile)</a>
 </li>
-      <li><a href="api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader">SpecificClassDictLoader (class in pyfileconf.io.file.load.lazy.datadict)</a>
+      <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface">SpecificClassDictInterface (class in pyfileconf.io.file.interfaces.datadict)</a>
 </li>
-      <li><a href="api/pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.datadict.SpecificClassInterface">SpecificClassInterface (class in pyfileconf.io.file.interfaces.datadict)</a>
+      <li><a href="api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader">SpecificClassDictLoader (class in pyfileconf.io.file.load.lazy.datadict)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.registrar.SpecificRegistrar">SpecificRegistrar (class in pyfileconf.data.models.registrar)</a>
 </li>

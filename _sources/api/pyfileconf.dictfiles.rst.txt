@@ -1,0 +1,19 @@
+pyfileconf.dictfiles package
+============================
+
+.. automodule:: pyfileconf.dictfiles
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.dictfiles.modify module
+----------------------------------
+
+.. automodule:: pyfileconf.dictfiles.modify
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

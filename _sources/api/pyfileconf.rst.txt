@@ -15,6 +15,7 @@ Subpackages
    pyfileconf.basemodels
    pyfileconf.config
    pyfileconf.data
+   pyfileconf.dictfiles
    pyfileconf.exceptions
    pyfileconf.imports
    pyfileconf.io
