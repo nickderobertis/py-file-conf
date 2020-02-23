@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pdbpp = "*"
 
 [packages]
 sphinx = "*"
@@ -27,6 +28,7 @@ pandas = "*"
 pd_utils = "*"
 datacode = "*"
 IPython = "*"
+black = "*"
 
 [requires]
 python_version = "3.7"
