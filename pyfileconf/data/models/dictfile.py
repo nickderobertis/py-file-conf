@@ -1,5 +1,5 @@
 from pyfileconf.basemodels.file import ConfigFileBase
-from pyfileconf.io.file.interfaces.datadict import SpecificClassInterface
+from pyfileconf.io.file.interfaces.datadict import SpecificClassDictInterface
 
 class SpecificClassDictFile(ConfigFileBase):
     # lines to always import. pass import objects
@@ -12,7 +12,7 @@ class SpecificClassDictFile(ConfigFileBase):
 
     # class to use for interfacing with file
     # no need to override default
-    interface_class = SpecificClassInterface
+    interface_class = SpecificClassDictInterface
 
     def load(self) -> dict:  # type: ignore
         return self.interface.load()
