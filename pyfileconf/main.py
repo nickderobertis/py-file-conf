@@ -1,3 +1,4 @@
+import ast
 import sys
 import os
 import traceback
@@ -7,9 +8,14 @@ import warnings
 from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
 
+import black
+
+from pyfileconf.assignments.models.container import AssignmentStatementContainer
+from pyfileconf.assignments.models.statement import AssignmentStatement
 from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.pipelines.models.collection import PipelineCollection
+from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
 
 if TYPE_CHECKING:
     from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView
@@ -230,6 +236,98 @@ class PipelineManager:
         :return:
         """
         self.runner.update(d, section_path_str, **kwargs)
+
+    def create(self, func_or_class: Union[Callable, Type], section_path_str: str=None):
+        """
+        Create a new configuration entry dynamically rather than manually modifying dict file
+
+        :param func_or_class: function or class to use to generate config
+        :param section_path_str: section path at which the config should be stored
+        :return:
+        """
+        pipeline_dict_file = PipelineDictFile(self.pipeline_dict_path, name='pipeline_dict')
+        pipeline_dict = pipeline_dict_file.load()
+
+        section_path = SectionPath(section_path_str)
+
+        # Modify pipeline dict to add entry
+        current_dict = pipeline_dict
+        for i, section in enumerate(section_path):
+            if i <= len(section_path) - 2:
+                # Up until the next to last item, pull out the nested dicts, creating if necessary
+                try:
+                    current_dict = current_dict[section]
+                    # Section already exists, keep navigating deeper
+                except KeyError:
+                    # Section does not yet exist, create it, then navigate into it
+                    current_dict[section] = {}
+                    current_dict = current_dict[section]
+            if i == len(section_path) - 1:
+                # Reached final section. Because we only went up until the next to last item pulling out
+                # nested dicts, current_dict should now be the dict which contains the container for
+                # the item to be stored.
+
+                # Need to create entry in this section.
+                new_entry = ast.Name(func_or_class.__name__)
+
+                # First see if there is already an existing section
+                try:
+                    last_container = current_dict[section]
+                except KeyError:
+                    # No last section, create it
+                    current_dict[section] = []
+                    last_container = current_dict[section]
+
+                if not isinstance(last_container, list):
+                    raise ValueError('trying to insert item into existing dictionary section, must be existing '
+                                     'list section or non-existent sectionj')
+
+                last_container.append(new_entry)
+
+        def create_pipeline_dict_str(p_dict: dict, existing_str: Optional[str] = None) -> str:
+            if existing_str is None:
+                use_str = 'pipeline_dict = {'
+            else:
+                use_str = ''
+
+            for key, value in p_dict.items():
+                use_str += f'"{key}": '
+                if isinstance(value, ast.Name):
+                    use_str += value.id + ','
+                elif isinstance(value, list):
+                    use_str += '['
+                    for item in value:
+                        use_str += item.id + ','
+                    use_str += '],'
+                elif isinstance(value, dict):
+                    use_str = create_pipeline_dict_str(value, use_str)
+                else:
+                    raise ValueError(f'could not parse object {value} of type {type(value)} in '
+                                     f'creating pipeline dict str')
+
+            if existing_str is None:
+                # Must be finishing top-level operation, finish str
+                use_str += '}'
+                # Pretty print the string using black formatter
+                fm = black.FileMode()
+                use_str = black.format_str(use_str, mode=fm)
+
+            return use_str
+
+        # Convert pipeline dict to string for output
+        pipeline_dict_str = create_pipeline_dict_str(pipeline_dict)
+
+
+        pipeline_dict_config = PipelineDictConfig(
+            dict(pipeline_dict=pipeline_dict_str),
+            name='pipeline_dict',
+            _file=pipeline_dict_file,
+        )
+        pipeline_dict_file.save(pipeline_dict_config)
+
+        # TODO: create items without reloading by inserting directly into registrar and config manager
+        self.reload()
+
 
     def _load_pipeline_config_and_runner(self) -> None:
         """

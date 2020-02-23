@@ -4,9 +4,7 @@ from pyfileconf.io.file.interfaces.pipeline import PipelineDictInterface
 
 class PipelineDictFile(ConfigFileBase):
     # lines to always import. pass import objects
-    always_imports = [
-        ObjectImportStatement.from_str('from pyfileconf import DataPipeline', preferred_position='begin')
-    ]
+    always_imports = []
 
     # assignment lines to always include at beginning. pass assign objects
     # no need to override default

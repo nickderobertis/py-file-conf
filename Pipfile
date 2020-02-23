@@ -28,6 +28,7 @@ pandas = "*"
 pd_utils = "*"
 datacode = "*"
 IPython = "*"
+black = "*"
 
 [requires]
 python_version = "3.7"
