@@ -65,13 +65,17 @@ def create_dict_assignment_str_from_nested_dict_with_ast_names(nested_dict: dict
         use_str += f'"{key}": '
         if isinstance(value, ast.Name):
             use_str += value.id + ','
+        elif isinstance(value, str):
+            use_str += value + ','
         elif isinstance(value, list):
             use_str += '['
             for item in value:
                 use_str += item.id + ','
             use_str += '],'
         elif isinstance(value, dict):
-            use_str = create_dict_assignment_str_from_nested_dict_with_ast_names(value, use_str)
+            use_str += '{'
+            use_str += create_dict_assignment_str_from_nested_dict_with_ast_names(value, use_str)
+            use_str += '},'
         else:
             raise ValueError(f'could not parse object {value} of type {type(value)} in '
                              f'creating pipeline dict str')
