@@ -33,7 +33,11 @@ class Selector:
         # Accessing an existing item, should be a collection, source, or function instance, return True
         # Accessing an existing attribute of an existing item, should not be an ItemView instance, return False
         try:
-            result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
+            result = _get_from_nested_obj_by_section_path(
+                collection_obj,
+                relative_section_path,
+                prevent_property_access=True
+            )
         except AttributeError:
             return False
 
