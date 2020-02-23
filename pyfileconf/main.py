@@ -1,4 +1,3 @@
-import ast
 import sys
 import os
 import traceback
@@ -8,10 +7,6 @@ import warnings
 from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
 
-import black
-
-from pyfileconf.assignments.models.container import AssignmentStatementContainer
-from pyfileconf.assignments.models.statement import AssignmentStatement
 from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
@@ -250,58 +245,63 @@ class PipelineManager:
         """
         section_path = SectionPath(section_path_str)
 
-
         if section_path[0] in self.specific_class_names:
+            # Got path for a specific class dict, add to specific class dict
             if len(section_path) < 3:
                 raise ValueError('when targeting a specific class dict, section path must have minimum length of '
                                  '3, e.g. example_class.thing.stuff')
             if func_or_class is not None:
                 raise ValueError('only pass func_or_class when targeting main pipeline dict, not specific class dict')
-            # Got path for a specific class dict, add to specific class dict
-            name = section_path[0]
-            file_path = os.path.join(self.folder, f'{name}_dict.py')
-            specific_class_dict_file = SpecificClassDictFile(file_path, name=name + '_dict')
-            specific_dict = specific_class_dict_file.load()
-
-            # Modify specific class dict to add entry
-            add_item_into_nested_dict_at_section_path(
-                specific_dict,
-                # skip first section as that is name of specific class, skip last section as
-                # that's name which should be created
-                section_path[1:-1],
-                str(section_path[-1]),  # last section is name that should be created
-                add_as_ast_name=False
-            )
-            specific_dict_str = pretty_format_str('class_dict = ' + str(specific_dict))
-
-            specific_class_dict_config = SpecificClassDictConfig(
-                dict(class_dict=specific_dict_str),
-                name='specific_class_dict',
-                _file=specific_class_dict_file,
-            )
-            specific_class_dict_file.save(specific_class_dict_config)
+            self._create_specific_class_dict_entry(section_path)
         else:
+            # Got path for main pipeline dict, add to main pipeline dict
             if func_or_class is None:
                 raise ValueError('when adding creating item in main pipeline dict, must pass function or class')
-            # Got path for main pipeline dict, add to main pipeline dict
-            pipeline_dict_file = PipelineDictFile(self.pipeline_dict_path, name='pipeline_dict')
-            pipeline_dict = pipeline_dict_file.load()
-
-            # Modify pipeline dict to add entry
-            add_item_into_nested_dict_at_section_path(pipeline_dict, section_path, func_or_class.__name__)
-
-            # Convert pipeline dict to string for output
-            pipeline_dict_str = create_dict_assignment_str_from_nested_dict_with_ast_names(pipeline_dict)
-
-            pipeline_dict_config = PipelineDictConfig(
-                dict(pipeline_dict=pipeline_dict_str),
-                name='pipeline_dict',
-                _file=pipeline_dict_file,
-            )
-            pipeline_dict_file.save(pipeline_dict_config)
+            self._create_pipeline_dict_entry(section_path, func_or_class)
 
         # TODO: create items without reloading by inserting directly into registrar and config manager
         self.reload()
+
+    def _create_specific_class_dict_entry(self, section_path: SectionPath):
+        name = section_path[0]
+        file_path = os.path.join(self.folder, f'{name}_dict.py')
+        specific_class_dict_file = SpecificClassDictFile(file_path, name=name + '_dict')
+        specific_dict = specific_class_dict_file.load()
+
+        # Modify specific class dict to add entry
+        add_item_into_nested_dict_at_section_path(
+            specific_dict,
+            # skip first section as that is name of specific class, skip last section as
+            # that's name which should be created
+            section_path[1:-1],
+            str(section_path[-1]),  # last section is name that should be created
+            add_as_ast_name=False
+        )
+        specific_dict_str = pretty_format_str('class_dict = ' + str(specific_dict))
+
+        specific_class_dict_config = SpecificClassDictConfig(
+            dict(class_dict=specific_dict_str),
+            name='specific_class_dict',
+            _file=specific_class_dict_file,
+        )
+        specific_class_dict_file.save(specific_class_dict_config)
+
+    def _create_pipeline_dict_entry(self, section_path: SectionPath, func_or_class: Union[Callable, Type]):
+        pipeline_dict_file = PipelineDictFile(self.pipeline_dict_path, name='pipeline_dict')
+        pipeline_dict = pipeline_dict_file.load()
+
+        # Modify pipeline dict to add entry
+        add_item_into_nested_dict_at_section_path(pipeline_dict, section_path, func_or_class.__name__)
+
+        # Convert pipeline dict to string for output
+        pipeline_dict_str = create_dict_assignment_str_from_nested_dict_with_ast_names(pipeline_dict)
+
+        pipeline_dict_config = PipelineDictConfig(
+            dict(pipeline_dict=pipeline_dict_str),
+            name='pipeline_dict',
+            _file=pipeline_dict_file,
+        )
+        pipeline_dict_file.save(pipeline_dict_config)
 
 
     def _load_pipeline_config_and_runner(self) -> None:
