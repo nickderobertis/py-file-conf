@@ -3,6 +3,7 @@ import os
 import traceback
 import pdb
 import bdb
+import warnings
 from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
 
@@ -31,6 +32,7 @@ class PipelineManager:
     """
     Main class for managing flow-based programming and configuration.
     """
+    _active_managers: Dict[str, 'PipelineManager'] = {}
 
     def __init__(self, folder: str,
                  name: str= 'project',
@@ -55,7 +57,9 @@ class PipelineManager:
         self._general_registrar: Optional[PipelineRegistrar] = None
 
         self._validate_options()
+        self._active_managers[self.name] = self
         self._create_project_if_needed()
+
 
     def __getattr__(self, item):
 
@@ -272,6 +276,9 @@ class PipelineManager:
     def _validate_options(self):
         if self.auto_pdb and self.force_continue:
             raise ValueError('cannot force continue and drop into pdb at the same time')
+        if self.name in self._active_managers:
+            warnings.warn(f'should not repeat names of PipelineManagers. Got repeated name {self.name}. '
+                          f'The original PipelineManager has been replaced in the Selector.')
 
     def _create_project_if_needed(self):
         if self._need_to_create_project():
@@ -289,7 +296,10 @@ class PipelineManager:
             ],
         ])
 
-
+    def __del__(self):
+        current_manager_under_this_key = self._active_managers[self.name]
+        if current_manager_under_this_key is self:
+            del self._active_managers[self.name]
 
 
 def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func: Callable = lambda x: x,

@@ -1,7 +1,6 @@
 from typing import Callable, List, Any
 import warnings
 
-from pyfileconf.selector.logic.get.main import get_dict_of_any_defined_pipeline_manager_names_and_instances
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.selector.logic.get.frommanager import get_pipeline_dict_path_and_specific_class_config_dicts_from_manager
@@ -137,7 +136,8 @@ class Selector:
         )
 
     def _attach_to_pipeline_manager(self):
-        self._managers = get_dict_of_any_defined_pipeline_manager_names_and_instances()
+        from pyfileconf.main import PipelineManager
+        self._managers = PipelineManager._active_managers
 
     def _load_structure(self):
         from pyfileconf.main import create_collections
