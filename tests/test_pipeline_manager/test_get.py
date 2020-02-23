@@ -144,6 +144,22 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         str_obj = pipeline_manager.get('example_class.stuff.data')
         assert iv.item is iv_obj is str_obj
 
+    def test_get_class_from_specific_config_dict_access_property_that_needs_obj_loaded(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        pipeline_manager.update(
+            a=(1, 2),
+            section_path_str='example_class.stuff.data'
+        )
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv.e == iv_obj.e == str_obj.e == 10
+
 
 class TestPipelineManagerGetSection(PipelineManagerTestBase):
 

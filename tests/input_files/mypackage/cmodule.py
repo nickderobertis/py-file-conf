@@ -23,6 +23,12 @@ class ExampleClass:
     def d(self, d):
         self._d = d
 
+    @property
+    def e(self):
+        if self.a is None:
+            raise ValueError('should only access this when a is set')
+        return 10
+
     def __eq__(self, other):
         return all([
             self.a == other.a,
