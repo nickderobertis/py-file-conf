@@ -17,7 +17,7 @@ REPO_MAINTAINERS = [
 ]
 
 # Package version in the format (major, minor, release)
-PACKAGE_VERSION_TUPLE = (0, 5, 0)
+PACKAGE_VERSION_TUPLE = (0, 5, 1)
 
 # Short description of the package
 PACKAGE_SHORT_DESCRIPTION = "Generate Python configuration files from functions and classes and run them from the command line or Python"
@@ -65,6 +65,7 @@ PACKAGE_INSTALL_REQUIRES = [
     'pd_utils',
     'datacode',
     'IPython',
+    'black',
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
