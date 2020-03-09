@@ -87,6 +87,12 @@ class PipelineManagerLoadTestBase(PipelineManagerTestBase):
         assert "c: Optional[collections.defaultdict] = None" in contents
         assert "d: Optional['TracebackException'] = None" in contents
 
+        # TODO: format config output better, then update this test assertion
+        #
+        # For some reason, longer items when written to the config are line breaking at weird parts
+        assert "f: typing.Sequence[typing.Union[collections.Counter, pathlib.Path]] " \
+               "= (\n    collections.Counter(), collections.Counter(), pathlib.Path('.'))" in contents
+
         for item in imports + assigns + [a_value, name_value]:
             assert item in contents
 

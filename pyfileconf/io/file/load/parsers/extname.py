@@ -1,7 +1,5 @@
 import ast
-from typing import Union
-
-StrOrNone = Union[str, None]
+from typing import List, Optional
 
 
 class NameExtractor(ast.NodeVisitor):
@@ -13,7 +11,7 @@ class NameExtractor(ast.NodeVisitor):
         self.names.append(node.id)
 
 
-def extract_external_name_from_assign_value(ast_node: ast.AST) -> StrOrNone:
+def extract_external_name_from_assign_value(ast_node: ast.AST) -> Optional[str]:
     """
     Identifies the root part of an assignment value, so long as it is not builtin.
 
@@ -47,3 +45,14 @@ def extract_external_name_from_assign_value(ast_node: ast.AST) -> StrOrNone:
         raise ValueError(f'expected single name, got {ne.names}')
 
     return ne.names[0]
+
+
+def extract_unique_external_names_from_assign_value(ast_node: ast.AST) -> List[str]:
+    """
+    Same as extract_external_name_from_assign_value but returns a list always, can return multiple names,
+    and drops duplicates in the returned names
+    """
+    ne = NameExtractor()
+    ne.visit(ast_node)
+
+    return list(set(ne.names))

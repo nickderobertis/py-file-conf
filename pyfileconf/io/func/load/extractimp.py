@@ -3,7 +3,7 @@ import ast
 import warnings
 
 from pyfileconf.io.func.load.config import function_args_as_arg_and_annotation_dict
-from pyfileconf.io.file.load.parsers.extname import extract_external_name_from_assign_value
+from pyfileconf.io.file.load.parsers.extname import extract_unique_external_names_from_assign_value
 from pyfileconf.imports.models.statements.container import ImportStatementContainer, ObjectImportStatement
 from pyfileconf.assignments.models.container import AssignmentStatementContainer
 from pyfileconf.logic.inspect import _is_str_matching_builtin_type
@@ -56,7 +56,10 @@ def _unique_external_names_from_multiple_assignment_dicts(*assignment_dicts) -> 
     return list(set(all_names))
 
 def _unique_external_names_from_assignment_dict(assignment_dict: dict) -> List[str]:
-    names = [extract_external_name_from_assign_value(value) for key, value in assignment_dict.items()]
+    names = []
+    for key, value in assignment_dict.items():
+        new_names = extract_unique_external_names_from_assign_value(value)
+        names.extend(new_names)
     no_none_names: List[str] = [name for name in names if name is not None]
     return list(set(no_none_names))
 
