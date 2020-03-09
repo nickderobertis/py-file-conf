@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.models.statements.obj &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.imports.models.statements.obj &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -196,9 +196,9 @@
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">objs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span>
         <span class="n">objs_str</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
-        <span class="n">import_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;from </span><span class="si">{self.module}</span><span class="s1"> import </span><span class="si">{objs_str}</span><span class="s1">&#39;</span>
+        <span class="n">import_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="si">}</span><span class="s1"> import </span><span class="si">{</span><span class="n">objs_str</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">import_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{self.comment}</span><span class="s1">&#39;</span>
+            <span class="n">import_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">comment</span><span class="si">}</span><span class="s1">&#39;</span>
 
         <span class="k">return</span> <span class="n">import_str</span>
 
@@ -209,7 +209,7 @@
         <span class="n">ast_module</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">import_str</span><span class="p">)</span>
         <span class="n">cls_obj</span> <span class="o">=</span> <span class="n">extract_obj_import_from_ast</span><span class="p">(</span><span class="n">ast_module</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cls_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">CouldNotExtractObjectImportFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original str which was converted to ast: </span><span class="si">{import_str}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CouldNotExtractObjectImportFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original str which was converted to ast: </span><span class="si">{</span><span class="n">import_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">comment</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">preferred_position</span> <span class="o">=</span> <span class="n">preferred_position</span>
 
@@ -225,7 +225,7 @@
         <span class="n">objs</span> <span class="o">=</span> <span class="p">[</span><span class="n">alias</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">ast_import</span><span class="o">.</span><span class="n">names</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">ast_import</span><span class="o">.</span><span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">CouldNotExtractObjectImportFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;original ast: </span><span class="si">{ast_import}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CouldNotExtractObjectImportFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;original ast: </span><span class="si">{</span><span class="n">ast_import</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">objs</span><span class="p">,</span>

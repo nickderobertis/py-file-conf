@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -209,7 +209,7 @@
         <span class="c1">#</span>
         <span class="c1">#  So that there is a better way of catching a known typo than python throwing a RecursionError</span>
 
-        <span class="k">except</span> <span class="n">RecursionError</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">RecursionError</span><span class="p">:</span>
             <span class="c1"># We are landing here when there is a typo in after the pipeline manager selection of a longer</span>
             <span class="c1"># section path, e.g if &quot;this&quot; was portfolio manager name: s.this.tpyo.would.cause.this</span>
             <span class="k">return</span> <span class="n">handle_known_typo_after_pipeline_manager_name</span><span class="p">(</span><span class="n">full_section_path_str</span><span class="p">)</span>
@@ -266,10 +266,10 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">]</span>
 
-        <span class="n">repr_col_strs</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{col}</span><span class="s1">={getattr(self, col, None).__repr__()}&#39;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">repr_cols</span><span class="p">]</span>
-        <span class="n">repr_col_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;({&quot;, &quot;.join(repr_col_strs)})&#39;</span>
+        <span class="n">repr_col_strs</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">=</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">repr_cols</span><span class="p">]</span>
+        <span class="n">repr_col_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">repr_col_strs</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span>
 
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;{type(self).__name__}</span><span class="si">{repr_col_str}</span><span class="s1">&gt;&#39;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="n">repr_col_str</span><span class="si">}</span><span class="s1">&gt;&#39;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

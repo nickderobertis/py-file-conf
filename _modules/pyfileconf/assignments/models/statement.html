@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.assignments.models.statement &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.assignments.models.statement &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -230,7 +230,7 @@
 
             <span class="c1"># TODO [#1]: multiple assignments (multiple targets)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ast_assign</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot yet handle multiple assignment to: </span><span class="si">{ast_assign.targets}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot yet handle multiple assignment to: </span><span class="si">{</span><span class="n">ast_assign</span><span class="o">.</span><span class="n">targets</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
             <span class="n">annotation</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ast_assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">):</span>
@@ -238,7 +238,7 @@
             <span class="n">target</span> <span class="o">=</span> <span class="n">ast_assign</span><span class="o">.</span><span class="n">target</span>
             <span class="n">annotation</span> <span class="o">=</span> <span class="n">ast_assign</span><span class="o">.</span><span class="n">annotation</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected ast.Assign or ast.AnnAssign. got </span><span class="si">{ast_assign}</span><span class="s1"> of type {type(ast_assign)}&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected ast.Assign or ast.AnnAssign. got </span><span class="si">{</span><span class="n">ast_assign</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ast_assign</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="c1"># TODO [#22]: remove type ignores in AssignmentStatement.from_ast_assign once ast has proper type definitions</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
@@ -277,7 +277,7 @@
         <span class="n">ast_module</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">assign_str</span><span class="p">)</span>
         <span class="n">cls_obj</span> <span class="o">=</span> <span class="n">extract_assignment_from_ast</span><span class="p">(</span><span class="n">ast_module</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cls_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">CouldNotExtractAssignmentFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original str which created ast: </span><span class="si">{assign_str}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CouldNotExtractAssignmentFromAstException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Original str which created ast: </span><span class="si">{</span><span class="n">assign_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">preferred_position</span> <span class="o">=</span> <span class="n">preferred_position</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">created_from_str</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">cls_obj</span><span class="o">.</span><span class="n">orig_str</span> <span class="o">=</span> <span class="n">assign_str</span>

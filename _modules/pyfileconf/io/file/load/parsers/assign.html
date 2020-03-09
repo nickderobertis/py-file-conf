@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.parsers.assign &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.io.file.load.parsers.assign &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -202,8 +202,8 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">assign_container</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected to extract one assignment from ast. got {len(assign_container)} &#39;</span>
-                         <span class="sa">f</span><span class="s1">&#39;assigns: </span><span class="si">{assign_container.items}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected to extract one assignment from ast. got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">assign_container</span><span class="p">)</span><span class="si">}</span><span class="s1"> &#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39;assigns: </span><span class="si">{</span><span class="n">assign_container</span><span class="o">.</span><span class="n">items</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assign_container</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
@@ -235,8 +235,8 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">assign_container</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected to extract one assignment from ast. got {len(assign_container)} &#39;</span>
-                         <span class="sa">f</span><span class="s1">&#39;assigns: </span><span class="si">{assign_container.items}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected to extract one assignment from ast. got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">assign_container</span><span class="p">)</span><span class="si">}</span><span class="s1"> &#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39;assigns: </span><span class="si">{</span><span class="n">assign_container</span><span class="o">.</span><span class="n">items</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">assign_container</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 </pre></div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.logic.merge.display &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.data.logic.merge.display &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -189,14 +189,14 @@
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">summary_attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">summary_disp</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;df.</span><span class="si">{summary_attr}</span><span class="s1">&#39;</span>
+        <span class="n">summary_disp</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;df.</span><span class="si">{</span><span class="n">summary_attr</span><span class="si">}</span><span class="s1">&#39;</span>
     <span class="k">if</span> <span class="n">summary_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">summary_disp</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{summary_function.__name__}</span><span class="s1">(df, *</span><span class="si">{summary_args}</span><span class="s1">, **</span><span class="si">{summary_method_kwargs}</span><span class="s1">)&#39;</span>
+        <span class="n">summary_disp</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">summary_function</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">(df, *</span><span class="si">{</span><span class="n">summary_args</span><span class="si">}</span><span class="s1">, **</span><span class="si">{</span><span class="n">summary_method_kwargs</span><span class="si">}</span><span class="s1">)&#39;</span>
     <span class="k">if</span> <span class="n">summary_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">summary_disp</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;df.</span><span class="si">{summary_method}</span><span class="s1">(*</span><span class="si">{summary_args}</span><span class="s1">, **</span><span class="si">{summary_method_kwargs}</span><span class="s1">)&#39;</span>
+        <span class="n">summary_disp</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;df.</span><span class="si">{</span><span class="n">summary_method</span><span class="si">}</span><span class="s1">(*</span><span class="si">{</span><span class="n">summary_args</span><span class="si">}</span><span class="s1">, **</span><span class="si">{</span><span class="n">summary_method_kwargs</span><span class="si">}</span><span class="s1">)&#39;</span>
 
     <span class="n">display_df_dict</span><span class="p">({</span>
-        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{summary_disp}</span><span class="s1"> called on: &#39;</span> <span class="o">+</span> <span class="n">merge</span><span class="o">.</span><span class="n">merge_str</span><span class="p">:</span> <span class="n">df_disp_dict</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">summary_disp</span><span class="si">}</span><span class="s1"> called on: &#39;</span> <span class="o">+</span> <span class="n">merge</span><span class="o">.</span><span class="n">merge_str</span><span class="p">:</span> <span class="n">df_disp_dict</span>
     <span class="p">})</span></div>
 
 
@@ -220,9 +220,9 @@
 
 <span class="k">def</span> <span class="nf">_df_dict_from_merge</span><span class="p">(</span><span class="n">merge</span><span class="p">):</span>
     <span class="n">df_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="sa">f</span><span class="s1">&#39;Left Dataset: </span><span class="si">{merge.data_sources[0].name_type}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">merge</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">df</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s1">&#39;Right Dataset: </span><span class="si">{merge.data_sources[1].name_type}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">merge</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">df</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s1">&#39;Result: </span><span class="si">{merge.result.name}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">merge</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">df</span>
+        <span class="sa">f</span><span class="s1">&#39;Left Dataset: </span><span class="si">{</span><span class="n">merge</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">merge</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">df</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;Right Dataset: </span><span class="si">{</span><span class="n">merge</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">merge</span><span class="o">.</span><span class="n">data_sources</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">df</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;Result: </span><span class="si">{</span><span class="n">merge</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">merge</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">df</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">df_dict</span>

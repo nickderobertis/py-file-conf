@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.logger &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.logger &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -195,7 +195,7 @@
 
 <span class="k">def</span> <span class="nf">_log_filename</span><span class="p">():</span>
     <span class="n">creation_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{creation_time}</span><span class="s1">.log&#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">creation_time</span><span class="si">}</span><span class="s1">.log&#39;</span>
 </pre></div>
 
            </div>

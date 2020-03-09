@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.parsers package &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.io.file.load.parsers package &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -412,6 +412,18 @@ c.thing.stuff -&gt; ‘c’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.io.file.load.parsers.extname.extract_unique_external_names_from_assign_value">
+<code class="sig-prename descclassname">pyfileconf.io.file.load.parsers.extname.</code><code class="sig-name descname">extract_unique_external_names_from_assign_value</code><span class="sig-paren">(</span><em class="sig-param">ast_node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/parsers/extname.html#extract_unique_external_names_from_assign_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.parsers.extname.extract_unique_external_names_from_assign_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as extract_external_name_from_assign_value but returns a list always, can return multiple names,
+and drops duplicates in the returned names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>

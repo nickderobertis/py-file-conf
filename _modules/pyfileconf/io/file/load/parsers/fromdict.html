@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.parsers.fromdict &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.io.file.load.parsers.fromdict &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -174,7 +174,7 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ast_dict</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_extract_dict_from_ast_dict_constructor</span><span class="p">(</span><span class="n">ast_dict</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected ast.Dict or ast.Call, got </span><span class="si">{ast_dict}</span><span class="s1"> of type {type(ast_dict)}&#39;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected ast.Dict or ast.Call, got </span><span class="si">{</span><span class="n">ast_dict</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ast_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <span class="k">def</span> <span class="nf">_extract_dict_from_ast_dict</span><span class="p">(</span><span class="n">ast_dict</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>

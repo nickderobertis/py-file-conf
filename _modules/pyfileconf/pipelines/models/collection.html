@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pipelines.models.collection &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.pipelines.models.collection &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -212,8 +212,8 @@
             <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">_output_config_files</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">ObjectView</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;did not initialize pipeline dict correctly. expected ObjectView, got </span><span class="si">{item}</span><span class="s1"> of &#39;</span>
-                             <span class="sa">f</span><span class="s1">&#39;type {type(item)}&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;did not initialize pipeline dict correctly. expected ObjectView, got </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s1"> of &#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="c1"># Dealing with ObjectView</span>
         <span class="n">item_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">output_name</span> <span class="o">+</span> <span class="s1">&#39;.py&#39;</span><span class="p">)</span>

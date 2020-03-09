@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.dictfiles.modify &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.dictfiles.modify &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -223,12 +223,12 @@
 <div class="viewcode-block" id="create_dict_assignment_str_from_nested_dict_with_ast_names"><a class="viewcode-back" href="../../../api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.create_dict_assignment_str_from_nested_dict_with_ast_names">[docs]</a><span class="k">def</span> <span class="nf">create_dict_assignment_str_from_nested_dict_with_ast_names</span><span class="p">(</span><span class="n">nested_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">existing_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                                                <span class="n">assign_to_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pipeline_dict&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">existing_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">use_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{assign_to_name}</span><span class="s1"> = {{&#39;</span>
+        <span class="n">use_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">assign_to_name</span><span class="si">}</span><span class="s1"> = </span><span class="se">{{</span><span class="s1">&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">use_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nested_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">use_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{key}</span><span class="s1">&quot;: &#39;</span>
+        <span class="n">use_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;: &#39;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
             <span class="n">use_str</span> <span class="o">+=</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -243,7 +243,7 @@
             <span class="n">use_str</span> <span class="o">+=</span> <span class="n">create_dict_assignment_str_from_nested_dict_with_ast_names</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">use_str</span><span class="p">)</span>
             <span class="n">use_str</span> <span class="o">+=</span> <span class="s1">&#39;},&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not parse object </span><span class="si">{value}</span><span class="s1"> of type {type(value)} in &#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not parse object </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s1"> in &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;creating pipeline dict str&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">existing_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

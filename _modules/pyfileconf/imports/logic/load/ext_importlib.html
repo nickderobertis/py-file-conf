@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.logic.load.ext_importlib &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.imports.logic.load.ext_importlib &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -172,7 +172,7 @@
 <div class="viewcode-block" id="get_filepath_from_module_str"><a class="viewcode-back" href="../../../../../api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str">[docs]</a><span class="k">def</span> <span class="nf">get_filepath_from_module_str</span><span class="p">(</span><span class="n">module_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">location_section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">spec</span><span class="p">:</span> <span class="n">ModuleSpec</span> <span class="o">=</span> <span class="n">find_spec</span><span class="p">(</span><span class="n">module_str</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="n">location_section_path_str</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">spec</span><span class="o">.</span><span class="n">has_location</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not find location of module </span><span class="si">{module_str}</span><span class="s1">, package </span><span class="si">{location_section_path_str}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not find location of module </span><span class="si">{</span><span class="n">module_str</span><span class="si">}</span><span class="s1">, package </span><span class="si">{</span><span class="n">location_section_path_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">spec</span><span class="o">.</span><span class="n">origin</span></div>
 

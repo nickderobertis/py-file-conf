@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.parsers.extname &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.io.file.load.parsers.extname &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -164,9 +164,7 @@
             
   <h1>Source code for pyfileconf.io.file.load.parsers.extname</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">ast</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-
-<span class="n">StrOrNone</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 
 <div class="viewcode-block" id="NameExtractor"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.extname.NameExtractor">[docs]</a><span class="k">class</span> <span class="nc">NameExtractor</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeVisitor</span><span class="p">):</span>
@@ -178,7 +176,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="extract_external_name_from_assign_value"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.extname.extract_external_name_from_assign_value">[docs]</a><span class="k">def</span> <span class="nf">extract_external_name_from_assign_value</span><span class="p">(</span><span class="n">ast_node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrOrNone</span><span class="p">:</span>
+<div class="viewcode-block" id="extract_external_name_from_assign_value"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.extname.extract_external_name_from_assign_value">[docs]</a><span class="k">def</span> <span class="nf">extract_external_name_from_assign_value</span><span class="p">(</span><span class="n">ast_node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Identifies the root part of an assignment value, so long as it is not builtin.</span>
 
@@ -209,9 +207,20 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ne</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected single name, got </span><span class="si">{ne.names}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected single name, got </span><span class="si">{</span><span class="n">ne</span><span class="o">.</span><span class="n">names</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ne</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="extract_unique_external_names_from_assign_value"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.extname.extract_unique_external_names_from_assign_value">[docs]</a><span class="k">def</span> <span class="nf">extract_unique_external_names_from_assign_value</span><span class="p">(</span><span class="n">ast_node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Same as extract_external_name_from_assign_value but returns a list always, can return multiple names,</span>
+<span class="sd">    and drops duplicates in the returned names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ne</span> <span class="o">=</span> <span class="n">NameExtractor</span><span class="p">()</span>
+    <span class="n">ne</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">ast_node</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ne</span><span class="o">.</span><span class="n">names</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -294,8 +294,8 @@
         <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_one_func</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not run section </span><span class="si">{section_path_str}</span><span class="s1">. expected PipelineCollection or function,&#39;</span>
-                             <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{func_or_collection}</span><span class="s1"> of type {type(func_or_collection)}&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not run section </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">. expected PipelineCollection or function,&#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{</span><span class="n">func_or_collection</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
     <span class="k">def</span> <span class="nf">_run_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Results</span><span class="p">:</span>
@@ -324,9 +324,9 @@
                 <span class="c1"># run function</span>
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_one_func</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not run section </span><span class="si">{subsection_path_str}</span><span class="s1">. expected PipelineCollection or &#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not run section </span><span class="si">{</span><span class="n">subsection_path_str</span><span class="si">}</span><span class="s1">. expected PipelineCollection or &#39;</span>
                                  <span class="sa">f</span><span class="s1">&#39;function or Pipeline,&#39;</span>
-                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{section_or_callable}</span><span class="s1"> of type {type(section_or_callable)}&#39;</span><span class="p">)</span>
+                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{</span><span class="n">section_or_callable</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">results</span>
 
@@ -334,9 +334,9 @@
     <span class="k">def</span> <span class="nf">_run_one_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
         <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running function </span><span class="si">{section_path_str}</span><span class="s1">({dict_as_function_kwarg_str(config_dict)})&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running function </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{result}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span>
 
@@ -346,9 +346,9 @@
         <span class="c1"># Construct new pipeline instance with config args</span>
         <span class="n">configured_pipeline</span> <span class="o">=</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running pipeline </span><span class="si">{configured_pipeline}</span><span class="s1">({dict_as_function_kwarg_str(config_dict)})&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running pipeline </span><span class="si">{</span><span class="n">configured_pipeline</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">configured_pipeline</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{result}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">configured_pipeline</span>
 
@@ -364,8 +364,8 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{section_path_str}</span><span class="s1">. expected PipelineCollection or function,&#39;</span>
-                             <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{func_or_collection}</span><span class="s1"> of type {type(func_or_collection)}&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">. expected PipelineCollection or function,&#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{</span><span class="n">func_or_collection</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">func_or_collection</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
     <span class="c1"># TODO [#50]: restructure runner get and run</span>
     <span class="c1">#</span>
@@ -416,9 +416,9 @@
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="c1"># got a non-collection, but results were defined as a dict. Should only have collections in dict</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s1">&#39;section </span><span class="si">{section_or_object_view.name}</span><span class="s1"> has both collections and items, must only &#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;section </span><span class="si">{</span><span class="n">section_or_object_view</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> has both collections and items, must only &#39;</span>
                     <span class="sa">f</span><span class="s1">&#39;have collections if there is at least one collection. &#39;</span>
-                    <span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{section_or_callable}</span><span class="s1"> as non-collection.&#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{</span><span class="n">section_or_callable</span><span class="si">}</span><span class="s1"> as non-collection.&#39;</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
                 <span class="c1"># get function</span>
@@ -426,9 +426,9 @@
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{subsection_path_str}</span><span class="s1">. expected Collection or &#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{</span><span class="n">subsection_path_str</span><span class="si">}</span><span class="s1">. expected Collection or &#39;</span>
                                  <span class="sa">f</span><span class="s1">&#39;function or specific class,&#39;</span>
-                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{section_or_callable}</span><span class="s1"> of type {type(section_or_callable)}&#39;</span><span class="p">)</span>
+                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{</span><span class="n">section_or_callable</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">results</span>
 

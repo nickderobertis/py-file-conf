@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.models.statements.container &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.imports.models.statements.container &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -302,7 +302,7 @@
                 <span class="k">if</span> <span class="n">found_import</span><span class="p">:</span>
                     <span class="c1"># May be multiple objects imported in this one statement. Create a new statement with just this object</span>
                     <span class="k">return</span> <span class="n">ObjectImportStatement</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="n">imp</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">renames</span><span class="o">=</span><span class="n">renames</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">NoImportMatchingNameException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not find name </span><span class="si">{name}</span><span class="s1"> in </span><span class="si">{self}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="n">NoImportMatchingNameException</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not find name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> in </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">imported_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>

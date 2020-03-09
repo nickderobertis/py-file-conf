@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -429,7 +429,7 @@
 
     <span class="k">def</span> <span class="nf">_create_specific_class_dict_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">:</span> <span class="n">SectionPath</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
         <span class="n">specific_class_dict_file</span> <span class="o">=</span> <span class="n">SpecificClassDictFile</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_dict&#39;</span><span class="p">)</span>
         <span class="n">specific_dict</span> <span class="o">=</span> <span class="n">specific_class_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
@@ -508,14 +508,14 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">section_path_str_or_view</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected str or ItemView. Got </span><span class="si">{section_path_str_or_view}</span><span class="s1"> of &#39;</span>
-                             <span class="sa">f</span><span class="s1">&#39;type {type(section_path_str_or_view)}&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected str or ItemView. Got </span><span class="si">{</span><span class="n">section_path_str_or_view</span><span class="si">}</span><span class="s1"> of &#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_validate_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_continue</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;cannot force continue and drop into pdb at the same time&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;should not repeat names of PipelineManagers. Got repeated name </span><span class="si">{self.name}</span><span class="s1">. &#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;should not repeat names of PipelineManagers. Got repeated name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">. &#39;</span>
                           <span class="sa">f</span><span class="s1">&#39;The original PipelineManager has been replaced in the Selector.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_create_project_if_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -530,7 +530,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span><span class="p">),</span>
             <span class="o">*</span><span class="p">[</span>
                 <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span>
-                <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_names</span><span class="p">]</span>
+                <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_names</span><span class="p">]</span>
             <span class="p">],</span>
         <span class="p">])</span>
 
@@ -596,7 +596,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">output_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Error while running </span><span class="si">{self.section_path_str}</span><span class="s1">:</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="n">output_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Error while running </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">:</span><span class="se">\n\n</span><span class="s1">&#39;</span>
         <span class="n">output_str</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trace_back</span>
 
         <span class="k">return</span> <span class="n">output_str</span></div>
@@ -629,10 +629,10 @@
     <span class="k">if</span> <span class="n">specific_class_config_dicts</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">specific_class_config</span> <span class="ow">in</span> <span class="n">specific_class_config_dicts</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">specific_class_config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-            <span class="n">dict_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
+            <span class="n">dict_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dict_path</span><span class="p">):</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dict_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">class_dict = {{}}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">class_dict = </span><span class="se">{{}}\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 
@@ -641,12 +641,12 @@
     <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="n">registrars</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">registrar</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">used_names</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot use a name for a specific class dict which is already specified in &#39;</span>
-                             <span class="sa">f</span><span class="s1">&#39;top-level pipeline_dict. The issue is with </span><span class="si">{registrar.name}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                             <span class="sa">f</span><span class="s1">&#39;top-level pipeline_dict. The issue is with </span><span class="si">{</span><span class="n">registrar</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
     <span class="n">all_registrar_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">registrar</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="n">registrars</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_registrar_names</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_registrar_names</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cannot have multiple specific class dicts with the same &#39;</span>
-                         <span class="sa">f</span><span class="s1">&#39;name attribute. Got names: </span><span class="si">{all_registrar_names}</span><span class="s1">&#39;</span><span class="p">)</span>
+                         <span class="sa">f</span><span class="s1">&#39;name attribute. Got names: </span><span class="si">{</span><span class="n">all_registrar_names</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="create_registrars"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_registrars">[docs]</a><span class="k">def</span> <span class="nf">create_registrars</span><span class="p">(</span><span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">],</span>
@@ -721,7 +721,7 @@
 
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;class&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_dict</span> <span class="ow">or</span> <span class="n">config_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{key}</span><span class="s1"> is required in </span><span class="si">{config_dict}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> is required in </span><span class="si">{</span><span class="n">config_dict</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="c1"># Kwargs require &#39;klass&#39; while config dict is &#39;class&#39;</span>
         <span class="n">kwargs_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
@@ -729,7 +729,7 @@
         <span class="n">kwargs_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
 
         <span class="n">name</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
-        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipeline_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pipeline_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span>
         <span class="n">specific_class_dict_file</span> <span class="o">=</span> <span class="n">SpecificClassDictFile</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_dict&#39;</span><span class="p">)</span>
         <span class="n">specific_dict</span> <span class="o">=</span> <span class="n">specific_class_dict_file</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">specific_class_class</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -360,7 +360,7 @@
                 <span class="k">return</span> <span class="n">ActiveFunctionConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">+</span> <span class="s1">&#39;.py&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected section path to return ConfigSection or FunctionConfig, &#39;</span>
-                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{config_obj}</span><span class="s1"> of type {type(config_obj)}&#39;</span><span class="p">)</span>
+                                 <span class="sa">f</span><span class="s1">&#39;got </span><span class="si">{</span><span class="n">config_obj</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">config_obj</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_is_function_or_pipeline_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
@@ -373,7 +373,7 @@
             <span class="c1"># must be individual function as Config is returned</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected Config or ConfigSection, got </span><span class="si">{config_or_section}</span><span class="s1"> of type </span><span class="si">{config_or_section}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected Config or ConfigSection, got </span><span class="si">{</span><span class="n">config_or_section</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="n">config_or_section</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
                                                             <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
@@ -393,7 +393,7 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_or_section</span><span class="p">,</span> <span class="n">ActiveFunctionConfig</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">config_or_section</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected Config or ConfigSection, got </span><span class="si">{config_or_section}</span><span class="s1"> of type </span><span class="si">{config_or_section}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected Config or ConfigSection, got </span><span class="si">{</span><span class="n">config_or_section</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="n">config_or_section</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
            </div>

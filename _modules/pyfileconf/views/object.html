@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.views.object &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.views.object &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -239,7 +239,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">import_statement</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected import statement to be ObjectImportStatement or ModuleImportStatement.&#39;</span>
-                             <span class="sa">f</span><span class="s1">&#39; Got </span><span class="si">{self.import_statement}</span><span class="s1"> of type {type(self.import_statement)}&#39;</span><span class="p">)</span>
+                             <span class="sa">f</span><span class="s1">&#39; Got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">import_statement</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">import_statement</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">extract_external_name_from_assign_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_ast</span><span class="p">)</span>
@@ -265,7 +265,7 @@
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">obj_name</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected import statement to be ObjectImportStatement or ModuleImportStatement.&#39;</span>
-                         <span class="sa">f</span><span class="s1">&#39; Got </span><span class="si">{import_statement}</span><span class="s1"> of type {type(import_statement)}&#39;</span><span class="p">)</span>
+                         <span class="sa">f</span><span class="s1">&#39; Got </span><span class="si">{</span><span class="n">import_statement</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">import_statement</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 
            </div>

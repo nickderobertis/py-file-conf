@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.func.load.extractimp &mdash; pyfileconf 0.5.1 documentation</title>
+  <title>pyfileconf.io.func.load.extractimp &mdash; pyfileconf 0.5.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.5.2
               </div>
             
           
@@ -168,7 +168,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.io.func.load.config</span> <span class="kn">import</span> <span class="n">function_args_as_arg_and_annotation_dict</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.extname</span> <span class="kn">import</span> <span class="n">extract_external_name_from_assign_value</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.parsers.extname</span> <span class="kn">import</span> <span class="n">extract_unique_external_names_from_assign_value</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.container</span> <span class="kn">import</span> <span class="n">ImportStatementContainer</span><span class="p">,</span> <span class="n">ObjectImportStatement</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.assignments.models.container</span> <span class="kn">import</span> <span class="n">AssignmentStatementContainer</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.inspect</span> <span class="kn">import</span> <span class="n">_is_str_matching_builtin_type</span>
@@ -190,7 +190,7 @@
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">external_names</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">assigns</span><span class="o">.</span><span class="n">contains_varname</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
             <span class="c1"># External name is due to assignment in this module. Create import from this module</span>
-            <span class="n">out_imports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ObjectImportStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;from </span><span class="si">{current_module_section_path_str}</span><span class="s1"> import </span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">))</span>
+            <span class="n">out_imports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ObjectImportStatement</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;from </span><span class="si">{</span><span class="n">current_module_section_path_str</span><span class="si">}</span><span class="s1"> import </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
 
     <span class="c1"># Handle names which are imported into this file</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">external_names</span><span class="p">:</span>
@@ -202,8 +202,8 @@
     <span class="n">n_external</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">external_names</span><span class="p">)</span>
     <span class="n">n_imports</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_imports</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n_external</span> <span class="o">!=</span> <span class="n">n_imports</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;had </span><span class="si">{n_external}</span><span class="s1"> external names from function definition, only &#39;</span>
-                      <span class="sa">f</span><span class="s1">&#39;found </span><span class="si">{n_imports}</span><span class="s1"> imports. May be missing imports&#39;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;had </span><span class="si">{</span><span class="n">n_external</span><span class="si">}</span><span class="s1"> external names from function definition, only &#39;</span>
+                      <span class="sa">f</span><span class="s1">&#39;found </span><span class="si">{</span><span class="n">n_imports</span><span class="si">}</span><span class="s1"> imports. May be missing imports&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">out_imports</span></div>
 
@@ -221,7 +221,10 @@
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_names</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">_unique_external_names_from_assignment_dict</span><span class="p">(</span><span class="n">assignment_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">extract_external_name_from_assign_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">assignment_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">assignment_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">new_names</span> <span class="o">=</span> <span class="n">extract_unique_external_names_from_assign_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_names</span><span class="p">)</span>
     <span class="n">no_none_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">no_none_names</span><span class="p">))</span>
 
@@ -262,7 +265,7 @@
         <span class="c1"># E.g. &#39;DataPipeline&#39; (quoted type declaration where type was imported if TYPE_CHECKING)</span>
         <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">annotation</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;no handling for </span><span class="si">{annotation}</span><span class="s1"> of type {type(annotation)}&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;no handling for </span><span class="si">{</span><span class="n">annotation</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">names</span>
 
