@@ -86,6 +86,7 @@ class PipelineManagerLoadTestBase(PipelineManagerTestBase):
         # Always assigns, from arguments
         assert "c: Optional[collections.defaultdict] = None" in contents
         assert "d: Optional['TracebackException'] = None" in contents
+        assert "f: typing.Sequence[collections.Counter] = (collections.Counter(),\n    collections.Counter())" in contents
 
         for item in imports + assigns + [a_value, name_value]:
             assert item in contents

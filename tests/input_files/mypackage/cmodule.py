@@ -9,11 +9,13 @@ if TYPE_CHECKING:
 class ExampleClass:
 
     def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None,
-                 c: Optional[collections.defaultdict] = None, d: Optional['TracebackException'] = None):
+                 c: Optional[collections.defaultdict] = None, d: Optional['TracebackException'] = None,
+                 f: typing.Sequence[collections.Counter] = (collections.Counter(), collections.Counter())):
         self.a = a
         self.name = name
         self.c = c
         self.d = d
+        self.f = f
 
     @property
     def d(self):
