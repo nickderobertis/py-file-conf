@@ -154,7 +154,15 @@ class ConfigManager(ReprMixin):
 
         # Goes into nested sections, until it pulls the final config or section
         config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
-        return _get_config_from_config_or_section(config_or_section)
+        conf = _get_config_from_config_or_section(config_or_section)
+
+        # Now update stored config as loading may have happened during _get_config_from_config_or_section
+        # Want to keep the active config once it is loaded
+        # But if it is a section, then don't want to overwrite with config
+        if not isinstance(config_or_section, ConfigSection):
+            _set_in_nested_obj_by_section_path(self, section_path, conf)
+
+        return conf
 
     def _set_func_or_section_config(self, section_path_str: str, value=None) -> None:
         if self.section is None:
@@ -206,7 +214,7 @@ class ConfigManager(ReprMixin):
         if isinstance(config_or_section, ConfigSection):
             # must be section, not individual pipeline or function
             return False
-        elif isinstance(config_or_section, ActiveFunctionConfigFile):
+        elif isinstance(config_or_section, (ActiveFunctionConfig, ActiveFunctionConfigFile)):
             # must be individual function as Config is returned
             return True
         else:

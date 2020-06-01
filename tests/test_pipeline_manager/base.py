@@ -56,6 +56,11 @@ class PipelineManagerTestBase(TestCase):
     ]
     standard_section_path = os.path.join(defaults_path, 'stuff')
     standard_a_function_path = os.path.join(standard_section_path, 'a_function.py')
+    standard_ec_path = os.path.join(standard_section_path, 'ExampleClass.py')
+    standard_specific_class_defaults_path = os.path.join(defaults_path, 'example_class')
+    standard_specific_class_section_path = os.path.join(standard_specific_class_defaults_path, 'stuff')
+    standard_specific_class_ec_path = os.path.join(standard_specific_class_section_path, 'data.py')
+
     example_class_dict_paths = []
     for name in example_class_file_names:
         example_class_dict_paths.append(os.path.join(pm_folder, name))
@@ -127,11 +132,18 @@ class PipelineManagerTestBase(TestCase):
         with open(file_path, 'w') as f:
             f.write(write_str)
 
-    def write_error_to_a_function_file(self, file_path: Optional[str] = None):
-        if file_path is None:
-            file_path = self.standard_a_function_path
+    def write_error_to_file(self, file_path: str):
         directory = os.path.dirname(file_path)
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(file_path, 'w') as f:
             f.write('raise ValueError')
+
+    def write_error_to_a_function_file(self):
+        self.write_error_to_file(self.standard_a_function_path)
+
+    def write_error_to_example_class_file(self):
+        self.write_error_to_file(self.standard_ec_path)
+
+    def write_error_to_specific_example_class_file(self):
+        self.write_error_to_file(self.standard_specific_class_ec_path)
