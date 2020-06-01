@@ -1,8 +1,8 @@
-astor
 pd_utils
-IPython
 pandas
-datacode
-pyfileconf
-mixins
 black
+mixins
+pyfileconf
+datacode
+IPython
+astor
