@@ -84,7 +84,29 @@ class AssignmentStatement(ReprMixin, OrderPreferenceMixin):
         )
 
     def to_default_dict_and_annotation_dict(self) -> Tuple[Dict[str, ast.AST], Dict[str, ast.Name]]:
-        return {self.target.id: self.value}, {self.target.id: self.annotation} if self.annotation is not None else {}
+        # Set default dict
+        try:
+            default_dict = {self.target.id: self.value}
+        except AttributeError as e:
+            if "no attribute 'id'" in str(e):
+                try:
+                    self.target.attr  # type: ignore
+                    # Success, means that this was an attribute assignment like a.b = 6, do not need to put
+                    # into default dict
+                    default_dict = {}
+                except AttributeError:
+                    raise NotImplementedError(
+                        f'do not understand how to parse {self.target} (dict: {self.target.__dict__})'
+                    )
+            else:
+                raise e
+
+        # Set annotation dict
+        annotation_dict = {}
+        if self.annotation is not None:
+            annotation_dict = {self.target.id: self.annotation}
+
+        return default_dict, annotation_dict
 
     def to_ast(self) -> AnyAstAssign:
         if self.annotation is None:
