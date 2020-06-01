@@ -2,11 +2,13 @@ from typing import Union, Any, Optional
 
 from mixins.repr import ReprMixin
 
+from pyfileconf.config.models.file import ActiveFunctionConfigFile
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.config.models.interfaces import ConfigSectionOrConfig
 from pyfileconf.config.models.section import ConfigSection, ActiveFunctionConfig
+from pyfileconf.pipelines.models.file import FunctionConfigFile
 from pyfileconf.sectionpath.sectionpath import SectionPath
 
 class ConfigManager(ReprMixin):
@@ -191,7 +193,7 @@ class ConfigManager(ReprMixin):
             config_obj = _get_from_nested_obj_by_section_path(self, section_path)
             if isinstance(config_obj, ConfigSection):
                 return ConfigSection.from_files(filepath)
-            if isinstance(config_obj, ActiveFunctionConfig):
+            if isinstance(config_obj, ActiveFunctionConfigFile):
                 return ActiveFunctionConfig.from_file(filepath + '.py')
             else:
                 raise ValueError(f'expected section path to return ConfigSection or FunctionConfig, '
@@ -204,7 +206,7 @@ class ConfigManager(ReprMixin):
         if isinstance(config_or_section, ConfigSection):
             # must be section, not individual pipeline or function
             return False
-        elif isinstance(config_or_section, ActiveFunctionConfig):
+        elif isinstance(config_or_section, ActiveFunctionConfigFile):
             # must be individual function as Config is returned
             return True
         else:
@@ -222,10 +224,15 @@ class ConfigManager(ReprMixin):
 
 
 def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Optional[ActiveFunctionConfig]:
-    # Pull Config from ConfigSection
-    if isinstance(config_or_section, ConfigSection):
-        return config_or_section.config
-    elif isinstance(config_or_section, ActiveFunctionConfig):
+    # Pull Config file from ConfigSection
+    if isinstance(config_or_section, ActiveFunctionConfig):
+        # config already loaded
         return config_or_section
-    else:
-        raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
+    if isinstance(config_or_section, ConfigSection):
+        # config already loaded
+        return config_or_section.config
+    if isinstance(config_or_section, ActiveFunctionConfigFile):
+        # Load config from file
+        return config_or_section.load(ActiveFunctionConfig)
+
+    raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
