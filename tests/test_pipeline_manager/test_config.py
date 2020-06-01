@@ -552,3 +552,10 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         new_item = deepcopy(iv)
         assert isinstance(new_item, ExampleClass)
         assert iv.item is not new_item
+
+    def test_invalid_config(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        self.write_error_to_a_function_file()
+        with self.assertRaises(ValueError):
+            pipeline_manager.load()

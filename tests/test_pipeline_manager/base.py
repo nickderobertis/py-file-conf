@@ -54,6 +54,8 @@ class PipelineManagerTestBase(TestCase):
         'example_class2_dict.py',
         'second_example_class_dict.py',
     ]
+    standard_section_path = os.path.join(defaults_path, 'stuff')
+    standard_a_function_path = os.path.join(standard_section_path, 'a_function.py')
     example_class_dict_paths = []
     for name in example_class_file_names:
         example_class_dict_paths.append(os.path.join(pm_folder, name))
@@ -124,3 +126,12 @@ class PipelineManagerTestBase(TestCase):
             write_str = class_dict_str('class_dict', 'stuff', 'data')
         with open(file_path, 'w') as f:
             f.write(write_str)
+
+    def write_error_to_a_function_file(self, file_path: Optional[str] = None):
+        if file_path is None:
+            file_path = self.standard_a_function_path
+        directory = os.path.dirname(file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(file_path, 'w') as f:
+            f.write('raise ValueError')
