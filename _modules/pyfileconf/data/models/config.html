@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.config &mdash; pyfileconf 0.5.3 documentation</title>
+  <title>pyfileconf.data.models.config &mdash; pyfileconf 0.6.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -179,12 +179,9 @@
 <div class="viewcode-block" id="SpecificClassConfig.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.config.SpecificClassConfig.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">annotations</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">imports</span><span class="p">:</span> <span class="n">ImportStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">_file</span><span class="p">:</span> <span class="n">ConfigFileBase</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">begin_assignments</span><span class="p">:</span> <span class="n">AssignmentStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">active_config_dict</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
-        <span class="k">if</span> <span class="n">active_config_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">active_config_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">config_file_class</span> <span class="o">=</span> <span class="n">SpecificClassConfigFile</span><span class="p">(</span>
             <span class="n">file_path</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
@@ -205,9 +202,8 @@
             <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span>
             <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">active_config_dict</span> <span class="o">=</span> <span class="n">active_config_dict</span></div>
 
 
 <div class="viewcode-block" id="SpecificClassConfig.from_obj"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.config.SpecificClassConfig.from_obj">[docs]</a>    <span class="nd">@classmethod</span>

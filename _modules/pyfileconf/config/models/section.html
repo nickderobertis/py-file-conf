@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.section &mdash; pyfileconf 0.5.3 documentation</title>
+  <title>pyfileconf.config.models.section &mdash; pyfileconf 0.6.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -170,14 +170,16 @@
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.container</span> <span class="kn">import</span> <span class="n">Container</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.config</span> <span class="kn">import</span> <span class="n">ActiveFunctionConfig</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.config.models.file</span> <span class="kn">import</span> <span class="n">ActiveFunctionConfigFile</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.config</span> <span class="kn">import</span> <span class="n">ConfigManagerNotLoadedException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.file</span> <span class="kn">import</span> <span class="n">FunctionConfigFile</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">_strip_py</span>
 
 
 <div class="viewcode-block" id="ConfigSection"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection">[docs]</a><span class="k">class</span> <span class="nc">ConfigSection</span><span class="p">(</span><span class="n">Container</span><span class="p">,</span> <span class="n">ReprMixin</span><span class="p">):</span>
     <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;items&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="ConfigSection.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">,</span> <span class="s1">&#39;ConfigSection&#39;</span><span class="p">]],</span>
+<div class="viewcode-block" id="ConfigSection.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">ActiveFunctionConfigFile</span><span class="p">,</span> <span class="s1">&#39;ConfigSection&#39;</span><span class="p">]],</span>
                  <span class="n">section_config</span><span class="p">:</span> <span class="n">ActiveFunctionConfig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">section_config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">configs</span>
@@ -251,7 +253,7 @@
             <span class="n">section_config</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="n">configs</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">ActiveFunctionConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span>
+            <span class="n">ActiveFunctionConfigFile</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">_strip_py</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
             <span class="p">)</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">config_file_list</span>

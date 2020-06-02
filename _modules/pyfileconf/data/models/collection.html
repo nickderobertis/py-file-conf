@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.5.3 documentation</title>
+  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.6.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -246,8 +246,6 @@
             <span class="c1"># Here using the ast config, for the purpose of writing to file</span>
             <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="n">apply_config</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">existing_config</span><span class="p">)</span>
-            <span class="c1"># also use to update DataSource object in memory. Here use the actual objects instead of ast</span>
-            <span class="n">apply_config</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">existing_config</span><span class="o">.</span><span class="n">active_config_dict</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">file_existed</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">existing_imports</span> <span class="o">=</span> <span class="kc">None</span>
@@ -276,13 +274,7 @@
         <span class="n">item_config</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">annotation_dict</span><span class="p">)</span>
         <span class="n">item_config</span><span class="o">.</span><span class="n">imports</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">func_arg_imports</span><span class="p">)</span>
 
-        <span class="n">item_config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_existed</span><span class="p">:</span>
-            <span class="c1"># If this was a new output, we now need to load again to get the object representation</span>
-            <span class="c1"># instead of just the ast representation</span>
-            <span class="n">existing_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">,</span> <span class="n">item_name</span><span class="p">,</span> <span class="o">**</span><span class="n">class_config</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-            <span class="n">apply_config</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">existing_config</span><span class="o">.</span><span class="n">active_config_dict</span><span class="p">)</span></div>
+        <span class="n">item_config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="apply_config"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.apply_config">[docs]</a><span class="k">def</span> <span class="nf">apply_config</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;SpecificClassConfig&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

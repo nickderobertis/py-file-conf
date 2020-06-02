@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.file &mdash; pyfileconf 0.5.3 documentation</title>
+  <title>pyfileconf.data.models.file &mdash; pyfileconf 0.6.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -238,11 +238,7 @@
         <span class="c1"># Override base class method to pull a single dict, and not pass annotations</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">SpecificClassConfig</span>
 
-        <span class="c1"># Data configs are a hybrid of the ast/static config and the active config</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">active_interface</span> <span class="o">=</span> <span class="n">ActiveConfigFileInterface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
-
         <span class="n">config_dict</span><span class="p">,</span> <span class="n">annotation_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-        <span class="n">user_defined_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_interface</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">config_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">config_class</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span>
@@ -250,7 +246,6 @@
         <span class="k">return</span> <span class="n">config_class</span><span class="p">(</span>
             <span class="n">d</span><span class="o">=</span><span class="n">config_dict</span><span class="p">,</span>
             <span class="n">annotations</span><span class="o">=</span><span class="n">annotation_dict</span><span class="p">,</span>
-            <span class="n">active_config_dict</span><span class="o">=</span><span class="n">user_defined_dict</span><span class="p">,</span>
             <span class="n">imports</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
             <span class="n">_file</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
