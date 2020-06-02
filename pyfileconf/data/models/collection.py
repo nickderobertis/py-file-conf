@@ -81,8 +81,6 @@ class SpecificClassCollection(Collection):
             # Here using the ast config, for the purpose of writing to file
             file_config_item = deepcopy(item)
             apply_config(file_config_item, existing_config)
-            # also use to update DataSource object in memory. Here use the actual objects instead of ast
-            apply_config(item, existing_config.active_config_dict)
         else:
             file_existed = False
             existing_imports = None
@@ -112,12 +110,6 @@ class SpecificClassCollection(Collection):
         item_config.imports.extend(func_arg_imports)
 
         item_config.to_file(item_filepath)
-
-        if not file_existed:
-            # If this was a new output, we now need to load again to get the object representation
-            # instead of just the ast representation
-            existing_config = SpecificClassConfig.from_file(item_filepath, item_name, **class_config)  # type: ignore
-            apply_config(item, existing_config.active_config_dict)
 
 
 def apply_config(obj: Any, config: 'SpecificClassConfig') -> None:

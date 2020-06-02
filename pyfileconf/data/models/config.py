@@ -14,12 +14,9 @@ class SpecificClassConfig(ConfigBase):
     def __init__(self, d: dict = None, name: str = None, annotations: dict = None,
                  imports: ImportStatementContainer = None,
                  _file: ConfigFileBase = None, begin_assignments: AssignmentStatementContainer = None,
-                 active_config_dict: dict = None, always_import_strs: Optional[Sequence[str]] = None,
+                 always_import_strs: Optional[Sequence[str]] = None,
                  always_assign_strs: Optional[Sequence[str]] = None, klass: Optional[Type] = None,
                  file_path: Optional[str] = None, **kwargs):
-
-        if active_config_dict is None:
-            active_config_dict = {}
 
         self.config_file_class = SpecificClassConfigFile(
             file_path,  # type: ignore
@@ -42,7 +39,6 @@ class SpecificClassConfig(ConfigBase):
             **kwargs
         )
 
-        self.active_config_dict = active_config_dict
 
 
     @classmethod
