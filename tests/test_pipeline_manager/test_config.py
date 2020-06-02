@@ -552,3 +552,47 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         new_item = deepcopy(iv)
         assert isinstance(new_item, ExampleClass)
         assert iv.item is not new_item
+
+    def test_invalid_config_function(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        self.write_error_to_a_function_file()
+
+        # No error raised here thanks to lazy loading
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+
+        # Config is only loaded once attribute of item view is accessed
+        with self.assertRaises(ValueError):
+            iv.item
+
+    def test_invalid_config_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        self.write_error_to_example_class_file()
+
+        # No error raised here thanks to lazy loading
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+
+        # Config is only loaded once attribute of item view is accessed
+        with self.assertRaises(ValueError):
+            iv.item
+
+    def test_invalid_specific_config_class(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        self.write_error_to_specific_example_class_file()
+
+        # No error raised here thanks to lazy loading
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+
+        # Config is only loaded once attribute of item view is accessed
+        with self.assertRaises(ValueError):
+            iv.item

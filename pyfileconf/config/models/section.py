@@ -5,14 +5,16 @@ import warnings
 from mixins.repr import ReprMixin
 from pyfileconf.basemodels.container import Container
 from pyfileconf.config.models.config import ActiveFunctionConfig
+from pyfileconf.config.models.file import ActiveFunctionConfigFile
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
+from pyfileconf.pipelines.models.file import FunctionConfigFile
 from pyfileconf.sectionpath.sectionpath import _strip_py
 
 
 class ConfigSection(Container, ReprMixin):
     repr_cols = ['name', 'config', 'items']
 
-    def __init__(self, configs: List[Union[ActiveFunctionConfig, 'ConfigSection']],
+    def __init__(self, configs: List[Union[ActiveFunctionConfigFile, 'ConfigSection']],
                  section_config: ActiveFunctionConfig=None, name: str=None):
         self.config = section_config
         self.items = configs
@@ -86,7 +88,7 @@ class ConfigSection(Container, ReprMixin):
             section_config = None
 
         configs = [
-            ActiveFunctionConfig.from_file(
+            ActiveFunctionConfigFile(
                 os.path.join(basepath, file),
                 name=_strip_py(file)
             ) for file in config_file_list
