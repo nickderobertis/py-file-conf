@@ -1,6 +1,8 @@
 import sys
 import os
 import traceback
+from functools import partial
+
 import pdb
 import bdb
 import warnings
@@ -10,6 +12,7 @@ from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, S
 from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
+from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
 from pyfileconf.dictfiles.modify import add_item_into_nested_dict_at_section_path, \
     create_dict_assignment_str_from_nested_dict_with_ast_names, pretty_format_str
 from pyfileconf.pipelines.models.collection import PipelineCollection
@@ -41,7 +44,8 @@ class PipelineManager:
     def __init__(self, folder: str,
                  name: str= 'project',
                  specific_class_config_dicts: Optional[List[SpecificClassConfigDict]] = None,
-                 auto_pdb: bool=False, force_continue: bool=False, log_folder: Optional[str] = None,
+                 auto_pdb: Union[bool, Callable] = False, force_continue: bool = False,
+                 log_folder: Optional[str] = None,
                  default_config_folder_name: str = 'defaults'):
 
         if specific_class_config_dicts is None:
@@ -139,9 +143,11 @@ class PipelineManager:
         return self.runner.run(section_path_str_or_list)
 
     def _run_with_auto_pdb(self, section_path_str_or_list: 'RunnerArgs'):
+        pm_func = partial(pdb_post_mortem_or_passed_debug_fn, debug_fn=self.auto_pdb)
+
         result, successful = _try_except_run_func_except_user_interrupts(
             self.runner.run,
-            except_func=lambda exc: pdb.post_mortem(),
+            except_func=pm_func,
             try_func_kwargs=dict(
                 section_path_str_or_list=section_path_str_or_list
             ),
