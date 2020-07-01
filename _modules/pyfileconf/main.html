@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.6.0 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.6.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
             
           
@@ -166,6 +166,8 @@
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">bdb</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -175,6 +177,7 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictconfig</span> <span class="kn">import</span> <span class="n">SpecificClassDictConfig</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.debug</span> <span class="kn">import</span> <span class="n">pdb_post_mortem_or_passed_debug_fn</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.dictfiles.modify</span> <span class="kn">import</span> <span class="n">add_item_into_nested_dict_at_section_path</span><span class="p">,</span> \
     <span class="n">create_dict_assignment_str_from_nested_dict_with_ast_names</span><span class="p">,</span> <span class="n">pretty_format_str</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
@@ -206,7 +209,8 @@
 <div class="viewcode-block" id="PipelineManager.__init__"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
                  <span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">auto_pdb</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_continue</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log_folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">auto_pdb</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">force_continue</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">log_folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">default_config_folder_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;defaults&#39;</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">specific_class_config_dicts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -304,9 +308,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_run_with_auto_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">):</span>
+        <span class="n">pm_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">pdb_post_mortem_or_passed_debug_fn</span><span class="p">,</span> <span class="n">debug_fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span><span class="p">)</span>
+
         <span class="n">result</span><span class="p">,</span> <span class="n">successful</span> <span class="o">=</span> <span class="n">_try_except_run_func_except_user_interrupts</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">,</span>
-            <span class="n">except_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">exc</span><span class="p">:</span> <span class="n">pdb</span><span class="o">.</span><span class="n">post_mortem</span><span class="p">(),</span>
+            <span class="n">except_func</span><span class="o">=</span><span class="n">pm_func</span><span class="p">,</span>
             <span class="n">try_func_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
                 <span class="n">section_path_str_or_list</span><span class="o">=</span><span class="n">section_path_str_or_list</span>
             <span class="p">),</span>

@@ -31,6 +31,14 @@ Subpackages
 Submodules
 ----------
 
+pyfileconf.debug module
+-----------------------
+
+.. automodule:: pyfileconf.debug
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.main module
 ----------------------
 
