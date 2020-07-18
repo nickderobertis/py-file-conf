@@ -85,7 +85,8 @@ class PipelineManager:
             'get',
             'update',
             'load',
-            'reload'
+            'reload',
+            'refresh',
         ]
         exposed_attrs = ['name'] + self.specific_class_names
         exposed = exposed_methods + exposed_attrs
@@ -240,6 +241,16 @@ class PipelineManager:
         :return:
         """
         self.runner.update(d, section_path_str, **kwargs)
+
+    def refresh(self, section_path_str: str):
+        """
+        Reloads from the existing file, then reapplies any config updates. Useful for when
+        this config depends on the attribute of some other config which was updated.
+
+        :param section_path_str: section path of item to be refreshed
+        :return:
+        """
+        self.runner.refresh(section_path_str)
 
     def create(self, section_path_str: str, func_or_class: Optional[Union[Callable, Type]] = None):
         """
