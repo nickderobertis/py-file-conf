@@ -344,6 +344,43 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert ec == expect_1
         assert ec.a.a == expected_a_result
 
+    def test_create_update_from_specific_class_dict_multiple_dependent_attribute_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        self.append_to_specific_class_config('a = s.test_pipeline_manager2.example_class.stuff.data.a')
+        sel = Selector()
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Assert original pipeline manager 1 has pipeline manager 2 example class as a
+        ec2 = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_1 = ExampleClass(name='data', a=ec2.a)
+        ec = sel.test_pipeline_manager.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a is None
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec2 = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_1 = ExampleClass(name='data', a=ec2.a)
+        ec = sel.test_pipeline_manager.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a == expected_a_result
+
     def test_create_update_from_multiple_specific_class_dicts_same(self):
         self.write_example_class_dict_to_file()  # example_class
         self.write_example_class_dict_to_file(1)  # example_class2
