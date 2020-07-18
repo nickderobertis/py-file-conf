@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, Type, Sequence
+from typing import Tuple, Optional, Type, Sequence, Any, Dict
 import os
 from copy import deepcopy
 
@@ -42,6 +42,7 @@ class ConfigBase(dict):
         self.klass = klass
         self.always_import_strs = always_import_strs
         self.always_assign_strs = always_assign_strs
+        self._applied_updates: Dict[str, Any] = {}
 
     def __repr__(self):
         dict_repr = super().__repr__()
@@ -61,6 +62,11 @@ class ConfigBase(dict):
     def update(self, E=None, **F):
         if E is None:
             E = {}
+
+        # Track the updates so they can be applied later
+        all_updates = {**E, **F}
+        self._applied_updates.update(all_updates)
+
         super().update(E, **F)
 
     def to_file(self, filepath: str):
@@ -103,3 +109,17 @@ class ConfigBase(dict):
 
     def copy(self):
         return deepcopy(self)
+
+    def refresh(self):
+        """
+        Reloads from the existing, then reapplies any config updates. Useful for when
+        this config depends on the attribute of some other config which was updated.
+        :return:
+        """
+        # Reload from file
+        new_config = self.__class__.from_file(self._file.filepath, name=self.name,
+                                              klass=self.klass, always_import_strs=self.always_import_strs,
+                                              always_assign_strs=self.always_assign_strs)
+        applied_updates = self._applied_updates
+        self.update(**new_config)
+        self.update(**applied_updates)

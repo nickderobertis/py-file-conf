@@ -1,7 +1,9 @@
 from typing import Callable, List, Any
 import warnings
 
+from pyfileconf.exceptions.pipelinemanager import NoPipelineManagerForFilepathException
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
+from pyfileconf.logic.inspect import get_caller_filepath
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.selector.logic.get.frommanager import get_pipeline_dict_path_and_specific_class_config_dicts_from_manager
 from pyfileconf.pipelines.models.collection import PipelineCollection
@@ -123,10 +125,20 @@ class Selector:
         return type(result)
 
     def _get_real_item(self, item):
-        section_path = SectionPath(item)
-        manager_name = section_path[0]
-        manager = self._managers[manager_name]
-        relative_section_path = SectionPath('.'.join(section_path[1:]))
+        from pyfileconf.main import PipelineManager
+        manager = PipelineManager.get_manager_by_section_path_str(item)
+        relative_section_path = SectionPath('.'.join(SectionPath(item)[1:]))
+
+        if PipelineManager._file_is_currently_being_loaded:
+            # This item is being accessed within another config
+            filepath = get_caller_filepath(caller_levels=4)
+            dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
+            # Add the config where this item is
+            # being accessed as a dependent config of this item
+            dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
+            full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
+            PipelineManager._config_dependencies[item].add(full_sp)
+
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)
 
     def _set_attr_for_item(self, item: str, attr: str, value: Any):

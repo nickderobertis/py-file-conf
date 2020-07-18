@@ -42,6 +42,12 @@ class ConfigManager(ReprMixin):
             raise ConfigManagerNotLoadedException('no config to update')
         config_obj.update(d, **kwargs)
 
+    def refresh(self, section_path_str: str):
+        config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
+        if config_obj is None:
+            raise ConfigManagerNotLoadedException('no config to refresh')
+        config_obj.refresh()
+
     def clear(self, section_path_str: str=None) -> None:
         """
         Resets a function or section config to default. If no section_path_str is passed, resets local config.

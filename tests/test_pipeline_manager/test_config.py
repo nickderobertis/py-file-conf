@@ -95,6 +95,37 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager2.run(iv2)
         assert result == (None, expected_b_result)
 
+    def test_config_update_function_multiple_dependent_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        self.append_to_a_function_config('b = s.test_pipeline_manager2.stuff.a_function')
+        pipeline_manager.reload()
+        sel = Selector()
+        expected_b_result = ['a', 'b']
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 = sel.test_pipeline_manager2.stuff.a_function
+
+        # Assert original pipeline manager 1 has pipeline manager 2 a_function as b
+        result = pipeline_manager.run(iv)
+        assert result == (None, iv2)
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        result = pipeline_manager.run(iv2)
+        assert result == (None, iv2)
+        assert result[1]() == (None, expected_b_result)
+
     def test_config_update_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -158,6 +189,42 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         ec = sel.test_pipeline_manager2.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
+
+    def test_create_update_class_multiple_dependent_pms(self):
+        self.write_example_class_to_pipeline_dict_file()
+        self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        self.append_to_example_class_config('a = s.test_pipeline_manager2.stuff.ExampleClass')
+        pipeline_manager.reload()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv2 = sel.test_pipeline_manager2.stuff.ExampleClass
+
+        # Assert original pipeline manager 1 has pipeline manager 2 example class as a
+        ec2 = sel.test_pipeline_manager2.stuff.ExampleClass
+        expect_1 = ExampleClass(ec2)
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == expect_1
+        assert ec.a().a is None
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec2 = sel.test_pipeline_manager2.stuff.ExampleClass
+        expect_1 = ExampleClass(ec2)
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == expect_1
+        assert ec.a().a == expected_a_result
 
     def test_create_update_from_specific_class_dict(self):
         self.write_example_class_dict_to_file()
@@ -239,6 +306,81 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
+
+    def test_create_update_from_specific_class_dict_multiple_dependent_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        self.append_to_specific_class_config('a = s.test_pipeline_manager2.example_class.stuff.data')
+        sel = Selector()
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Assert original pipeline manager 1 has pipeline manager 2 example class as a
+        ec2 = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_1 = ExampleClass(name='data', a=ec2)
+        ec = sel.test_pipeline_manager.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a.a is None
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec2 = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_1 = ExampleClass(name='data', a=ec2)
+        ec = sel.test_pipeline_manager.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a.a == expected_a_result
+
+    def test_create_update_from_specific_class_dict_multiple_dependent_attribute_pms(self):
+        self.write_example_class_dict_to_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        self.append_to_specific_class_config('a = s.test_pipeline_manager2.example_class.stuff.data.a')
+        pipeline_manager.reload()
+        sel = Selector()
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Assert original pipeline manager 1 has pipeline manager 2 example class as a
+        ec2 = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_1 = ExampleClass(name='data', a=ec2.a)
+        ec = sel.test_pipeline_manager.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a is None
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
+        pipeline_manager2.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec2 = sel.test_pipeline_manager2.example_class.stuff.data
+        expect_1 = ExampleClass(name='data', a=ec2.a)
+        ec = sel.test_pipeline_manager.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a == expected_a_result
 
     def test_create_update_from_multiple_specific_class_dicts_same(self):
         self.write_example_class_dict_to_file()  # example_class
