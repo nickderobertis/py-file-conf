@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.config &mdash; pyfileconf 0.6.1 documentation</title>
+  <title>pyfileconf.basemodels.config &mdash; pyfileconf 0.7.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.7.0
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.basemodels.config</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Sequence</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
@@ -206,7 +206,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">begin_assignments</span> <span class="o">=</span> <span class="n">begin_assignments</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">klass</span> <span class="o">=</span> <span class="n">klass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span> <span class="o">=</span> <span class="n">always_import_strs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span> <span class="o">=</span> <span class="n">always_assign_strs</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span> <span class="o">=</span> <span class="n">always_assign_strs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_applied_updates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">dict_repr</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
@@ -226,6 +227,11 @@
 <div class="viewcode-block" id="ConfigBase.update"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">E</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">E</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Track the updates so they can be applied later</span>
+        <span class="n">all_updates</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">E</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_applied_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_updates</span><span class="p">)</span>
+
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConfigBase.to_file"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.to_file">[docs]</a>    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -267,7 +273,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">begin_assignments</span> <span class="o">+</span> <span class="n">assigns</span></div>
 
 <div class="viewcode-block" id="ConfigBase.copy"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConfigBase.refresh"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reloads from the existing, then reapplies any config updates. Useful for when</span>
+<span class="sd">        this config depends on the attribute of some other config which was updated.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Reload from file</span>
+        <span class="n">new_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                              <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span>
+                                              <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">)</span>
+        <span class="n">applied_updates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applied_updates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">applied_updates</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

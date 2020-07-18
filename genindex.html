@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyfileconf 0.6.1 documentation</title>
+  <title>Index &mdash; pyfileconf 0.7.0 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.7.0
               </div>
             
           
@@ -569,6 +569,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.base.FileParser">FileParser (class in pyfileconf.io.file.load.parsers.base)</a>
 </li>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_filepath.params.filepath">filepath (pyfileconf.main.PipelineManager.get_manager_by_filepath parameter)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_section_path_str.params.filepath">(pyfileconf.main.PipelineManager.get_manager_by_section_path_str parameter)</a>
+</li>
+      </ul></li>
       <li><a href="api/pyfileconf.io.file.write.html#pyfileconf.io.file.write.base.FileStr">FileStr (class in pyfileconf.io.file.write.base)</a>
 </li>
       <li><a href="api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.ext_importlib.find_spec">find_spec() (in module pyfileconf.imports.logic.load.ext_importlib)</a>
@@ -607,10 +613,10 @@
       </ul></li>
       <li><a href="api/pyfileconf.sectionpath.html#pyfileconf.sectionpath.sectionpath.SectionPath.from_filepath">from_filepath() (pyfileconf.sectionpath.sectionpath.SectionPath class method)</a>
 </li>
-      <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.from_files">from_files() (pyfileconf.config.models.section.ConfigSection class method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.from_files">from_files() (pyfileconf.config.models.section.ConfigSection class method)</a>
+</li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.from_list">from_list() (pyfileconf.basemodels.collection.Collection class method)</a>
 </li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.config.SpecificClassConfig.from_obj">from_obj() (pyfileconf.data.models.config.SpecificClassConfig class method)</a>
@@ -667,6 +673,10 @@
         <li><a href="api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.get">(pyfileconf.runner.models.runner.Runner method)</a>
 </li>
       </ul></li>
+      <li><a href="api/pyfileconf.logic.html#pyfileconf.logic.inspect.get_caller_filepath">get_caller_filepath() (in module pyfileconf.logic.inspect)</a>
+</li>
+      <li><a href="api/pyfileconf.logic.html#pyfileconf.logic.inspect.get_caller_frame">get_caller_frame() (in module pyfileconf.logic.inspect)</a>
+</li>
       <li><a href="api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str">get_filepath_from_module_str() (in module pyfileconf.imports.logic.load.ext_importlib)</a>
 </li>
       <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer.get_import_for_ast_obj">get_import_for_ast_obj() (pyfileconf.imports.models.statements.container.ImportStatementContainer method)</a>
@@ -677,6 +687,10 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_filepath">get_manager_by_filepath() (pyfileconf.main.PipelineManager class method)</a>
+</li>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_section_path_str">get_manager_by_section_path_str() (pyfileconf.main.PipelineManager class method)</a>
+</li>
       <li><a href="api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.name.get_module_and_name_imported_from">get_module_and_name_imported_from() (in module pyfileconf.imports.logic.load.name)</a>
 </li>
       <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.obj.ObjectImportStatement.get_module_filepath">get_module_filepath() (pyfileconf.imports.models.statements.obj.ObjectImportStatement method)</a>
@@ -883,15 +897,19 @@
 </li>
       <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path.params.nested_dict">nested_dict (pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path parameter)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline.new_instance_with_config">new_instance_with_config() (pyfileconf.basemodels.pipeline.Pipeline method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatementCollection.new_names">new_names() (pyfileconf.imports.models.statements.rename.RenameStatementCollection property)</a>
 </li>
       <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.NoImportMatchingNameException">NoImportMatchingNameException</a>
 </li>
       <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.imports.NoImportStatementException">NoImportStatementException</a>
+</li>
+      <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.pipelinemanager.NoPipelineManagerForFilepathException">NoPipelineManagerForFilepathException</a>
+</li>
+      <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.pipelinemanager.NoPipelineManagerForSectionPathException">NoPipelineManagerForSectionPathException</a>
 </li>
       <li><a href="api/pyfileconf.exceptions.html#pyfileconf.exceptions.registrar.NoRegistrarWithNameException">NoRegistrarWithNameException</a>
 </li>
@@ -1253,6 +1271,16 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.refresh">refresh() (pyfileconf.basemodels.config.ConfigBase method)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.refresh">(pyfileconf.config.models.manager.ConfigManager method)</a>
+</li>
+        <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.refresh">(pyfileconf.main.PipelineManager method)</a>
+</li>
+        <li><a href="api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.refresh">(pyfileconf.runner.models.runner.Runner method)</a>
+</li>
+      </ul></li>
       <li><a href="api/pyfileconf.io.file.load.lazy.base.html#pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.register">register() (pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader method)</a>
 
       <ul>
@@ -1356,6 +1384,8 @@
       <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.create.params.section_path_str">section_path_str (pyfileconf.main.PipelineManager.create parameter)</a>
 
       <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.refresh.params.section_path_str">(pyfileconf.main.PipelineManager.refresh parameter)</a>
+</li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update.params.section_path_str">(pyfileconf.main.PipelineManager.update parameter)</a>
 </li>
       </ul></li>

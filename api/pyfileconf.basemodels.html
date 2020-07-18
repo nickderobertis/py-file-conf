@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.6.1 documentation</title>
+  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.7.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.7.0
               </div>
             
           
@@ -287,6 +287,14 @@ The argument must be an iterable if specified.</p>
 <dt id="pyfileconf.basemodels.config.ConfigBase.from_file">
 <em class="property">classmethod </em><code class="sig-name descname">from_file</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.from_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.basemodels.config.ConfigBase.refresh">
+<code class="sig-name descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reloads from the existing, then reapplies any config updates. Useful for when
+this config depends on the attribute of some other config which was updated.
+:return:</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.to_file">

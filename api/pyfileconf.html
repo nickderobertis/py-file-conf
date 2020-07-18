@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.6.1 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.7.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.7.0
               </div>
             
           
@@ -577,12 +577,71 @@ dynamically updated, enabling powerful scripting.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="pyfileconf.main.PipelineManager.get_manager_by_filepath">
+<em class="property">classmethod </em><code class="sig-name descname">get_manager_by_filepath</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get_manager_by_filepath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get_manager_by_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the active pipeline manager which references the passed
+filepath.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.main.PipelineManager.get_manager_by_filepath.params.filepath"></span><strong>filepath</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.get_manager_by_filepath.params.filepath">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pyfileconf.main.PipelineManager" title="pyfileconf.main.PipelineManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineManager</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="pyfileconf.exceptions.html#pyfileconf.exceptions.pipelinemanager.NoPipelineManagerForFilepathException" title="pyfileconf.exceptions.pipelinemanager.NoPipelineManagerForFilepathException"><strong>NoPipelineManagerForFilepathException</strong></a> – When no active pipeline
+manager has a config file matching the file path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.get_manager_by_section_path_str">
+<em class="property">classmethod </em><code class="sig-name descname">get_manager_by_section_path_str</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get_manager_by_section_path_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get_manager_by_section_path_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the active pipeline manager which references the passed
+section path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.main.PipelineManager.get_manager_by_section_path_str.params.filepath"></span><strong>filepath</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.get_manager_by_section_path_str.params.filepath">¶</a> – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pyfileconf.main.PipelineManager" title="pyfileconf.main.PipelineManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineManager</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="pyfileconf.exceptions.html#pyfileconf.exceptions.pipelinemanager.NoPipelineManagerForSectionPathException" title="pyfileconf.exceptions.pipelinemanager.NoPipelineManagerForSectionPathException"><strong>NoPipelineManagerForSectionPathException</strong></a> – When no active pipeline
+manager has a config file matching the file path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyfileconf.main.PipelineManager.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper to track imported modules so that can reimport them upon reloading</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.refresh">
+<code class="sig-name descname">refresh</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reloads from the existing file, then reapplies any config updates. Useful for when
+this config depends on the attribute of some other config which was updated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.main.PipelineManager.refresh.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.refresh.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – section path of item to be refreshed</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
 </dd>
 </dl>
 </dd></dl>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.6.1 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.7.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.7.0
               </div>
             
           
@@ -166,13 +166,13 @@
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">bdb</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
@@ -194,7 +194,8 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.runner</span> <span class="kn">import</span> <span class="n">Runner</span><span class="p">,</span> <span class="n">ResultOrResults</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.tracker</span> <span class="kn">import</span> <span class="n">ImportTracker</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span><span class="p">,</span> \
+    <span class="n">NoPipelineManagerForFilepathException</span><span class="p">,</span> <span class="n">NoPipelineManagerForSectionPathException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logger</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
 
 <span class="n">SpecificClassConfigDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span>
@@ -205,6 +206,8 @@
 <span class="sd">    Main class for managing flow-based programming and configuration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_active_managers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_config_dependencies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">SectionPath</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">())</span>
+    <span class="n">_file_is_currently_being_loaded</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="PipelineManager.__init__"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
@@ -250,7 +253,8 @@
             <span class="s1">&#39;get&#39;</span><span class="p">,</span>
             <span class="s1">&#39;update&#39;</span><span class="p">,</span>
             <span class="s1">&#39;load&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;reload&#39;</span>
+            <span class="s1">&#39;reload&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;refresh&#39;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="n">exposed_attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_names</span>
         <span class="n">exposed</span> <span class="o">=</span> <span class="n">exposed_methods</span> <span class="o">+</span> <span class="n">exposed_attrs</span>
@@ -404,7 +408,26 @@
 <span class="sd">        :param kwargs: kwarg updates</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Refresh any configs which are dependent on attributes of this config</span>
+        <span class="c1"># Dependent configs are determined in Selector._get_real_item</span>
+        <span class="k">if</span> <span class="n">section_path_str</span><span class="p">:</span>
+            <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dependent_sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_config_dependencies</span><span class="p">[</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">]:</span>
+                <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">dependent_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
+                <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dependent_sp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+                <span class="n">manager</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">relative_section_path</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PipelineManager.refresh"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reloads from the existing file, then reapplies any config updates. Useful for when</span>
+<span class="sd">        this config depends on the attribute of some other config which was updated.</span>
+
+<span class="sd">        :param section_path_str: section path of item to be refreshed</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.create"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">func_or_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -432,6 +455,45 @@
 
         <span class="c1"># TODO [#64]: create items without reloading by inserting directly into registrar and config manager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PipelineManager.get_manager_by_filepath"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_filepath">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_manager_by_filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the active pipeline manager which references the passed</span>
+<span class="sd">        filepath.</span>
+
+<span class="sd">        :param filepath:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        :raises NoPipelineManagerForFilepathException: When no active pipeline</span>
+<span class="sd">            manager has a config file matching the file path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abs_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">manager</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_active_managers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">manager_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">folder</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">abs_filepath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">manager_path</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">manager</span>
+
+        <span class="k">raise</span> <span class="n">NoPipelineManagerForFilepathException</span></div>
+
+<div class="viewcode-block" id="PipelineManager.get_manager_by_section_path_str"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_section_path_str">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_manager_by_section_path_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the active pipeline manager which references the passed</span>
+<span class="sd">        section path.</span>
+
+<span class="sd">        :param filepath:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        :raises NoPipelineManagerForSectionPathException: When no active pipeline</span>
+<span class="sd">            manager has a config file matching the file path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="n">manager_name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">manager</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">manager</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoPipelineManagerForSectionPathException</span></div>
+
 
     <span class="k">def</span> <span class="nf">_create_specific_class_dict_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">:</span> <span class="n">SectionPath</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>

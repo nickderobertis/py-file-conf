@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.6.1 documentation</title>
+  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.7.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.6.1
+                0.7.0
               </div>
             
           
@@ -166,7 +166,9 @@
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">NoPipelineManagerForFilepathException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logic.inspect</span> <span class="kn">import</span> <span class="n">get_caller_filepath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.frommanager</span> <span class="kn">import</span> <span class="n">get_pipeline_dict_path_and_specific_class_config_dicts_from_manager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
@@ -288,10 +290,20 @@
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-        <span class="n">manager_name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span>
-        <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="n">item</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]))</span>
+
+        <span class="k">if</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">_file_is_currently_being_loaded</span><span class="p">:</span>
+            <span class="c1"># This item is being accessed within another config</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_caller_filepath</span><span class="p">(</span><span class="n">caller_levels</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">dependent_manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_filepath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+            <span class="c1"># Add the config where this item is</span>
+            <span class="c1"># being accessed as a dependent config of this item</span>
+            <span class="n">dependent_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_filepath</span><span class="p">(</span><span class="n">dependent_manager</span><span class="o">.</span><span class="n">default_config_path</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+            <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dependent_manager</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">dependent_sp</span><span class="p">)</span>
+            <span class="n">PipelineManager</span><span class="o">.</span><span class="n">_config_dependencies</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">full_sp</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="n">manager</span><span class="p">,</span> <span class="n">relative_section_path</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_set_attr_for_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
