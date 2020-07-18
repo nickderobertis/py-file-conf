@@ -53,6 +53,15 @@ class SectionPath(ReprMixin):
                 return False
         return True
 
+    def __eq__(self, other):
+        try:
+            return self.path_str == other.path_str
+        except AttributeError:
+            return False
+
+    def __hash__(self):
+        return hash(self.path_str)
+
 
 def _section_path_str_to_section_strs(section_path_str: str) -> List[str]:
     return section_path_str.split('.')

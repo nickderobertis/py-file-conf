@@ -1,13 +1,13 @@
 import sys
 import os
 import traceback
+from collections import defaultdict
 from functools import partial
 
-import pdb
 import bdb
 import warnings
 from copy import deepcopy
-from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict
+from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict, Set
 
 from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.data.models.collection import SpecificClassCollection
@@ -29,7 +29,8 @@ from pyfileconf.data.models.dictfile import SpecificClassDictFile
 from pyfileconf.runner.models.runner import Runner, ResultOrResults
 from pyfileconf.imports.models.tracker import ImportTracker
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedException
+from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedException, \
+    NoPipelineManagerForFilepathException, NoPipelineManagerForSectionPathException
 from pyfileconf.logger import stdout_also_logged
 
 SpecificClassConfigDict = Dict[str, Optional[Union[str, Type, List[str]]]]
@@ -40,6 +41,7 @@ class PipelineManager:
     Main class for managing flow-based programming and configuration.
     """
     _active_managers: Dict[str, 'PipelineManager'] = {}
+    _config_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
 
     def __init__(self, folder: str,
                  name: str= 'project',
@@ -242,6 +244,15 @@ class PipelineManager:
         """
         self.runner.update(d, section_path_str, **kwargs)
 
+        # Refresh any configs which are dependent on attributes of this config
+        # Dependent configs are determined in Selector._get_real_item
+        if section_path_str:
+            full_sp = SectionPath.join(self.name, section_path_str)
+            for dependent_sp in self.__class__._config_dependencies[full_sp.path_str]:
+                manager = self.__class__.get_manager_by_section_path_str(dependent_sp.path_str)
+                relative_section_path = SectionPath('.'.join(dependent_sp[1:]))
+                manager.refresh(relative_section_path.path_str)
+
     def refresh(self, section_path_str: str):
         """
         Reloads from the existing file, then reapplies any config updates. Useful for when
@@ -278,6 +289,45 @@ class PipelineManager:
 
         # TODO [#64]: create items without reloading by inserting directly into registrar and config manager
         self.reload()
+
+    @classmethod
+    def get_manager_by_filepath(cls, filepath: str) -> 'PipelineManager':
+        """
+        Gets the active pipeline manager which references the passed
+        filepath.
+
+        :param filepath:
+        :return:
+        :raises NoPipelineManagerForFilepathException: When no active pipeline
+            manager has a config file matching the file path
+        """
+        abs_filepath = os.path.abspath(filepath)
+        for manager in cls._active_managers.values():
+            manager_path = os.path.abspath(manager.folder)
+            if abs_filepath.startswith(manager_path + os.sep):
+                return manager
+
+        raise NoPipelineManagerForFilepathException
+
+    @classmethod
+    def get_manager_by_section_path_str(cls, section_path_str: str) -> 'PipelineManager':
+        """
+        Gets the active pipeline manager which references the passed
+        section path.
+
+        :param filepath:
+        :return:
+        :raises NoPipelineManagerForSectionPathException: When no active pipeline
+            manager has a config file matching the file path
+        """
+        section_path = SectionPath(section_path_str)
+        manager_name = section_path[0]
+        try:
+            manager = cls._active_managers[manager_name]
+            return manager
+        except KeyError:
+            raise NoPipelineManagerForSectionPathException
+
 
     def _create_specific_class_dict_entry(self, section_path: SectionPath):
         name = section_path[0]

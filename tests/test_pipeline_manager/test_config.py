@@ -358,6 +358,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         pipeline_manager2.load()
         self.append_to_specific_class_config('a = s.test_pipeline_manager2.example_class.stuff.data.a')
+        pipeline_manager.reload()
         sel = Selector()
         iv2 = sel.test_pipeline_manager2.example_class.stuff.data
 
@@ -375,8 +376,6 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
-        # TODO: should not require explicit refresh
-        pipeline_manager.refresh('example_class.stuff.data')
         ec2 = sel.test_pipeline_manager2.example_class.stuff.data
         expect_1 = ExampleClass(name='data', a=ec2.a)
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
