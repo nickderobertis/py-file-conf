@@ -128,20 +128,16 @@ class Selector:
         from pyfileconf.main import PipelineManager
         manager = PipelineManager.get_manager_by_section_path_str(item)
         relative_section_path = SectionPath('.'.join(SectionPath(item)[1:]))
-        # TODO: add context for whether are currently loading a file and only do this if so
 
-        # Check if this item is being accessed within another config
-        filepath = get_caller_filepath(caller_levels=4)
-        try:
+        if PipelineManager._file_is_currently_being_loaded:
+            # This item is being accessed within another config
+            filepath = get_caller_filepath(caller_levels=4)
             dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
-            # It is being accessed within another config. So add the config where this item is
+            # Add the config where this item is
             # being accessed as a dependent config of this item
             dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
             full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
             PipelineManager._config_dependencies[item].add(full_sp)
-        except NoPipelineManagerForFilepathException:
-            # Not accessed within another config, external selector usage
-            pass
 
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)
 
