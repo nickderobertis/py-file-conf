@@ -3,7 +3,7 @@ from collections import defaultdict
 from copy import deepcopy
 from typing import List, Dict, Any, Tuple, Sequence, Optional
 
-from pyfileconf.runner.models.interfaces import RunnerArgs
+from pyfileconf.runner.models.interfaces import RunnerArgs, IterativeResults
 from pyfileconf.sectionpath.sectionpath import SectionPath
 
 
@@ -25,7 +25,7 @@ class IterativeRunner:
     def get_cases(self) -> List[Tuple[Dict[str, Any], ...]]:
         return get_config_product(self.config_updates)
 
-    def run(self) -> List[Tuple[Tuple[Dict[str, Any], ...], Tuple[Any]]]:
+    def run(self, collect_results: bool = True) -> IterativeResults:
         from pyfileconf.main import PipelineManager
 
         all_results = []
@@ -41,8 +41,9 @@ class IterativeRunner:
                 relative_conf_dict['section_path_str'] = relative_section_path_str
                 manager.update(**relative_conf_dict)
             result = self._run()
-            in_out_tup = (case, result)
-            all_results.append(in_out_tup)
+            if collect_results:
+                in_out_tup = (case, result)
+                all_results.append(in_out_tup)
         return all_results
 
     def _run(self) -> Any:

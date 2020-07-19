@@ -20,7 +20,7 @@ from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
 
 if TYPE_CHECKING:
-    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView
+    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults
 
 from pyfileconf.config.models.manager import ConfigManager
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar
@@ -140,14 +140,15 @@ class PipelineManager:
         else:
             return self._run_depending_on_settings(section_path_str_or_list)
 
-    def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]]):
+    def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
+                 collect_results: bool = True) -> 'IterativeResults':
         iterative_runner = IterativeRunner(
             section_path_str_or_list,
             config_updates,
             base_section_path_str=self.name,
             strip_manager_from_iv=True,
         )
-        return iterative_runner.run()
+        return iterative_runner.run(collect_results=collect_results)
 
     def _run_depending_on_settings(self, section_path_str_or_list: Union[str, List[str]]) -> ResultOrResults:
         if self.auto_pdb:

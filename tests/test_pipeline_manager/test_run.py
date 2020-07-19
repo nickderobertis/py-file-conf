@@ -152,6 +152,8 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         config_dicts = [cd]
         result = pipeline_manager.run_iter(iv, config_dicts)
         assert result == [((cd,), (None, 10))]
+        result = pipeline_manager.run_iter(iv, config_dicts, collect_results=False)
+        assert result == []
 
     def test_run_iter_function_multiple(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -171,6 +173,8 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         config_dicts = [cd, cd2]
         result = pipeline_manager.run_iter(iv, config_dicts)
         assert result == [((cd,), (2, 10)), ((cd2,), (None, 20))]
+        result = pipeline_manager.run_iter(iv, config_dicts, collect_results=False)
+        assert result == []
 
     def test_run_iter_function_multiple_pms(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -208,4 +212,6 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         result = runner.run()
         assert result == [((cd, cd3), [(2, 10), (1, 5)]), ((cd, cd4), [(2, 10), (None, 7)]),
                           ((cd2, cd3), [(None, 20), (1, 5)]), ((cd2, cd4), [(None, 20), (None, 7)])]
+        result = runner.run(collect_results=False)
+        assert result == []
 
