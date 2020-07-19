@@ -66,6 +66,7 @@ PACKAGE_INSTALL_REQUIRES = [
     'datacode',
     'IPython',
     'black',
+    'pluggy',
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
