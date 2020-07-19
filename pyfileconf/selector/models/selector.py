@@ -57,12 +57,9 @@ class Selector:
         if isinstance(result, pfc_types):
             if PipelineManager._file_is_currently_being_loaded and isinstance(result, item_types):
                 # This item is being accessed within another config
-                filepath = get_caller_filepath(caller_levels=3)
-                dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
+                full_sp = self._get_full_section_path_of_caller()
                 # Add the config where this item is
                 # being accessed as a dependent config of this item
-                dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
-                full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
                 PipelineManager.config_dependencies[item].add(full_sp)
             return True
 
@@ -85,6 +82,15 @@ class Selector:
         managers = list(self._managers.keys())
 
         return exposed_methods + managers
+
+    def _get_full_section_path_of_caller(self, caller_levels: int = 4) -> SectionPath:
+        from pyfileconf.main import PipelineManager
+
+        filepath = get_caller_filepath(caller_levels=caller_levels)
+        dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
+        dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
+        full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
+        return full_sp
 
     def _get_dir_for_section_path(self, section_path_str: str) -> List[str]:
         collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(
@@ -146,12 +152,9 @@ class Selector:
 
         if PipelineManager._file_is_currently_being_loaded:
             # This item is being accessed within another config
-            filepath = get_caller_filepath(caller_levels=4)
-            dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
+            full_sp = self._get_full_section_path_of_caller(caller_levels=5)
             # Add the config where this item is
             # being accessed as a dependent config of this item
-            dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
-            full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
             PipelineManager._config_attribute_dependencies[item].add(full_sp)
 
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)
