@@ -1,4 +1,5 @@
-from typing import Union, List, Any, TYPE_CHECKING
+from typing import Union, List, Any, TYPE_CHECKING, Tuple, Dict
+
 if TYPE_CHECKING:
     from pyfileconf.selector.models.itemview import ItemView
 
@@ -9,3 +10,4 @@ Results = List[Result]
 ResultOrResults = Union[Result, Results]
 StrOrView = Union[str, 'ItemView']
 RunnerArgs = Union[str, List[str], 'ItemView', List['ItemView']]
+IterativeResults = List[Tuple[Tuple[Dict[str, Any], ...], Tuple[Any]]]

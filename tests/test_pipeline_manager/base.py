@@ -1,9 +1,11 @@
 import os
-from typing import Optional
+from collections import defaultdict
+from typing import Optional, Dict, Set
 from unittest import TestCase
 
 from pyfileconf import PipelineManager
 from pyfileconf.main import create_project
+from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.utils import delete_project, nested_pipeline_dict_str_with_obj, pipeline_dict_str_with_obj, \
@@ -84,6 +86,7 @@ class PipelineManagerTestBase(TestCase):
     def teardown_method(self, method):
         delete_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
         delete_project(self.second_pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
+        self.reset_pm_class()
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(
@@ -95,6 +98,13 @@ class PipelineManagerTestBase(TestCase):
         all_kwargs.update(**kwargs)
         pipeline_manager = PipelineManager(**all_kwargs)
         return pipeline_manager
+
+    def reset_pm_class(self):
+        # Uncommenting this for some reason causes segmentation fault while running tests
+        # PipelineManager._active_managers = {}
+
+        PipelineManager._config_dependencies = defaultdict(lambda: set())
+        PipelineManager._file_is_currently_being_loaded = False
 
     def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):
         if file_path is None:
@@ -147,3 +157,22 @@ class PipelineManagerTestBase(TestCase):
 
     def write_error_to_specific_example_class_file(self):
         self.write_error_to_file(self.standard_specific_class_ec_path)
+
+    def append_to_a_function_config(self, to_add: str):
+        section_folder = os.path.join(self.defaults_path, 'stuff')
+        config_path = os.path.join(section_folder, 'a_function.py')
+        with open(config_path, 'a') as f:
+            f.write(to_add)
+
+    def append_to_example_class_config(self, to_add: str):
+        section_folder = os.path.join(self.defaults_path, 'stuff')
+        config_path = os.path.join(section_folder, 'ExampleClass.py')
+        with open(config_path, 'a') as f:
+            f.write(to_add)
+
+    def append_to_specific_class_config(self, to_add: str):
+        class_folder = os.path.join(self.defaults_path, 'example_class')
+        section_folder = os.path.join(class_folder, 'stuff')
+        config_path = os.path.join(section_folder, 'data.py')
+        with open(config_path, 'a') as f:
+            f.write(to_add)

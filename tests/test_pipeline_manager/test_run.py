@@ -1,4 +1,6 @@
 from pyfileconf import Selector
+from pyfileconf.iterate import IterativeRunner
+from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.amodule import SecondExampleClass
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
@@ -134,3 +136,111 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         assert ec.name == expect_sec.name == expect_ec.name
         assert ec.a == expect_ec.a
         assert sec.b == expect_sec.b
+
+
+class TestPipelineManagerRunIter(PipelineManagerTestBase):
+
+    def test_run_iter_function_single(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        cd = dict(
+            section_path_str='stuff.a_function',
+            b=10
+        )
+        config_dicts = [cd]
+        result = pipeline_manager.run_iter(iv, config_dicts)
+        assert result == [((cd,), (None, 10))]
+        result = pipeline_manager.run_iter(iv, config_dicts, collect_results=False)
+        assert result == []
+
+    def test_run_iter_function_multiple(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        cd = dict(
+            section_path_str='stuff.a_function',
+            b=10,
+            a=2
+        )
+        cd2 = dict(
+            section_path_str='stuff.a_function',
+            b=20
+        )
+        config_dicts = [cd, cd2]
+        result = pipeline_manager.run_iter(iv, config_dicts)
+        assert result == [((cd,), (2, 10)), ((cd2,), (None, 20))]
+        result = pipeline_manager.run_iter(iv, config_dicts, collect_results=False)
+        assert result == []
+
+    def test_run_iter_function_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 =sel.test_pipeline_manager2.stuff.a_function
+        cd = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=10,
+            a=2
+        )
+        cd2 = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=20
+        )
+        cd3 = dict(
+            section_path_str='test_pipeline_manager2.stuff.a_function',
+            b=5,
+            a=1
+        )
+        cd4 = dict(
+            section_path_str='test_pipeline_manager2.stuff.a_function',
+            b=7
+        )
+        config_dicts = [cd, cd2, cd3, cd4]
+        runner = IterativeRunner([iv, iv2], config_dicts)
+        result = runner.run()
+        assert result == [((cd, cd3), [(2, 10), (1, 5)]), ((cd, cd4), [(2, 10), (None, 7)]),
+                          ((cd2, cd3), [(None, 20), (1, 5)]), ((cd2, cd4), [(None, 20), (None, 7)])]
+        result = runner.run(collect_results=False)
+        assert result == []
+
+    def test_run_iter_function_dependent_on_other_pm_class(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        self.append_to_a_function_config('a = s.test_pipeline_manager2.example_class.stuff.data')
+        pipeline_manager.reload()
+        sel = Selector()
+        expected_a_result = ['a', 'b']
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        cd = dict(
+            a=expected_a_result,
+            section_path_str=iv2.section_path_str
+        )
+        config_dicts = [cd]
+        runner = IterativeRunner(iv, config_dicts)
+        result = runner.run()
+        assert result == [((cd,), (iv2, None))]
+        assert iv2.a == expected_a_result

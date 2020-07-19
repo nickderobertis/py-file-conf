@@ -8,3 +8,4 @@ dynamically updated, enabling powerful scripting.
 
 from pyfileconf.main import PipelineManager
 from pyfileconf.selector.models.selector import Selector
+from pyfileconf.iterate import IterativeRunner

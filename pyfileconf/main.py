@@ -15,11 +15,12 @@ from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
 from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
 from pyfileconf.dictfiles.modify import add_item_into_nested_dict_at_section_path, \
     create_dict_assignment_str_from_nested_dict_with_ast_names, pretty_format_str
+from pyfileconf.iterate import get_config_product, IterativeRunner
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
 
 if TYPE_CHECKING:
-    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView
+    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults
 
 from pyfileconf.config.models.manager import ConfigManager
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar
@@ -42,7 +43,7 @@ class PipelineManager:
     """
     _active_managers: Dict[str, 'PipelineManager'] = {}
     _config_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
-    _file_is_currently_being_loaded = False
+    _file_is_currently_being_loaded: bool = False
 
     def __init__(self, folder: str,
                  name: str= 'project',
@@ -85,11 +86,13 @@ class PipelineManager:
     def __dir__(self):
         exposed_methods = [
             'run',
+            'run_iter',
             'get',
             'update',
             'load',
             'reload',
             'refresh',
+            'reset',
         ]
         exposed_attrs = ['name'] + self.specific_class_names
         exposed = exposed_methods + exposed_attrs
@@ -136,6 +139,31 @@ class PipelineManager:
                 return self._run_depending_on_settings(section_path_str_or_list)
         else:
             return self._run_depending_on_settings(section_path_str_or_list)
+
+    def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
+                 collect_results: bool = True) -> 'IterativeResults':
+        """
+        Run one or multiple registered functions/sections multiple times, each time
+        updating the config with a combination of the passed config updates.
+
+        Aggregates the updates to each config, then takes the itertools product of all the config
+        updates to run the functions with each combination of the configs.
+
+        :param section_path_str_or_list: . separated name of path of function or section, or list thereof.
+            similar to how a function would be imported. e.g. 'main.data.summarize.summary_func1'
+            or when running multiple functions/sections, e.g. ['main.data', 'main.analysis.reg.1']
+        :param config_updates: list of kwarg dictionaries which would normally be provided to .update
+        :param collect_results: Whether to aggregate and return results, set to False to save memory
+            if results are stored in some other way
+        :return:
+        """
+        iterative_runner = IterativeRunner(
+            section_path_str_or_list,
+            config_updates,
+            base_section_path_str=self.name,
+            strip_manager_from_iv=True,
+        )
+        return iterative_runner.run(collect_results=collect_results)
 
     def _run_depending_on_settings(self, section_path_str_or_list: Union[str, List[str]]) -> ResultOrResults:
         if self.auto_pdb:
@@ -202,6 +230,18 @@ class PipelineManager:
     def get(self, section_path_str_or_view: 'StrOrView'):
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
         return self.runner.get(section_path_str)
+
+    def reset(self, section_path_str_or_view: 'StrOrView'):
+        """
+        Resets a function or section config to default.
+
+        To reset all configs, use .reload() instead.
+
+        :param section_path_str_or_view:
+        :return:
+        """
+        section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
+        self.config.reset(section_path_str)
 
     def reload(self) -> None:
         """

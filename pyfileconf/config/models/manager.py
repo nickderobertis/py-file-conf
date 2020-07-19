@@ -48,7 +48,7 @@ class ConfigManager(ReprMixin):
             raise ConfigManagerNotLoadedException('no config to refresh')
         config_obj.refresh()
 
-    def clear(self, section_path_str: str=None) -> None:
+    def reset(self, section_path_str: str=None) -> None:
         """
         Resets a function or section config to default. If no section_path_str is passed, resets local config.
 
@@ -207,7 +207,7 @@ class ConfigManager(ReprMixin):
             config_obj = _get_from_nested_obj_by_section_path(self, section_path)
             if isinstance(config_obj, ConfigSection):
                 return ConfigSection.from_files(filepath)
-            if isinstance(config_obj, ActiveFunctionConfigFile):
+            if isinstance(config_obj, (ActiveFunctionConfig, ActiveFunctionConfigFile)):
                 return ActiveFunctionConfig.from_file(filepath + '.py')
             else:
                 raise ValueError(f'expected section path to return ConfigSection or FunctionConfig, '
