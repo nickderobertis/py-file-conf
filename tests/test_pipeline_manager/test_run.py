@@ -1,4 +1,4 @@
-from pyfileconf import Selector
+from pyfileconf import Selector, PipelineManager
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.amodule import SecondExampleClass
@@ -253,3 +253,4 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         result = runner.run()
         assert result == [((cd,), (iv2, None))]
         assert iv2.a == expected_a_result
+        assert PipelineManager.config_dependencies == self.expect_pm_1_a_function_depends_on_pm_2_specific_class
