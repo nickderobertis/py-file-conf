@@ -39,6 +39,14 @@ pyfileconf.debug module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.iterate module
+-------------------------
+
+.. automodule:: pyfileconf.iterate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.main module
 ----------------------
 

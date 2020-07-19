@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.7.0 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.8.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
             
           
@@ -123,6 +123,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.debug">pyfileconf.debug module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.iterate">pyfileconf.iterate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.main">pyfileconf.main module</a></li>
 </ul>
 </li>
@@ -541,6 +542,117 @@ dynamically updated, enabling powerful scripting.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-pyfileconf.iterate">
+<span id="pyfileconf-iterate-module"></span><h2>pyfileconf.iterate module<a class="headerlink" href="#module-pyfileconf.iterate" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.iterate.IterativeRunner">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.iterate.</code><code class="sig-name descname">IterativeRunner</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class that enables running functions/sections with different combinations of config updates,
+even across multiple pipeline managers</p>
+<p>Run one or multiple registered functions/sections multiple times, each time
+updating the config with a combination of the passed config updates.</p>
+<p>Aggregates the updates to each config, then takes the itertools product of all the config
+updates to run the functions with each combination of the configs.</p>
+<dl class="method">
+<dt id="pyfileconf.iterate.IterativeRunner.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.iterate.IterativeRunner.params.section_path_str_or_list"></span><strong>section_path_str_or_list</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.params.section_path_str_or_list">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code></a>]]) – . separated name of path of function or section, or list thereof.
+similar to how a function would be imported. e.g. ‘main.data.summarize.summary_func1’
+or when running multiple functions/sections, e.g. [‘main.data’, ‘main.analysis.reg.1’]</p></li>
+<li><p><span class="target" id="pyfileconf.iterate.IterativeRunner.params.config_updates"></span><strong>config_updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.params.config_updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – list of kwarg dictionaries which would normally be provided to .update</p></li>
+<li><p><span class="target" id="pyfileconf.iterate.IterativeRunner.params.base_section_path_str"></span><strong>base_section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.params.base_section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – section path str to put at beginning of all passed section paths</p></li>
+<li><p><span class="target" id="pyfileconf.iterate.IterativeRunner.params.strip_manager_from_iv"></span><strong>strip_manager_from_iv</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.params.strip_manager_from_iv">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to remove manager name from any incoming item views</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.iterate.IterativeRunner.cases">
+<code class="sig-name descname">cases</code><em class="property">: List[Tuple[Dict[str, Any], ...]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.cases" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.iterate.IterativeRunner.config_updates">
+<code class="sig-name descname">config_updates</code><em class="property">: Sequence[Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.config_updates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.iterate.IterativeRunner.get_cases">
+<code class="sig-name descname">get_cases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.get_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.get_cases" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.iterate.IterativeRunner.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">collect_results=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.iterate.IterativeRunner.run.params.collect_results"></span><strong>collect_results</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.run.params.collect_results">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to aggregate and return results, set to False to save memory
+if results are stored in some other way</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.iterate.IterativeRunner.run_items">
+<code class="sig-name descname">run_items</code><em class="property">: List[SectionPath]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.iterate.get_config_product">
+<code class="sig-prename descclassname">pyfileconf.iterate.</code><code class="sig-name descname">get_config_product</code><span class="sig-paren">(</span><em class="sig-param">config_dicts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#get_config_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.get_config_product" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.iterate.get_config_product.params.config_dicts"></span><strong>config_dicts</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.get_config_product.params.config_dicts">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Examples</dt>
+<dd class="field-even"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cd</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">section_path_str</span><span class="o">=</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="o">=</span><span class="mi">10</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cd2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">section_path_str</span><span class="o">=</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="o">=</span><span class="mi">20</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cd3</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">section_path_str</span><span class="o">=</span><span class="s1">&#39;def&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="o">=</span><span class="mi">20</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cds</span> <span class="o">=</span> <span class="p">[</span><span class="n">cd</span><span class="p">,</span> <span class="n">cd2</span><span class="p">,</span> <span class="n">cd3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">get_config_product</span><span class="p">(</span><span class="n">cds</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="gp">... </span><span class="p">[({</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">:</span> <span class="s1">&#39;def&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}),</span>
+<span class="gp">... </span><span class="p">({</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">:</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span> <span class="p">{</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">:</span> <span class="s1">&#39;def&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">})]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-pyfileconf.main">
 <span id="pyfileconf-main-module"></span><h2>pyfileconf.main module<a class="headerlink" href="#module-pyfileconf.main" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -662,6 +774,21 @@ and updates configuration from files.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyfileconf.main.PipelineManager.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets a function or section config to default.</p>
+<p>To reset all configs, use .reload() instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.main.PipelineManager.reset.params.section_path_str_or_view"></span><strong>section_path_str_or_view</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.reset.params.section_path_str_or_view">¶</a> (<em>StrOrView</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyfileconf.main.PipelineManager.run">
 <code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use to run registered pipelines/functions/sections. Pass a single section path or a list
@@ -686,6 +813,33 @@ or when running multiple functions/sections, e.g.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.run_iter">
+<code class="sig-name descname">run_iter</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">collect_results=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run one or multiple registered functions/sections multiple times, each time
+updating the config with a combination of the passed config updates.</p>
+<p>Aggregates the updates to each config, then takes the itertools product of all the config
+updates to run the functions with each combination of the configs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_iter.params.section_path_str_or_list"></span><strong>section_path_str_or_list</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_iter.params.section_path_str_or_list">¶</a> (<em>RunnerArgs</em>) – . separated name of path of function or section, or list thereof.
+similar to how a function would be imported. e.g. ‘main.data.summarize.summary_func1’
+or when running multiple functions/sections, e.g. [‘main.data’, ‘main.analysis.reg.1’]</p></li>
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_iter.params.config_updates"></span><strong>config_updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_iter.params.config_updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – list of kwarg dictionaries which would normally be provided to .update</p></li>
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_iter.params.collect_results"></span><strong>collect_results</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_iter.params.collect_results">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to aggregate and return results, set to False to save memory
+if results are stored in some other way</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>IterativeResults</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
 </dd>
 </dl>
 </dd></dl>

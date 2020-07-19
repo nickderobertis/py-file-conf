@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models package &mdash; pyfileconf 0.7.0 documentation</title>
+  <title>pyfileconf.config.models package &mdash; pyfileconf 0.8.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
             
           
@@ -123,6 +123,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.debug">pyfileconf.debug module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.iterate">pyfileconf.iterate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.main">pyfileconf.main module</a></li>
 </ul>
 </li>
@@ -260,23 +261,6 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="pyfileconf.config.models.manager.ConfigManager.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets a function or section config to default. If no section_path_str is passed, resets local config.</p>
-<p>To reset all configs, use .load() instead.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>section_path_str:</p>
-</dd>
-</dl>
-<p>Returns:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.get">
 <code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles config inheritance to get the active config for a section or function</p>
@@ -316,6 +300,23 @@
 <dt id="pyfileconf.config.models.manager.ConfigManager.repr_cols">
 <code class="sig-name descname">repr_cols</code><em class="property"> = ['basepath', 'section']</em><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.repr_cols" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.config.models.manager.ConfigManager.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets a function or section config to default. If no section_path_str is passed, resets local config.</p>
+<p>To reset all configs, use .load() instead.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>section_path_str:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.set">

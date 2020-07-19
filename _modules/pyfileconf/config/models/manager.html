@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.7.0 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.8.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
             
           
@@ -213,7 +213,7 @@
             <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to refresh&#39;</span><span class="p">)</span>
         <span class="n">config_obj</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ConfigManager.clear"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ConfigManager.reset"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resets a function or section config to default. If no section_path_str is passed, resets local config.</span>
 
@@ -372,7 +372,7 @@
             <span class="n">config_obj</span> <span class="o">=</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_obj</span><span class="p">,</span> <span class="n">ConfigSection</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">ConfigSection</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_obj</span><span class="p">,</span> <span class="n">ActiveFunctionConfigFile</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config_obj</span><span class="p">,</span> <span class="p">(</span><span class="n">ActiveFunctionConfig</span><span class="p">,</span> <span class="n">ActiveFunctionConfigFile</span><span class="p">)):</span>
                 <span class="k">return</span> <span class="n">ActiveFunctionConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">filepath</span> <span class="o">+</span> <span class="s1">&#39;.py&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected section path to return ConfigSection or FunctionConfig, &#39;</span>
