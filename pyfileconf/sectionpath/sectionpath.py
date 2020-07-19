@@ -1,4 +1,4 @@
-from typing import List, Union, TYPE_CHECKING, Sequence, Optional
+from typing import List, Union, TYPE_CHECKING, Sequence, Optional, cast
 
 if TYPE_CHECKING:
     from pyfileconf.selector.models.itemview import ItemView
@@ -40,6 +40,7 @@ class SectionPath(ReprMixin):
     def from_ambiguous(cls, item: Union[str, 'ItemView', 'SectionPath'], strip_manager_from_iv: bool = False):
         from pyfileconf.selector.models.itemview import _is_item_view
         if _is_item_view(item):
+            item = cast(ItemView, item)
             sp = cls(item.section_path_str)
             if strip_manager_from_iv:
                 relative_section_path = cls.from_section_str_list(sp[1:])
@@ -59,8 +60,10 @@ class SectionPath(ReprMixin):
         base_section_path_str: Optional[str] = None,
         strip_manager_from_iv: bool = False
     ) -> List['SectionPath']:
-        items_list = items
-        if not isinstance(items, (list, tuple)):
+        if isinstance(items, (list, tuple)):
+            items_list = items
+        else:
+            items = cast(Union[str, 'ItemView', 'SectionPath'], items)
             items_list = [items]
 
         sp_results: List[SectionPath] = []

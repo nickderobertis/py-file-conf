@@ -143,7 +143,7 @@ def _get_configs_by_section_path_dict(config_dicts: Sequence[Dict[str, Any]]) ->
         ...       {'section_path_str': 'abc', 'a': 20}],
         ...      'def': [{'section_path_str': 'def', 'a': 20}]})
     """
-    combined_dicts = defaultdict(lambda: [])
+    combined_dicts: Dict[str, List[Dict[str, Any]]] = defaultdict(lambda: [])
     for config_dict in config_dicts:
         conf = deepcopy(config_dict)
         sp = conf['section_path_str']
