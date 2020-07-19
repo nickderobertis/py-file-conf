@@ -40,7 +40,7 @@ class SectionPath(ReprMixin):
     def from_ambiguous(cls, item: Union[str, 'ItemView', 'SectionPath'], strip_manager_from_iv: bool = False):
         from pyfileconf.selector.models.itemview import _is_item_view
         if _is_item_view(item):
-            item = cast(ItemView, item)
+            item = cast('ItemView', item)
             sp = cls(item.section_path_str)
             if strip_manager_from_iv:
                 relative_section_path = cls.from_section_str_list(sp[1:])
