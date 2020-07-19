@@ -18,6 +18,15 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == (None, None)
 
+    def test_run_function_multiple(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        result = pipeline_manager.run([iv, iv])
+        assert result == [(None, None), (None, None)]
+
     def test_run_function_multiple_pms(self):
         self.write_a_function_to_pipeline_dict_file()
         self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)

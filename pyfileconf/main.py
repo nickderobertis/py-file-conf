@@ -15,9 +15,12 @@ from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
 from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
 from pyfileconf.dictfiles.modify import add_item_into_nested_dict_at_section_path, \
     create_dict_assignment_str_from_nested_dict_with_ast_names, pretty_format_str
-from pyfileconf.iterate import get_config_product, IterativeRunner
+from pyfileconf.iterate import IterativeRunner
+from pyfileconf.logic.combine import \
+    combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
+from pyfileconf.plugin import manager
 
 if TYPE_CHECKING:
     from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults
@@ -132,13 +135,20 @@ class PipelineManager:
         Returns: result or list of results
 
         """
-        section_path_str_or_list = self._convert_list_or_single_item_view_or_str_to_strs(section_path_str_or_list)
+        str_or_list_only: Union[str, List[str]] = self._convert_list_or_single_item_view_or_str_to_strs(
+            section_path_str_or_list
+        )
+        additional_items = manager.plm.hook.pyfileconf_pre_run(section_path_str_or_list=section_path_str_or_list)
+        # Will be converted into list always
+        str_or_list_only = combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item(
+            str_or_list_only, additional_items
+        )
 
         if self.log_folder is not None:
             with stdout_also_logged(self.log_folder):
-                return self._run_depending_on_settings(section_path_str_or_list)
+                return self._run_depending_on_settings(str_or_list_only)
         else:
-            return self._run_depending_on_settings(section_path_str_or_list)
+            return self._run_depending_on_settings(str_or_list_only)
 
     def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
                  collect_results: bool = True) -> 'IterativeResults':
