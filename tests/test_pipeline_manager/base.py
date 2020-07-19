@@ -78,6 +78,21 @@ class PipelineManagerTestBase(TestCase):
     )
     test_name = 'test_pipeline_manager'
     second_test_name = 'test_pipeline_manager2'
+    expect_pm_1_a_function_depends_on_pm_1_specific_class = {
+        'test_pipeline_manager.example_class.stuff.data': {SectionPath('test_pipeline_manager.stuff.a_function')}
+    }
+    expect_pm_1_a_function_depends_on_pm_2_a_function = {
+        'test_pipeline_manager2.stuff.a_function': {SectionPath('test_pipeline_manager.stuff.a_function')}
+    }
+    expect_pm_1_a_function_depends_on_pm_2_specific_class = {
+        'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.stuff.a_function')}
+    }
+    expect_pm_1_class_depends_on_pm_2_class = {
+        'test_pipeline_manager2.stuff.ExampleClass': {SectionPath('test_pipeline_manager.stuff.ExampleClass')}
+    }
+    expect_pm_1_specific_class_depends_on_pm_2_specific_class = {
+        'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.example_class.stuff.data')}
+    }
 
     def setup_method(self, method):
         create_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
@@ -103,7 +118,8 @@ class PipelineManagerTestBase(TestCase):
         # Uncommenting this for some reason causes segmentation fault while running tests
         # PipelineManager._active_managers = {}
 
-        PipelineManager._config_dependencies = defaultdict(lambda: set())
+        PipelineManager.config_dependencies = defaultdict(lambda: set())
+        PipelineManager._config_attribute_dependencies = defaultdict(lambda: set())
         PipelineManager._file_is_currently_being_loaded = False
 
     def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):

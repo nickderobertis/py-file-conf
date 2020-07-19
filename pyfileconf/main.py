@@ -44,8 +44,9 @@ class PipelineManager:
     """
     Main class for managing flow-based programming and configuration.
     """
+    config_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
     _active_managers: Dict[str, 'PipelineManager'] = {}
-    _config_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
+    _config_attribute_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
     _file_is_currently_being_loaded: bool = False
 
     def __init__(self, folder: str,
@@ -299,7 +300,7 @@ class PipelineManager:
         # Dependent configs are determined in Selector._get_real_item
         if section_path_str:
             full_sp = SectionPath.join(self.name, section_path_str)
-            for dependent_sp in self.__class__._config_dependencies[full_sp.path_str]:
+            for dependent_sp in self.__class__._config_attribute_dependencies[full_sp.path_str]:
                 manager = self.__class__.get_manager_by_section_path_str(dependent_sp.path_str)
                 relative_section_path = SectionPath('.'.join(dependent_sp[1:]))
                 manager.refresh(relative_section_path.path_str)

@@ -19,6 +19,8 @@ class Selector:
         self._is_selector = True
 
     def __contains__(self, item):
+        from pyfileconf.main import PipelineManager
+
         if not isinstance(item, (str, SectionPath)):
             warnings.warn('check for if non-str object in Selector will always return False')
             return False
@@ -47,8 +49,21 @@ class Selector:
         #
         # it would make this check safer
 
-        item_types = (SpecificClassCollection, Pipeline, PipelineCollection, Callable, ObjectView, collection_obj.klass)
-        if isinstance(result, item_types):
+        item_types = (Pipeline, Callable, ObjectView)
+        if collection_obj.klass is not None:
+            item_types = item_types + (collection_obj.klass,)
+        collection_types = (SpecificClassCollection, PipelineCollection)
+        pfc_types = collection_types + item_types
+        if isinstance(result, pfc_types):
+            if PipelineManager._file_is_currently_being_loaded and isinstance(result, item_types):
+                # This item is being accessed within another config
+                filepath = get_caller_filepath(caller_levels=3)
+                dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
+                # Add the config where this item is
+                # being accessed as a dependent config of this item
+                dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
+                full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
+                PipelineManager.config_dependencies[item].add(full_sp)
             return True
 
         return False
@@ -137,7 +152,7 @@ class Selector:
             # being accessed as a dependent config of this item
             dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
             full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
-            PipelineManager._config_dependencies[item].add(full_sp)
+            PipelineManager._config_attribute_dependencies[item].add(full_sp)
 
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)
 

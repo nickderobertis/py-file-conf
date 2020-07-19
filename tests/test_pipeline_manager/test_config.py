@@ -1,7 +1,7 @@
 import os
 from copy import deepcopy
 
-from pyfileconf import Selector
+from pyfileconf import Selector, PipelineManager
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.amodule import SecondExampleClass
 from tests.input_files.mypackage.cmodule import ExampleClass
@@ -106,6 +106,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager.run(iv2)
         assert result == (None, iv2)
         assert result[1]() == (None, expected_b_result)
+        assert PipelineManager.config_dependencies == self.expect_pm_1_a_function_depends_on_pm_2_a_function
 
     def test_config_update_class(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -206,6 +207,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == expect_1
         assert ec.a().a == expected_a_result
+        assert PipelineManager.config_dependencies == self.expect_pm_1_class_depends_on_pm_2_class
 
     def test_create_update_from_specific_class_dict(self):
         self.write_example_class_dict_to_file()
@@ -324,6 +326,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
         assert ec == expect_1
         assert ec.a.a == expected_a_result
+        assert PipelineManager.config_dependencies == self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
 
     def test_create_update_from_specific_class_dict_multiple_dependent_attribute_pms(self):
         self.write_example_class_dict_to_file()
@@ -362,6 +365,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
         assert ec == expect_1
         assert ec.a == expected_a_result
+        assert PipelineManager.config_dependencies == self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
 
     def test_create_update_from_multiple_specific_class_dicts_same(self):
         self.write_example_class_dict_to_file()  # example_class
@@ -626,6 +630,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert result_none is None
         assert result_sc.name == sc.name == expect_sc.name
         assert result_sc.a == sc.a == expect_sc.a
+        assert PipelineManager.config_dependencies == self.expect_pm_1_a_function_depends_on_pm_1_specific_class
 
     def test_config_update_function_by_item_view(self):
         self.write_a_function_to_pipeline_dict_file()
