@@ -142,6 +142,21 @@ class PipelineManager:
 
     def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
                  collect_results: bool = True) -> 'IterativeResults':
+        """
+        Run one or multiple registered functions/sections multiple times, each time
+        updating the config with a combination of the passed config updates.
+
+        Aggregates the updates to each config, then takes the itertools product of all the config
+        updates to run the functions with each combination of the configs.
+
+        :param section_path_str_or_list: . separated name of path of function or section, or list thereof.
+            similar to how a function would be imported. e.g. 'main.data.summarize.summary_func1'
+            or when running multiple functions/sections, e.g. ['main.data', 'main.analysis.reg.1']
+        :param config_updates: list of kwarg dictionaries which would normally be provided to .update
+        :param collect_results: Whether to aggregate and return results, set to False to save memory
+            if results are stored in some other way
+        :return:
+        """
         iterative_runner = IterativeRunner(
             section_path_str_or_list,
             config_updates,
