@@ -11,25 +11,6 @@ from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONF
 
 class TestPipelineManagerConfig(PipelineManagerTestBase):
 
-    def append_to_a_function_config(self, to_add: str):
-        section_folder = os.path.join(self.defaults_path, 'stuff')
-        config_path = os.path.join(section_folder, 'a_function.py')
-        with open(config_path, 'a') as f:
-            f.write(to_add)
-
-    def append_to_example_class_config(self, to_add: str):
-        section_folder = os.path.join(self.defaults_path, 'stuff')
-        config_path = os.path.join(section_folder, 'ExampleClass.py')
-        with open(config_path, 'a') as f:
-            f.write(to_add)
-
-    def append_to_specific_class_config(self, to_add: str):
-        class_folder = os.path.join(self.defaults_path, 'example_class')
-        section_folder = os.path.join(class_folder, 'stuff')
-        config_path = os.path.join(section_folder, 'data.py')
-        with open(config_path, 'a') as f:
-            f.write(to_add)
-
     def test_config_update_function(self):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()

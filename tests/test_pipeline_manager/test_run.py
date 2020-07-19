@@ -1,5 +1,6 @@
 from pyfileconf import Selector
 from pyfileconf.iterate import IterativeRunner
+from pyfileconf.sectionpath.sectionpath import SectionPath
 from tests.input_files.amodule import SecondExampleClass
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
@@ -215,3 +216,31 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         result = runner.run(collect_results=False)
         assert result == []
 
+    def test_run_iter_function_dependent_on_other_pm_class(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_example_class_dict_to_file(pm_index=1)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager2.load()
+        self.append_to_a_function_config('a = s.test_pipeline_manager2.example_class.stuff.data')
+        pipeline_manager.reload()
+        sel = Selector()
+        expected_a_result = ['a', 'b']
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+
+        # Assert that update pipeline manager 2 affects pipeline manager 1
+        cd = dict(
+            a=expected_a_result,
+            section_path_str=iv2.section_path_str
+        )
+        config_dicts = [cd]
+        runner = IterativeRunner(iv, config_dicts)
+        result = runner.run()
+        assert result == [((cd,), (iv2, None))]
+        assert iv2.a == expected_a_result

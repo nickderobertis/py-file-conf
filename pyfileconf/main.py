@@ -43,7 +43,7 @@ class PipelineManager:
     """
     _active_managers: Dict[str, 'PipelineManager'] = {}
     _config_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
-    _file_is_currently_being_loaded = False
+    _file_is_currently_being_loaded: bool = False
 
     def __init__(self, folder: str,
                  name: str= 'project',
