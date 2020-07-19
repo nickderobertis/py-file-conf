@@ -15,6 +15,7 @@ from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
 from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
 from pyfileconf.dictfiles.modify import add_item_into_nested_dict_at_section_path, \
     create_dict_assignment_str_from_nested_dict_with_ast_names, pretty_format_str
+from pyfileconf.iterate import get_config_product
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
 
@@ -85,11 +86,13 @@ class PipelineManager:
     def __dir__(self):
         exposed_methods = [
             'run',
+            'run_iter',
             'get',
             'update',
             'load',
             'reload',
             'refresh',
+            'reset',
         ]
         exposed_attrs = ['name'] + self.specific_class_names
         exposed = exposed_methods + exposed_attrs
@@ -136,6 +139,19 @@ class PipelineManager:
                 return self._run_depending_on_settings(section_path_str_or_list)
         else:
             return self._run_depending_on_settings(section_path_str_or_list)
+
+    def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]]):
+        config_cases = get_config_product(config_updates)
+        all_results = []
+        for case in config_cases:
+            for config_dict in case:
+                self.reset(config_dict['section_path_str'])
+                self.update(**config_dict)
+            result = self.run(section_path_str_or_list)
+            in_out_tup = (case, result)
+            all_results.append(in_out_tup)
+        return all_results
+
 
     def _run_depending_on_settings(self, section_path_str_or_list: Union[str, List[str]]) -> ResultOrResults:
         if self.auto_pdb:
@@ -202,6 +218,18 @@ class PipelineManager:
     def get(self, section_path_str_or_view: 'StrOrView'):
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
         return self.runner.get(section_path_str)
+
+    def reset(self, section_path_str_or_view: 'StrOrView'):
+        """
+        Resets a function or section config to default.
+
+        To reset all configs, use .reload() instead.
+
+        :param section_path_str_or_view:
+        :return:
+        """
+        section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
+        self.config.reset(section_path_str)
 
     def reload(self) -> None:
         """

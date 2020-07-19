@@ -134,3 +134,39 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         assert ec.name == expect_sec.name == expect_ec.name
         assert ec.a == expect_ec.a
         assert sec.b == expect_sec.b
+
+
+class TestPipelineManagerRunIter(PipelineManagerTestBase):
+
+    def test_run_iter_function_single(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        cd = dict(
+            section_path_str='stuff.a_function',
+            b=10
+        )
+        config_dicts = [cd]
+        result = pipeline_manager.run_iter(iv, config_dicts)
+        assert result == [((cd,), (None, 10))]
+
+    def test_run_iter_function_multiple(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        cd = dict(
+            section_path_str='stuff.a_function',
+            b=10,
+            a=2
+        )
+        cd2 = dict(
+            section_path_str='stuff.a_function',
+            b=20
+        )
+        config_dicts = [cd, cd2]
+        result = pipeline_manager.run_iter(iv, config_dicts)
+        assert result == [((cd,), (2, 10)), ((cd2,), (None, 20))]
