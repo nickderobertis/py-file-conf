@@ -1,7 +1,3 @@
-import pluggy
-from pyfileconf.plugin import hookspecs, default_hooks
+from pyfileconf.plugin.manager_utils import get_plugin_manager
 
-plm = pluggy.PluginManager("pyfileconf")
-plm.add_hookspecs(hookspecs)
-plm.load_setuptools_entrypoints("eggsample")
-plm.register(default_hooks)
+plm = get_plugin_manager()

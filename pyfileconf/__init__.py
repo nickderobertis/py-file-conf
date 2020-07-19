@@ -9,3 +9,4 @@ from pyfileconf.main import PipelineManager
 from pyfileconf.selector.models.selector import Selector
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.plugin.impl import hookimpl
+from pyfileconf.plugin.manager_utils import reset_plugins, remove_default_plugins

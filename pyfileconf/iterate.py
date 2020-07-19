@@ -3,7 +3,7 @@ from collections import defaultdict
 from copy import deepcopy
 from typing import List, Dict, Any, Tuple, Sequence, Optional
 
-from pyfileconf.plugin.manager import plm
+from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import RunnerArgs, IterativeResults
 from pyfileconf.sectionpath.sectionpath import SectionPath
 
@@ -52,8 +52,9 @@ class IterativeRunner:
     def get_cases(self) -> List[Tuple[Dict[str, Any], ...]]:
         cases_lol: List[
             List[Tuple[Dict[str, Any], ...]]
-        ] = plm.hook.pyfileconf_iter_get_cases(config_updates=self.config_updates)
+        ] = manager.plm.hook.pyfileconf_iter_get_cases(config_updates=self.config_updates)
         cases = list(itertools.chain(*cases_lol))
+        manager.plm.hook.pyfileconf_iter_modify_cases(cases=cases)
         return cases
 
     def run(self, collect_results: bool = True) -> IterativeResults:
