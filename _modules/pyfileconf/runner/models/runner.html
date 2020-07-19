@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.8.0 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.9.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -174,8 +174,11 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.config</span> <span class="kn">import</span> <span class="n">ConfigManagerNotLoadedException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.registrar</span> <span class="kn">import</span> <span class="n">NoRegistrarWithNameException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logic.combine</span> <span class="kn">import</span> \
+    <span class="n">combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.registrar</span> <span class="kn">import</span> <span class="n">PipelineRegistrar</span><span class="p">,</span> <span class="n">PipelineCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_public_name_or_special_name</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.plugin</span> <span class="kn">import</span> <span class="n">manager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">StrOrListOfStrs</span><span class="p">,</span>
     <span class="n">Result</span><span class="p">,</span>
@@ -267,13 +270,23 @@
 <span class="sd">        Returns: result or list of results</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">multiple_results</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="c1"># Running single function/pipeline</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span> <span class="k">for</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="n">section_path_str_or_list</span><span class="p">]</span>
+            <span class="n">multiple_results</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span> <span class="k">for</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="n">section_path_str_or_list</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;must pass str or list of strs of section paths to Runner.run&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;must pass str or list of strs of section paths to Runner.run&#39;</span><span class="p">)</span>
+
+        <span class="n">additional_results</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_post_run</span><span class="p">(</span><span class="n">results</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">additional_results</span> <span class="ow">and</span> <span class="n">multiple_results</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">additional_results</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">additional_results</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">multiple_results</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">result</span><span class="p">,</span> <span class="o">*</span><span class="n">additional_results</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
 
     <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResultOrResults</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>

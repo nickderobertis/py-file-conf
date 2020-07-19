@@ -23,6 +23,7 @@ Subpackages
    pyfileconf.logic
    pyfileconf.mixins
    pyfileconf.pipelines
+   pyfileconf.plugin
    pyfileconf.runner
    pyfileconf.sectionpath
    pyfileconf.selector

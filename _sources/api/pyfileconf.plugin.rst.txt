@@ -1,0 +1,51 @@
+pyfileconf.plugin package
+=========================
+
+.. automodule:: pyfileconf.plugin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.plugin.default\_hooks module
+---------------------------------------
+
+.. automodule:: pyfileconf.plugin.default_hooks
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.plugin.hookspecs module
+----------------------------------
+
+.. automodule:: pyfileconf.plugin.hookspecs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.plugin.impl module
+-----------------------------
+
+.. automodule:: pyfileconf.plugin.impl
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.plugin.manager module
+--------------------------------
+
+.. automodule:: pyfileconf.plugin.manager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.plugin.manager\_utils module
+---------------------------------------
+
+.. automodule:: pyfileconf.plugin.manager_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

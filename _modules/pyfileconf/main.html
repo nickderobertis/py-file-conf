@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.8.0 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.9.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.8.0
+                0.9.0
               </div>
             
           
@@ -180,9 +180,12 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.debug</span> <span class="kn">import</span> <span class="n">pdb_post_mortem_or_passed_debug_fn</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.dictfiles.modify</span> <span class="kn">import</span> <span class="n">add_item_into_nested_dict_at_section_path</span><span class="p">,</span> \
     <span class="n">create_dict_assignment_str_from_nested_dict_with_ast_names</span><span class="p">,</span> <span class="n">pretty_format_str</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">get_config_product</span><span class="p">,</span> <span class="n">IterativeRunner</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">IterativeRunner</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logic.combine</span> <span class="kn">import</span> \
+    <span class="n">combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.dictconfig</span> <span class="kn">import</span> <span class="n">PipelineDictConfig</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.plugin</span> <span class="kn">import</span> <span class="n">manager</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">StrOrView</span><span class="p">,</span> <span class="n">IterativeResults</span>
@@ -297,13 +300,20 @@
 <span class="sd">        Returns: result or list of results</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">section_path_str_or_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_list_or_single_item_view_or_str_to_strs</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+        <span class="n">str_or_list_only</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_list_or_single_item_view_or_str_to_strs</span><span class="p">(</span>
+            <span class="n">section_path_str_or_list</span>
+        <span class="p">)</span>
+        <span class="n">additional_items</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_pre_run</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="o">=</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+        <span class="c1"># Will be converted into list always</span>
+        <span class="n">str_or_list_only</span> <span class="o">=</span> <span class="n">combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item</span><span class="p">(</span>
+            <span class="n">str_or_list_only</span><span class="p">,</span> <span class="n">additional_items</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">stdout_also_logged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">str_or_list_only</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">str_or_list_only</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.run_iter"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.run_iter">[docs]</a>    <span class="k">def</span> <span class="nf">run_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">,</span> <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
                  <span class="n">collect_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;IterativeResults&#39;</span><span class="p">:</span>

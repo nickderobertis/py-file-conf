@@ -9,6 +9,14 @@ pyfileconf.logic package
 Submodules
 ----------
 
+pyfileconf.logic.combine module
+-------------------------------
+
+.. automodule:: pyfileconf.logic.combine
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.logic.get module
 ---------------------------
 
