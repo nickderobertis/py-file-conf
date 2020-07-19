@@ -1,3 +1,6 @@
+"""
+Default behavior to be run on hooks
+"""
 from typing import Any, Dict, Sequence, List, Tuple
 
 from pyfileconf.plugin.impl import hookimpl

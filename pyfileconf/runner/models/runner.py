@@ -9,8 +9,11 @@ from pyfileconf.config.models.manager import ConfigManager, ActiveFunctionConfig
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
 from pyfileconf.exceptions.registrar import NoRegistrarWithNameException
+from pyfileconf.logic.combine import \
+    combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from pyfileconf.logic.get import _get_public_name_or_special_name
+from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import (
     StrOrListOfStrs,
     Result,
@@ -102,13 +105,23 @@ class Runner(ReprMixin):
         Returns: result or list of results
 
         """
+        multiple_results = False
         if isinstance(section_path_str_or_list, str):
             # Running single function/pipeline
-            return self._run(section_path_str_or_list)
+            result = self._run(section_path_str_or_list)
         elif isinstance(section_path_str_or_list, list):
-            return [self._run(section_path_str) for section_path_str in section_path_str_or_list]
+            multiple_results = True
+            result = [self._run(section_path_str) for section_path_str in section_path_str_or_list]
         else:
             raise ValueError('must pass str or list of strs of section paths to Runner.run')
+
+        additional_results = manager.plm.hook.pyfileconf_post_run(results=result)
+        if additional_results and multiple_results:
+            result.extend(additional_results)
+        elif additional_results and not multiple_results:
+            result = [result, *additional_results]
+
+        return result
 
     def _run(self, section_path_str: str) -> ResultOrResults:
         """
