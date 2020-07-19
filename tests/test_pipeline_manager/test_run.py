@@ -1,4 +1,5 @@
 from pyfileconf import Selector
+from pyfileconf.iterate import IterativeRunner
 from tests.input_files.amodule import SecondExampleClass
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
@@ -170,3 +171,41 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         config_dicts = [cd, cd2]
         result = pipeline_manager.run_iter(iv, config_dicts)
         assert result == [((cd,), (2, 10)), ((cd2,), (None, 20))]
+
+    def test_run_iter_function_multiple_pms(self):
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 =sel.test_pipeline_manager2.stuff.a_function
+        cd = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=10,
+            a=2
+        )
+        cd2 = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=20
+        )
+        cd3 = dict(
+            section_path_str='test_pipeline_manager2.stuff.a_function',
+            b=5,
+            a=1
+        )
+        cd4 = dict(
+            section_path_str='test_pipeline_manager2.stuff.a_function',
+            b=7
+        )
+        config_dicts = [cd, cd2, cd3, cd4]
+        runner = IterativeRunner([iv, iv2], config_dicts)
+        result = runner.run()
+        assert result == [((cd, cd3), [(2, 10), (1, 5)]), ((cd, cd4), [(2, 10), (None, 7)]),
+                          ((cd2, cd3), [(None, 20), (1, 5)]), ((cd2, cd4), [(None, 20), (None, 7)])]
+

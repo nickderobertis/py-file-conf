@@ -15,7 +15,7 @@ from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
 from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
 from pyfileconf.dictfiles.modify import add_item_into_nested_dict_at_section_path, \
     create_dict_assignment_str_from_nested_dict_with_ast_names, pretty_format_str
-from pyfileconf.iterate import get_config_product
+from pyfileconf.iterate import get_config_product, IterativeRunner
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
 
@@ -141,17 +141,13 @@ class PipelineManager:
             return self._run_depending_on_settings(section_path_str_or_list)
 
     def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]]):
-        config_cases = get_config_product(config_updates)
-        all_results = []
-        for case in config_cases:
-            for config_dict in case:
-                self.reset(config_dict['section_path_str'])
-                self.update(**config_dict)
-            result = self.run(section_path_str_or_list)
-            in_out_tup = (case, result)
-            all_results.append(in_out_tup)
-        return all_results
-
+        iterative_runner = IterativeRunner(
+            section_path_str_or_list,
+            config_updates,
+            base_section_path_str=self.name,
+            strip_manager_from_iv=True,
+        )
+        return iterative_runner.run()
 
     def _run_depending_on_settings(self, section_path_str_or_list: Union[str, List[str]]) -> ResultOrResults:
         if self.auto_pdb:

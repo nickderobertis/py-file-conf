@@ -1,4 +1,7 @@
-from typing import List, Union
+from typing import List, Union, TYPE_CHECKING, Sequence, Optional
+
+if TYPE_CHECKING:
+    from pyfileconf.selector.models.itemview import ItemView
 import os
 
 from mixins.repr import ReprMixin
@@ -32,6 +35,42 @@ class SectionPath(ReprMixin):
     def from_section_str_list(cls, section_strs: List[str]):
         section_path = _section_strs_to_section_path_str(section_strs)
         return cls(section_path)
+
+    @classmethod
+    def from_ambiguous(cls, item: Union[str, 'ItemView', 'SectionPath'], strip_manager_from_iv: bool = False):
+        from pyfileconf.selector.models.itemview import _is_item_view
+        if _is_item_view(item):
+            sp = cls(item.section_path_str)
+            if strip_manager_from_iv:
+                relative_section_path = cls.from_section_str_list(sp[1:])
+                return relative_section_path
+            else:
+                return sp
+        if isinstance(item, cls):
+            return item
+        if isinstance(item, str):
+            return cls(item)
+        raise ValueError(f'cannot parse {item} of type {item} to create SectionPath')
+
+    @classmethod
+    def list_from_ambiguous(
+        cls,
+        items: Union[str, 'ItemView', 'SectionPath', Sequence[Union[str, 'ItemView', 'SectionPath']]],
+        base_section_path_str: Optional[str] = None,
+        strip_manager_from_iv: bool = False
+    ) -> List['SectionPath']:
+        items_list = items
+        if not isinstance(items, (list, tuple)):
+            items_list = [items]
+
+        sp_results: List[SectionPath] = []
+        for item in items_list:
+            sp = SectionPath.from_ambiguous(item, strip_manager_from_iv=strip_manager_from_iv)
+            if base_section_path_str is not None:
+                sp = SectionPath.join(base_section_path_str, sp)
+            sp_results.append(sp)
+
+        return sp_results
 
     @classmethod
     def join(cls, section_path_1: SectionPathOrStr, section_path_2: SectionPathOrStr):
