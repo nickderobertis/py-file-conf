@@ -20,7 +20,7 @@ from pyfileconf.logic.combine import \
     combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
-from pyfileconf.plugin import manager
+from pyfileconf.plugin import manager as plugin_manager
 
 if TYPE_CHECKING:
     from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults
@@ -139,7 +139,9 @@ class PipelineManager:
         str_or_list_only: Union[str, List[str]] = self._convert_list_or_single_item_view_or_str_to_strs(
             section_path_str_or_list
         )
-        additional_items = manager.plm.hook.pyfileconf_pre_run(section_path_str_or_list=section_path_str_or_list)
+        additional_items = plugin_manager.plm.hook.pyfileconf_pre_run(
+            section_path_str_or_list=section_path_str_or_list, pm=self
+        )
         # Will be converted into list always
         str_or_list_only = combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item(
             str_or_list_only, additional_items
@@ -294,6 +296,15 @@ class PipelineManager:
         :param kwargs: kwarg updates
         :return:
         """
+        new_updates_list: List[Dict[str, Any]] = plugin_manager.plm.hook.pyfileconf_pre_update(
+            pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
+        )
+        new_updates_dict: Dict[str, Any] = {k: v for d in new_updates_list for k, v in d.items()}
+        if new_updates_dict:
+            if d is not None:
+                d.update(new_updates_dict)
+            kwargs.update(new_updates_dict)
+
         self.runner.update(d, section_path_str, **kwargs)
 
         # Refresh any configs which are dependent on attributes of this config
@@ -304,6 +315,10 @@ class PipelineManager:
                 manager = self.__class__.get_manager_by_section_path_str(dependent_sp.path_str)
                 relative_section_path = SectionPath('.'.join(dependent_sp[1:]))
                 manager.refresh(relative_section_path.path_str)
+
+        plugin_manager.plm.hook.pyfileconf_post_update(
+            pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
+        )
 
     def refresh(self, section_path_str: str):
         """

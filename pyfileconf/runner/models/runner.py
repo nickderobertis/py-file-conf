@@ -115,7 +115,7 @@ class Runner(ReprMixin):
         else:
             raise ValueError('must pass str or list of strs of section paths to Runner.run')
 
-        additional_results = manager.plm.hook.pyfileconf_post_run(results=result)
+        additional_results = manager.plm.hook.pyfileconf_post_run(results=result, runner=self)
         if additional_results and multiple_results:
             result.extend(additional_results)
         elif additional_results and not multiple_results:
