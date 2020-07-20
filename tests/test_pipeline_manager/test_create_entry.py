@@ -186,10 +186,17 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         with open(class_path, 'r') as f:
             contents = f.read()
             self.assert_example_class_dict_config_file_contents(contents)
+
         ec = sel.test_pipeline_manager.example_class.thing.data
+        result = pipeline_manager.run(ec)
+        assert result == 'woo'
+
         expect_ec = ExampleClass(name='data', a=expected_a_result)
-        assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        got_ec = ec.item
+        assert ec.name == expect_ec.name == got_ec.name
+        assert ec.a == expect_ec.a == got_ec.a
+
+
 
     def test_create_deeply_nested_entry_for_function(self):
         self.write_a_function_to_pipeline_dict_file()
