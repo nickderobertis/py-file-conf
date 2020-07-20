@@ -312,8 +312,6 @@ class Runner(ReprMixin):
             elif callable(section_or_callable):
                 # get function
                 results.append(self._get_one_func_with_config(subsection_path_str))
-            elif self._is_specific_class(section_or_callable):
-                results.append(self._get_one_obj_with_config(subsection_path_str))
             else:
                 raise ValueError(f'could not get section {subsection_path_str}. expected Collection or '
                                  f'function or specific class,'
@@ -326,13 +324,18 @@ class Runner(ReprMixin):
 
         full_func = partial(func, **config_dict)
 
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return full_func
 
     def _get_one_pipeline_with_config(self, section_path_str: str) -> Pipeline:
         pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
-        return pipeline_class(**config_dict)  # type: ignore
+        obj = pipeline_class(**config_dict)  # type: ignore
+
+        self._add_to_config_dependencies_if_necessary(section_path_str)
+
+        return obj
 
     def _get_one_obj_with_config(self, section_path_str: str) -> Type:
         if section_path_str in self._loaded_objects:
@@ -343,6 +346,7 @@ class Runner(ReprMixin):
         obj = klass(**config_dict)
 
         self._loaded_objects[section_path_str] = obj
+        self._add_to_config_dependencies_if_necessary(section_path_str)
 
         return obj
 
@@ -363,7 +367,7 @@ class Runner(ReprMixin):
                 if not lookup_in_registrar_section_path:
                     # Was looking up registrar collection itself
                     return registrar.collection
-                # Looking up within registrary
+                # Looking up within registrar
                 return registrar.get(lookup_in_registrar_section_path)
 
         # Try to return from general registrar
@@ -428,3 +432,17 @@ class Runner(ReprMixin):
 
     def _is_specific_class(self, obj: Any) -> bool:
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
+
+    def _add_to_config_dependencies(self, section_path_str: str):
+        from pyfileconf.main import PipelineManager
+        full_sp_str = SectionPath.join(self._manager_name, section_path_str).path_str
+        running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
+        PipelineManager._config_attribute_dependencies[full_sp_str].add(running_sp)
+        PipelineManager.config_dependencies[full_sp_str].add(running_sp)
+
+    def _add_to_config_dependencies_if_necessary(self, section_path_str: str):
+        from pyfileconf.main import PipelineManager
+        # If this happened while running another item, add to dependencies
+        if PipelineManager._currently_running_section_path_str is not None:
+            self._add_to_config_dependencies(section_path_str)
+
