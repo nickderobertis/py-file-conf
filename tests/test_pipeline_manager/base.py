@@ -93,15 +93,12 @@ class PipelineManagerTestBase(TestCase):
     expect_pm_1_specific_class_depends_on_pm_2_specific_class = {
         'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.example_class.stuff.data')}
     }
-    expect_pm_1_specific_class_depends_on_pm_1_specific_class_2_and_3 = {
-        'test_pipeline_manager.example_class.stuff.data2': {
-            SectionPath('test_pipeline_manager.example_class.stuff.data')},
-        'test_pipeline_manager.example_class.stuff.data3': {
-            SectionPath('test_pipeline_manager.example_class.stuff.data')},
-    }
-    expect_pm_1_specific_class_depends_on_pm_1_specific_class_3 = {
-        'test_pipeline_manager.example_class.stuff.data3': {
-            SectionPath('test_pipeline_manager.example_class.stuff.data')},
+    expect_pm_1_specific_class_depends_on_pm_1_specific_class_3_class_1_2_function_1_2 = {
+        'test_pipeline_manager.example_class.stuff.data3': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
+        'test_pipeline_manager.ec.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
+        'test_pipeline_manager.ec2.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
+        'test_pipeline_manager.af.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
+        'test_pipeline_manager.af2.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
     }
 
     def setup_method(self, method):
@@ -127,6 +124,10 @@ class PipelineManagerTestBase(TestCase):
     def reset_pm_class(self):
         # Uncommenting this for some reason causes segmentation fault while running tests
         # PipelineManager._active_managers = {}
+        # Instead, remove the managers explicitly
+        for pm_name in [self.test_name, self.second_test_name]:
+            if pm_name in PipelineManager._active_managers:
+                del PipelineManager._active_managers[pm_name]
 
         PipelineManager.config_dependencies = defaultdict(lambda: set())
         PipelineManager._config_attribute_dependencies = defaultdict(lambda: set())

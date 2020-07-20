@@ -3,7 +3,7 @@ from copy import deepcopy
 from pyfileconf import Selector, PipelineManager
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from tests.input_files.amodule import SecondExampleClass
+from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
     DIFFERENT_CLASS_CONFIG_DICT_LIST
@@ -136,11 +136,17 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         pipeline_manager.load()
         pipeline_manager.create('example_class.stuff.data2')
         pipeline_manager.create('example_class.stuff.data3')
+        pipeline_manager.create('ec', ExampleClass)
+        pipeline_manager.create('ec2', ExampleClass)
+        pipeline_manager.create('ec3', ExampleClass)
+        pipeline_manager.create('af', a_function)
+        pipeline_manager.create('af2', a_function)
+        pipeline_manager.create('af3', a_function)
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
         assert PipelineManager.config_dependencies == PipelineManager._config_attribute_dependencies \
-               == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_3
+               == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_3_class_1_2_function_1_2
 
     def test_create_from_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()
