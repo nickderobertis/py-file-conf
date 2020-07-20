@@ -28,18 +28,20 @@ from pyfileconf.pipelines.models.interfaces import (
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.config.logic.write import dict_as_function_kwarg_str
 from pyfileconf.basemodels.pipeline import Pipeline
+from pyfileconf.tracing import RunningTracker
 from pyfileconf.views.object import ObjectView
 
 class Runner(ReprMixin):
     repr_cols = ['_config', '_pipelines']
 
-
-    def __init__(self, config: ConfigManager, registrars: Sequence[Registrar], general_registrar: PipelineRegistrar):
+    def __init__(self, config: ConfigManager, registrars: Sequence[Registrar], general_registrar: PipelineRegistrar,
+                 name: str):
         self._config = config
         self._registrars = registrars
         self._general_registrar = general_registrar
-        self._full_getattr = ''
+        self._manager_name = name
 
+        self._full_getattr = ''
         self._all_specific_classes = tuple([registrar.klass for registrar in self._registrars])
         self._specific_class_registrar_map = {registrar.klass: registrar for registrar in self._registrars}
         self._loaded_objects: Dict[str, Any] = {}
@@ -190,46 +192,50 @@ class Runner(ReprMixin):
 
 
     def _run_one_func(self, section_path_str: str) -> Result:
-        func, config_dict = self._get_func_and_config(section_path_str)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            func, config_dict = self._get_func_and_config(section_path_str)
 
-        print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-        result = func(**config_dict)
-        print(f'Result:\n{result}\n')
+            print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            result = func(**config_dict)
+            print(f'Result:\n{result}\n')
 
         return result
 
     def _run_one_class(self, section_path_str: str) -> Result:
-        klass, config_dict = self._get_func_and_config(section_path_str)
-        obj = klass(**config_dict)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            klass, config_dict = self._get_func_and_config(section_path_str)
+            obj = klass(**config_dict)
 
-        print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-        result = obj()
-        print(f'Result:\n{result}\n')
+            print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            result = obj()
+            print(f'Result:\n{result}\n')
 
         return result
 
     def _run_one_specific_class(self, section_path_str: str) -> Result:
-        klass, config_dict = self._get_class_and_config(section_path_str)
-        obj = klass(**config_dict)
-        registrar = self._specific_class_registrar_map[klass]
-        execute_attr = registrar.execute_attr
-        func = getattr(obj, execute_attr)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            klass, config_dict = self._get_class_and_config(section_path_str)
+            obj = klass(**config_dict)
+            registrar = self._specific_class_registrar_map[klass]
+            execute_attr = registrar.execute_attr
+            func = getattr(obj, execute_attr)
 
-        print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-        result = func()
-        print(f'Result:\n{result}\n')
+            print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            result = func()
+            print(f'Result:\n{result}\n')
 
         return result
 
     def _run_one_pipeline(self, section_path_str: str) -> Result:
-        pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
-        # Construct new pipeline instance with config args
-        configured_pipeline = pipeline_class(**config_dict)  # type: ignore
+            # Construct new pipeline instance with config args
+            configured_pipeline = pipeline_class(**config_dict)  # type: ignore
 
-        print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
-        result = configured_pipeline.execute()
-        print(f'Result:\n{result}\n')
+            print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
+            result = configured_pipeline.execute()
+            print(f'Result:\n{result}\n')
 
         return configured_pipeline
 

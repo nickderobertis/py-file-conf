@@ -139,8 +139,8 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
-        assert PipelineManager.config_dependencies == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_2_and_3
-        assert PipelineManager._config_attribute_dependencies == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_3
+        assert PipelineManager.config_dependencies == PipelineManager._config_attribute_dependencies \
+               == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_3
 
     def test_create_from_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()

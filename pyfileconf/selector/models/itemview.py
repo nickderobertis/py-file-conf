@@ -1,5 +1,6 @@
 from typing import cast
 
+from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.selector.logic.exc.typo import (
     handle_pipeline_manager_not_loaded_or_typo,
     handle_known_typo_at_end_of_section_path_str,
@@ -23,6 +24,7 @@ class ItemView:
         self._is_item_view = True
 
     def __getattr__(self, item):
+        from pyfileconf.main import PipelineManager
         full_section_path_str = self.section_path_str + '.' + item
         if full_section_path_str in self.selector:
             # This is an item, return an item view for it
@@ -50,12 +52,21 @@ class ItemView:
             return handle_known_typo_after_pipeline_manager_name(full_section_path_str)
 
         try:
-            return getattr(actual_item, item)
+            result = getattr(actual_item, item)
         except (KeyError, AttributeError) as e:
             ### TEMP - having issues with _is_selector
             raise e
             ### END TEMP
             return handle_known_typo_at_end_of_section_path_str(full_section_path_str)
+
+        # Got attribute of actual item
+        # If this happened while running another item, add to dependencies
+        if PipelineManager._currently_running_section_path_str is not None:
+            running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
+            PipelineManager._config_attribute_dependencies[self.section_path_str].add(running_sp)
+            PipelineManager.config_dependencies[self.section_path_str].add(running_sp)
+
+        return result
 
     def __setattr__(self, key: str, value):
         # Set these items on ItemView itself
