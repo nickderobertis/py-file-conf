@@ -61,10 +61,7 @@ class ItemView:
 
         # Got attribute of actual item
         # If this happened while running another item, add to dependencies
-        if PipelineManager._currently_running_section_path_str is not None:
-            running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
-            PipelineManager._config_attribute_dependencies[self.section_path_str].add(running_sp)
-            PipelineManager.config_dependencies[self.section_path_str].add(running_sp)
+        self._add_to_config_dependencies_if_necessary()
 
         return result
 
@@ -92,6 +89,8 @@ class ItemView:
     def __call__(self, *args, **kwargs):
         # When calling, assume user always wants the real item
         actual_item = self.selector._get_real_item(self.section_path_str)
+        # If this happened while running another item, add to dependencies
+        self._add_to_config_dependencies_if_necessary()
         return actual_item(*args, **kwargs)
 
     def __deepcopy__(self, memodict={}):
@@ -124,6 +123,18 @@ class ItemView:
     @property
     def item(self):
         return self.selector._get_real_item(self.section_path_str)
+
+    def _add_to_config_dependencies(self):
+        from pyfileconf.main import PipelineManager
+        running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
+        PipelineManager._config_attribute_dependencies[self.section_path_str].add(running_sp)
+        PipelineManager.config_dependencies[self.section_path_str].add(running_sp)
+
+    def _add_to_config_dependencies_if_necessary(self):
+        from pyfileconf.main import PipelineManager
+        # If this happened while running another item, add to dependencies
+        if PipelineManager._currently_running_section_path_str is not None:
+            self._add_to_config_dependencies()
 
 
 def _is_item_view(obj) -> bool:
