@@ -90,7 +90,7 @@ class Registrar(ReprMixin):
                     always_import_strs=self.always_import_strs, klass=self.klass,
                     key_attr=self.key_attr, execute_attr=self.execute_attr
                 )
-                setattr(obj, section, new_collection)
+                obj.append(new_collection)
                 obj = getattr(obj, section)
 
         # Now have collection object which should hold this final object
