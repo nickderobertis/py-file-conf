@@ -60,8 +60,9 @@ class Runner(ReprMixin):
             return self
         else:
             # Got function or Pipeline, return the function or pipeline itself
-            configured_func_or_pipeline = self.get(self._full_getattr)
+            full_getattr = self._full_getattr
             self._full_getattr = ''  # found the item, reset for next time
+            configured_func_or_pipeline = self.get(full_getattr)
             return configured_func_or_pipeline
 
     # TODO [#16]: this may work once __getattr__ works with sections
