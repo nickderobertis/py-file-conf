@@ -29,7 +29,6 @@ class PipelineCollection(Collection):
         if isinstance(item, PipelineCollection):
             # no processing needed for collections, just items
             return item
-
         # If item, convert to object view
         return ObjectView.from_ast_and_imports(item, self.imports)
 

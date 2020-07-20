@@ -1,3 +1,4 @@
+import ast
 import sys
 import os
 import traceback
@@ -10,6 +11,7 @@ from copy import deepcopy
 from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict, Set
 
 from pyfileconf.basemodels.registrar import Registrar
+from pyfileconf.data.logic.convert import convert_to_empty_obj_if_necessary
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
 from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
@@ -24,6 +26,7 @@ from pyfileconf.logic.combine import \
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.pipelines.models.dictconfig import PipelineDictConfig
 from pyfileconf.plugin import manager as plugin_manager
+from pyfileconf.views.object import ObjectView
 
 if TYPE_CHECKING:
     from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults
@@ -246,7 +249,7 @@ class PipelineManager:
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
         return self.runner.get(section_path_str)
 
-    def reset(self, section_path_str_or_view: 'StrOrView'):
+    def reset(self, section_path_str_or_view: 'StrOrView', allow_create: bool = False):
         """
         Resets a function or section config to default.
 
@@ -256,7 +259,7 @@ class PipelineManager:
         :return:
         """
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
-        self.config.reset(section_path_str)
+        self.config.reset(section_path_str, allow_create=allow_create)
 
     def reload(self) -> None:
         """
@@ -350,14 +353,36 @@ class PipelineManager:
             if func_or_class is not None:
                 raise ValueError('only pass func_or_class when targeting main pipeline dict, not specific class dict')
             self._create_specific_class_dict_entry(section_path)
+            full_sp = section_path
+            registrar = self._registrar_dict[section_path[0]]
+            klass = registrar.collection.klass
+            if klass is None:
+                raise ValueError(f'must have specific class set, got None for class in {registrar}')
+            key_attr = registrar.collection.key_attr
+            registrar_obj = convert_to_empty_obj_if_necessary(section_path[-1], klass, key_attr=key_attr)
+            set_section_path_str = SectionPath.from_section_str_list(section_path[1:-1]).path_str
+            scaffold_path_str = SectionPath.from_section_str_list(section_path[1:]).path_str
         else:
             # Got path for main pipeline dict, add to main pipeline dict
             if func_or_class is None:
                 raise ValueError('when adding creating item in main pipeline dict, must pass function or class')
             self._create_pipeline_dict_entry(section_path, func_or_class)
+            name = func_or_class.__name__
+            full_sp = SectionPath.join(section_path, name)
+            mod, import_base = get_module_and_name_imported_from(func_or_class)
+            obj_import = ObjectImportStatement([name], import_base)
+            item = ast.Name(id=name)
+            imports = ImportStatementContainer([obj_import])
+            registrar_obj = ObjectView.from_ast_and_imports(item, imports)
+            if self._general_registrar is None:
+                raise ValueError('general registrar must be defined')
+            registrar = self._general_registrar
+            set_section_path_str = section_path_str
+            scaffold_path_str = full_sp.path_str
 
-        # TODO [#64]: create items without reloading by inserting directly into registrar and config manager
-        self.reload()
+        registrar.set(set_section_path_str, registrar_obj)
+        registrar.scaffold_config_for(scaffold_path_str)
+        self.reset(full_sp.path_str, allow_create=True)
 
     @classmethod
     def get_manager_by_filepath(cls, filepath: str) -> 'PipelineManager':
@@ -514,6 +539,16 @@ class PipelineManager:
         current_manager_under_this_key = self._active_managers[self.name]
         if current_manager_under_this_key is self:
             del self._active_managers[self.name]
+
+    @property
+    def _registrar_dict(self) -> Dict[str, Registrar]:
+        if self._general_registrar is None:
+            raise ValueError('general registrar must be defined')
+        rd: Dict[str, Registrar] = {'general': self._general_registrar}
+        if self._registrars is not None:
+            for registrar in self._registrars:
+                rd[registrar.name] = registrar
+        return rd
 
 
 def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func: Callable = lambda x: x,

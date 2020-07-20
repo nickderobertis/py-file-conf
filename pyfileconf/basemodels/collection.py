@@ -69,6 +69,14 @@ class Collection(Container, ReprMixin):
         self._items = items
         self._set_name_map()  # need to recreate pipeline map when items change
 
+    def append(self, item):
+        self._items.append(item)
+        self._set_name_map()
+
+    def extend(self, items):
+        self._items.extend(items)
+        self._set_name_map()
+
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str = None,
                   imports: ImportStatementContainer = None, always_import_strs: Optional[Sequence[str]] = None,
