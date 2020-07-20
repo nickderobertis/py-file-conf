@@ -28,18 +28,20 @@ from pyfileconf.pipelines.models.interfaces import (
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.config.logic.write import dict_as_function_kwarg_str
 from pyfileconf.basemodels.pipeline import Pipeline
+from pyfileconf.tracing import RunningTracker
 from pyfileconf.views.object import ObjectView
 
 class Runner(ReprMixin):
     repr_cols = ['_config', '_pipelines']
 
-
-    def __init__(self, config: ConfigManager, registrars: Sequence[Registrar], general_registrar: PipelineRegistrar):
+    def __init__(self, config: ConfigManager, registrars: Sequence[Registrar], general_registrar: PipelineRegistrar,
+                 name: str):
         self._config = config
         self._registrars = registrars
         self._general_registrar = general_registrar
-        self._full_getattr = ''
+        self._manager_name = name
 
+        self._full_getattr = ''
         self._all_specific_classes = tuple([registrar.klass for registrar in self._registrars])
         self._specific_class_registrar_map = {registrar.klass: registrar for registrar in self._registrars}
         self._loaded_objects: Dict[str, Any] = {}
@@ -190,47 +192,51 @@ class Runner(ReprMixin):
 
 
     def _run_one_func(self, section_path_str: str) -> Result:
-        func, config_dict = self._get_func_and_config(section_path_str)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            func, config_dict = self._get_func_and_config(section_path_str)
 
-        print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-        result = func(**config_dict)
-        print(f'Result:\n{result}\n')
-
+            print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            result = func(**config_dict)
+            print(f'Result:\n{result}\n')
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
     def _run_one_class(self, section_path_str: str) -> Result:
-        klass, config_dict = self._get_func_and_config(section_path_str)
-        obj = klass(**config_dict)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            klass, config_dict = self._get_func_and_config(section_path_str)
+            obj = klass(**config_dict)
 
-        print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-        result = obj()
-        print(f'Result:\n{result}\n')
-
+            print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            result = obj()
+            print(f'Result:\n{result}\n')
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
     def _run_one_specific_class(self, section_path_str: str) -> Result:
-        klass, config_dict = self._get_class_and_config(section_path_str)
-        obj = klass(**config_dict)
-        registrar = self._specific_class_registrar_map[klass]
-        execute_attr = registrar.execute_attr
-        func = getattr(obj, execute_attr)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            klass, config_dict = self._get_class_and_config(section_path_str)
+            obj = klass(**config_dict)
+            registrar = self._specific_class_registrar_map[klass]
+            execute_attr = registrar.execute_attr
+            func = getattr(obj, execute_attr)
 
-        print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-        result = func()
-        print(f'Result:\n{result}\n')
-
+            print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            result = func()
+            print(f'Result:\n{result}\n')
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
     def _run_one_pipeline(self, section_path_str: str) -> Result:
-        pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
+        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+            pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
-        # Construct new pipeline instance with config args
-        configured_pipeline = pipeline_class(**config_dict)  # type: ignore
+            # Construct new pipeline instance with config args
+            configured_pipeline = pipeline_class(**config_dict)  # type: ignore
 
-        print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
-        result = configured_pipeline.execute()
-        print(f'Result:\n{result}\n')
-
+            print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
+            result = configured_pipeline.execute()
+            print(f'Result:\n{result}\n')
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return configured_pipeline
 
     def get(self, section_path_str: str):
@@ -306,8 +312,6 @@ class Runner(ReprMixin):
             elif callable(section_or_callable):
                 # get function
                 results.append(self._get_one_func_with_config(subsection_path_str))
-            elif self._is_specific_class(section_or_callable):
-                results.append(self._get_one_obj_with_config(subsection_path_str))
             else:
                 raise ValueError(f'could not get section {subsection_path_str}. expected Collection or '
                                  f'function or specific class,'
@@ -320,13 +324,18 @@ class Runner(ReprMixin):
 
         full_func = partial(func, **config_dict)
 
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return full_func
 
     def _get_one_pipeline_with_config(self, section_path_str: str) -> Pipeline:
         pipeline_class, config_dict = self._get_pipeline_and_config(section_path_str)
 
         # Construct new pipeline instance with config args
-        return pipeline_class(**config_dict)  # type: ignore
+        obj = pipeline_class(**config_dict)  # type: ignore
+
+        self._add_to_config_dependencies_if_necessary(section_path_str)
+
+        return obj
 
     def _get_one_obj_with_config(self, section_path_str: str) -> Type:
         if section_path_str in self._loaded_objects:
@@ -337,6 +346,7 @@ class Runner(ReprMixin):
         obj = klass(**config_dict)
 
         self._loaded_objects[section_path_str] = obj
+        self._add_to_config_dependencies_if_necessary(section_path_str)
 
         return obj
 
@@ -357,7 +367,7 @@ class Runner(ReprMixin):
                 if not lookup_in_registrar_section_path:
                     # Was looking up registrar collection itself
                     return registrar.collection
-                # Looking up within registrary
+                # Looking up within registrar
                 return registrar.get(lookup_in_registrar_section_path)
 
         # Try to return from general registrar
@@ -422,3 +432,19 @@ class Runner(ReprMixin):
 
     def _is_specific_class(self, obj: Any) -> bool:
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
+
+    def _add_to_config_dependencies(self, section_path_str: str):
+        from pyfileconf.main import PipelineManager
+        if PipelineManager._currently_running_section_path_str is None:
+            raise ValueError('should not call _add_to_config_dependencies when not currently running')
+        full_sp_str = SectionPath.join(self._manager_name, section_path_str).path_str
+        running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
+        PipelineManager._config_attribute_dependencies[full_sp_str].add(running_sp)
+        PipelineManager.config_dependencies[full_sp_str].add(running_sp)
+
+    def _add_to_config_dependencies_if_necessary(self, section_path_str: str):
+        from pyfileconf.main import PipelineManager
+        # If this happened while running another item, add to dependencies
+        if PipelineManager._currently_running_section_path_str is not None:
+            self._add_to_config_dependencies(section_path_str)
+

@@ -2,6 +2,9 @@ from dataclasses import dataclass
 from typing import Optional, TYPE_CHECKING
 import typing
 import collections
+
+from pyfileconf import Selector
+
 if TYPE_CHECKING:
     from traceback import TracebackException
 import pathlib
@@ -45,3 +48,34 @@ class ExampleClass:
 
     def my_call(self):
         return 'woo2'
+
+    def dependent_call(self):
+        from pyfileconf.main import PipelineManager
+        # Get active pipeline manager
+        assert len(PipelineManager._active_managers) == 1
+        manager = list(PipelineManager._active_managers.values())[0]
+
+        s = Selector()
+        # Specific classes
+        # Access ItemView - should not be dependency
+        obj = s.test_pipeline_manager.example_class.stuff.data2
+        # Access attr
+        a = s.test_pipeline_manager.example_class.stuff.data3.a
+
+        # Classes
+        # Call ItemView
+        b = s.test_pipeline_manager.ec.ExampleClass()
+        # Get by PM
+        c = manager.get(s.test_pipeline_manager.ec2.ExampleClass)
+        # Access ItemView - should not be dependency
+        f = s.test_pipeline_manager.ec3.ExampleClass
+
+        # Functions
+        # Call function
+        d = s.test_pipeline_manager.af.a_function()
+        # Run by PM
+        e = manager.run(s.test_pipeline_manager.af2.a_function)
+        # Access ItemView - should not be dependency
+        g = s.test_pipeline_manager.af3.a_function
+        return obj, a, b, c, d, e, f, g
+

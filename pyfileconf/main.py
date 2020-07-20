@@ -53,6 +53,7 @@ class PipelineManager:
     _active_managers: Dict[str, 'PipelineManager'] = {}
     _config_attribute_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
     _file_is_currently_being_loaded: bool = False
+    _currently_running_section_path_str: Optional[str] = None
 
     def __init__(self, folder: str,
                  name: str= 'project',
@@ -501,7 +502,12 @@ class PipelineManager:
         self.config = ConfigManager(self.default_config_path)
         self.config.load()
 
-        self.runner = Runner(config=self.config, registrars=self._registrars, general_registrar=self._general_registrar)
+        self.runner = Runner(
+            config=self.config,
+            registrars=self._registrars,
+            general_registrar=self._general_registrar,
+            name=self.name,
+        )
 
     def _wipe_loaded_modules(self):
         [sys.modules.pop(module) for module in self._loaded_modules]
