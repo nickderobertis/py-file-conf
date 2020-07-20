@@ -188,13 +188,13 @@ class ConfigManager(ReprMixin):
     def _set_func_or_config_with_create(self, section_path: SectionPath, value: Any):
         obj = self
         section_basepath = self.basepath
-        for i, section in enumerate(section_path):
+        for i, section in enumerate(section_path[:-1]):
             section_basepath = os.path.join(section_basepath, section)
             try:
                 obj = getattr(obj, section)
             except KeyError as e:
                 new_section = ConfigSection([], name=section)
-                setattr(obj, section, new_section)
+                obj.append(new_section)
                 obj = getattr(obj, section)
 
         # Now have collection object which should hold this final object
