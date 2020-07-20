@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.debug &mdash; pyfileconf 0.9.5 documentation</title>
+  <title>pyfileconf.interfaces &mdash; pyfileconf 0.9.5 documentation</title>
   
 
   
@@ -147,7 +147,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>pyfileconf.debug</li>
+      <li>pyfileconf.interfaces</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,33 +162,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyfileconf.debug</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+  <h1>Source code for pyfileconf.interfaces</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">TypedDict</span>
 
 
-<div class="viewcode-block" id="pdb_post_mortem_or_passed_debug_fn"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.debug.pdb_post_mortem_or_passed_debug_fn">[docs]</a><span class="k">def</span> <span class="nf">pdb_post_mortem_or_passed_debug_fn</span><span class="p">(</span>
-    <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">debug_fn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">debug_fn</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">debug_fn</span><span class="p">:</span>
-            <span class="n">post_mortem</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">post_mortem</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">debug_fn</span><span class="o">=</span><span class="n">debug_fn</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="post_mortem"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.debug.post_mortem">[docs]</a><span class="k">def</span> <span class="nf">post_mortem</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">debug_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Post-mortem, using a custom debug function if passed</span>
-
-<span class="sd">    :param debug_fn:</span>
-<span class="sd">    :return:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">debug_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pdb</span>
-
-        <span class="n">debug_fn</span> <span class="o">=</span> <span class="n">pdb</span><span class="o">.</span><span class="n">post_mortem</span>
-
-    <span class="n">debug_fn</span><span class="p">()</span></div>
+<span class="n">SpecificClassConfigDict</span> <span class="o">=</span> <span class="n">TypedDict</span><span class="p">(</span>
+    <span class="s2">&quot;SpecificClassConfigDict&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span>
+        <span class="s2">&quot;always_import_strs&quot;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="s2">&quot;always_assign_strs&quot;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="s2">&quot;key_attr&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="s2">&quot;execute_attr&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">total</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
 </pre></div>
 
            </div>

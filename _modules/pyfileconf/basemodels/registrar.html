@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.9.4 documentation</title>
+  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.9.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.4
+                0.9.5
               </div>
             
           
@@ -178,7 +178,7 @@
 <div class="viewcode-block" id="Registrar.__init__"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                 <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">execute_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span> <span class="o">=</span> <span class="n">basepath</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -186,7 +186,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span> <span class="o">=</span> <span class="n">always_import_strs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span> <span class="o">=</span> <span class="n">always_assign_strs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">klass</span> <span class="o">=</span> <span class="n">klass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span> <span class="o">=</span> <span class="n">key_attr</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span> <span class="o">=</span> <span class="n">key_attr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute_attr</span> <span class="o">=</span> <span class="n">execute_attr</span></div>
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
@@ -207,17 +208,17 @@
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">imports</span><span class="p">:</span> <span class="n">ImportStatementContainer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                   <span class="n">always_assign_strs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">klass</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                  <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                  <span class="n">key_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">execute_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
         <span class="n">collection</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">collection_class</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
             <span class="n">dict_</span><span class="p">,</span> <span class="n">basepath</span><span class="o">=</span><span class="n">basepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="n">imports</span><span class="p">,</span>
             <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
-            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
+            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span><span class="p">,</span> <span class="n">execute_attr</span><span class="o">=</span><span class="n">execute_attr</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">collection</span><span class="p">,</span> <span class="n">basepath</span><span class="o">=</span><span class="n">basepath</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
             <span class="n">always_assign_strs</span><span class="o">=</span><span class="n">always_assign_strs</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="n">klass</span><span class="p">,</span>
-            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span>
+            <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span><span class="p">,</span> <span class="n">execute_attr</span><span class="o">=</span><span class="n">execute_attr</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Registrar.scaffold_config"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.scaffold_config">[docs]</a>    <span class="k">def</span> <span class="nf">scaffold_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

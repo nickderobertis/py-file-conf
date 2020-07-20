@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.9.4 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.9.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.4
+                0.9.5
               </div>
             
           
@@ -204,8 +204,7 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span><span class="p">,</span> \
     <span class="n">NoPipelineManagerForFilepathException</span><span class="p">,</span> <span class="n">NoPipelineManagerForSectionPathException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logger</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
-
-<span class="n">SpecificClassConfigDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.interfaces</span> <span class="kn">import</span> <span class="n">SpecificClassConfigDict</span>
 
 
 <div class="viewcode-block" id="PipelineManager"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager">[docs]</a><span class="k">class</span> <span class="nc">PipelineManager</span><span class="p">:</span>
