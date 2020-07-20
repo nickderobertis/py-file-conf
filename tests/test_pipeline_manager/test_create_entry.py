@@ -27,6 +27,24 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             contents = f.read()
             self.assert_a_function_config_file_contents(contents)
 
+    def test_create_entry_for_previously_unimported_function(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager.create('thing', a_function)
+        sel = Selector()
+        iv = sel.test_pipeline_manager.thing.a_function
+        module_folder = os.path.join(self.defaults_path, 'thing')
+        function_path = os.path.join(module_folder, 'a_function.py')
+        with open(function_path, 'r') as f:
+            contents = f.read()
+            self.assert_a_function_config_file_contents(contents)
+        module_folder = os.path.join(self.defaults_path, 'stuff')
+        class_path = os.path.join(module_folder, 'ExampleClass.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_config_file_contents(contents)
+
     def test_create_entry_for_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -34,6 +52,24 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         pipeline_manager.create('thing', ExampleClass)
         sel = Selector()
         iv = sel.test_pipeline_manager.thing.ExampleClass
+        module_folder = os.path.join(self.defaults_path, 'thing')
+        class_path = os.path.join(module_folder, 'ExampleClass.py')
+        with open(class_path, 'r') as f:
+            contents = f.read()
+            self.assert_example_class_config_file_contents(contents)
+
+    def test_create_entry_for_previously_unimported_class(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager.create('thing', ExampleClass)
+        sel = Selector()
+        iv = sel.test_pipeline_manager.thing.ExampleClass
+        module_folder = os.path.join(self.defaults_path, 'stuff')
+        function_path = os.path.join(module_folder, 'a_function.py')
+        with open(function_path, 'r') as f:
+            contents = f.read()
+            self.assert_a_function_config_file_contents(contents)
         module_folder = os.path.join(self.defaults_path, 'thing')
         class_path = os.path.join(module_folder, 'ExampleClass.py')
         with open(class_path, 'r') as f:

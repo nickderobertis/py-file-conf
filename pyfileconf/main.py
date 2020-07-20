@@ -15,6 +15,9 @@ from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
 from pyfileconf.debug import pdb_post_mortem_or_passed_debug_fn
 from pyfileconf.dictfiles.modify import add_item_into_nested_dict_at_section_path, \
     create_dict_assignment_str_from_nested_dict_with_ast_names, pretty_format_str
+from pyfileconf.imports.logic.load.name import get_module_and_name_imported_from
+from pyfileconf.imports.models.statements.container import ImportStatementContainer
+from pyfileconf.imports.models.statements.obj import ObjectImportStatement
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.logic.combine import \
     combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item
@@ -424,6 +427,10 @@ class PipelineManager:
         pipeline_dict_file = PipelineDictFile(self.pipeline_dict_path, name='pipeline_dict')
         pipeline_dict = pipeline_dict_file.load()
 
+        mod, import_base = get_module_and_name_imported_from(func_or_class)
+        obj_import = ObjectImportStatement([func_or_class.__name__], import_base)
+        imports = ImportStatementContainer([obj_import])
+
         # Modify pipeline dict to add entry
         add_item_into_nested_dict_at_section_path(pipeline_dict, section_path, func_or_class.__name__)
 
@@ -434,6 +441,7 @@ class PipelineManager:
             dict(pipeline_dict=pipeline_dict_str),
             name='pipeline_dict',
             _file=pipeline_dict_file,
+            imports=imports
         )
         pipeline_dict_file.save(pipeline_dict_config)
 
