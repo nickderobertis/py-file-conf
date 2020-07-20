@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.9.2 documentation</title>
+  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.9.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
             
           
@@ -166,7 +166,12 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Contains the hooks which may be attached to in creating plugins</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">pyfileconf.runner.models.runner</span> <span class="kn">import</span> <span class="n">Runner</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
 
 <span class="kn">import</span> <span class="nn">pluggy</span>
 
@@ -200,7 +205,9 @@
 
 
 <div class="viewcode-block" id="pyfileconf_pre_run"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_run">[docs]</a><span class="nd">@hookspec</span>
-<span class="k">def</span> <span class="nf">pyfileconf_pre_run</span><span class="p">(</span><span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="n">RunnerArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunnerArgs</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">pyfileconf_pre_run</span><span class="p">(</span>
+    <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">pm</span><span class="p">:</span> <span class="s2">&quot;PipelineManager&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunnerArgs</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Called at the beginning of PipelineManager.run. Can optionally return</span>
 <span class="sd">    additional section paths to run. If section_path_str_or_list is a</span>
@@ -213,7 +220,9 @@
 
 
 <div class="viewcode-block" id="pyfileconf_post_run"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_run">[docs]</a><span class="nd">@hookspec</span>
-<span class="k">def</span> <span class="nf">pyfileconf_post_run</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">ResultOrResults</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ResultOrResults</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">pyfileconf_post_run</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">ResultOrResults</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Runner</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ResultOrResults</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Called at the end of PipelineManager.run. Can optionally return</span>
 <span class="sd">    additional results which will be appended to the results list. If results is mutable</span>
@@ -221,6 +230,42 @@
 
 <span class="sd">    :param results: results from running section/function</span>
 <span class="sd">    :return: additional results, if any</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_pre_update"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update">[docs]</a><span class="nd">@hookspec</span>
+<span class="k">def</span> <span class="nf">pyfileconf_pre_update</span><span class="p">(</span>
+    <span class="n">pm</span><span class="p">:</span> <span class="s2">&quot;PipelineManager&quot;</span><span class="p">,</span>
+    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called at the beginning of PipelineManager.update. Can optionally return</span>
+<span class="sd">    a dictionary of updates which will be used to update the passed dictionary.</span>
+<span class="sd">    Can also modify the passed dictionaries in place.</span>
+
+<span class="sd">    :param d: dictionary of config updates</span>
+<span class="sd">    :param section_path_str: section path of config to be updated</span>
+<span class="sd">    :param kwargs: dictionary of config updates</span>
+<span class="sd">    :return: optional updates to config updates</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_post_update"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update">[docs]</a><span class="nd">@hookspec</span>
+<span class="k">def</span> <span class="nf">pyfileconf_post_update</span><span class="p">(</span>
+    <span class="n">pm</span><span class="p">:</span> <span class="s2">&quot;PipelineManager&quot;</span><span class="p">,</span>
+    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called at the end of PipelineManager.update.</span>
+
+<span class="sd">    :param d: dictionary of config updates</span>
+<span class="sd">    :param section_path_str: section path of config which was updated</span>
+<span class="sd">    :param kwargs: dictionary of config updates</span>
+<span class="sd">    :return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 

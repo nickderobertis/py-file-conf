@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin package &mdash; pyfileconf 0.9.2 documentation</title>
+  <title>pyfileconf.plugin package &mdash; pyfileconf 0.9.3 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.9.2
+                0.9.3
               </div>
             
           
@@ -264,7 +264,7 @@ config cases to be run and modify them in place.</p>
 
 <dl class="function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_run">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_run</code><span class="sig-paren">(</span><em class="sig-param">results</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_run</code><span class="sig-paren">(</span><em class="sig-param">results</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the end of PipelineManager.run. Can optionally return
 additional results which will be appended to the results list. If results is mutable
 then it can also be modified in place.</p>
@@ -282,8 +282,26 @@ then it can also be modified in place.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_update">
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the end of PipelineManager.update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.d"></span><strong>d</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.d">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – dictionary of config updates</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – section path of config which was updated</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.kwargs"></span><strong>kwargs</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.kwargs">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – dictionary of config updates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_run">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_run</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_run</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">pm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of PipelineManager.run. Can optionally return
 additional section paths to run. If section_path_str_or_list is a
 list then it can also be modified in place.</p>
@@ -297,6 +315,29 @@ PipelineManager.run</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>additional sections/functions to run, if any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update">
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the beginning of PipelineManager.update. Can optionally return
+a dictionary of updates which will be used to update the passed dictionary.
+Can also modify the passed dictionaries in place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.d"></span><strong>d</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.d">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – dictionary of config updates</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – section path of config to be updated</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.kwargs"></span><strong>kwargs</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.kwargs">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – dictionary of config updates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>optional updates to config updates</p>
 </dd>
 </dl>
 </dd></dl>
