@@ -377,7 +377,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         pipeline_manager2.load()
         sel = Selector()
-        pipeline_manager2.update(
+        pipeline_manager.update(
             section_path_str='example_class.stuff.data',
             a=sel.test_pipeline_manager2.example_class.stuff.data,
         )
@@ -420,27 +420,6 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
         assert ec == expect_1
         assert ec.a == expected_a_result
-        assert PipelineManager.config_dependencies == PipelineManager._config_attribute_dependencies == \
-               self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
-
-    def test_create_update_specific_class_attribute_dependencies(self):
-        self.write_example_class_dict_to_file()
-        self.write_example_class_dict_to_file(pm_index=1)
-        pipeline_manager = self.create_pm(
-            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
-        )
-        pipeline_manager.load()
-        pipeline_manager2 = self.create_pm(
-            folder=self.second_pm_folder,
-            name=self.second_test_name,
-            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST,
-        )
-        pipeline_manager2.load()
-        sel = Selector()
-        pipeline_manager2.update(
-            section_path_str='example_class.stuff.data',
-            a=sel.test_pipeline_manager2.example_class.stuff.data.a,
-        )
         assert PipelineManager.config_dependencies == PipelineManager._config_attribute_dependencies == \
                self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
 
