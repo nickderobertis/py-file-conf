@@ -1,3 +1,4 @@
+import os
 from typing import Union, Any, Optional
 
 from mixins.repr import ReprMixin
@@ -48,7 +49,7 @@ class ConfigManager(ReprMixin):
             raise ConfigManagerNotLoadedException('no config to refresh')
         config_obj.refresh()
 
-    def reset(self, section_path_str: str=None) -> None:
+    def reset(self, section_path_str: str=None, allow_create: bool = False) -> None:
         """
         Resets a function or section config to default. If no section_path_str is passed, resets local config.
 
@@ -60,8 +61,8 @@ class ConfigManager(ReprMixin):
         Returns:
 
         """
-        default = self._get_default_func_or_section_config(section_path_str)
-        self.set(section_path_str, default)
+        default = self._get_default_func_or_section_config(section_path_str, create=allow_create)
+        self.set(section_path_str, default, allow_create=allow_create)
 
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
@@ -115,7 +116,7 @@ class ConfigManager(ReprMixin):
 
         return config
 
-    def set(self, section_path_str: str=None, value=None):
+    def set(self, section_path_str: str=None, value=None, allow_create: bool = True):
         """
         In contrast to update, completely replaces the config object.
 
@@ -135,7 +136,7 @@ class ConfigManager(ReprMixin):
             self.local_config = value
             return
 
-        self._set_func_or_section_config(section_path_str, value=value)
+        self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
 
 
     def _get_func_or_section_configs(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
@@ -170,7 +171,7 @@ class ConfigManager(ReprMixin):
 
         return conf
 
-    def _set_func_or_section_config(self, section_path_str: str, value=None) -> None:
+    def _set_func_or_section_config(self, section_path_str: str, value=None, allow_create: bool = True) -> None:
         if self.section is None:
             raise ConfigManagerNotLoadedException('call .load() on ConfigManager before .set()')
 
@@ -179,22 +180,31 @@ class ConfigManager(ReprMixin):
 
         section_path = SectionPath(section_path_str)
 
-        # Currently set up to update the files in the section config, not just the section config.
-        # Perhaps expose as another parameter or method. The below logic helps with updating just section config
+        if allow_create:
+            self._set_func_or_config_with_create(section_path, value)
+        else:
+            self._set_func_or_config_no_create(section_path, value)
 
-        # Goes into nested sections, until it pulls the final config or section
-        # config_or_section: ConfigSectionOrConfig = _get_from_nested_obj_by_section_path(self, section_path)
+    def _set_func_or_config_with_create(self, section_path: SectionPath, value: Any):
+        obj = self
+        section_basepath = self.basepath
+        for i, section in enumerate(section_path):
+            section_basepath = os.path.join(section_basepath, section)
+            try:
+                obj = getattr(obj, section)
+            except KeyError as e:
+                new_section = ConfigSection([], name=section)
+                setattr(obj, section, new_section)
+                obj = getattr(obj, section)
 
-        # if isinstance(config_or_section, ConfigSection):
-        #     # If target is a section, update config attr of section
-        #     update_path = SectionPath.from_section_str_list(section_path.sections + ['config'])
-        # else:
-        #     # Otherwise, got a config, apply update directly to the config object
-        #     update_path = section_path
+        # Now have collection object which should hold this final object
+        obj.append(value)
 
+    def _set_func_or_config_no_create(self, section_path: SectionPath, value: Any):
         _set_in_nested_obj_by_section_path(self, section_path, value)
 
-    def _get_default_func_or_section_config(self, section_path_str: str=None) -> Union[ActiveFunctionConfig, ConfigSection]:
+    def _get_default_func_or_section_config(self, section_path_str: str=None,
+                                            create: bool = False) -> Union[ActiveFunctionConfig, ConfigSection]:
 
         if section_path_str is None:
             # local config. Default is blank config
@@ -204,7 +214,13 @@ class ConfigManager(ReprMixin):
             section_path = SectionPath(section_path_str)
             filepath = section_path.to_filepath(self.basepath)
 
-            config_obj = _get_from_nested_obj_by_section_path(self, section_path)
+            try:
+                config_obj = _get_from_nested_obj_by_section_path(self, section_path)
+            except KeyError as e:
+                # config object not already created
+                if not create:
+                    raise e
+                config_obj = ActiveFunctionConfig()
             if isinstance(config_obj, ConfigSection):
                 return ConfigSection.from_files(filepath)
             if isinstance(config_obj, (ActiveFunctionConfig, ActiveFunctionConfigFile)):

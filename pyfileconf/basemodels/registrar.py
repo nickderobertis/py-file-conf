@@ -1,7 +1,9 @@
-from typing import Optional, Sequence, Type
+import os
+from typing import Optional, Sequence, Type, Any
 
 from mixins.repr import ReprMixin
 from pyfileconf.basemodels.collection import Collection
+from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
@@ -59,11 +61,40 @@ class Registrar(ReprMixin):
     def scaffold_config(self):
         self.collection._output_config_files()
 
+    def scaffold_config_for(self, section_path_str: str):
+        section_path = SectionPath(section_path_str)
+
+        collection = _get_from_nested_obj_by_section_path(self, section_path[:-1])
+        collection._output_config_files()
+
     def get(self, section_path_str: str):
         section_path = SectionPath(section_path_str)
 
         # Goes into nested sections, until it pulls the final section or pipeline
         return _get_from_nested_obj_by_section_path(self, section_path)
+
+    def set(self, section_path_str: str, value: Any):
+        section_path = SectionPath(section_path_str)
+
+        # Goes into nested sections, until it sets the final section or pipeline
+        obj = self
+        section_basepath = self.basepath
+        for i, section in enumerate(section_path):
+            section_basepath = os.path.join(section_basepath, section)
+            try:
+                obj = getattr(obj, section)
+            except AttributeError as e:
+                new_collection = self.collection_class(
+                    section_basepath, [], name=section, imports=self.imports,
+                    always_assign_strs=self.always_assign_strs,
+                    always_import_strs=self.always_import_strs, klass=self.klass,
+                    key_attr=self.key_attr, execute_attr=self.execute_attr
+                )
+                setattr(obj, section, new_collection)
+                obj = getattr(obj, section)
+
+        # Now have collection object which should hold this final object
+        obj.append(value)
 
     def to_nested_dict(self):
         return self.collection.to_nested_dict()

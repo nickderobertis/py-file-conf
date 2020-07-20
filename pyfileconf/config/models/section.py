@@ -40,6 +40,14 @@ class ConfigSection(Container, ReprMixin):
         self._items = items
         self._set_config_map() # recreate config map on setting items
 
+    def append(self, item):
+        self._items.append(item)
+        self._set_config_map()
+
+    def extend(self, items):
+        self._items.extend(items)
+        self._set_config_map()
+
     @property
     def config_map(self):
         return self._config_map
