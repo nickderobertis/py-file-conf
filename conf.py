@@ -17,7 +17,7 @@ REPO_MAINTAINERS = [
 ]
 
 # Package version in the format (major, minor, release)
-PACKAGE_VERSION_TUPLE = (0, 9, 8)
+PACKAGE_VERSION_TUPLE = (0, 9, 9)
 
 # Short description of the package
 PACKAGE_SHORT_DESCRIPTION = "Generate Python configuration files from functions and classes and run them from the command line or Python"
