@@ -1,7 +1,12 @@
 """
 Contains the hooks which may be attached to in creating plugins
 """
-from typing import Any, Dict, Sequence, List, Tuple, Optional
+from typing import Any, Dict, Sequence, List, Tuple, Optional, TYPE_CHECKING
+
+from pyfileconf.runner.models.runner import Runner
+
+if TYPE_CHECKING:
+    from pyfileconf.main import PipelineManager
 
 import pluggy
 
@@ -35,7 +40,9 @@ def pyfileconf_iter_modify_cases(cases: List[Tuple[Dict[str, Any], ...]]):
 
 
 @hookspec
-def pyfileconf_pre_run(section_path_str_or_list: RunnerArgs) -> Optional[RunnerArgs]:
+def pyfileconf_pre_run(
+    section_path_str_or_list: RunnerArgs, pm: "PipelineManager"
+) -> Optional[RunnerArgs]:
     """
     Called at the beginning of PipelineManager.run. Can optionally return
     additional section paths to run. If section_path_str_or_list is a
@@ -48,7 +55,9 @@ def pyfileconf_pre_run(section_path_str_or_list: RunnerArgs) -> Optional[RunnerA
 
 
 @hookspec
-def pyfileconf_post_run(results: ResultOrResults) -> Optional[ResultOrResults]:
+def pyfileconf_post_run(
+    results: ResultOrResults, runner: Runner
+) -> Optional[ResultOrResults]:
     """
     Called at the end of PipelineManager.run. Can optionally return
     additional results which will be appended to the results list. If results is mutable
@@ -56,4 +65,40 @@ def pyfileconf_post_run(results: ResultOrResults) -> Optional[ResultOrResults]:
 
     :param results: results from running section/function
     :return: additional results, if any
+    """
+
+
+@hookspec
+def pyfileconf_pre_update(
+    pm: "PipelineManager",
+    d: dict = None,
+    section_path_str: str = None,
+    kwargs: Dict[str, Any] = None,
+) -> Optional[Dict[str, Any]]:
+    """
+    Called at the beginning of PipelineManager.update. Can optionally return
+    a dictionary of updates which will be used to update the passed dictionary.
+    Can also modify the passed dictionaries in place.
+
+    :param d: dictionary of config updates
+    :param section_path_str: section path of config to be updated
+    :param kwargs: dictionary of config updates
+    :return: optional updates to config updates
+    """
+
+
+@hookspec
+def pyfileconf_post_update(
+    pm: "PipelineManager",
+    d: dict = None,
+    section_path_str: str = None,
+    kwargs: Dict[str, Any] = None,
+):
+    """
+    Called at the end of PipelineManager.update.
+
+    :param d: dictionary of config updates
+    :param section_path_str: section path of config which was updated
+    :param kwargs: dictionary of config updates
+    :return: None
     """
