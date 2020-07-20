@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from pyfileconf import Selector, PipelineManager
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -57,6 +59,15 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(None)
 
+    def test_run_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        result = pipeline_manager.run(iv)
+        assert result == 'woo'
+
     def test_create_class_multiple_pms(self):
         self.write_example_class_to_pipeline_dict_file()
         self.write_example_class_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
@@ -88,6 +99,31 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
         assert ec.a == expect_ec.a
+
+    def test_run_from_specific_class_dict_original_execute_key(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        result = pipeline_manager.run(iv)
+        assert result == 'woo'
+
+    def test_run_from_specific_class_dict_custom_execute_key(self):
+        self.write_example_class_dict_to_file()
+        ccdl = deepcopy(CLASS_CONFIG_DICT_LIST)
+        for config_dict in ccdl:
+            config_dict['execute_attr'] = 'my_call'
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=ccdl
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        result = pipeline_manager.run(iv)
+        assert result == 'woo2'
 
     def test_create_from_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()

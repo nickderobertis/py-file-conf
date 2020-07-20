@@ -1,3 +1,4 @@
+import inspect
 from typing import Callable, Tuple, cast, Sequence, Type, Union, Dict, Any, List
 from functools import partial
 
@@ -139,6 +140,10 @@ class Runner(ReprMixin):
             return self._run_section(section_path_str)
         elif type(func_or_collection) is type and issubclass(type(func_or_collection), Pipeline):
             return self._run_one_pipeline(section_path_str)
+        elif self._is_specific_class(func_or_collection):
+            return self._run_one_specific_class(section_path_str)
+        elif inspect.isclass(func_or_collection):
+            return self._run_one_class(section_path_str)
         elif callable(func_or_collection):
             return self._run_one_func(section_path_str)
         else:
@@ -168,6 +173,10 @@ class Runner(ReprMixin):
             elif type(section_or_callable) is type and issubclass(section_or_callable, Pipeline):
                 # run pipeline
                 results.append(self._run_one_pipeline(subsection_path_str))
+            elif self._is_specific_class(section_or_callable):
+                results.append(self._run_one_specific_class(section_path_str))
+            elif inspect.isclass(section_or_callable):
+                results.append(self._run_one_class(section_path_str))
             elif callable(section_or_callable):
                 # run function
                 results.append(self._run_one_func(subsection_path_str))
@@ -184,6 +193,29 @@ class Runner(ReprMixin):
 
         print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
         result = func(**config_dict)
+        print(f'Result:\n{result}\n')
+
+        return result
+
+    def _run_one_class(self, section_path_str: str) -> Result:
+        klass, config_dict = self._get_func_and_config(section_path_str)
+        obj = klass(**config_dict)
+
+        print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+        result = obj()
+        print(f'Result:\n{result}\n')
+
+        return result
+
+    def _run_one_specific_class(self, section_path_str: str) -> Result:
+        klass, config_dict = self._get_class_and_config(section_path_str)
+        obj = klass(**config_dict)
+        registrar = self._specific_class_registrar_map[klass]
+        execute_attr = registrar.execute_attr
+        func = getattr(obj, execute_attr)
+
+        print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+        result = func()
         print(f'Result:\n{result}\n')
 
         return result
@@ -207,10 +239,10 @@ class Runner(ReprMixin):
         elif type(func_or_collection) is type and issubclass(type(func_or_collection), Pipeline):
             # Got pipeline class
             return self._get_one_pipeline_with_config(section_path_str)
-        elif callable(func_or_collection):
-            return self._get_one_func_with_config(section_path_str)
         elif self._is_specific_class(func_or_collection):
             return self._get_one_obj_with_config(section_path_str)
+        elif callable(func_or_collection):
+            return self._get_one_func_with_config(section_path_str)
         else:
             raise ValueError(f'could not get section {section_path_str}. expected PipelineCollection or function,'
                              f'got {func_or_collection} of type {type(func_or_collection)}')
@@ -268,6 +300,8 @@ class Runner(ReprMixin):
                     f'have collections if there is at least one collection. '
                     f'Got {section_or_callable} as non-collection.'
                 )
+            elif self._is_specific_class(section_or_callable):
+                results.append(self._get_one_obj_with_config(subsection_path_str))
             elif callable(section_or_callable):
                 # get function
                 results.append(self._get_one_func_with_config(subsection_path_str))
@@ -359,15 +393,15 @@ class Runner(ReprMixin):
 
         return pipeline, config_dict
 
-    def _get_class_and_config(self, section_path_str: str) -> Tuple[Callable, dict]:
+    def _get_class_and_config(self, section_path_str: str) -> Tuple[Type, dict]:
         config = self._get_config(section_path_str)
         obj = self._get_func_or_collection(section_path_str)
-        func = obj.__class__
+        klass = obj.__class__
 
         # Only pass items in config which are arguments of function
-        config_dict = config.for_function(func)
+        config_dict = config.for_function(klass)
 
-        return func, config_dict
+        return klass, config_dict
 
     def update(self, d: dict=None, section_path_str: str=None, **kwargs):
         self._config.update(d, section_path_str, **kwargs)

@@ -39,8 +39,7 @@ from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedException, \
     NoPipelineManagerForFilepathException, NoPipelineManagerForSectionPathException
 from pyfileconf.logger import stdout_also_logged
-
-SpecificClassConfigDict = Dict[str, Optional[Union[str, Type, List[str]]]]
+from pyfileconf.interfaces import SpecificClassConfigDict
 
 
 class PipelineManager:

@@ -39,3 +39,9 @@ class ExampleClass:
             self.name == other.name,
             self.c == other.c,
         ])
+
+    def __call__(self, *args, **kwargs):
+        return 'woo'
+
+    def my_call(self):
+        return 'woo2'
