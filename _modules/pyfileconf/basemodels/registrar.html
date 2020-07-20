@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.9.9 documentation</title>
+  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.9.10 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.9
+                0.9.10
               </div>
             
           
@@ -255,7 +255,7 @@
                     <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span>
                     <span class="n">key_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span><span class="p">,</span> <span class="n">execute_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execute_attr</span>
                 <span class="p">)</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">new_collection</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_collection</span><span class="p">)</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
 
         <span class="c1"># Now have collection object which should hold this final object</span>
