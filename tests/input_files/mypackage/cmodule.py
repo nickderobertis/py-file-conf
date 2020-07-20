@@ -2,6 +2,9 @@ from dataclasses import dataclass
 from typing import Optional, TYPE_CHECKING
 import typing
 import collections
+
+from pyfileconf import Selector
+
 if TYPE_CHECKING:
     from traceback import TracebackException
 import pathlib
@@ -45,3 +48,12 @@ class ExampleClass:
 
     def my_call(self):
         return 'woo2'
+
+    def dependent_call(self):
+        s = Selector()
+        # Access ItemView
+        obj = s.test_pipeline_manager.example_class.stuff.data2
+        # Access attr
+        a = s.test_pipeline_manager.example_class.stuff.data3.a
+        return obj, a
+

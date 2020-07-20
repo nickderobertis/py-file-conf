@@ -93,6 +93,16 @@ class PipelineManagerTestBase(TestCase):
     expect_pm_1_specific_class_depends_on_pm_2_specific_class = {
         'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.example_class.stuff.data')}
     }
+    expect_pm_1_specific_class_depends_on_pm_1_specific_class_2_and_3 = {
+        'test_pipeline_manager.example_class.stuff.data2': {
+            SectionPath('test_pipeline_manager.example_class.stuff.data')},
+        'test_pipeline_manager.example_class.stuff.data3': {
+            SectionPath('test_pipeline_manager.example_class.stuff.data')},
+    }
+    expect_pm_1_specific_class_depends_on_pm_1_specific_class_3 = {
+        'test_pipeline_manager.example_class.stuff.data3': {
+            SectionPath('test_pipeline_manager.example_class.stuff.data')},
+    }
 
     def setup_method(self, method):
         create_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)

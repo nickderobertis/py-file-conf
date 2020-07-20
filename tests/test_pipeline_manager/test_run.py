@@ -125,6 +125,23 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == 'woo2'
 
+    def test_get_dependencies_while_running(self):
+        self.write_example_class_dict_to_file()
+        ccdl = deepcopy(CLASS_CONFIG_DICT_LIST)
+        for config_dict in ccdl:
+            config_dict['execute_attr'] = 'dependent_call'
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=ccdl
+        )
+        pipeline_manager.load()
+        pipeline_manager.create('example_class.stuff.data2')
+        pipeline_manager.create('example_class.stuff.data3')
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        result = pipeline_manager.run(iv)
+        assert PipelineManager.config_dependencies == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_2_and_3
+        assert PipelineManager._config_attribute_dependencies == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_3
+
     def test_create_from_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()
         self.write_example_class_dict_to_file(pm_index=1)
