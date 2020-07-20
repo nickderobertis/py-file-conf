@@ -64,3 +64,11 @@ pyfileconf.main module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.tracing module
+-------------------------
+
+.. automodule:: pyfileconf.tracing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

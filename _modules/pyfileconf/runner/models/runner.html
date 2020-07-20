@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.9.10 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.9.11 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.10
+                0.9.11
               </div>
             
           
@@ -193,18 +193,20 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.logic.write</span> <span class="kn">import</span> <span class="n">dict_as_function_kwarg_str</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.tracing</span> <span class="kn">import</span> <span class="n">RunningTracker</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 
 <div class="viewcode-block" id="Runner"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner">[docs]</a><span class="k">class</span> <span class="nc">Runner</span><span class="p">(</span><span class="n">ReprMixin</span><span class="p">):</span>
     <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_config&#39;</span><span class="p">,</span> <span class="s1">&#39;_pipelines&#39;</span><span class="p">]</span>
 
-
-<div class="viewcode-block" id="Runner.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ConfigManager</span><span class="p">,</span> <span class="n">registrars</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Registrar</span><span class="p">],</span> <span class="n">general_registrar</span><span class="p">:</span> <span class="n">PipelineRegistrar</span><span class="p">):</span>
+<div class="viewcode-block" id="Runner.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ConfigManager</span><span class="p">,</span> <span class="n">registrars</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Registrar</span><span class="p">],</span> <span class="n">general_registrar</span><span class="p">:</span> <span class="n">PipelineRegistrar</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span> <span class="o">=</span> <span class="n">registrars</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span> <span class="o">=</span> <span class="n">general_registrar</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_full_getattr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span> <span class="o">=</span> <span class="n">name</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_full_getattr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">registrar</span><span class="o">.</span><span class="n">klass</span><span class="p">:</span> <span class="n">registrar</span> <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
@@ -355,47 +357,51 @@
 
 
     <span class="k">def</span> <span class="nf">_run_one_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+            <span class="n">func</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running function </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running function </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">_run_one_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+            <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running class </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">obj</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running class </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">obj</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">_run_one_specific_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_class_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
-        <span class="n">registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span><span class="p">[</span><span class="n">klass</span><span class="p">]</span>
-        <span class="n">execute_attr</span> <span class="o">=</span> <span class="n">registrar</span><span class="o">.</span><span class="n">execute_attr</span>
-        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">execute_attr</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+            <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_class_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
+            <span class="n">registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span><span class="p">[</span><span class="n">klass</span><span class="p">]</span>
+            <span class="n">execute_attr</span> <span class="o">=</span> <span class="n">registrar</span><span class="o">.</span><span class="n">execute_attr</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">execute_attr</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running class </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running class </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">_run_one_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="n">pipeline_class</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pipeline_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+            <span class="n">pipeline_class</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pipeline_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
-        <span class="c1"># Construct new pipeline instance with config args</span>
-        <span class="n">configured_pipeline</span> <span class="o">=</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="c1"># Construct new pipeline instance with config args</span>
+            <span class="n">configured_pipeline</span> <span class="o">=</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running pipeline </span><span class="si">{</span><span class="n">configured_pipeline</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">configured_pipeline</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running pipeline </span><span class="si">{</span><span class="n">configured_pipeline</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">dict_as_function_kwarg_str</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">configured_pipeline</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">configured_pipeline</span>
 
 <div class="viewcode-block" id="Runner.get"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -471,8 +477,6 @@
             <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
                 <span class="c1"># get function</span>
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_one_func_with_config</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
-                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">subsection_path_str</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not get section </span><span class="si">{</span><span class="n">subsection_path_str</span><span class="si">}</span><span class="s1">. expected Collection or &#39;</span>
                                  <span class="sa">f</span><span class="s1">&#39;function or specific class,&#39;</span>
@@ -485,13 +489,18 @@
 
         <span class="n">full_func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">full_func</span>
 
     <span class="k">def</span> <span class="nf">_get_one_pipeline_with_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pipeline</span><span class="p">:</span>
         <span class="n">pipeline_class</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pipeline_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
         <span class="c1"># Construct new pipeline instance with config args</span>
-        <span class="k">return</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">pipeline_class</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">obj</span>
 
     <span class="k">def</span> <span class="nf">_get_one_obj_with_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span>
@@ -502,6 +511,7 @@
         <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">obj</span>
 
@@ -522,7 +532,7 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">lookup_in_registrar_section_path</span><span class="p">:</span>
                     <span class="c1"># Was looking up registrar collection itself</span>
                     <span class="k">return</span> <span class="n">registrar</span><span class="o">.</span><span class="n">collection</span>
-                <span class="c1"># Looking up within registrary</span>
+                <span class="c1"># Looking up within registrar</span>
                 <span class="k">return</span> <span class="n">registrar</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lookup_in_registrar_section_path</span><span class="p">)</span>
 
         <span class="c1"># Try to return from general registrar</span>
@@ -586,7 +596,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_is_specific_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">def</span> <span class="nf">_add_to_config_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+        <span class="k">if</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">_currently_running_section_path_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;should not call _add_to_config_dependencies when not currently running&#39;</span><span class="p">)</span>
+        <span class="n">full_sp_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
+        <span class="n">running_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">PipelineManager</span><span class="o">.</span><span class="n">_currently_running_section_path_str</span><span class="p">)</span>
+        <span class="n">PipelineManager</span><span class="o">.</span><span class="n">_config_attribute_dependencies</span><span class="p">[</span><span class="n">full_sp_str</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">running_sp</span><span class="p">)</span>
+        <span class="n">PipelineManager</span><span class="o">.</span><span class="n">config_dependencies</span><span class="p">[</span><span class="n">full_sp_str</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">running_sp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+        <span class="c1"># If this happened while running another item, add to dependencies</span>
+        <span class="k">if</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">_currently_running_section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>

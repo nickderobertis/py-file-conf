@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.9.10 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.9.11 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.9.10
+                0.9.11
               </div>
             
           
@@ -127,6 +127,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.interfaces">pyfileconf.interfaces module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.iterate">pyfileconf.iterate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.main">pyfileconf.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.tracing">pyfileconf.tracing module</a></li>
 </ul>
 </li>
 </ul>
@@ -966,6 +967,26 @@ if results are stored in some other way</p></li>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.tracing">
+<span id="pyfileconf-tracing-module"></span><h2>pyfileconf.tracing module<a class="headerlink" href="#module-pyfileconf.tracing" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.tracing.RunningTracker">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.tracing.</code><code class="sig-name descname">RunningTracker</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">base_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/tracing.html#RunningTracker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.tracing.RunningTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="pyfileconf.tracing.RunningTracker.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">base_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/tracing.html#RunningTracker.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.tracing.RunningTracker.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.tracing.RunningTracker.orig_running_section_path_str">
+<code class="sig-name descname">orig_running_section_path_str</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.tracing.RunningTracker.orig_running_section_path_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
