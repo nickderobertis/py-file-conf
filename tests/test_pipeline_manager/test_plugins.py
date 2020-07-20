@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Sequence, Dict, Any, List, Tuple, Type, Optional
 
-from pyfileconf import Selector, hookimpl, IterativeRunner, reset_plugins, remove_default_plugins
+from pyfileconf import Selector, hookimpl, IterativeRunner, reset_plugins, remove_default_plugins, PipelineManager
 from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import RunnerArgs, ResultOrResults
 from pyfileconf.sectionpath.sectionpath import SectionPath
