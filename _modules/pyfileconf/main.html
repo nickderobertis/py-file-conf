@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.9.5 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.9.6 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.9.6
               </div>
             
           
@@ -163,7 +163,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.main</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
@@ -175,6 +176,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.data.logic.convert</span> <span class="kn">import</span> <span class="n">convert_to_empty_obj_if_necessary</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictconfig</span> <span class="kn">import</span> <span class="n">SpecificClassDictConfig</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.debug</span> <span class="kn">import</span> <span class="n">pdb_post_mortem_or_passed_debug_fn</span>
@@ -189,6 +191,7 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.dictconfig</span> <span class="kn">import</span> <span class="n">PipelineDictConfig</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.plugin</span> <span class="kn">import</span> <span class="n">manager</span> <span class="k">as</span> <span class="n">plugin_manager</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">StrOrView</span><span class="p">,</span> <span class="n">IterativeResults</span>
@@ -411,7 +414,7 @@
         <span class="n">section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PipelineManager.reset"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_view</span><span class="p">:</span> <span class="s1">&#39;StrOrView&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="PipelineManager.reset"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_view</span><span class="p">:</span> <span class="s1">&#39;StrOrView&#39;</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resets a function or section config to default.</span>
 
@@ -421,7 +424,7 @@
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.reload"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -515,14 +518,36 @@
             <span class="k">if</span> <span class="n">func_or_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;only pass func_or_class when targeting main pipeline dict, not specific class dict&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_specific_class_dict_entry</span><span class="p">(</span><span class="n">section_path</span><span class="p">)</span>
+            <span class="n">full_sp</span> <span class="o">=</span> <span class="n">section_path</span>
+            <span class="n">registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrar_dict</span><span class="p">[</span><span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">klass</span> <span class="o">=</span> <span class="n">registrar</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">klass</span>
+            <span class="k">if</span> <span class="n">klass</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;must have specific class set, got None for class in </span><span class="si">{</span><span class="n">registrar</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">key_attr</span> <span class="o">=</span> <span class="n">registrar</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">key_attr</span>
+            <span class="n">registrar_obj</span> <span class="o">=</span> <span class="n">convert_to_empty_obj_if_necessary</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">klass</span><span class="p">,</span> <span class="n">key_attr</span><span class="o">=</span><span class="n">key_attr</span><span class="p">)</span>
+            <span class="n">set_section_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">path_str</span>
+            <span class="n">scaffold_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">path_str</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Got path for main pipeline dict, add to main pipeline dict</span>
             <span class="k">if</span> <span class="n">func_or_class</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;when adding creating item in main pipeline dict, must pass function or class&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_create_pipeline_dict_entry</span><span class="p">(</span><span class="n">section_path</span><span class="p">,</span> <span class="n">func_or_class</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">func_or_class</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">mod</span><span class="p">,</span> <span class="n">import_base</span> <span class="o">=</span> <span class="n">get_module_and_name_imported_from</span><span class="p">(</span><span class="n">func_or_class</span><span class="p">)</span>
+            <span class="n">obj_import</span> <span class="o">=</span> <span class="n">ObjectImportStatement</span><span class="p">([</span><span class="n">name</span><span class="p">],</span> <span class="n">import_base</span><span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">imports</span> <span class="o">=</span> <span class="n">ImportStatementContainer</span><span class="p">([</span><span class="n">obj_import</span><span class="p">])</span>
+            <span class="n">registrar_obj</span> <span class="o">=</span> <span class="n">ObjectView</span><span class="o">.</span><span class="n">from_ast_and_imports</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">imports</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;general registrar must be defined&#39;</span><span class="p">)</span>
+            <span class="n">registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span>
+            <span class="n">set_section_path_str</span> <span class="o">=</span> <span class="n">section_path_str</span>
+            <span class="n">scaffold_path_str</span> <span class="o">=</span> <span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span>
 
-        <span class="c1"># TODO [#64]: create items without reloading by inserting directly into registrar and config manager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span></div>
+        <span class="n">registrar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">set_section_path_str</span><span class="p">,</span> <span class="n">registrar_obj</span><span class="p">)</span>
+        <span class="n">registrar</span><span class="o">.</span><span class="n">scaffold_config_for</span><span class="p">(</span><span class="n">scaffold_path_str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.get_manager_by_filepath"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_filepath">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_manager_by_filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">:</span>
@@ -678,7 +703,17 @@
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">current_manager_under_this_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">current_manager_under_this_key</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_registrar_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Registrar</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;general registrar must be defined&#39;</span><span class="p">)</span>
+        <span class="n">rd</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Registrar</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;general&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">:</span>
+                <span class="n">rd</span><span class="p">[</span><span class="n">registrar</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">registrar</span>
+        <span class="k">return</span> <span class="n">rd</span></div>
 
 
 <span class="k">def</span> <span class="nf">_try_except_run_func_except_user_interrupts</span><span class="p">(</span><span class="n">try_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">except_func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>

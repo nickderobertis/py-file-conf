@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.section &mdash; pyfileconf 0.9.5 documentation</title>
+  <title>pyfileconf.config.models.section &mdash; pyfileconf 0.9.6 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.9.6
               </div>
             
           
@@ -204,6 +204,14 @@
     <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_config_map</span><span class="p">()</span> <span class="c1"># recreate config map on setting items</span>
+
+<div class="viewcode-block" id="ConfigSection.append"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_config_map</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ConfigSection.extend"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_config_map</span><span class="p">()</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">config_map</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.9.5 documentation</title>
+  <title>pyfileconf.basemodels.registrar &mdash; pyfileconf 0.9.6 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.9.6
               </div>
             
           
@@ -163,10 +163,12 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.basemodels.registrar</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logic.set</span> <span class="kn">import</span> <span class="n">_set_in_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.container</span> <span class="kn">import</span> <span class="n">ImportStatementContainer</span>
@@ -224,11 +226,40 @@
 <div class="viewcode-block" id="Registrar.scaffold_config"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.scaffold_config">[docs]</a>    <span class="k">def</span> <span class="nf">scaffold_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_output_config_files</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="Registrar.scaffold_config_for"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.scaffold_config_for">[docs]</a>    <span class="k">def</span> <span class="nf">scaffold_config_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+
+        <span class="n">collection</span> <span class="o">=</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">_output_config_files</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Registrar.get"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
         <span class="c1"># Goes into nested sections, until it pulls the final section or pipeline</span>
         <span class="k">return</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Registrar.set"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+
+        <span class="c1"># Goes into nested sections, until it sets the final section or pipeline</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">section_basepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">section_path</span><span class="p">):</span>
+            <span class="n">section_basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_basepath</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">new_collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_class</span><span class="p">(</span>
+                    <span class="n">section_basepath</span><span class="p">,</span> <span class="p">[],</span> <span class="n">name</span><span class="o">=</span><span class="n">section</span><span class="p">,</span> <span class="n">imports</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">imports</span><span class="p">,</span>
+                    <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">,</span>
+                    <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span> <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span>
+                    <span class="n">key_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key_attr</span><span class="p">,</span> <span class="n">execute_attr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execute_attr</span>
+                <span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">new_collection</span><span class="p">)</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
+
+        <span class="c1"># Now have collection object which should hold this final object</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Registrar.to_nested_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.to_nested_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_nested_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">to_nested_dict</span><span class="p">()</span></div></div>

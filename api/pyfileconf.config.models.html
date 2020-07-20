@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models package &mdash; pyfileconf 0.9.5 documentation</title>
+  <title>pyfileconf.config.models package &mdash; pyfileconf 0.9.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.9.5
+                0.9.6
               </div>
             
           
@@ -305,7 +305,7 @@
 
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em>, <em class="sig-param">allow_create=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets a function or section config to default. If no section_path_str is passed, resets local config.</p>
 <p>To reset all configs, use .load() instead.</p>
 <dl class="simple">
@@ -322,7 +322,7 @@
 
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em>, <em class="sig-param">value=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em>, <em class="sig-param">value=None</em>, <em class="sig-param">allow_create=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>In contrast to update, completely replaces the config object.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>section_path_str:
@@ -358,8 +358,18 @@ value:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyfileconf.config.models.section.ConfigSection.append">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/section.html#ConfigSection.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.section.ConfigSection.append" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="pyfileconf.config.models.section.ConfigSection.config_map">
 <em class="property">property </em><code class="sig-name descname">config_map</code><a class="headerlink" href="#pyfileconf.config.models.section.ConfigSection.config_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.config.models.section.ConfigSection.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">items</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/section.html#ConfigSection.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.section.ConfigSection.extend" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
