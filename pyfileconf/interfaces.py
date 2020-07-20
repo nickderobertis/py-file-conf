@@ -11,6 +11,7 @@ SpecificClassConfigDict = TypedDict(
         "always_import_strs": List[str],
         "always_assign_strs": List[str],
         "key_attr": str,
+        "execute_attr": str,
     },
     total=False
 )
