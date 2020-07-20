@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.9.6 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.9.7 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.6
+                0.9.7
               </div>
             
           
@@ -353,13 +353,13 @@
     <span class="k">def</span> <span class="nf">_set_func_or_config_with_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path</span><span class="p">:</span> <span class="n">SectionPath</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">section_basepath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">section_path</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">section</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">section_path</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
             <span class="n">section_basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">section_basepath</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">new_section</span> <span class="o">=</span> <span class="n">ConfigSection</span><span class="p">([],</span> <span class="n">name</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">new_section</span><span class="p">)</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_section</span><span class="p">)</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">section</span><span class="p">)</span>
 
         <span class="c1"># Now have collection object which should hold this final object</span>
