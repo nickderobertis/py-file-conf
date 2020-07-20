@@ -198,7 +198,7 @@ class Runner(ReprMixin):
             print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = func(**config_dict)
             print(f'Result:\n{result}\n')
-
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
     def _run_one_class(self, section_path_str: str) -> Result:
@@ -209,7 +209,7 @@ class Runner(ReprMixin):
             print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = obj()
             print(f'Result:\n{result}\n')
-
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
     def _run_one_specific_class(self, section_path_str: str) -> Result:
@@ -223,7 +223,7 @@ class Runner(ReprMixin):
             print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = func()
             print(f'Result:\n{result}\n')
-
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
     def _run_one_pipeline(self, section_path_str: str) -> Result:
@@ -236,7 +236,7 @@ class Runner(ReprMixin):
             print(f'Running pipeline {configured_pipeline}({dict_as_function_kwarg_str(config_dict)})')
             result = configured_pipeline.execute()
             print(f'Result:\n{result}\n')
-
+        self._add_to_config_dependencies_if_necessary(section_path_str)
         return configured_pipeline
 
     def get(self, section_path_str: str):
@@ -435,6 +435,8 @@ class Runner(ReprMixin):
 
     def _add_to_config_dependencies(self, section_path_str: str):
         from pyfileconf.main import PipelineManager
+        if PipelineManager._currently_running_section_path_str is None:
+            raise ValueError('should not call _add_to_config_dependencies when not currently running')
         full_sp_str = SectionPath.join(self._manager_name, section_path_str).path_str
         running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
         PipelineManager._config_attribute_dependencies[full_sp_str].add(running_sp)
