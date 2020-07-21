@@ -68,6 +68,8 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.ExampleClass
         result = pipeline_manager.run(iv)
         assert result == 'woo'
+        result2 = iv().my_call()
+        assert result2 == 'woo2'
 
     def test_create_class_multiple_pms(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -110,7 +112,8 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
-        assert result == 'woo'
+        iv_result = iv()
+        assert result == iv_result == 'woo'
 
     def test_run_from_specific_class_dict_custom_execute_key(self):
         self.write_example_class_dict_to_file()
@@ -124,8 +127,9 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
-        result2 = iv()
-        assert result == result2 == 'woo2'
+        iv_result = iv()
+        method_result = iv.my_call()
+        assert result == iv_result == method_result == 'woo2'
 
     def test_get_dependencies_while_running(self):
         self.write_example_class_dict_to_file()

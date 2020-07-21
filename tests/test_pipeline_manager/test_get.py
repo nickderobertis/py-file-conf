@@ -384,6 +384,9 @@ class TestGetSectionPathFromItem(PipelineManagerTestBase):
         pm_run = pipeline_manager.run(iv)
         assert not hasattr(iv_run, '_section_path_str')
         assert iv_run == pm_run == 'test_pipeline_manager.example_class.stuff.data'
+        iv_attr = iv.a
+        assert not hasattr(iv_attr, '_section_path_str')
+        assert iv_attr is None
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
         for obj in [iv, iv_obj, str_obj]:
