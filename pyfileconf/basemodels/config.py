@@ -120,6 +120,6 @@ class ConfigBase(dict):
         new_config = self.__class__.from_file(self._file.filepath, name=self.name,
                                               klass=self.klass, always_import_strs=self.always_import_strs,
                                               always_assign_strs=self.always_assign_strs)
-        applied_updates = self._applied_updates
+        applied_updates = {**self._applied_updates}
         self.update(**new_config)
         self.update(**applied_updates)

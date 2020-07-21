@@ -26,6 +26,9 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         result = pipeline_manager.run(iv)
         assert result == (None, expected_b_result)
+        pipeline_manager.refresh(section_path.path_str)
+        result = pipeline_manager.run(iv)
+        assert result == (None, expected_b_result)
 
     def test_config_update_by_file_for_function(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -140,6 +143,9 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
+        pipeline_manager.refresh(section_path.path_str)
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
 
     def test_config_update_by_file_for_class(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -244,7 +250,6 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         assert context.config_dependencies == self.expect_pm_1_class_depends_on_pm_2_class
 
-
     def test_create_update_from_specific_class_dict(self):
         self.write_example_class_dict_to_file()
         pipeline_manager = self.create_pm(
@@ -259,6 +264,11 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+        pipeline_manager.refresh(section_path.path_str)
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
