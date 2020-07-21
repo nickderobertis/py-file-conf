@@ -84,7 +84,7 @@ class Selector:
         return exposed_methods + managers
 
     def _get_full_section_path_of_caller(self, caller_levels: int = 4) -> SectionPath:
-        # TODO [$5f16a5137d9a680008609862]: don't inspect stack to get calling section path, set in context when loading file
+        # TODO [#88]: don't inspect stack to get calling section path, set in context when loading file
         from pyfileconf.main import PipelineManager
 
         filepath = get_caller_filepath(caller_levels=caller_levels)
