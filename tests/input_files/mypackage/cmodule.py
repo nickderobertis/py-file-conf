@@ -36,6 +36,10 @@ class ExampleClass:
             raise ValueError('should only access this when a is set')
         return 10
 
+    @property
+    def my_property(self):
+        return 100
+
     def __eq__(self, other):
         return all([
             self.a == other.a,

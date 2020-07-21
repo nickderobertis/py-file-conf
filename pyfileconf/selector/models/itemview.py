@@ -123,7 +123,9 @@ class ItemView:
 
             # Got specific class method
             # Add section path to original item and then set method to be called
-            orig_item._section_path_str = self.section_path_str
+            orig_item_sp = SectionPath.from_section_str_list(SectionPath(self.section_path_str)[:-1])
+            orig_item_sp_str = orig_item_sp.path_str
+            orig_item._section_path_str = orig_item_sp_str
             func = actual_item
 
         result = func(*args, **kwargs)
