@@ -20,6 +20,7 @@ class ItemView:
 
     def __init__(self, section_path_str: str, selector: Selector):
         self.section_path_str = section_path_str
+        self._section_path_str = section_path_str  # for compatibility with real items which have this attribute added
         self.selector = selector
         self._is_item_view = True
 
@@ -71,6 +72,7 @@ class ItemView:
             'section_path_str',
             'selector',
             '_is_item_view',
+            '_section_path_str',
         ]
         if key in item_view_set_attrs:
             super().__setattr__(key, value)
