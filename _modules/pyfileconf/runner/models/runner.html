@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.10.0 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.10.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.0
+                0.10.1
               </div>
             
           
@@ -381,6 +381,7 @@
         <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
             <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_class_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">klass</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_full_section_path_str_to_obj</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
             <span class="n">registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span><span class="p">[</span><span class="n">klass</span><span class="p">]</span>
             <span class="n">execute_attr</span> <span class="o">=</span> <span class="n">registrar</span><span class="o">.</span><span class="n">execute_attr</span>
             <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">execute_attr</span><span class="p">)</span>

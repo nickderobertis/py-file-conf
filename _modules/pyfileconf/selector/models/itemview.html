@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.0 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.0
+                0.10.1
               </div>
             
           
@@ -165,8 +165,9 @@
   <h1>Source code for pyfileconf.selector.models.itemview</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Dict</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.exc.typo</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">handle_pipeline_manager_not_loaded_or_typo</span><span class="p">,</span>
@@ -260,7 +261,18 @@
         <span class="n">actual_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="c1"># If this happened while running another item, add to dependencies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">()</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">actual_item</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">partial</span><span class="p">):</span>
+            <span class="c1"># Got something in the general registrar, function or class</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="n">actual_item</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Got specific registrar class</span>
+            <span class="c1"># Need to look up the execute attribute and apply section path str</span>
+            <span class="n">actual_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_collection_map</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">actual_item</span><span class="p">)]</span>
+            <span class="n">execute_attr</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">execute_attr</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">execute_attr</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">partial</span><span class="p">)</span> <span class="ow">and</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">actual_item</span><span class="o">.</span><span class="n">func</span><span class="p">):</span>
             <span class="c1"># Got a class in the general collection, running these generates</span>
             <span class="c1"># an instance of the object so add the section path in this case</span>
@@ -300,7 +312,17 @@
 
     <span class="k">def</span> <span class="nf">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.context</span> <span class="kn">import</span> <span class="n">context</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency_for_currently_running_item_if_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency_for_currently_running_item_if_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_specific_class_collection_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="n">SpecificClassCollection</span><span class="p">]:</span>
+        <span class="n">class_collection_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="n">SpecificClassCollection</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">manager_name</span><span class="p">,</span> <span class="n">manager_dict</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_structure</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">collection_name</span><span class="p">,</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">manager_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">collection_name</span> <span class="o">==</span> <span class="s1">&#39;_general&#39;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">class_collection_map</span><span class="p">[</span><span class="n">collection</span><span class="o">.</span><span class="n">klass</span><span class="p">]</span> <span class="o">=</span> <span class="n">collection</span>
+        <span class="k">return</span> <span class="n">class_collection_map</span></div>
 
 
 <span class="k">def</span> <span class="nf">_is_item_view</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
