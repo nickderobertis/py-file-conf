@@ -1,6 +1,6 @@
 import inspect
 from functools import partial
-from typing import cast, List, Type, Dict
+from typing import cast, List, Type, Dict, Tuple
 
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -99,13 +99,32 @@ class ItemView:
         if isinstance(actual_item, partial):
             # Got something in the general registrar, function or class
             func = actual_item
-        else:
+        elif isinstance(actual_item, self._specific_classes):
             # Got specific registrar class
             # Need to look up the execute attribute and apply section path str
             actual_item._section_path_str = self.section_path_str
             collection = self._specific_class_collection_map[type(actual_item)]
             execute_attr = collection.execute_attr
             func = getattr(actual_item, execute_attr)
+        else:
+            cannot_parse_error = ValueError(f'could not parse actual item, expected partial, '
+                                            f'specific class, or method of specific class. '
+                                            f'Got {actual_item} of type {type(actual_item)}')
+            try:
+                orig_item = actual_item.__self__
+                # Is bound method
+            except AttributeError:
+                # Is not bound method
+                raise cannot_parse_error
+
+            if not isinstance(orig_item, self._specific_classes):
+                # Is bound method, but not for one of defined specific classes
+                raise cannot_parse_error
+
+            # Got specific class method
+            # Add section path to original item and then set method to be called
+            orig_item._section_path_str = self.section_path_str
+            func = actual_item
 
         result = func(*args, **kwargs)
         if isinstance(actual_item, partial) and inspect.isclass(actual_item.func):
@@ -158,6 +177,10 @@ class ItemView:
                     continue
                 class_collection_map[collection.klass] = collection
         return class_collection_map
+
+    @property
+    def _specific_classes(self) -> Tuple[Type, ...]:
+        return tuple(self._specific_class_collection_map.keys())
 
 
 def _is_item_view(obj) -> bool:
