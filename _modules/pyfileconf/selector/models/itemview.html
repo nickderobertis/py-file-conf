@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.2 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.2
+                0.10.3
               </div>
             
           
@@ -288,7 +288,9 @@
 
             <span class="c1"># Got specific class method</span>
             <span class="c1"># Add section path to original item and then set method to be called</span>
-            <span class="n">orig_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span>
+            <span class="n">orig_item_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">orig_item_sp_str</span> <span class="o">=</span> <span class="n">orig_item_sp</span><span class="o">.</span><span class="n">path_str</span>
+            <span class="n">orig_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="n">orig_item_sp_str</span>
             <span class="n">func</span> <span class="o">=</span> <span class="n">actual_item</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
