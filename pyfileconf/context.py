@@ -49,14 +49,12 @@ class PyFileConfContext:
         if force_update:
             self.force_update_dependencies[depends_on_section_path_str].add(dependent_section_path)
 
-    def add_config_dependency_for_currently_running_item(self, depends_on: Union[str, 'ItemView', 'SectionPath'],
-                                                         force_update: bool = False):
-        self.add_config_dependency(self.currently_running_section_path_str, depends_on, force_update=force_update)
-
     def add_config_dependency_for_currently_running_item_if_exists(self, depends_on: Union[str, 'ItemView', 'SectionPath'],
                                                                    force_update: bool = False):
         if self.currently_running_section_path_str is not None:
-            self.add_config_dependency_for_currently_running_item(depends_on, force_update=force_update)
+            self.add_config_dependency(
+                self.currently_running_section_path_str, depends_on, force_update=force_update
+            )
 
     def add_config_dependency_if_file_is_currently_being_loaded(
         self,
