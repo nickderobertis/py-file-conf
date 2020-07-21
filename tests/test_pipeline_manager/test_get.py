@@ -309,3 +309,44 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         str_obj = str_section[0]
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
+
+
+class TestGetSectionPathFromItem(PipelineManagerTestBase):
+
+    def test_get_function_section_path(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv_func = pipeline_manager.get(iv)
+        str_func = pipeline_manager.get('stuff.a_function')
+        for obj in [iv, iv_func, str_func]:
+            sp = obj._section_path_str
+            assert sp == 'test_pipeline_manager.stuff.a_function'
+
+    def test_get_class_section_path(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv_class = pipeline_manager.get(iv)
+        str_class = pipeline_manager.get('stuff.ExampleClass')
+        for obj in [iv, iv_class, str_class]:
+            sp = obj._section_path_str
+            assert sp == 'test_pipeline_manager.stuff.ExampleClass'
+
+    def test_get_specific_class_section_path(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        for obj in [iv, iv_obj, str_obj]:
+            sp = obj._section_path_str
+            assert sp == 'test_pipeline_manager.example_class.stuff.data'
