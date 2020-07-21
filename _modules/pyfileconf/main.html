@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.9.11 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.9.12 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.11
+                0.9.12
               </div>
             
           
@@ -208,17 +208,13 @@
     <span class="n">NoPipelineManagerForFilepathException</span><span class="p">,</span> <span class="n">NoPipelineManagerForSectionPathException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logger</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.interfaces</span> <span class="kn">import</span> <span class="n">SpecificClassConfigDict</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.context</span> <span class="kn">import</span> <span class="n">context</span>
 
 
 <div class="viewcode-block" id="PipelineManager"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager">[docs]</a><span class="k">class</span> <span class="nc">PipelineManager</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Main class for managing flow-based programming and configuration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">config_dependencies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">SectionPath</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">())</span>
-    <span class="n">_active_managers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">_config_attribute_dependencies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="n">SectionPath</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">set</span><span class="p">())</span>
-    <span class="n">_file_is_currently_being_loaded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">_currently_running_section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="PipelineManager.__init__"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
@@ -244,7 +240,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PipelineRegistrar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_options</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_project_if_needed</span><span class="p">()</span></div>
 
 
@@ -490,12 +486,12 @@
             <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_updates</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">_is_item_view</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">config_dependencies</span><span class="p">[</span><span class="n">value</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">full_sp</span><span class="p">)</span>
+                    <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency</span><span class="p">(</span><span class="n">full_sp</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
             <span class="c1"># Refresh any configs which are dependent on attributes of this config</span>
             <span class="c1"># Dependent configs are determined in Selector._get_real_item</span>
             <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">dependent_sp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_config_attribute_dependencies</span><span class="p">[</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">dependent_sp</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">force_update_dependencies</span><span class="p">[</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">]:</span>
                 <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">dependent_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
                 <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dependent_sp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
                 <span class="n">manager</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">relative_section_path</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
@@ -575,7 +571,7 @@
 <span class="sd">            manager has a config file matching the file path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">abs_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">manager</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_active_managers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">manager</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">active_managers</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">manager_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">folder</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">abs_filepath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">manager_path</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">manager</span>
@@ -596,7 +592,7 @@
         <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="n">manager_name</span> <span class="o">=</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">manager</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span>
+            <span class="n">manager</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">active_managers</span><span class="p">[</span><span class="n">manager_name</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">manager</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoPipelineManagerForSectionPathException</span></div>
@@ -699,7 +695,7 @@
     <span class="k">def</span> <span class="nf">_validate_options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_continue</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;cannot force continue and drop into pdb at the same time&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">active_managers</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;should not repeat names of PipelineManagers. Got repeated name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">. &#39;</span>
                           <span class="sa">f</span><span class="s1">&#39;The original PipelineManager has been replaced in the Selector.&#39;</span><span class="p">)</span>
 
@@ -720,9 +716,14 @@
         <span class="p">])</span>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">current_manager_under_this_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">current_manager_under_this_key</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="c1"># Must have already been deleted from active managers, do nothing</span>
+            <span class="k">return</span>
+
         <span class="k">if</span> <span class="n">current_manager_under_this_key</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">context</span><span class="o">.</span><span class="n">active_managers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_registrar_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Registrar</span><span class="p">]:</span>
