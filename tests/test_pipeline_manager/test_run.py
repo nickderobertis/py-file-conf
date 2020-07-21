@@ -124,7 +124,8 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
-        assert result == 'woo2'
+        result2 = iv()
+        assert result == result2 == 'woo2'
 
     def test_get_dependencies_while_running(self):
         self.write_example_class_dict_to_file()

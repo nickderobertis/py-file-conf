@@ -1,7 +1,8 @@
 import inspect
 from functools import partial
-from typing import cast, List, Type
+from typing import cast, List, Type, Dict
 
+from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.selector.logic.exc.typo import (
     handle_pipeline_manager_not_loaded_or_typo,
@@ -95,7 +96,18 @@ class ItemView:
         actual_item = self.selector._get_real_item(self.section_path_str)
         # If this happened while running another item, add to dependencies
         self._add_to_config_dependencies_if_necessary()
-        result = actual_item(*args, **kwargs)
+        if isinstance(actual_item, partial):
+            # Got something in the general registrar, function or class
+            func = actual_item
+        else:
+            # Got specific registrar class
+            # Need to look up the execute attribute and apply section path str
+            actual_item._section_path_str = self.section_path_str
+            collection = self._specific_class_collection_map[type(actual_item)]
+            execute_attr = collection.execute_attr
+            func = getattr(actual_item, execute_attr)
+
+        result = func(*args, **kwargs)
         if isinstance(actual_item, partial) and inspect.isclass(actual_item.func):
             # Got a class in the general collection, running these generates
             # an instance of the object so add the section path in this case
@@ -136,6 +148,16 @@ class ItemView:
     def _add_to_config_dependencies_if_necessary(self):
         from pyfileconf.context import context
         context.add_config_dependency_for_currently_running_item_if_exists(self.section_path_str, force_update=True)
+
+    @property
+    def _specific_class_collection_map(self) -> Dict[Type, SpecificClassCollection]:
+        class_collection_map: Dict[Type, SpecificClassCollection] = {}
+        for manager_name, manager_dict in self.selector._structure.items():
+            for collection_name, collection in manager_dict.items():
+                if collection_name == '_general':
+                    continue
+                class_collection_map[collection.klass] = collection
+        return class_collection_map
 
 
 def _is_item_view(obj) -> bool:

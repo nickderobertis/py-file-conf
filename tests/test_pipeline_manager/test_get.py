@@ -370,14 +370,20 @@ class TestGetSectionPathFromItem(PipelineManagerTestBase):
 
     def test_get_specific_class_section_path(self):
         self.write_example_class_dict_to_file()
+        ccdl = deepcopy(CLASS_CONFIG_DICT_LIST)
+        for config_dict in ccdl:
+            config_dict['execute_attr'] = 'return_section_path_str'
         pipeline_manager = self.create_pm(
-            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+            specific_class_config_dicts=ccdl
         )
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
-        iv_run = iv()  # result of __call__ on ExampleClass, should not have _section_path_str
+        # result of __call__ on ExampleClass, should not have _section_path_str on result, but should have in object
+        iv_run = iv()
+        pm_run = pipeline_manager.run(iv)
         assert not hasattr(iv_run, '_section_path_str')
+        assert iv_run == pm_run == 'test_pipeline_manager.example_class.stuff.data'
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
         for obj in [iv, iv_obj, str_obj]:
