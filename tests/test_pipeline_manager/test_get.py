@@ -378,15 +378,22 @@ class TestGetSectionPathFromItem(PipelineManagerTestBase):
         )
         pipeline_manager.load()
         sel = Selector()
+        assert sel.test_pipeline_manager.example_class.stuff.data.return_section_path_str() == \
+               'test_pipeline_manager.example_class.stuff.data'
         iv = sel.test_pipeline_manager.example_class.stuff.data
         # result of __call__ on ExampleClass, should not have _section_path_str on result, but should have in object
         iv_run = iv()
         pm_run = pipeline_manager.run(iv)
         assert not hasattr(iv_run, '_section_path_str')
         assert iv_run == pm_run == 'test_pipeline_manager.example_class.stuff.data'
+        # attribute access should be normal, not have _section_path_str
         iv_attr = iv.a
         assert not hasattr(iv_attr, '_section_path_str')
         assert iv_attr is None
+        # property access should be normal, not have _section_path_str
+        iv_property = iv.my_property
+        assert not hasattr(iv_property, '_section_path_str')
+        assert iv_property == 100
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
         for obj in [iv, iv_obj, str_obj]:
