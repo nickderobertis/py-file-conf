@@ -216,6 +216,7 @@ class Runner(ReprMixin):
         with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
             klass, config_dict = self._get_class_and_config(section_path_str)
             obj = klass(**config_dict)
+            self._add_full_section_path_str_to_obj(section_path_str, obj)
             registrar = self._specific_class_registrar_map[klass]
             execute_attr = registrar.execute_attr
             func = getattr(obj, execute_attr)

@@ -84,3 +84,5 @@ class ExampleClass:
         context.currently_running_section_path_str = 'test_pipeline_manager.example_class.stuff.data4'
         return self.dependent_call()
 
+    def return_section_path_str(self):
+        return self._section_path_str  # type: ignore
