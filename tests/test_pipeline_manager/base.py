@@ -130,13 +130,6 @@ class PipelineManagerTestBase(TestCase):
         return pipeline_manager
 
     def reset_pm_class(self):
-        # Uncommenting this for some reason causes segmentation fault while running tests
-        # PipelineManager._active_managers = {}
-        # Instead, remove the managers explicitly
-        # for pm_name in [self.test_name, self.second_test_name]:
-        #     if pm_name in PipelineManager._active_managers:
-        #         del PipelineManager._active_managers[pm_name]
-
         context.reset()
 
     def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):
