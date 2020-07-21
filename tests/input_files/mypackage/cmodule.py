@@ -50,10 +50,10 @@ class ExampleClass:
         return 'woo2'
 
     def dependent_call(self):
-        from pyfileconf.main import PipelineManager
+        from pyfileconf import context
         # Get active pipeline manager
-        assert len(PipelineManager._active_managers) == 1
-        manager = list(PipelineManager._active_managers.values())[0]
+        assert len(context.active_managers) == 1
+        manager = list(context.active_managers.values())[0]
 
         s = Selector()
         # Specific classes

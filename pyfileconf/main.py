@@ -43,17 +43,13 @@ from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedExcept
     NoPipelineManagerForFilepathException, NoPipelineManagerForSectionPathException
 from pyfileconf.logger import stdout_also_logged
 from pyfileconf.interfaces import SpecificClassConfigDict
+from pyfileconf.context import context
 
 
 class PipelineManager:
     """
     Main class for managing flow-based programming and configuration.
     """
-    config_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
-    _active_managers: Dict[str, 'PipelineManager'] = {}
-    _config_attribute_dependencies: Dict[str, Set[SectionPath]] = defaultdict(lambda: set())
-    _file_is_currently_being_loaded: bool = False
-    _currently_running_section_path_str: Optional[str] = None
 
     def __init__(self, folder: str,
                  name: str= 'project',
@@ -79,7 +75,7 @@ class PipelineManager:
         self._general_registrar: Optional[PipelineRegistrar] = None
 
         self._validate_options()
-        self._active_managers[self.name] = self
+        context.active_managers[self.name] = self
         self._create_project_if_needed()
 
 
@@ -325,12 +321,12 @@ class PipelineManager:
             full_sp = SectionPath.join(self.name, section_path_str)
             for value in all_updates.values():
                 if _is_item_view(value):
-                    self.__class__.config_dependencies[value.section_path_str].add(full_sp)
+                    context.add_config_dependency(full_sp, value)
 
             # Refresh any configs which are dependent on attributes of this config
             # Dependent configs are determined in Selector._get_real_item
             full_sp = SectionPath.join(self.name, section_path_str)
-            for dependent_sp in self.__class__._config_attribute_dependencies[full_sp.path_str]:
+            for dependent_sp in context.force_update_dependencies[full_sp.path_str]:
                 manager = self.__class__.get_manager_by_section_path_str(dependent_sp.path_str)
                 relative_section_path = SectionPath('.'.join(dependent_sp[1:]))
                 manager.refresh(relative_section_path.path_str)
@@ -410,7 +406,7 @@ class PipelineManager:
             manager has a config file matching the file path
         """
         abs_filepath = os.path.abspath(filepath)
-        for manager in cls._active_managers.values():
+        for manager in context.active_managers.values():
             manager_path = os.path.abspath(manager.folder)
             if abs_filepath.startswith(manager_path + os.sep):
                 return manager
@@ -431,7 +427,7 @@ class PipelineManager:
         section_path = SectionPath(section_path_str)
         manager_name = section_path[0]
         try:
-            manager = cls._active_managers[manager_name]
+            manager = context.active_managers[manager_name]
             return manager
         except KeyError:
             raise NoPipelineManagerForSectionPathException
@@ -534,7 +530,7 @@ class PipelineManager:
     def _validate_options(self):
         if self.auto_pdb and self.force_continue:
             raise ValueError('cannot force continue and drop into pdb at the same time')
-        if self.name in self._active_managers:
+        if self.name in context.active_managers:
             warnings.warn(f'should not repeat names of PipelineManagers. Got repeated name {self.name}. '
                           f'The original PipelineManager has been replaced in the Selector.')
 
@@ -555,9 +551,14 @@ class PipelineManager:
         ])
 
     def __del__(self):
-        current_manager_under_this_key = self._active_managers[self.name]
+        try:
+            current_manager_under_this_key = context.active_managers[self.name]
+        except KeyError:
+            # Must have already been deleted from active managers, do nothing
+            return
+
         if current_manager_under_this_key is self:
-            del self._active_managers[self.name]
+            del context.active_managers[self.name]
 
     @property
     def _registrar_dict(self) -> Dict[str, Registrar]:

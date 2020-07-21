@@ -19,7 +19,7 @@ class Selector:
         self._is_selector = True
 
     def __contains__(self, item):
-        from pyfileconf.main import PipelineManager
+        from pyfileconf.context import context
 
         if not isinstance(item, (str, SectionPath)):
             warnings.warn('check for if non-str object in Selector will always return False')
@@ -55,12 +55,12 @@ class Selector:
         collection_types = (SpecificClassCollection, PipelineCollection)
         pfc_types = collection_types + item_types
         if isinstance(result, pfc_types):
-            if PipelineManager._file_is_currently_being_loaded and isinstance(result, item_types):
+            if context.file_is_currently_being_loaded and isinstance(result, item_types):
                 # This item is being accessed within another config
                 full_sp = self._get_full_section_path_of_caller()
                 # Add the config where this item is
                 # being accessed as a dependent config of this item
-                PipelineManager.config_dependencies[item].add(full_sp)
+                context.add_config_dependency(full_sp, item)
             return True
 
         return False
@@ -84,6 +84,7 @@ class Selector:
         return exposed_methods + managers
 
     def _get_full_section_path_of_caller(self, caller_levels: int = 4) -> SectionPath:
+        # TODO: don't inspect stack to get calling section path, set in context when loading file
         from pyfileconf.main import PipelineManager
 
         filepath = get_caller_filepath(caller_levels=caller_levels)
@@ -146,16 +147,15 @@ class Selector:
         return type(result)
 
     def _get_real_item(self, item):
+        from pyfileconf import context
         from pyfileconf.main import PipelineManager
         manager = PipelineManager.get_manager_by_section_path_str(item)
         relative_section_path = SectionPath('.'.join(SectionPath(item)[1:]))
 
-        if PipelineManager._file_is_currently_being_loaded:
-            # This item is being accessed within another config
-            full_sp = self._get_full_section_path_of_caller(caller_levels=5)
-            # Add the config where this item is
-            # being accessed as a dependent config of this item
-            PipelineManager._config_attribute_dependencies[item].add(full_sp)
+        if context.file_is_currently_being_loaded:
+            context.add_config_dependency(
+                self._get_full_section_path_of_caller(caller_levels=5), item, force_update=True
+            )
 
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)
 
@@ -170,8 +170,8 @@ class Selector:
         )
 
     def _attach_to_pipeline_manager(self):
-        from pyfileconf.main import PipelineManager
-        self._managers = PipelineManager._active_managers
+        from pyfileconf import context
+        self._managers = context.active_managers
 
     def _load_structure(self):
         from pyfileconf.main import create_collections
