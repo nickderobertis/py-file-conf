@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.9.12 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.9.12
+                0.10.0
               </div>
             
           
@@ -163,7 +163,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.selector.models.itemview</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.exc.typo</span> <span class="kn">import</span> <span class="p">(</span>
@@ -185,6 +187,7 @@
 
 <div class="viewcode-block" id="ItemView.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.ItemView.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="n">Selector</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span> <span class="o">=</span> <span class="n">section_path_str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="n">section_path_str</span>  <span class="c1"># for compatibility with real items which have this attribute added</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="n">selector</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_item_view</span> <span class="o">=</span> <span class="kc">True</span></div>
 
@@ -236,6 +239,7 @@
             <span class="s1">&#39;section_path_str&#39;</span><span class="p">,</span>
             <span class="s1">&#39;selector&#39;</span><span class="p">,</span>
             <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;_section_path_str&#39;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">item_view_set_attrs</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -256,7 +260,12 @@
         <span class="n">actual_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="c1"># If this happened while running another item, add to dependencies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">actual_item</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">actual_item</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">partial</span><span class="p">)</span> <span class="ow">and</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">actual_item</span><span class="o">.</span><span class="n">func</span><span class="p">):</span>
+            <span class="c1"># Got a class in the general collection, running these generates</span>
+            <span class="c1"># an instance of the object so add the section path in this case</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span>
+        <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memodict</span><span class="o">=</span><span class="p">{}):</span>
         <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">memodict</span><span class="p">)</span>
