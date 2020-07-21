@@ -101,6 +101,13 @@ class PipelineManagerTestBase(TestCase):
         'test_pipeline_manager.af.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
         'test_pipeline_manager.af2.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
     }
+    expect_pm_1_specific_class_4_depends_on_pm_1_specific_class_3_class_1_2_function_1_2 = {
+        'test_pipeline_manager.example_class.stuff.data3': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.ec.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.ec2.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.af.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.af2.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+    }
 
     def setup_method(self, method):
         create_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)

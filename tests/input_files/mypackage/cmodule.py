@@ -79,3 +79,8 @@ class ExampleClass:
         g = s.test_pipeline_manager.af3.a_function
         return obj, a, b, c, d, e, f, g
 
+    def dependent_call_with_context_update(self):
+        from pyfileconf import context
+        context.currently_running_section_path_str = 'test_pipeline_manager.example_class.stuff.data4'
+        return self.dependent_call()
+
