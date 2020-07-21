@@ -3,6 +3,7 @@ from copy import deepcopy
 from pyfileconf import Selector, PipelineManager
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.sectionpath.sectionpath import SectionPath
+from pyfileconf import context
 from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
@@ -145,7 +146,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
-        assert PipelineManager.config_dependencies == PipelineManager._config_attribute_dependencies \
+        assert context.config_dependencies == context.force_update_dependencies \
                == self.expect_pm_1_specific_class_depends_on_pm_1_specific_class_3_class_1_2_function_1_2
 
     def test_create_from_specific_class_dict_multiple_pms(self):
@@ -312,4 +313,4 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         result = runner.run()
         assert result == [((cd,), (iv2, None))]
         assert iv2.a == expected_a_result
-        assert PipelineManager.config_dependencies == self.expect_pm_1_a_function_depends_on_pm_2_specific_class
+        assert context.config_dependencies == self.expect_pm_1_a_function_depends_on_pm_2_specific_class

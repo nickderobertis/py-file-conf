@@ -50,10 +50,10 @@ class ExampleClass:
         return 'woo2'
 
     def dependent_call(self):
-        from pyfileconf.main import PipelineManager
+        from pyfileconf import context
         # Get active pipeline manager
-        assert len(PipelineManager._active_managers) == 1
-        manager = list(PipelineManager._active_managers.values())[0]
+        assert len(context.active_managers) == 1
+        manager = list(context.active_managers.values())[0]
 
         s = Selector()
         # Specific classes
@@ -78,4 +78,9 @@ class ExampleClass:
         # Access ItemView - should not be dependency
         g = s.test_pipeline_manager.af3.a_function
         return obj, a, b, c, d, e, f, g
+
+    def dependent_call_with_context_update(self):
+        from pyfileconf import context
+        context.currently_running_section_path_str = 'test_pipeline_manager.example_class.stuff.data4'
+        return self.dependent_call()
 

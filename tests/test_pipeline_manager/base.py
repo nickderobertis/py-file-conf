@@ -6,6 +6,7 @@ from unittest import TestCase
 from pyfileconf import PipelineManager
 from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
+from pyfileconf import context
 from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass
 from tests.utils import delete_project, nested_pipeline_dict_str_with_obj, pipeline_dict_str_with_obj, \
@@ -100,6 +101,13 @@ class PipelineManagerTestBase(TestCase):
         'test_pipeline_manager.af.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
         'test_pipeline_manager.af2.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
     }
+    expect_pm_1_specific_class_4_depends_on_pm_1_specific_class_3_class_1_2_function_1_2 = {
+        'test_pipeline_manager.example_class.stuff.data3': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.ec.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.ec2.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.af.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+        'test_pipeline_manager.af2.a_function': {SectionPath('test_pipeline_manager.example_class.stuff.data4')},
+    }
 
     def setup_method(self, method):
         create_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
@@ -122,16 +130,7 @@ class PipelineManagerTestBase(TestCase):
         return pipeline_manager
 
     def reset_pm_class(self):
-        # Uncommenting this for some reason causes segmentation fault while running tests
-        # PipelineManager._active_managers = {}
-        # Instead, remove the managers explicitly
-        for pm_name in [self.test_name, self.second_test_name]:
-            if pm_name in PipelineManager._active_managers:
-                del PipelineManager._active_managers[pm_name]
-
-        PipelineManager.config_dependencies = defaultdict(lambda: set())
-        PipelineManager._config_attribute_dependencies = defaultdict(lambda: set())
-        PipelineManager._file_is_currently_being_loaded = False
+        context.reset()
 
     def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):
         if file_path is None:

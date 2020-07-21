@@ -433,18 +433,8 @@ class Runner(ReprMixin):
     def _is_specific_class(self, obj: Any) -> bool:
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
 
-    def _add_to_config_dependencies(self, section_path_str: str):
-        from pyfileconf.main import PipelineManager
-        if PipelineManager._currently_running_section_path_str is None:
-            raise ValueError('should not call _add_to_config_dependencies when not currently running')
-        full_sp_str = SectionPath.join(self._manager_name, section_path_str).path_str
-        running_sp = SectionPath(PipelineManager._currently_running_section_path_str)
-        PipelineManager._config_attribute_dependencies[full_sp_str].add(running_sp)
-        PipelineManager.config_dependencies[full_sp_str].add(running_sp)
-
     def _add_to_config_dependencies_if_necessary(self, section_path_str: str):
-        from pyfileconf.main import PipelineManager
-        # If this happened while running another item, add to dependencies
-        if PipelineManager._currently_running_section_path_str is not None:
-            self._add_to_config_dependencies(section_path_str)
+        from pyfileconf.context import context
+        full_sp = SectionPath.join(self._manager_name, section_path_str)
+        context.add_config_dependency_for_currently_running_item_if_exists(full_sp, force_update=True)
 

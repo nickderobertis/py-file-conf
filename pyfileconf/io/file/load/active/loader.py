@@ -4,14 +4,14 @@ from pyfileconf.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoad
 class ActiveConfigFileLoader(ImportAssignmentLazyLoader):
 
     def load(self):
-        from pyfileconf.main import PipelineManager
+        from pyfileconf import context
         # Get ast, imports, assigns
         super().register()
 
         # Actually import module
-        PipelineManager._file_is_currently_being_loaded = True
+        context.file_is_currently_being_loaded = True
         self._user_defined_dict = get_user_defined_dict_from_filepath(self.filepath)
-        PipelineManager._file_is_currently_being_loaded = False
+        context.file_is_currently_being_loaded = False
 
         return self._user_defined_dict
 

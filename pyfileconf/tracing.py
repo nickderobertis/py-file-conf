@@ -14,10 +14,10 @@ class RunningTracker:
         self.orig_running_section_path_str = None
 
     def __enter__(self):
-        from pyfileconf.main import PipelineManager
-        self.orig_running_section_path_str = PipelineManager._currently_running_section_path_str
-        PipelineManager._currently_running_section_path_str = self.section_path_str
+        from pyfileconf import context
+        self.orig_running_section_path_str = context.currently_running_section_path_str
+        context.currently_running_section_path_str = self.section_path_str
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        from pyfileconf.main import PipelineManager
-        PipelineManager._currently_running_section_path_str = self.orig_running_section_path_str
+        from pyfileconf import context
+        context.currently_running_section_path_str = self.orig_running_section_path_str
