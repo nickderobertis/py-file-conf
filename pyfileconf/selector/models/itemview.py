@@ -1,4 +1,6 @@
-from typing import cast
+import inspect
+from functools import partial
+from typing import cast, List, Type
 
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.selector.logic.exc.typo import (
@@ -93,7 +95,12 @@ class ItemView:
         actual_item = self.selector._get_real_item(self.section_path_str)
         # If this happened while running another item, add to dependencies
         self._add_to_config_dependencies_if_necessary()
-        return actual_item(*args, **kwargs)
+        result = actual_item(*args, **kwargs)
+        if isinstance(actual_item, partial) and inspect.isclass(actual_item.func):
+            # Got a class in the general collection, running these generates
+            # an instance of the object so add the section path in this case
+            result._section_path_str = self.section_path_str
+        return result
 
     def __deepcopy__(self, memodict={}):
         return deepcopy(self.item, memodict)

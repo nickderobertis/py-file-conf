@@ -324,6 +324,7 @@ class Runner(ReprMixin):
 
         full_func = partial(func, **config_dict)
 
+        self._add_full_section_path_str_to_obj(section_path_str, full_func)
         self._add_to_config_dependencies_if_necessary(section_path_str)
         return full_func
 
@@ -333,6 +334,7 @@ class Runner(ReprMixin):
         # Construct new pipeline instance with config args
         obj = pipeline_class(**config_dict)  # type: ignore
 
+        self._add_full_section_path_str_to_obj(section_path_str, obj)
         self._add_to_config_dependencies_if_necessary(section_path_str)
 
         return obj
@@ -345,6 +347,7 @@ class Runner(ReprMixin):
 
         obj = klass(**config_dict)
 
+        self._add_full_section_path_str_to_obj(section_path_str, obj)
         self._loaded_objects[section_path_str] = obj
         self._add_to_config_dependencies_if_necessary(section_path_str)
 
@@ -437,4 +440,8 @@ class Runner(ReprMixin):
         from pyfileconf.context import context
         full_sp = SectionPath.join(self._manager_name, section_path_str)
         context.add_config_dependency_for_currently_running_item_if_exists(full_sp, force_update=True)
+
+    def _add_full_section_path_str_to_obj(self, section_path_str: str, obj: Any):
+        full_sp_str = SectionPath.join(self._manager_name, section_path_str).path_str
+        obj._section_path_str = full_sp_str
 

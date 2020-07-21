@@ -319,11 +319,27 @@ class TestGetSectionPathFromItem(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
+        iv_run = iv()  # result of a_function(), should not have _section_path_str
+        assert not hasattr(iv_run, '_section_path_str')
         iv_func = pipeline_manager.get(iv)
         str_func = pipeline_manager.get('stuff.a_function')
         for obj in [iv, iv_func, str_func]:
             sp = obj._section_path_str
             assert sp == 'test_pipeline_manager.stuff.a_function'
+
+    def test_get_function_section_path_by_section(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff
+        iv_func = pipeline_manager.get(iv)
+        str_func = pipeline_manager.get('stuff')
+        assert iv._section_path_str == 'test_pipeline_manager.stuff'
+        for obj_list in [iv_func, str_func]:
+            for obj in obj_list:
+                sp = obj._section_path_str
+                assert sp == 'test_pipeline_manager.stuff.a_function'
 
     def test_get_class_section_path(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -331,11 +347,26 @@ class TestGetSectionPathFromItem(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.ExampleClass
+        iv_run = iv()  # running general class gets instance of class, so should have _section_path_str
         iv_class = pipeline_manager.get(iv)
         str_class = pipeline_manager.get('stuff.ExampleClass')
-        for obj in [iv, iv_class, str_class]:
+        for obj in [iv, iv_run, iv_class, str_class]:
             sp = obj._section_path_str
             assert sp == 'test_pipeline_manager.stuff.ExampleClass'
+
+    def test_get_class_section_path_by_section(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff
+        iv_class = pipeline_manager.get(iv)
+        str_class = pipeline_manager.get('stuff')
+        assert iv._section_path_str == 'test_pipeline_manager.stuff'
+        for obj_list in [iv_class, str_class]:
+            for obj in obj_list:
+                sp = obj._section_path_str
+                assert sp == 'test_pipeline_manager.stuff.ExampleClass'
 
     def test_get_specific_class_section_path(self):
         self.write_example_class_dict_to_file()
@@ -345,8 +376,26 @@ class TestGetSectionPathFromItem(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
+        iv_run = iv()  # result of __call__ on ExampleClass, should not have _section_path_str
+        assert not hasattr(iv_run, '_section_path_str')
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
         for obj in [iv, iv_obj, str_obj]:
             sp = obj._section_path_str
             assert sp == 'test_pipeline_manager.example_class.stuff.data'
+
+    def test_get_specific_class_section_path_by_section(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff')
+        assert iv._section_path_str == 'test_pipeline_manager.example_class.stuff'
+        for obj_list in [iv_obj, str_obj]:
+            for obj in obj_list:
+                sp = obj._section_path_str
+                assert sp == 'test_pipeline_manager.example_class.stuff.data'
