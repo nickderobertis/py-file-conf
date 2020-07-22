@@ -1,7 +1,6 @@
 """
 Default behavior to be run on hooks
 """
-from copy import deepcopy
 from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -53,6 +52,6 @@ def pyfileconf_iter_update_for_case(
             ".".join(SectionPath(sp_str)[1:])
         ).path_str
         manager.reset(relative_section_path_str)
-        relative_conf_dict = deepcopy(config_dict)
+        relative_conf_dict = {**config_dict}
         relative_conf_dict["section_path_str"] = relative_section_path_str
         manager.update(**relative_conf_dict)
