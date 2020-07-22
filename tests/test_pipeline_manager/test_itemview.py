@@ -6,7 +6,7 @@ from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.context import context
 from pyfileconf.selector.models.itemview import ItemView
 from tests.input_files.amodule import SecondExampleClass
-from tests.input_files.mypackage.cmodule import ExampleClass
+from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassProtocol
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
     DIFFERENT_CLASS_CONFIG_DICT_LIST
 
@@ -30,6 +30,7 @@ class TestItemView(PipelineManagerTestBase):
         assert iv() == pipeline_manager.run(iv)
         assert iv.a == pipeline_manager.get(iv).a
         assert iv.item() == pipeline_manager.get(iv)()
+        assert isinstance(iv, ExampleClassProtocol)
 
     def test_function_iv_from_selector(self):
         self.write_a_function_to_pipeline_dict_file()
