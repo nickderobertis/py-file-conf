@@ -1,7 +1,10 @@
+from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Optional, TYPE_CHECKING
 import typing
 import collections
+
+from typing_extensions import Protocol, runtime_checkable
 
 from pyfileconf import Selector
 
@@ -90,3 +93,15 @@ class ExampleClass:
 
     def return_section_path_str(self):
         return self._section_path_str  # type: ignore
+
+
+@runtime_checkable
+class ExampleClassProtocol(Protocol):
+    a: Optional[typing.Tuple[int, int]]
+    name: Optional[str]
+    c: Optional[collections.defaultdict]
+    f: Optional[typing.Sequence[typing.Union[collections.Counter, pathlib.Path]]]
+
+    @abstractmethod
+    def my_call(self) -> str:
+        ...
