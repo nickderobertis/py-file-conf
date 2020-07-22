@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.5 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.6 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.5
+                0.10.6
               </div>
             
           
@@ -347,7 +347,25 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_specific_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_collection_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_collection_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<div class="viewcode-block" id="ItemView.from_section_path_str"><a class="viewcode-back" href="../../../../api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.ItemView.from_section_path_str">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_section_path_str</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructs an ItemView from a section path str</span>
+
+<span class="sd">        :param section_path_str: Must be the full section path</span>
+<span class="sd">            str containing the pipeline manager name</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">()</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;got invalid section path str </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">iv</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ItemView</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">sp</span><span class="p">:</span>
+            <span class="n">iv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">iv</span><span class="p">,</span> <span class="n">part</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">iv</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">_is_item_view</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
