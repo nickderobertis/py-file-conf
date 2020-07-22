@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.default_hooks &mdash; pyfileconf 0.10.7 documentation</title>
+  <title>pyfileconf.plugin.default_hooks &mdash; pyfileconf 0.10.8 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.7
+                0.10.8
               </div>
             
           
@@ -188,6 +188,38 @@
     <span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">get_config_product</span>
 
     <span class="k">return</span> <span class="n">get_config_product</span><span class="p">(</span><span class="n">config_updates</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_iter_update_for_case"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case">[docs]</a><span class="nd">@hookimpl</span>
+<span class="k">def</span> <span class="nf">pyfileconf_iter_update_for_case</span><span class="p">(</span>
+    <span class="n">case</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span> <span class="n">runner</span><span class="p">:</span> <span class="s2">&quot;IterativeRunner&quot;</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called in PipelineManager.run_iter and IterativeRunner to take the case</span>
+<span class="sd">    containing all the updates and actually run the updates, before running</span>
+<span class="sd">    this case.</span>
+
+<span class="sd">    :param case: tuple of kwarg dictionaries which would normally be provided to .update</span>
+<span class="sd">    :param runner: :class:`IterativeRunner` which has been constructed to call iteration</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
+
+    <span class="k">for</span> <span class="n">config_dict</span> <span class="ow">in</span> <span class="n">case</span><span class="p">:</span>
+        <span class="n">sp_str</span> <span class="o">=</span> <span class="n">config_dict</span><span class="p">[</span><span class="s2">&quot;section_path_str&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">runner</span><span class="o">.</span><span class="n">base_section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sp_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">runner</span><span class="o">.</span><span class="n">base_section_path_str</span><span class="p">,</span> <span class="n">sp_str</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">sp_str</span><span class="p">)</span>
+        <span class="n">relative_section_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span>
+            <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="n">sp_str</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">relative_section_path_str</span><span class="p">)</span>
+        <span class="n">relative_conf_dict</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">config_dict</span><span class="p">}</span>
+        <span class="n">relative_conf_dict</span><span class="p">[</span><span class="s2">&quot;section_path_str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relative_section_path_str</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">relative_conf_dict</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

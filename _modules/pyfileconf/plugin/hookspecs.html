@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.10.7 documentation</title>
+  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.10.8 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.7
+                0.10.8
               </div>
             
           
@@ -204,6 +204,21 @@
 <span class="sd">    config cases to be run and modify them in place.</span>
 
 <span class="sd">    :param cases: list of tuples of kwarg dictionaries which would normally be provided to .update</span>
+<span class="sd">    :param runner: :class:`IterativeRunner` which has been constructed to call iteration</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_iter_update_for_case"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case">[docs]</a><span class="nd">@hookspec</span>
+<span class="k">def</span> <span class="nf">pyfileconf_iter_update_for_case</span><span class="p">(</span>
+    <span class="n">case</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">],</span> <span class="n">runner</span><span class="p">:</span> <span class="s2">&quot;IterativeRunner&quot;</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called in PipelineManager.run_iter and IterativeRunner to take the case</span>
+<span class="sd">    containing all the updates and actually run the updates, before running</span>
+<span class="sd">    this case.</span>
+
+<span class="sd">    :param case: tuple of kwarg dictionaries which would normally be provided to .update</span>
 <span class="sd">    :param runner: :class:`IterativeRunner` which has been constructed to call iteration</span>
 <span class="sd">    :return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin package &mdash; pyfileconf 0.10.7 documentation</title>
+  <title>pyfileconf.plugin package &mdash; pyfileconf 0.10.8 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.10.7
+                0.10.8
               </div>
             
           
@@ -228,6 +228,25 @@ itertools.product to produce the cases</p>
 </dl>
 </dd></dl>
 
+<dl class="function">
+<dt id="pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case">
+<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_iter_update_for_case</code><span class="sig-paren">(</span><em class="sig-param">case</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_iter_update_for_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called in PipelineManager.run_iter and IterativeRunner to take the case
+containing all the updates and actually run the updates, before running
+this case.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case.params.case"></span><strong>case</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case.params.case">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …]) – tuple of kwarg dictionaries which would normally be provided to .update</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case.params.runner"></span><strong>runner</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case.params.runner">¶</a> (<a class="reference internal" href="pyfileconf.html#pyfileconf.iterate.IterativeRunner" title="pyfileconf.iterate.IterativeRunner"><em>IterativeRunner</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">IterativeRunner</span></code> which has been constructed to call iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-pyfileconf.plugin.hookspecs">
 <span id="pyfileconf-plugin-hookspecs-module"></span><h2>pyfileconf.plugin.hookspecs module<a class="headerlink" href="#module-pyfileconf.plugin.hookspecs" title="Permalink to this headline">¶</a></h2>
@@ -263,6 +282,25 @@ config cases to be run and modify them in place.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases.params.cases"></span><strong>cases</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases.params.cases">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …]]) – list of tuples of kwarg dictionaries which would normally be provided to .update</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases.params.runner"></span><strong>runner</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases.params.runner">¶</a> (<a class="reference internal" href="pyfileconf.html#pyfileconf.iterate.IterativeRunner" title="pyfileconf.iterate.IterativeRunner"><em>IterativeRunner</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">IterativeRunner</span></code> which has been constructed to call iteration</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case">
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_update_for_case</code><span class="sig-paren">(</span><em class="sig-param">case</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_update_for_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called in PipelineManager.run_iter and IterativeRunner to take the case
+containing all the updates and actually run the updates, before running
+this case.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case.params.case"></span><strong>case</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case.params.case">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …]) – tuple of kwarg dictionaries which would normally be provided to .update</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case.params.runner"></span><strong>runner</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case.params.runner">¶</a> (<a class="reference internal" href="pyfileconf.html#pyfileconf.iterate.IterativeRunner" title="pyfileconf.iterate.IterativeRunner"><em>IterativeRunner</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">IterativeRunner</span></code> which has been constructed to call iteration</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

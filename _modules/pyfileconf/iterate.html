@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.iterate &mdash; pyfileconf 0.10.7 documentation</title>
+  <title>pyfileconf.iterate &mdash; pyfileconf 0.10.8 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.7
+                0.10.8
               </div>
             
           
@@ -232,20 +232,7 @@
 
         <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">config_dict</span> <span class="ow">in</span> <span class="n">case</span><span class="p">:</span>
-                <span class="n">sp_str</span> <span class="o">=</span> <span class="n">config_dict</span><span class="p">[</span><span class="s2">&quot;section_path_str&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">sp_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">base_section_path_str</span><span class="p">,</span> <span class="n">sp_str</span>
-                    <span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
-                <span class="n">manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">sp_str</span><span class="p">)</span>
-                <span class="n">relative_section_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span>
-                    <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="n">sp_str</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
-                <span class="n">manager</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">relative_section_path_str</span><span class="p">)</span>
-                <span class="n">relative_conf_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
-                <span class="n">relative_conf_dict</span><span class="p">[</span><span class="s2">&quot;section_path_str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relative_section_path_str</span>
-                <span class="n">manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">relative_conf_dict</span><span class="p">)</span>
+            <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_iter_update_for_case</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="n">case</span><span class="p">,</span> <span class="n">runner</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">collect_results</span><span class="p">:</span>
                 <span class="n">in_out_tup</span> <span class="o">=</span> <span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
