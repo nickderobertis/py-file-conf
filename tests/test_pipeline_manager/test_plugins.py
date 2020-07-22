@@ -20,11 +20,12 @@ POST_UPDATE_COUNTER = 0
 class ExamplePlugin:
 
     @hookimpl
-    def pyfileconf_iter_get_cases(self, config_updates: Sequence[Dict[str, Any]]) -> List[Tuple[Dict[str, Any], ...]]:
+    def pyfileconf_iter_get_cases(self, config_updates: Sequence[Dict[str, Any]],
+                                  runner: "IterativeRunner") -> List[Tuple[Dict[str, Any], ...]]:
         return EXPECT_MODIFIED_CASES
 
     @hookimpl
-    def pyfileconf_iter_modify_cases(self, cases: List[Tuple[Dict[str, Any], ...]]):
+    def pyfileconf_iter_modify_cases(self, cases: List[Tuple[Dict[str, Any], ...]], runner: "IterativeRunner"):
         cases.append(EXTRA_CASE)
 
     @hookimpl

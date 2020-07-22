@@ -52,9 +52,9 @@ class IterativeRunner:
     def get_cases(self) -> List[Tuple[Dict[str, Any], ...]]:
         cases_lol: List[
             List[Tuple[Dict[str, Any], ...]]
-        ] = manager.plm.hook.pyfileconf_iter_get_cases(config_updates=self.config_updates)
+        ] = manager.plm.hook.pyfileconf_iter_get_cases(config_updates=self.config_updates, runner=self)
         cases = list(itertools.chain(*cases_lol))
-        manager.plm.hook.pyfileconf_iter_modify_cases(cases=cases)
+        manager.plm.hook.pyfileconf_iter_modify_cases(cases=cases, runner=self)
         return cases
 
     def run(self, collect_results: bool = True) -> IterativeResults:
