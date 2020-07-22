@@ -184,6 +184,24 @@ class ItemView:
     def _specific_classes(self) -> Tuple[Type, ...]:
         return tuple(self._specific_class_collection_map.keys())
 
+    @classmethod
+    def from_section_path_str(cls, section_path_str: str) -> 'ItemView':
+        """
+        Constructs an ItemView from a section path str
+
+        :param section_path_str: Must be the full section path
+            str containing the pipeline manager name
+        :return:
+        """
+        s = Selector()
+        sp = SectionPath(section_path_str)
+        if len(sp) < 2:
+            raise ValueError(f'got invalid section path str {section_path_str}')
+        iv = cast(ItemView, s)
+        for part in sp:
+            iv = getattr(iv, part)
+        return iv
+
 
 def _is_item_view(obj) -> bool:
     is_item_view = getattr(obj, '_is_item_view', False)
