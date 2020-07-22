@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.default_hooks &mdash; pyfileconf 0.10.4 documentation</title>
+  <title>pyfileconf.plugin.default_hooks &mdash; pyfileconf 0.10.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.4
+                0.10.5
               </div>
             
           
@@ -166,13 +166,18 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Default behavior to be run on hooks</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">IterativeRunner</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.plugin.impl</span> <span class="kn">import</span> <span class="n">hookimpl</span>
 
 
 <div class="viewcode-block" id="pyfileconf_iter_get_cases"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.default_hooks.pyfileconf_iter_get_cases">[docs]</a><span class="nd">@hookimpl</span>
-<span class="k">def</span> <span class="nf">pyfileconf_iter_get_cases</span><span class="p">(</span><span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">pyfileconf_iter_get_cases</span><span class="p">(</span>
+    <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">runner</span><span class="p">:</span> <span class="s2">&quot;IterativeRunner&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Collect user passed casses by section path str then call</span>
 <span class="sd">    itertools.product to produce the cases</span>

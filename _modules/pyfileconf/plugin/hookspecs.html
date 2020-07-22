@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.10.4 documentation</title>
+  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.10.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.4
+                0.10.5
               </div>
             
           
@@ -172,6 +172,7 @@
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">IterativeRunner</span>
 
 <span class="kn">import</span> <span class="nn">pluggy</span>
 
@@ -182,24 +183,28 @@
 
 <div class="viewcode-block" id="pyfileconf_iter_get_cases"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_iter_get_cases">[docs]</a><span class="nd">@hookspec</span>
 <span class="k">def</span> <span class="nf">pyfileconf_iter_get_cases</span><span class="p">(</span>
-    <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">runner</span><span class="p">:</span> <span class="s2">&quot;IterativeRunner&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Called in PipelineManager.run_iter and IterativeRunner to take the user passed</span>
 <span class="sd">    config updates and return the config cases to be run</span>
 
 <span class="sd">    :param config_updates: list of kwarg dictionaries which would normally be provided to .update</span>
+<span class="sd">    :param runner: :class:`IterativeRunner` which has been constructed to call iteration</span>
 <span class="sd">    :return: config cases to be run</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="pyfileconf_iter_modify_cases"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases">[docs]</a><span class="nd">@hookspec</span>
-<span class="k">def</span> <span class="nf">pyfileconf_iter_modify_cases</span><span class="p">(</span><span class="n">cases</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]):</span>
+<span class="k">def</span> <span class="nf">pyfileconf_iter_modify_cases</span><span class="p">(</span>
+    <span class="n">cases</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]],</span> <span class="n">runner</span><span class="p">:</span> <span class="s2">&quot;IterativeRunner&quot;</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Called in PipelineManager.run_iter and IterativeRunner to take the collected</span>
 <span class="sd">    config cases to be run and modify them in place.</span>
 
 <span class="sd">    :param cases: list of tuples of kwarg dictionaries which would normally be provided to .update</span>
+<span class="sd">    :param runner: :class:`IterativeRunner` which has been constructed to call iteration</span>
 <span class="sd">    :return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
@@ -215,6 +220,7 @@
 
 <span class="sd">    :param section_path_str_or_list: section paths which were passed to</span>
 <span class="sd">        PipelineManager.run</span>
+<span class="sd">    :param pm: The manager responsible for the run</span>
 <span class="sd">    :return: additional sections/functions to run, if any</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
@@ -229,6 +235,7 @@
 <span class="sd">    then it can also be modified in place.</span>
 
 <span class="sd">    :param results: results from running section/function</span>
+<span class="sd">    :param runner: :class:`Runner` which has been called to run function/section</span>
 <span class="sd">    :return: additional results, if any</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
@@ -245,6 +252,7 @@
 <span class="sd">    a dictionary of updates which will be used to update the passed dictionary.</span>
 <span class="sd">    Can also modify the passed dictionaries in place.</span>
 
+<span class="sd">    :param pm: The manager responsible for the run</span>
 <span class="sd">    :param d: dictionary of config updates</span>
 <span class="sd">    :param section_path_str: section path of config to be updated</span>
 <span class="sd">    :param kwargs: dictionary of config updates</span>
@@ -262,6 +270,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Called at the end of PipelineManager.update.</span>
 
+<span class="sd">    :param pm: The manager responsible for the run</span>
 <span class="sd">    :param d: dictionary of config updates</span>
 <span class="sd">    :param section_path_str: section path of config which was updated</span>
 <span class="sd">    :param kwargs: dictionary of config updates</span>
