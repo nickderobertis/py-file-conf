@@ -1,13 +1,18 @@
 """
 Default behavior to be run on hooks
 """
-from typing import Any, Dict, Sequence, List, Tuple
+from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pyfileconf.iterate import IterativeRunner
 
 from pyfileconf.plugin.impl import hookimpl
 
 
 @hookimpl
-def pyfileconf_iter_get_cases(config_updates: Sequence[Dict[str, Any]]) -> List[Tuple[Dict[str, Any], ...]]:
+def pyfileconf_iter_get_cases(
+    config_updates: Sequence[Dict[str, Any]], runner: "IterativeRunner"
+) -> List[Tuple[Dict[str, Any], ...]]:
     """
     Collect user passed casses by section path str then call
     itertools.product to produce the cases
