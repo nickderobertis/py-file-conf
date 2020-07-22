@@ -17,12 +17,24 @@ class TestItemView(PipelineManagerTestBase):
         assert isinstance(iv, ItemView)
         assert iv() == pipeline_manager.run(iv)
         assert iv.item() == pipeline_manager.get(iv)()
+        iv2 = ItemView.from_section_path_str(iv._section_path_str)
+        assert iv == iv2
+        assert iv2 in [iv]
+        assert iv == list({iv})[0]
+        assert {iv: 5}[iv] == 5
+        assert hash(iv) == hash(iv.section_path_str)
 
     def assert_valid_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
         assert isinstance(iv, ItemView)
         assert iv() == pipeline_manager.get(iv)()
         assert iv()() == pipeline_manager.run(iv)
         assert iv.item() == pipeline_manager.get(iv)()
+        iv2 = ItemView.from_section_path_str(iv._section_path_str)
+        assert iv == iv2
+        assert iv2 in [iv]
+        assert iv == list({iv})[0]
+        assert {iv: 5}[iv] == 5
+        assert hash(iv) == hash(iv.section_path_str)
 
     def assert_valid_specific_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
         assert isinstance(iv, ItemView)
@@ -30,6 +42,12 @@ class TestItemView(PipelineManagerTestBase):
         assert iv() == pipeline_manager.run(iv)
         assert iv.a == pipeline_manager.get(iv).a
         assert iv.item() == pipeline_manager.get(iv)()
+        iv2 = ItemView.from_section_path_str(iv._section_path_str)
+        assert iv == iv2
+        assert iv2 in [iv]
+        assert iv == list({iv})[0]
+        assert {iv: 5}[iv] == 5
+        assert hash(iv) == hash(iv.section_path_str)
         assert isinstance(iv, ExampleClassProtocol)
 
     def test_function_iv_from_selector(self):
