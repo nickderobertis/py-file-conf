@@ -67,20 +67,7 @@ class IterativeRunner:
 
         all_results = []
         for case in self.cases:
-            for config_dict in case:
-                sp_str = config_dict["section_path_str"]
-                if self.base_section_path_str is not None:
-                    sp_str = SectionPath.join(
-                        self.base_section_path_str, sp_str
-                    ).path_str
-                manager = PipelineManager.get_manager_by_section_path_str(sp_str)
-                relative_section_path_str = SectionPath(
-                    ".".join(SectionPath(sp_str)[1:])
-                ).path_str
-                manager.reset(relative_section_path_str)
-                relative_conf_dict = deepcopy(config_dict)
-                relative_conf_dict["section_path_str"] = relative_section_path_str
-                manager.update(**relative_conf_dict)
+            manager.plm.hook.pyfileconf_iter_update_for_case(case=case, runner=self)
             result = self._run()
             if collect_results:
                 in_out_tup = (case, result)

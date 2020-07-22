@@ -45,6 +45,21 @@ def pyfileconf_iter_modify_cases(
 
 
 @hookspec
+def pyfileconf_iter_update_for_case(
+    case: Tuple[Dict[str, Any], ...], runner: "IterativeRunner"
+):
+    """
+    Called in PipelineManager.run_iter and IterativeRunner to take the case
+    containing all the updates and actually run the updates, before running
+    this case.
+
+    :param case: tuple of kwarg dictionaries which would normally be provided to .update
+    :param runner: :class:`IterativeRunner` which has been constructed to call iteration
+    :return: None
+    """
+
+
+@hookspec
 def pyfileconf_pre_run(
     section_path_str_or_list: RunnerArgs, pm: "PipelineManager"
 ) -> Optional[RunnerArgs]:

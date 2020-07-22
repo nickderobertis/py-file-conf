@@ -1,41 +1,72 @@
 from copy import deepcopy
 from typing import Sequence, Dict, Any, List, Tuple, Type, Optional
 
-from pyfileconf import Selector, hookimpl, IterativeRunner, reset_plugins, remove_default_plugins, PipelineManager
+from pyfileconf import (
+    Selector,
+    hookimpl,
+    IterativeRunner,
+    reset_plugins,
+    remove_default_plugins,
+    PipelineManager,
+)
 from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import RunnerArgs, ResultOrResults
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST
+from tests.test_pipeline_manager.base import (
+    PipelineManagerTestBase,
+    CLASS_CONFIG_DICT_LIST,
+)
 
-EXPECT_MODIFIED_CASES = [(dict(a=1, b=2), dict(c=3, d=4))]
-EXTRA_CASE = dict(e=5, f=6)
-EXTRA_RESULT = 'abc'
+EXPECT_MODIFIED_CASES = [
+    (
+        dict(a=1, b=2, section_path_str="test_pipeline_manager.stuff.a_function"),
+        dict(a=3, b=4, section_path_str="test_pipeline_manager.stuff.a_function"),
+    )
+]
+EXTRA_CASE = (
+    dict(a=5, b=6, section_path_str="test_pipeline_manager.stuff.a_function"),
+)
+EXTRA_RESULT = "abc"
 OVERRIDDEN_B_RESULT = 10
 PRE_RUN_COUNTER = 0
 POST_RUN_COUNTER = 0
 PRE_UPDATE_COUNTER = 0
 POST_UPDATE_COUNTER = 0
+ITER_UPDATE_COUNTER = 0
 
 
 class ExamplePlugin:
-
     @hookimpl
-    def pyfileconf_iter_get_cases(self, config_updates: Sequence[Dict[str, Any]],
-                                  runner: "IterativeRunner") -> List[Tuple[Dict[str, Any], ...]]:
+    def pyfileconf_iter_get_cases(
+        self, config_updates: Sequence[Dict[str, Any]], runner: "IterativeRunner"
+    ) -> List[Tuple[Dict[str, Any], ...]]:
         return EXPECT_MODIFIED_CASES
 
     @hookimpl
-    def pyfileconf_iter_modify_cases(self, cases: List[Tuple[Dict[str, Any], ...]], runner: "IterativeRunner"):
+    def pyfileconf_iter_modify_cases(
+        self, cases: List[Tuple[Dict[str, Any], ...]], runner: "IterativeRunner"
+    ):
         cases.append(EXTRA_CASE)
 
     @hookimpl
-    def pyfileconf_pre_run(self, section_path_str_or_list: RunnerArgs) -> Optional[RunnerArgs]:
-        global PRE_RUN_COUNTER
-        PRE_RUN_COUNTER += 1
-        return 'stuff.a_function'
+    def pyfileconf_iter_update_for_case(
+        case: Tuple[Dict[str, Any], ...], runner: "IterativeRunner"
+    ):
+        global ITER_UPDATE_COUNTER
+        ITER_UPDATE_COUNTER += 1
 
     @hookimpl
-    def pyfileconf_post_run(self, results: ResultOrResults) -> Optional[ResultOrResults]:
+    def pyfileconf_pre_run(
+        self, section_path_str_or_list: RunnerArgs
+    ) -> Optional[RunnerArgs]:
+        global PRE_RUN_COUNTER
+        PRE_RUN_COUNTER += 1
+        return "stuff.a_function"
+
+    @hookimpl
+    def pyfileconf_post_run(
+        self, results: ResultOrResults
+    ) -> Optional[ResultOrResults]:
         global POST_RUN_COUNTER
         POST_RUN_COUNTER += 1
         return EXTRA_RESULT
@@ -64,10 +95,7 @@ class ExamplePlugin:
         POST_UPDATE_COUNTER += 1
 
 
-
-
 class PluginsTest(PipelineManagerTestBase):
-
     def teardown_method(self, method):
         super().teardown_method(method)
         reset_plugins()
@@ -75,7 +103,7 @@ class PluginsTest(PipelineManagerTestBase):
 
     def add_plugin(self, plugin_class: Type = ExamplePlugin):
         manager.plm.register(plugin_class())
-        
+
     def replace_plugin(self, plugin_class: Type = ExamplePlugin):
         remove_default_plugins()
         self.add_plugin(plugin_class)
@@ -85,32 +113,48 @@ class PluginsTest(PipelineManagerTestBase):
         global POST_RUN_COUNTER
         global PRE_UPDATE_COUNTER
         global POST_UPDATE_COUNTER
+        global ITER_UPDATE_COUNTER
         PRE_RUN_COUNTER = 0
         POST_RUN_COUNTER = 0
         PRE_UPDATE_COUNTER = 0
         POST_UPDATE_COUNTER = 0
+        ITER_UPDATE_COUNTER = 0
 
 
 class TestIterPlugins(PluginsTest):
-
     def test_iter_no_plugins(self):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
-        cd = dict(
-            section_path_str='test_pipeline_manager.stuff.a_function',
-            b=10,
-            a=2
-        )
-        cd2 = dict(
-            section_path_str='test_pipeline_manager.stuff.a_function',
-            b=20
-        )
+        cd = dict(section_path_str="test_pipeline_manager.stuff.a_function", b=10, a=2)
+        cd2 = dict(section_path_str="test_pipeline_manager.stuff.a_function", b=20)
         config_dicts = [cd, cd2]
         runner = IterativeRunner(iv, config_dicts)
         assert runner.cases == [(cd,), (cd2,)]
+        result = runner.run()
+        assert result == [
+            (
+                (
+                    {
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                        "b": 10,
+                        "a": 2,
+                    },
+                ),
+                (2, 10),
+            ),
+            (
+                (
+                    {
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                        "b": 20,
+                    },
+                ),
+                (None, 20),
+            ),
+        ]
 
     def test_iter_add_plugin(self):
         self.add_plugin()
@@ -119,18 +163,58 @@ class TestIterPlugins(PluginsTest):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
-        cd = dict(
-            section_path_str='test_pipeline_manager.stuff.a_function',
-            b=10,
-            a=2
-        )
-        cd2 = dict(
-            section_path_str='test_pipeline_manager.stuff.a_function',
-            b=20
-        )
+        cd = dict(section_path_str="test_pipeline_manager.stuff.a_function", b=10, a=2)
+        cd2 = dict(section_path_str="test_pipeline_manager.stuff.a_function", b=20)
         config_dicts = [cd, cd2]
         runner = IterativeRunner(iv, config_dicts)
         assert runner.cases == [*EXPECT_MODIFIED_CASES, (cd,), (cd2,), EXTRA_CASE]
+        result = runner.run()
+        assert result == [
+            (
+                (
+                    {
+                        "a": 1,
+                        "b": 2,
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                    },
+                    {
+                        "a": 3,
+                        "b": 4,
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                    },
+                ),
+                [(3, 10), (3, 10), "abc"],
+            ),
+            (
+                (
+                    {
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                        "b": 10,
+                        "a": 2,
+                    },
+                ),
+                [(2, 10), (2, 10), "abc"],
+            ),
+            (
+                (
+                    {
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                        "b": 20,
+                    },
+                ),
+                [(None, 10), (None, 10), "abc"],
+            ),
+            (
+                (
+                    {
+                        "a": 5,
+                        "b": 6,
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                    },
+                ),
+                [(5, 10), (5, 10), "abc"],
+            ),
+        ]
 
     def test_iter_replace_plugin(self):
         self.replace_plugin()
@@ -139,22 +223,43 @@ class TestIterPlugins(PluginsTest):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
-        cd = dict(
-            section_path_str='test_pipeline_manager.stuff.a_function',
-            b=10,
-            a=2
-        )
-        cd2 = dict(
-            section_path_str='test_pipeline_manager.stuff.a_function',
-            b=20
-        )
+        cd = dict(section_path_str="test_pipeline_manager.stuff.a_function", b=10, a=2)
+        cd2 = dict(section_path_str="test_pipeline_manager.stuff.a_function", b=20)
         config_dicts = [cd, cd2]
         runner = IterativeRunner(iv, config_dicts)
         assert runner.cases == [*EXPECT_MODIFIED_CASES, EXTRA_CASE]
+        result = runner.run()
+        assert ITER_UPDATE_COUNTER == 2
+        assert result == [
+            (
+                (
+                    {
+                        "a": 1,
+                        "b": 2,
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                    },
+                    {
+                        "a": 3,
+                        "b": 4,
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                    },
+                ),
+                [(None, None), (None, None), "abc"],
+            ),
+            (
+                (
+                    {
+                        "a": 5,
+                        "b": 6,
+                        "section_path_str": "test_pipeline_manager.stuff.a_function",
+                    },
+                ),
+                [(None, None), (None, None), "abc"],
+            ),
+        ]
 
 
 class TestRunPlugins(PluginsTest):
-
     def test_run_no_plugins(self):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -184,18 +289,18 @@ class TestRunPlugins(PluginsTest):
 
 
 class TestUpdatePlugins(PluginsTest):
-
     def test_update_no_plugins(self):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
-        expected_b_result = ['a', 'b']
-        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        expected_b_result = ["a", "b"]
+        section_path = SectionPath.from_section_str_list(
+            SectionPath(iv.section_path_str)[1:]
+        )
         pipeline_manager.update(
-            b=expected_b_result,
-            section_path_str=section_path.path_str
+            b=expected_b_result, section_path_str=section_path.path_str
         )
         result = pipeline_manager.run(iv)
         assert result == (None, expected_b_result)
@@ -209,13 +314,18 @@ class TestUpdatePlugins(PluginsTest):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
-        expected_b_result = ['a', 'b']
-        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        expected_b_result = ["a", "b"]
+        section_path = SectionPath.from_section_str_list(
+            SectionPath(iv.section_path_str)[1:]
+        )
         pipeline_manager.update(
-            b=expected_b_result,
-            section_path_str=section_path.path_str
+            b=expected_b_result, section_path_str=section_path.path_str
         )
         result = pipeline_manager.run(iv)
-        assert result == [(None, OVERRIDDEN_B_RESULT), (None, OVERRIDDEN_B_RESULT), 'abc']
+        assert result == [
+            (None, OVERRIDDEN_B_RESULT),
+            (None, OVERRIDDEN_B_RESULT),
+            "abc",
+        ]
         assert PRE_UPDATE_COUNTER == 1
         assert POST_UPDATE_COUNTER == 1
