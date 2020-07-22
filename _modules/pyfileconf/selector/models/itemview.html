@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.6 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.7 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.6
+                0.10.7
               </div>
             
           
@@ -314,6 +314,9 @@
 
         <span class="c1"># passed all checks, must be equal</span>
         <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">]</span>
