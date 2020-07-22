@@ -150,6 +150,9 @@ class ItemView:
         # passed all checks, must be equal
         return True
 
+    def __hash__(self):
+        return hash(self.section_path_str)
+
     def __repr__(self):
         repr_cols = ['section_path_str']
 
