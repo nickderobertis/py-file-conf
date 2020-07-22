@@ -39,12 +39,26 @@ class TestItemView(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.a_function
         self.assert_valid_function_iv(iv, pipeline_manager)
 
+    def test_function_iv_from_str(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        iv = ItemView.from_section_path_str('test_pipeline_manager.stuff.a_function')
+        self.assert_valid_function_iv(iv, pipeline_manager)
+
     def test_class_iv_from_selector(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.ExampleClass
+        self.assert_valid_class_iv(iv, pipeline_manager)
+
+    def test_class_iv_from_str(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        iv = ItemView.from_section_path_str('test_pipeline_manager.stuff.ExampleClass')
         self.assert_valid_class_iv(iv, pipeline_manager)
 
     def test_specific_class_iv_from_selector(self):
@@ -55,6 +69,15 @@ class TestItemView(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.example_class.stuff.data
+        self.assert_valid_specific_class_iv(iv, pipeline_manager)
+
+    def test_specific_class_iv_from_str(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        iv = ItemView.from_section_path_str('test_pipeline_manager.example_class.stuff.data')
         self.assert_valid_specific_class_iv(iv, pipeline_manager)
 
 
