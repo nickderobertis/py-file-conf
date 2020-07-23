@@ -31,6 +31,7 @@ class ExampleClass:
 
     @d.setter
     def d(self, d):
+        assert d is None
         self._d = d
 
     @property
