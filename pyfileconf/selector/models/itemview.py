@@ -1,6 +1,6 @@
 import inspect
 from functools import partial
-from typing import cast, List, Type, Dict, Tuple
+from typing import cast, List, Type, Dict, Tuple, Any
 
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -162,7 +162,16 @@ class ItemView:
         return f'<{type(self).__name__}{repr_col_str}>'
 
     @property
-    def type(self):
+    def __class__(self) -> Type:
+        return self.type
+
+    @__class__.setter
+    def __class__(self, value):
+        # Setting class has no effect, still use type of underlying item
+        pass
+
+    @property
+    def type(self) -> Type:
         return self.selector.get_type(self.section_path_str)
 
     @property
@@ -206,8 +215,23 @@ class ItemView:
         return iv
 
 
-def _is_item_view(obj) -> bool:
-    is_item_view = getattr(obj, '_is_item_view', False)
-    if is_item_view:
+def is_item_view(obj: Any) -> bool:
+    """
+    Determine whether an object is an :class:`ItemView`.
+
+    When using the Selector, objects are proxied by ItemViews
+    until an attribute is accessed. The ItemView is set up
+    so that it will work nearly completely like the
+    original object, including isinstance checks. In fact
+    isinstance(item, ItemView) will always return False
+    on an ItemView as the class appears to be the original
+    class. This function is the preferred way to check
+    whether an object is an ItemView.
+
+    :param obj: An object which may or may not be an ItemView
+    :return: Whether the object is an ItemView
+    """
+    this_is_item_view = getattr(obj, '_is_item_view', False)
+    if this_is_item_view:
         obj = cast(ItemView, obj)
-    return is_item_view
+    return this_is_item_view

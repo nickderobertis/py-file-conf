@@ -11,3 +11,4 @@ from pyfileconf.selector.models.selector import Selector
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.plugin.manager_utils import reset_plugins, remove_default_plugins
 from pyfileconf.context import context
+from pyfileconf.selector.models.itemview import is_item_view
