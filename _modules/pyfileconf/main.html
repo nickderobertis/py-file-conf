@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.12.0 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.12.1 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.12.1
               </div>
             
           
@@ -173,7 +173,7 @@
 <span class="kn">import</span> <span class="nn">bdb</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Iterator</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.logic.convert</span> <span class="kn">import</span> <span class="n">convert_to_empty_obj_if_necessary</span>
@@ -194,7 +194,7 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">StrOrView</span><span class="p">,</span> <span class="n">IterativeResults</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">StrOrView</span><span class="p">,</span> <span class="n">IterativeResults</span><span class="p">,</span> <span class="n">IterativeResult</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.registrar</span> <span class="kn">import</span> <span class="n">PipelineRegistrar</span>
@@ -257,7 +257,8 @@
     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">exposed_methods</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s1">&#39;run&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;run_iter&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;run_product&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;run_product_gen&#39;</span><span class="p">,</span>
             <span class="s1">&#39;get&#39;</span><span class="p">,</span>
             <span class="s1">&#39;update&#39;</span><span class="p">,</span>
             <span class="s1">&#39;load&#39;</span><span class="p">,</span>
@@ -320,8 +321,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">str_or_list_only</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PipelineManager.run_iter"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.run_iter">[docs]</a>    <span class="k">def</span> <span class="nf">run_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">,</span> <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
-                 <span class="n">collect_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;IterativeResults&#39;</span><span class="p">:</span>
+<div class="viewcode-block" id="PipelineManager.run_product"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.run_product">[docs]</a>    <span class="k">def</span> <span class="nf">run_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">,</span> <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+                    <span class="n">collect_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;IterativeResults&#39;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run one or multiple registered functions/sections multiple times, each time</span>
 <span class="sd">        updating the config with a combination of the passed config updates.</span>
@@ -344,6 +345,18 @@
             <span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">iterative_runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">collect_results</span><span class="o">=</span><span class="n">collect_results</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PipelineManager.run_product_gen"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.run_product_gen">[docs]</a>    <span class="k">def</span> <span class="nf">run_product_gen</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="s1">&#39;RunnerArgs&#39;</span><span class="p">,</span> <span class="n">config_updates</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="s1">&#39;IterativeResult&#39;</span><span class="p">]:</span>
+        <span class="n">iterative_runner</span> <span class="o">=</span> <span class="n">IterativeRunner</span><span class="p">(</span>
+            <span class="n">section_path_str_or_list</span><span class="p">,</span>
+            <span class="n">config_updates</span><span class="p">,</span>
+            <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">iterative_runner</span><span class="o">.</span><span class="n">run_gen</span><span class="p">()</span></div>
+
 
     <span class="k">def</span> <span class="nf">_run_depending_on_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str_or_list</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">ResultOrResults</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span><span class="p">:</span>

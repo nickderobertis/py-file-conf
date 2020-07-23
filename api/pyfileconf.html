@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.12.0 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.12.1 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.12.0
+                0.12.1
               </div>
             
           
@@ -720,6 +720,16 @@ if results are stored in some other way</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="pyfileconf.iterate.IterativeRunner.run_gen">
+<code class="sig-name descname">run_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.run_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_gen" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="pyfileconf.iterate.IterativeRunner.run_items">
 <code class="sig-name descname">run_items</code><em class="property">: List[SectionPath]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_items" title="Permalink to this definition">¶</a></dt>
@@ -930,8 +940,8 @@ or when running multiple functions/sections, e.g.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyfileconf.main.PipelineManager.run_iter">
-<code class="sig-name descname">run_iter</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">collect_results=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_iter" title="Permalink to this definition">¶</a></dt>
+<dt id="pyfileconf.main.PipelineManager.run_product">
+<code class="sig-name descname">run_product</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">collect_results=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_product" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run one or multiple registered functions/sections multiple times, each time
 updating the config with a combination of the passed config updates.</p>
 <p>Aggregates the updates to each config, then takes the itertools product of all the config
@@ -939,11 +949,11 @@ updates to run the functions with each combination of the configs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_iter.params.section_path_str_or_list"></span><strong>section_path_str_or_list</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_iter.params.section_path_str_or_list">¶</a> (<em>RunnerArgs</em>) – . separated name of path of function or section, or list thereof.
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_product.params.section_path_str_or_list"></span><strong>section_path_str_or_list</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_product.params.section_path_str_or_list">¶</a> (<em>RunnerArgs</em>) – . separated name of path of function or section, or list thereof.
 similar to how a function would be imported. e.g. ‘main.data.summarize.summary_func1’
 or when running multiple functions/sections, e.g. [‘main.data’, ‘main.analysis.reg.1’]</p></li>
-<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_iter.params.config_updates"></span><strong>config_updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_iter.params.config_updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – list of kwarg dictionaries which would normally be provided to .update</p></li>
-<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_iter.params.collect_results"></span><strong>collect_results</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_iter.params.collect_results">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to aggregate and return results, set to False to save memory
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_product.params.config_updates"></span><strong>config_updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_product.params.config_updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – list of kwarg dictionaries which would normally be provided to .update</p></li>
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.run_product.params.collect_results"></span><strong>collect_results</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.run_product.params.collect_results">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to aggregate and return results, set to False to save memory
 if results are stored in some other way</p></li>
 </ul>
 </dd>
@@ -952,6 +962,16 @@ if results are stored in some other way</p></li>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.run_product_gen">
+<code class="sig-name descname">run_product_gen</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_product_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_product_gen" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
