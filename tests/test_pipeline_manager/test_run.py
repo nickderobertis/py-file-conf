@@ -22,12 +22,15 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         assert result == (None, None)
 
     def test_run_function_multiple(self):
+        num_a_func = len(ExampleClass._a_function_instances)
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
         result = pipeline_manager.run([iv, iv])
+        pipeline_manager.get(iv)
+        assert len(ExampleClass._a_function_instances) == num_a_func + 1
         assert result == [(None, None), (None, None)]
 
     def test_run_function_multiple_pms(self):
@@ -61,6 +64,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         assert ec == ExampleClass(None)
 
     def test_run_class(self):
+        num_ec = len(ExampleClass._instances)
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
@@ -69,6 +73,9 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == 'woo'
         result2 = iv().my_call()
+        pipeline_manager.get(iv)
+        # Only created one instance
+        assert len(ExampleClass._instances) == num_ec + 1
         assert result2 == 'woo2'
 
     def test_create_class_multiple_pms(self):
@@ -104,6 +111,7 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         assert ec.a == expect_ec.a
 
     def test_run_from_specific_class_dict_original_execute_key(self):
+        num_ec = len(ExampleClass._instances)
         self.write_example_class_dict_to_file()
         pipeline_manager = self.create_pm(
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
@@ -113,6 +121,9 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.example_class.stuff.data
         result = pipeline_manager.run(iv)
         iv_result = iv()
+        pipeline_manager.get(iv)
+        # Only created one instance
+        assert len(ExampleClass._instances) == num_ec + 1
         assert result == iv_result == 'woo'
 
     def test_run_from_specific_class_dict_custom_execute_key(self):

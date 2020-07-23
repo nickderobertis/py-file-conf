@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Optional, TYPE_CHECKING
 import typing
 import collections
+from weakref import WeakValueDictionary
 
 from typing_extensions import Protocol, runtime_checkable
 
@@ -14,6 +15,8 @@ import pathlib
 
 
 class ExampleClass:
+    _instances = WeakValueDictionary()
+    _a_function_instances = WeakValueDictionary()
 
     def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None,
                  c: Optional[collections.defaultdict] = None, d: Optional['TracebackException'] = None,
@@ -24,6 +27,7 @@ class ExampleClass:
         self.c = c
         self.d = d
         self.f = f
+        self._instances[id(self)] = self
 
     @property
     def d(self):
