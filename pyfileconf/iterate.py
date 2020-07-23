@@ -1,10 +1,10 @@
 import itertools
 from collections import defaultdict
 from copy import deepcopy
-from typing import List, Dict, Any, Tuple, Sequence, Optional
+from typing import List, Dict, Any, Tuple, Sequence, Optional, Iterator
 
 from pyfileconf.plugin import manager
-from pyfileconf.runner.models.interfaces import RunnerArgs, IterativeResults
+from pyfileconf.runner.models.interfaces import RunnerArgs, IterativeResults, IterativeResult
 from pyfileconf.sectionpath.sectionpath import SectionPath
 
 
@@ -73,6 +73,13 @@ class IterativeRunner:
                 in_out_tup = (case, result)
                 all_results.append(in_out_tup)
         return all_results
+
+    def run_gen(self) -> Iterator[IterativeResult]:
+        for case in self.cases:
+            manager.plm.hook.pyfileconf_iter_update_for_case(case=case, runner=self)
+            result = self._run()
+            in_out_tup = (case, result)
+            yield in_out_tup
 
     def _run(self) -> Any:
         from pyfileconf.main import PipelineManager
