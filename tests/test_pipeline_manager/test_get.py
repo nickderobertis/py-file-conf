@@ -211,6 +211,9 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         str_section = pipeline_manager.get('stuff')
         str_func = str_section[0]
         str_result = str_func()
+        direct_iv_func = iv.a_function.item
+        direct_str_func = pipeline_manager.get('stuff.a_function')
+        assert iv_func is str_func is direct_iv_func is direct_str_func
         assert iv_result == str_result == (None, None)
 
     def test_get_main_dict_section_multiple_pms(self):
@@ -311,6 +314,9 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         iv_obj = iv_section[0]
         str_section = pipeline_manager.get('example_class.stuff')
         str_obj = str_section[0]
+        direct_iv_obj = pipeline_manager.get(iv.data)
+        direct_str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj is str_obj is direct_iv_obj is direct_str_obj
         assert iv_obj.c == str_obj.c == expect_ec.c
         assert iv_obj.a == str_obj.a == expect_ec.a
 
