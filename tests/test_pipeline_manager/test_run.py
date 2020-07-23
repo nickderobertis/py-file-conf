@@ -228,27 +228,25 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
 class TestPipelineManagerRunIter(PipelineManagerTestBase):
 
     def test_run_iter_function_single(self):
-        self.write_a_function_to_pipeline_dict_file()
-        pipeline_manager = self.create_pm()
-        pipeline_manager.load()
-        sel = Selector()
-        iv = sel.test_pipeline_manager.stuff.a_function
         cd = dict(
             section_path_str='stuff.a_function',
             b=10
         )
         config_dicts = [cd]
-        result = pipeline_manager.run_product(iv, config_dicts)
-        assert result == [((cd,), (None, 10))]
-        result = pipeline_manager.run_product(iv, config_dicts, collect_results=False)
-        assert result == []
-
-    def test_run_iter_function_multiple(self):
+        expect_results = [((cd,), (None, 10))]
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.a_function
+        result = pipeline_manager.run_product(iv, config_dicts)
+        assert result == expect_results
+        for res, expect_res in zip(pipeline_manager.run_product_gen(iv, config_dicts), expect_results):
+            assert res == expect_res
+        result = pipeline_manager.run_product(iv, config_dicts, collect_results=False)
+        assert result == []
+
+    def test_run_iter_function_multiple(self):
         cd = dict(
             section_path_str='stuff.a_function',
             b=10,
@@ -259,24 +257,21 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
             b=20
         )
         config_dicts = [cd, cd2]
+        expect_results = [((cd,), (2, 10)), ((cd2,), (None, 20))]
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+
         result = pipeline_manager.run_product(iv, config_dicts)
-        assert result == [((cd,), (2, 10)), ((cd2,), (None, 20))]
+        assert result == expect_results
+        for res, expect_res in zip(pipeline_manager.run_product_gen(iv, config_dicts), expect_results):
+            assert res == expect_res
         result = pipeline_manager.run_product(iv, config_dicts, collect_results=False)
         assert result == []
 
     def test_run_iter_function_multiple_pms(self):
-        self.write_a_function_to_pipeline_dict_file()
-        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
-        pipeline_manager = self.create_pm()
-        pipeline_manager.load()
-        pipeline_manager2 = self.create_pm(
-            folder=self.second_pm_folder,
-            name=self.second_test_name,
-        )
-        pipeline_manager2.load()
-        sel = Selector()
-        iv = sel.test_pipeline_manager.stuff.a_function
-        iv2 =sel.test_pipeline_manager2.stuff.a_function
         cd = dict(
             section_path_str='test_pipeline_manager.stuff.a_function',
             b=10,
@@ -296,10 +291,25 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
             b=7
         )
         config_dicts = [cd, cd2, cd3, cd4]
+        expect_results = [((cd, cd3), [(2, 10), (1, 5)]), ((cd, cd4), [(2, 10), (None, 7)]),
+                          ((cd2, cd3), [(None, 20), (1, 5)]), ((cd2, cd4), [(None, 20), (None, 7)])]
+        self.write_a_function_to_pipeline_dict_file()
+        self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager2 = self.create_pm(
+            folder=self.second_pm_folder,
+            name=self.second_test_name,
+        )
+        pipeline_manager2.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        iv2 =sel.test_pipeline_manager2.stuff.a_function
         runner = IterativeRunner([iv, iv2], config_dicts)
         result = runner.run()
-        assert result == [((cd, cd3), [(2, 10), (1, 5)]), ((cd, cd4), [(2, 10), (None, 7)]),
-                          ((cd2, cd3), [(None, 20), (1, 5)]), ((cd2, cd4), [(None, 20), (None, 7)])]
+        assert result == expect_results
+        for res, expect_res in zip(runner.run_gen(), expect_results):
+            assert res == expect_res
         result = runner.run(collect_results=False)
         assert result == []
 

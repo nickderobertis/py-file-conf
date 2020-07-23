@@ -8,7 +8,7 @@ from functools import partial
 import bdb
 import warnings
 from copy import deepcopy
-from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict, Set
+from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict, Set, Iterator
 
 from pyfileconf.basemodels.registrar import Registrar
 from pyfileconf.data.logic.convert import convert_to_empty_obj_if_necessary
@@ -29,7 +29,7 @@ from pyfileconf.plugin import manager as plugin_manager
 from pyfileconf.views.object import ObjectView
 
 if TYPE_CHECKING:
-    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults
+    from pyfileconf.runner.models.interfaces import RunnerArgs, StrOrView, IterativeResults, IterativeResult
 
 from pyfileconf.config.models.manager import ConfigManager
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar
@@ -93,6 +93,7 @@ class PipelineManager:
         exposed_methods = [
             'run',
             'run_product',
+            'run_product_gen',
             'get',
             'update',
             'load',
@@ -179,6 +180,18 @@ class PipelineManager:
             strip_manager_from_iv=True,
         )
         return iterative_runner.run(collect_results=collect_results)
+
+    def run_product_gen(
+        self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
+    ) -> Iterator['IterativeResult']:
+        iterative_runner = IterativeRunner(
+            section_path_str_or_list,
+            config_updates,
+            base_section_path_str=self.name,
+            strip_manager_from_iv=True,
+        )
+        return iterative_runner.run_gen()
+
 
     def _run_depending_on_settings(self, section_path_str_or_list: Union[str, List[str]]) -> ResultOrResults:
         if self.auto_pdb:
