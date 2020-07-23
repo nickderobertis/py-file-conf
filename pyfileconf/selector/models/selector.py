@@ -189,17 +189,11 @@ class Selector:
         out_dict = {}
         manager: PipelineManager
         for manager_name, manager in self._managers.items():
-            pipeline_dict_path, specific_class_name_config_dict = get_pipeline_dict_path_and_specific_class_config_dicts_from_manager(manager)
-            collections, general_collection = create_collections(
-                specific_class_name_config_dict,
-                manager.default_config_path,
-                manager.folder,
-                pipeline_dict_path,
-            )
             manager_dict = {
-                '_general': general_collection,
+                '_general': manager._general_registrar.collection,
             }
-            for collection in collections:
+            for registrar in manager._registrars:
+                collection = registrar.collection
                 manager_dict.update({
                     collection.name: collection
                 })
