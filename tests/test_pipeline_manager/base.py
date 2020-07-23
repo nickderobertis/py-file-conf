@@ -2,6 +2,7 @@ import os
 from collections import defaultdict
 from typing import Optional, Dict, Set
 from unittest import TestCase
+from weakref import WeakValueDictionary
 
 from pyfileconf import PipelineManager
 from pyfileconf.main import create_project
@@ -117,6 +118,7 @@ class PipelineManagerTestBase(TestCase):
         delete_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
         delete_project(self.second_pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
         self.reset_pm_class()
+        self.reset_example_class()
 
     def create_pm(self, **kwargs):
         all_kwargs = dict(
@@ -131,6 +133,10 @@ class PipelineManagerTestBase(TestCase):
 
     def reset_pm_class(self):
         context.reset()
+
+    def reset_example_class(self):
+        ExampleClass._instances = WeakValueDictionary()
+        ExampleClass._a_function_instances = WeakValueDictionary()
 
     def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):
         if file_path is None:

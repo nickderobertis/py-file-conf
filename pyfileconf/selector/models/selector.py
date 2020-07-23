@@ -2,13 +2,10 @@ import inspect
 from typing import Callable, List, Any
 import warnings
 
-from pyfileconf.exceptions.pipelinemanager import NoPipelineManagerForFilepathException
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.logic.inspect import get_caller_filepath
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from pyfileconf.selector.logic.get.frommanager import get_pipeline_dict_path_and_specific_class_config_dicts_from_manager
 from pyfileconf.pipelines.models.collection import PipelineCollection
-from pyfileconf.basemodels.pipeline import Pipeline
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.views.object import ObjectView
 
@@ -50,7 +47,7 @@ class Selector:
         #
         # it would make this check safer
 
-        item_types = (Pipeline, Callable, ObjectView)
+        item_types = (Callable, ObjectView)
         if collection_obj.klass is not None:
             item_types = item_types + (collection_obj.klass,)
         collection_types = (SpecificClassCollection, PipelineCollection)
@@ -189,17 +186,11 @@ class Selector:
         out_dict = {}
         manager: PipelineManager
         for manager_name, manager in self._managers.items():
-            pipeline_dict_path, specific_class_name_config_dict = get_pipeline_dict_path_and_specific_class_config_dicts_from_manager(manager)
-            collections, general_collection = create_collections(
-                specific_class_name_config_dict,
-                manager.default_config_path,
-                manager.folder,
-                pipeline_dict_path,
-            )
             manager_dict = {
-                '_general': general_collection,
+                '_general': manager._general_registrar.collection,
             }
-            for collection in collections:
+            for registrar in manager._registrars:
+                collection = registrar.collection
                 manager_dict.update({
                     collection.name: collection
                 })

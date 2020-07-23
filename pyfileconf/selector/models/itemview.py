@@ -92,14 +92,27 @@ class ItemView:
         return exposed_properties + collection_attrs
 
     def __call__(self, *args, **kwargs):
+        from pyfileconf import PipelineManager
+
         # When calling, assume user always wants the real item
         actual_item = self.selector._get_real_item(self.section_path_str)
         # If this happened while running another item, add to dependencies
         self._add_to_config_dependencies_if_necessary()
+
+        # Determine whether this object is from a specific class collection
+        manager = PipelineManager.get_manager_by_section_path_str(self.section_path_str)
+        collection_name = SectionPath(self.section_path_str)[1]
+        try:
+            manager._registrar_dict[collection_name]
+            specific_class = True
+        except KeyError:
+            specific_class = False
+
+        # Handle depending on the type of item
         if isinstance(actual_item, partial):
-            # Got something in the general registrar, function or class
+            # Got a function in the general registrar
             func = actual_item
-        elif isinstance(actual_item, self._specific_classes):
+        elif specific_class and isinstance(actual_item, self._specific_classes):
             # Got specific registrar class
             # Need to look up the execute attribute and apply section path str
             actual_item._section_path_str = self.section_path_str
@@ -110,29 +123,33 @@ class ItemView:
             cannot_parse_error = ValueError(f'could not parse actual item, expected partial, '
                                             f'specific class, or method of specific class. '
                                             f'Got {actual_item} of type {type(actual_item)}')
+            orig_item: Any = None
             try:
                 orig_item = actual_item.__self__
-                # Is bound method
+                is_bound_method = True
             except AttributeError:
-                # Is not bound method
-                raise cannot_parse_error
+                is_bound_method = False
 
-            if not isinstance(orig_item, self._specific_classes):
-                # Is bound method, but not for one of defined specific classes
-                raise cannot_parse_error
+            if is_bound_method:
+                if not isinstance(orig_item, self._specific_classes):
+                    # Is bound method, but not for one of defined specific classes
+                    raise cannot_parse_error
 
-            # Got specific class method
-            # Add section path to original item and then set method to be called
-            orig_item_sp = SectionPath.from_section_str_list(SectionPath(self.section_path_str)[:-1])
-            orig_item_sp_str = orig_item_sp.path_str
-            orig_item._section_path_str = orig_item_sp_str
-            func = actual_item
+                # Got specific class method
+                # Add section path to original item and then set method to be called
+                orig_item_sp = SectionPath.from_section_str_list(SectionPath(self.section_path_str)[:-1])
+                orig_item_sp_str = orig_item_sp.path_str
+                orig_item._section_path_str = orig_item_sp_str
+                func = actual_item
+            else:
+                if inspect.isclass(actual_item):
+                    raise cannot_parse_error
+                # Got a class object in the general registrar
+                actual_item._section_path_str = self.section_path_str
+                # Simply return it
+                return actual_item
 
         result = func(*args, **kwargs)
-        if isinstance(actual_item, partial) and inspect.isclass(actual_item.func):
-            # Got a class in the general collection, running these generates
-            # an instance of the object so add the section path in this case
-            result._section_path_str = self.section_path_str
         return result
 
     def __deepcopy__(self, memodict={}):

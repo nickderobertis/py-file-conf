@@ -17,6 +17,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         iv_result = iv_func()
         str_func = pipeline_manager.get('stuff.a_function')
         str_result = str_func()
+        assert iv_func is str_func is iv.item
         assert iv_result == str_result == (None, None)
 
     def test_get_function_multiple_pms(self):
@@ -53,11 +54,10 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         pipeline_manager.load()
         sel = Selector()
         iv = sel.test_pipeline_manager.stuff.ExampleClass
-        iv_class = pipeline_manager.get(iv)
-        iv_obj = iv_class()
-        str_class = pipeline_manager.get('stuff.ExampleClass')
-        str_obj = str_class()
-        assert iv_obj == str_obj == ExampleClass(None)
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('stuff.ExampleClass')
+        assert iv_obj is str_obj is iv()
+        assert iv_obj == ExampleClass(None)
 
     def test_get_class_multiple_pms(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -73,19 +73,17 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
 
         # Get from pipeline manager 1
         iv = sel.test_pipeline_manager.stuff.ExampleClass
-        iv_class = pipeline_manager.get(iv)
-        iv_obj = iv_class()
-        str_class = pipeline_manager.get('stuff.ExampleClass')
-        str_obj = str_class()
-        assert iv_obj == str_obj == ExampleClass(None)
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('stuff.ExampleClass')
+        assert iv_obj is str_obj is iv()
+        assert iv_obj == ExampleClass(None)
 
         # Get from pipeline manager 2
         iv = sel.test_pipeline_manager2.stuff.ExampleClass
-        iv_class = pipeline_manager2.get(iv)
-        iv_obj = iv_class()
-        str_class = pipeline_manager2.get('stuff.ExampleClass')
-        str_obj = str_class()
-        assert iv_obj == str_obj == ExampleClass(None)
+        iv_obj = pipeline_manager2.get(iv)
+        str_obj = pipeline_manager2.get('stuff.ExampleClass')
+        assert iv_obj is str_obj is iv()
+        assert iv_obj == ExampleClass(None)
 
     def test_get_class_from_specific_config_dict(self):
         self.write_example_class_dict_to_file()
@@ -98,6 +96,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         expect_ec = ExampleClass(None, name='data')
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj is str_obj is iv.item
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
 

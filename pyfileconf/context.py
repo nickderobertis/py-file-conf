@@ -45,6 +45,10 @@ class PyFileConfContext:
         from pyfileconf.sectionpath.sectionpath import SectionPath
         dependent_section_path = SectionPath.from_ambiguous(dependent)
         depends_on_section_path_str = SectionPath.from_ambiguous(depends_on).path_str
+        if dependent_section_path.path_str == depends_on_section_path_str:
+            # Will hit here while running an item, as it gets itself while running
+            # No need to make config dependent on itself
+            return
         self.config_dependencies[depends_on_section_path_str].add(dependent_section_path)
         if force_update:
             self.force_update_dependencies[depends_on_section_path_str].add(dependent_section_path)

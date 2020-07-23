@@ -28,7 +28,7 @@ class TestItemView(PipelineManagerTestBase):
 
     def assert_valid_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
         assert isinstance(iv, ItemView)
-        assert iv() == pipeline_manager.get(iv)()
+        assert iv() == pipeline_manager.get(iv)
         assert iv()() == pipeline_manager.run(iv)
         assert iv.item() == pipeline_manager.get(iv)()
         iv2 = ItemView.from_section_path_str(iv._section_path_str)
