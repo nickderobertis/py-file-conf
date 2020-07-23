@@ -100,6 +100,43 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
 
+    def test_get_class_from_specific_config_dict_custom_name(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        self.append_to_specific_class_config('name: str = "My Name"')
+        pipeline_manager.reload()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(None, name='My Name')
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj is str_obj is iv.item
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+    def test_get_class_from_specific_config_dict_custom_key_attr_and_key(self):
+        self.write_example_class_dict_to_file()
+        ccdl = deepcopy(CLASS_CONFIG_DICT_LIST)
+        for cd in ccdl:
+            cd['key_attr'] = 'c'
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=ccdl
+        )
+        pipeline_manager.load()
+        self.append_to_specific_class_config('c: str = "My Name"')
+        pipeline_manager.reload()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(None, c='My Name', name=None)
+        iv_obj = pipeline_manager.get(iv)
+        str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj is str_obj is iv.item
+        assert iv_obj.c == str_obj.c == expect_ec.c
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
     def test_get_class_from_specific_config_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()
         self.write_example_class_dict_to_file(pm_index=1)
@@ -174,6 +211,9 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         str_section = pipeline_manager.get('stuff')
         str_func = str_section[0]
         str_result = str_func()
+        direct_iv_func = iv.a_function.item
+        direct_str_func = pipeline_manager.get('stuff.a_function')
+        assert iv_func is str_func is direct_iv_func is direct_str_func
         assert iv_result == str_result == (None, None)
 
     def test_get_main_dict_section_multiple_pms(self):
@@ -236,6 +276,48 @@ class TestPipelineManagerGetSection(PipelineManagerTestBase):
         str_section = pipeline_manager.get('example_class.stuff')
         str_obj = str_section[0]
         assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+    def test_get_specific_class_dict_section_custom_name(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        self.append_to_specific_class_config('name: str = "My Name"')
+        pipeline_manager.reload()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff
+        expect_ec = ExampleClass(None, name='My Name')
+        iv_section = pipeline_manager.get(iv)
+        iv_obj = iv_section[0]
+        str_section = pipeline_manager.get('example_class.stuff')
+        str_obj = str_section[0]
+        assert iv_obj.name == str_obj.name == expect_ec.name
+        assert iv_obj.a == str_obj.a == expect_ec.a
+
+    def test_get_specific_class_dict_section_custom_key_attr_and_key(self):
+        self.write_example_class_dict_to_file()
+        ccdl = deepcopy(CLASS_CONFIG_DICT_LIST)
+        for cd in ccdl:
+            cd['key_attr'] = 'c'
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=ccdl
+        )
+        pipeline_manager.load()
+        self.append_to_specific_class_config('c: str = "My Name"')
+        pipeline_manager.reload()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff
+        expect_ec = ExampleClass(None, c='My Name', name=None)
+        iv_section = pipeline_manager.get(iv)
+        iv_obj = iv_section[0]
+        str_section = pipeline_manager.get('example_class.stuff')
+        str_obj = str_section[0]
+        direct_iv_obj = pipeline_manager.get(iv.data)
+        direct_str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj is str_obj is direct_iv_obj is direct_str_obj
+        assert iv_obj.c == str_obj.c == expect_ec.c
         assert iv_obj.a == str_obj.a == expect_ec.a
 
     def test_get_specific_class_dict_section_multiple_pms(self):

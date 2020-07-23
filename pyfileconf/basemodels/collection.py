@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, Type
+from typing import List, Optional, Sequence, Type, Any, Dict
 import os
 
 from pyfileconf.basemodels.container import Container
@@ -10,6 +10,7 @@ StrList = List[str]
 scaffolding_error = NotImplementedError('must use SpecificClassCollection or PipelineCollection, not base class Collection')
 
 class Collection(Container, ReprMixin):
+    name_dict: Dict[str, Any]
 
     #### Scaffolding functions. These should be overridden by collection subclasses ###
 
@@ -76,6 +77,12 @@ class Collection(Container, ReprMixin):
     def extend(self, items):
         self._items.extend(items)
         self._set_name_map()
+
+    def name_for_obj(self, obj: Any) -> str:
+        for name, item in self.name_dict.items():
+            if obj is item:
+                return name
+        raise ValueError(f'did not find object {obj} in {self}')
 
     @classmethod
     def from_dict(cls, dict_: dict, basepath: str, name: str = None,

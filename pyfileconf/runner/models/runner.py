@@ -262,9 +262,7 @@ class Runner(ReprMixin):
             # Get section path by which to call this item
             if self._is_specific_class(section_or_callable):
                 # If specific class, need to look up which key holds the name
-                item_registrar = self._specific_class_registrar_map[type(section_or_callable)]
-                item_key_attr = item_registrar.key_attr
-                subsection_name = getattr(section_or_callable, item_key_attr)
+                subsection_name = section.name_for_obj(section_or_object_view)
             else:
                 # If in the main dict, or is a collection, the name attribute or function/class name holds the name
                 subsection_name = _get_public_name_or_special_name(section_or_object_view, accept_output_names=False)
