@@ -1,10 +1,8 @@
-from copy import deepcopy
 from typing import Union, cast, Any, Type
 import os
 
 from pyfileconf.basemodels.collection import Collection
 from pyfileconf.data.logic.convert import convert_to_empty_obj_if_necessary
-from pyfileconf.logic.get import _get_public_name_or_special_name
 from pyfileconf.data.models.config import SpecificClassConfig
 from pyfileconf.io.func.load.args import extract_function_args_and_arg_imports_from_import
 from pyfileconf.imports.models.statements.obj import ObjectImportStatement
@@ -104,11 +102,3 @@ class SpecificClassCollection(Collection):
         item_config.imports.extend(func_arg_imports)
 
         item_config.to_file(item_filepath)
-
-
-def apply_config(obj: Any, config: 'SpecificClassConfig') -> None:
-    attributes = dir(obj)
-    for config_attr, config_item in config.items():
-        # Skip irrelevant items
-        if config_attr in attributes:
-            setattr(obj, config_attr, config_item)

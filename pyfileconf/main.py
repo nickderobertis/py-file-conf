@@ -256,7 +256,7 @@ class PipelineManager:
         :return:
         """
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
-        self.config.reset(section_path_str, allow_create=allow_create)
+        self.runner.reset(section_path_str, allow_create=allow_create)
 
     def reload(self) -> None:
         """

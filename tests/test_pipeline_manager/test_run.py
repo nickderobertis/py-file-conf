@@ -30,8 +30,10 @@ class TestPipelineManagerRun(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.stuff.a_function
         result = pipeline_manager.run([iv, iv])
         pipeline_manager.get(iv)
+        iv_res = iv()
         assert len(ExampleClass._a_function_instances) == num_a_func + 1
         assert result == [(None, None), (None, None)]
+        assert iv_res == (None, None)
 
     def test_run_function_multiple_pms(self):
         self.write_a_function_to_pipeline_dict_file()

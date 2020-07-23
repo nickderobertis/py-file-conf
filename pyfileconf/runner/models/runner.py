@@ -6,6 +6,7 @@ from mixins.repr import ReprMixin
 
 from pyfileconf.basemodels.collection import Collection
 from pyfileconf.basemodels.registrar import Registrar
+from pyfileconf.config.logic.apply import apply_config_to_obj, apply_config
 from pyfileconf.config.models.manager import ConfigManager, ActiveFunctionConfig
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
@@ -193,10 +194,11 @@ class Runner(ReprMixin):
 
     def _run_one_func(self, section_path_str: str) -> Result:
         with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
-            func, config_dict = self._get_func_and_config(section_path_str)
+            _, config_dict = self._get_func_and_config(section_path_str)
+            func = self._get_one_func_with_config(section_path_str)
 
             print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
-            result = func(**config_dict)
+            result = func()
             print(f'Result:\n{result}\n')
         self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
@@ -204,7 +206,7 @@ class Runner(ReprMixin):
     def _run_one_class(self, section_path_str: str) -> Result:
         with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
             klass, config_dict = self._get_func_and_config(section_path_str)
-            obj = klass(**config_dict)
+            obj = self._get_one_obj_with_config(section_path_str)
 
             print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = obj()
@@ -215,8 +217,7 @@ class Runner(ReprMixin):
     def _run_one_specific_class(self, section_path_str: str) -> Result:
         with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
             klass, config_dict = self._get_class_and_config(section_path_str)
-            obj = klass(**config_dict)
-            self._add_full_section_path_str_to_obj(section_path_str, obj)
+            obj = self._get_one_obj_with_config(section_path_str)
             registrar = self._specific_class_registrar_map[klass]
             execute_attr = registrar.execute_attr
             func = getattr(obj, execute_attr)
@@ -248,6 +249,8 @@ class Runner(ReprMixin):
             # Got pipeline class
             return self._get_one_pipeline_with_config(section_path_str)
         elif self._is_specific_class(func_or_collection):
+            return self._get_one_obj_with_config(section_path_str)
+        elif inspect.isclass(func_or_collection):
             return self._get_one_obj_with_config(section_path_str)
         elif callable(func_or_collection):
             return self._get_one_func_with_config(section_path_str)
@@ -321,11 +324,15 @@ class Runner(ReprMixin):
         return results
 
     def _get_one_func_with_config(self, section_path_str: str) -> Callable:
+        if section_path_str in self._loaded_objects:
+            return self._loaded_objects[section_path_str]
+
         func, config_dict = self._get_func_and_config(section_path_str)
 
         full_func = partial(func, **config_dict)
 
         self._add_full_section_path_str_to_obj(section_path_str, full_func)
+        self._loaded_objects[section_path_str] = full_func
         self._add_to_config_dependencies_if_necessary(section_path_str)
         return full_func
 
@@ -340,13 +347,16 @@ class Runner(ReprMixin):
 
         return obj
 
-    def _get_one_obj_with_config(self, section_path_str: str) -> Type:
+    def _get_one_obj_with_config(self, section_path_str: str) -> Any:
         if section_path_str in self._loaded_objects:
             return self._loaded_objects[section_path_str]
 
+        obj = self._get_func_or_collection(section_path_str)
         klass, config_dict = self._get_class_and_config(section_path_str)
-
-        obj = klass(**config_dict)
+        if inspect.isclass(obj):
+            obj = obj(**config_dict)
+        else:
+            apply_config(obj, config_dict)
 
         self._add_full_section_path_str_to_obj(section_path_str, obj)
         self._loaded_objects[section_path_str] = obj
@@ -411,7 +421,10 @@ class Runner(ReprMixin):
     def _get_class_and_config(self, section_path_str: str) -> Tuple[Type, dict]:
         config = self._get_config(section_path_str)
         obj = self._get_func_or_collection(section_path_str)
-        klass = obj.__class__
+        if inspect.isclass(obj):
+            klass = obj
+        else:
+            klass = obj.__class__
 
         # Only pass items in config which are arguments of function
         config_dict = config.for_function(klass)
@@ -425,8 +438,16 @@ class Runner(ReprMixin):
             if d is None:
                 d = {}
             d.update(**kwargs)
-            for key, value in d.items():
-                setattr(self._loaded_objects[section_path_str], key, value)
+            apply_config(self._loaded_objects[section_path_str], d)
+
+    def reset(self, section_path_str: str=None, allow_create: bool = False) -> None:
+        """
+        Resets a function or section config to default. If no section_path_str
+        is passed, resets local config.
+        """
+        default = self._config.reset(section_path_str=section_path_str, allow_create=allow_create)
+        if section_path_str in self._loaded_objects:
+            apply_config(self._loaded_objects[section_path_str], default)
 
     def refresh(self, section_path_str: str):
         if section_path_str in self._loaded_objects:

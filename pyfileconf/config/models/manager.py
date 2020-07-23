@@ -3,6 +3,7 @@ from typing import Union, Any, Optional
 
 from mixins.repr import ReprMixin
 
+from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.config.models.file import ActiveFunctionConfigFile
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
@@ -49,20 +50,18 @@ class ConfigManager(ReprMixin):
             raise ConfigManagerNotLoadedException('no config to refresh')
         config_obj.refresh()
 
-    def reset(self, section_path_str: str=None, allow_create: bool = False) -> None:
+    def reset(self, section_path_str: str=None, allow_create: bool = False) -> ConfigBase:
         """
         Resets a function or section config to default. If no section_path_str is passed, resets local config.
 
         To reset all configs, use .load() instead.
 
-        Args:
-            section_path_str:
-
-        Returns:
+        :return: the default configuration
 
         """
         default = self._get_default_func_or_section_config(section_path_str, create=allow_create)
         self.set(section_path_str, default, allow_create=allow_create)
+        return default
 
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
