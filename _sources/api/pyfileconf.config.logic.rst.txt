@@ -9,6 +9,14 @@ pyfileconf.config.logic package
 Submodules
 ----------
 
+pyfileconf.config.logic.apply module
+------------------------------------
+
+.. automodule:: pyfileconf.config.logic.apply
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pyfileconf.config.logic.load module
 -----------------------------------
 

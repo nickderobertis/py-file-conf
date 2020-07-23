@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.11.0 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.12.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -168,6 +168,7 @@
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.file</span> <span class="kn">import</span> <span class="n">ActiveFunctionConfigFile</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.config</span> <span class="kn">import</span> <span class="n">ConfigManagerNotLoadedException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
@@ -214,20 +215,18 @@
             <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to refresh&#39;</span><span class="p">)</span>
         <span class="n">config_obj</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ConfigManager.reset"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ConfigManager.reset"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConfigBase</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resets a function or section config to default. If no section_path_str is passed, resets local config.</span>
 
 <span class="sd">        To reset all configs, use .load() instead.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            section_path_str:</span>
-
-<span class="sd">        Returns:</span>
+<span class="sd">        :return: the default configuration</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_func_or_section_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">default</span></div>
 
 <div class="viewcode-block" id="ConfigManager.pop"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyfileconf 0.11.0 documentation</title>
+  <title>Index &mdash; pyfileconf 0.12.0 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -205,8 +205,6 @@
         <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.__init__">(pyfileconf.basemodels.config.ConfigBase method)</a>
 </li>
         <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase.__init__">(pyfileconf.basemodels.file.ConfigFileBase method)</a>
-</li>
-        <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline.__init__">(pyfileconf.basemodels.pipeline.Pipeline method)</a>
 </li>
         <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.__init__">(pyfileconf.basemodels.registrar.Registrar method)</a>
 </li>
@@ -353,7 +351,11 @@
       </ul></li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.append_if_missing">append_if_missing() (pyfileconf.basemodels.container.Container method)</a>
 </li>
-      <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.collection.apply_config">apply_config() (in module pyfileconf.data.models.collection)</a>
+      <li><a href="api/pyfileconf.config.logic.html#pyfileconf.config.logic.apply.apply_config">apply_config() (in module pyfileconf.config.logic.apply)</a>
+</li>
+      <li><a href="api/pyfileconf.config.logic.html#pyfileconf.config.logic.apply.apply_config_to_obj">apply_config_to_obj() (in module pyfileconf.config.logic.apply)</a>
+</li>
+      <li><a href="api/pyfileconf.config.logic.html#pyfileconf.config.logic.apply.apply_config_to_partial">apply_config_to_partial() (in module pyfileconf.config.logic.apply)</a>
 </li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.as_imports_and_assignments">as_imports_and_assignments() (pyfileconf.basemodels.config.ConfigBase method)</a>
 
@@ -573,11 +575,9 @@
         <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatement.equal_attrs">(pyfileconf.imports.models.statements.rename.RenameStatement attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline.execute">execute() (pyfileconf.basemodels.pipeline.Pipeline method)</a>
+      <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.importbase.ImportStatement.execute">execute() (pyfileconf.imports.models.statements.importbase.ImportStatement method)</a>
 
       <ul>
-        <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.importbase.ImportStatement.execute">(pyfileconf.imports.models.statements.importbase.ImportStatement method)</a>
-</li>
         <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.module.ModuleImportStatement.execute">(pyfileconf.imports.models.statements.module.ModuleImportStatement method)</a>
 </li>
         <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.obj.ObjectImportStatement.execute">(pyfileconf.imports.models.statements.obj.ObjectImportStatement method)</a>
@@ -742,8 +742,6 @@
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionExtractor">FunctionDefinitionExtractor (class in pyfileconf.io.file.load.parsers.funcdef)</a>
 </li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor">FunctionDefinitionOrClassInitByNameExtractor (class in pyfileconf.io.file.load.parsers.funcdef)</a>
-</li>
-      <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.pipeline.FunctionPipeline">FunctionPipeline (class in pyfileconf.pipelines.models.pipeline)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1009,8 +1007,6 @@
 </li>
       <li><a href="api/pyfileconf.dictfiles.html#pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path.params.nested_dict">nested_dict (pyfileconf.dictfiles.modify.add_item_into_nested_dict_at_section_path parameter)</a>
 </li>
-      <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline.new_instance_with_config">new_instance_with_config() (pyfileconf.basemodels.pipeline.Pipeline method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.rename.RenameStatementCollection.new_names">new_names() (pyfileconf.imports.models.statements.rename.RenameStatementCollection property)</a>
@@ -1060,8 +1056,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.html#pyfileconf.debug.pdb_post_mortem_or_passed_debug_fn">pdb_post_mortem_or_passed_debug_fn() (in module pyfileconf.debug)</a>
-</li>
-      <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.pipeline.Pipeline">Pipeline (class in pyfileconf.basemodels.pipeline)</a>
 </li>
       <li><a href="api/pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.pipeline.PipelineDictLoader.pipeline_dict">pipeline_dict() (pyfileconf.io.file.load.lazy.pipeline.PipelineDictLoader property)</a>
 </li>
@@ -1125,13 +1119,13 @@
 </li>
       <li><a href="api/pyfileconf.basemodels.html#module-pyfileconf.basemodels.file">pyfileconf.basemodels.file (module)</a>
 </li>
-      <li><a href="api/pyfileconf.basemodels.html#module-pyfileconf.basemodels.pipeline">pyfileconf.basemodels.pipeline (module)</a>
-</li>
       <li><a href="api/pyfileconf.basemodels.html#module-pyfileconf.basemodels.registrar">pyfileconf.basemodels.registrar (module)</a>
 </li>
       <li><a href="api/pyfileconf.config.html#module-pyfileconf.config">pyfileconf.config (module)</a>
 </li>
       <li><a href="api/pyfileconf.config.logic.html#module-pyfileconf.config.logic">pyfileconf.config.logic (module)</a>
+</li>
+      <li><a href="api/pyfileconf.config.logic.html#module-pyfileconf.config.logic.apply">pyfileconf.config.logic.apply (module)</a>
 </li>
       <li><a href="api/pyfileconf.config.logic.html#module-pyfileconf.config.logic.load">pyfileconf.config.logic.load (module)</a>
 </li>
@@ -1357,8 +1351,6 @@
 </li>
       <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.interfaces">pyfileconf.pipelines.models.interfaces (module)</a>
 </li>
-      <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.pipeline">pyfileconf.pipelines.models.pipeline (module)</a>
-</li>
       <li><a href="api/pyfileconf.pipelines.models.html#module-pyfileconf.pipelines.models.registrar">pyfileconf.pipelines.models.registrar (module)</a>
 </li>
       <li><a href="api/pyfileconf.plugin.html#module-pyfileconf.plugin">pyfileconf.plugin (module)</a>
@@ -1521,6 +1513,8 @@
         <li><a href="api/pyfileconf.html#pyfileconf.context.PyFileConfContext.reset">(pyfileconf.context.PyFileConfContext method)</a>
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.reset">(pyfileconf.main.PipelineManager method)</a>
+</li>
+        <li><a href="api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.reset">(pyfileconf.runner.models.runner.Runner method)</a>
 </li>
       </ul></li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.manager_utils.reset_plugins">reset_plugins() (in module pyfileconf.plugin.manager_utils)</a>

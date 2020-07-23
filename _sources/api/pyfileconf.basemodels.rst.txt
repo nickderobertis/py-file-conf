@@ -41,14 +41,6 @@ pyfileconf.basemodels.file module
    :undoc-members:
    :show-inheritance:
 
-pyfileconf.basemodels.pipeline module
--------------------------------------
-
-.. automodule:: pyfileconf.basemodels.pipeline
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyfileconf.basemodels.registrar module
 --------------------------------------
 

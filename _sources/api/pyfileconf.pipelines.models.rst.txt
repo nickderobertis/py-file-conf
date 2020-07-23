@@ -57,14 +57,6 @@ pyfileconf.pipelines.models.interfaces module
    :undoc-members:
    :show-inheritance:
 
-pyfileconf.pipelines.models.pipeline module
--------------------------------------------
-
-.. automodule:: pyfileconf.pipelines.models.pipeline
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 pyfileconf.pipelines.models.registrar module
 --------------------------------------------
 

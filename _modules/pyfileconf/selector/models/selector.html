@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.11.0 documentation</title>
+  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.12.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -167,13 +167,10 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">NoPipelineManagerForFilepathException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.inspect</span> <span class="kn">import</span> <span class="n">get_caller_filepath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.selector.logic.get.frommanager</span> <span class="kn">import</span> <span class="n">get_pipeline_dict_path_and_specific_class_config_dicts_from_manager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.basemodels.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 
@@ -215,7 +212,7 @@
         <span class="c1">#</span>
         <span class="c1"># it would make this check safer</span>
 
-        <span class="n">item_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">Pipeline</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">ObjectView</span><span class="p">)</span>
+        <span class="n">item_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">Callable</span><span class="p">,</span> <span class="n">ObjectView</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">collection_obj</span><span class="o">.</span><span class="n">klass</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">item_types</span> <span class="o">=</span> <span class="n">item_types</span> <span class="o">+</span> <span class="p">(</span><span class="n">collection_obj</span><span class="o">.</span><span class="n">klass</span><span class="p">,)</span>
         <span class="n">collection_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">SpecificClassCollection</span><span class="p">,</span> <span class="n">PipelineCollection</span><span class="p">)</span>
@@ -354,17 +351,11 @@
         <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">manager</span><span class="p">:</span> <span class="n">PipelineManager</span>
         <span class="k">for</span> <span class="n">manager_name</span><span class="p">,</span> <span class="n">manager</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">pipeline_dict_path</span><span class="p">,</span> <span class="n">specific_class_name_config_dict</span> <span class="o">=</span> <span class="n">get_pipeline_dict_path_and_specific_class_config_dicts_from_manager</span><span class="p">(</span><span class="n">manager</span><span class="p">)</span>
-            <span class="n">collections</span><span class="p">,</span> <span class="n">general_collection</span> <span class="o">=</span> <span class="n">create_collections</span><span class="p">(</span>
-                <span class="n">specific_class_name_config_dict</span><span class="p">,</span>
-                <span class="n">manager</span><span class="o">.</span><span class="n">default_config_path</span><span class="p">,</span>
-                <span class="n">manager</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span>
-                <span class="n">pipeline_dict_path</span><span class="p">,</span>
-            <span class="p">)</span>
             <span class="n">manager_dict</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;_general&#39;</span><span class="p">:</span> <span class="n">general_collection</span><span class="p">,</span>
+                <span class="s1">&#39;_general&#39;</span><span class="p">:</span> <span class="n">manager</span><span class="o">.</span><span class="n">_general_registrar</span><span class="o">.</span><span class="n">collection</span><span class="p">,</span>
             <span class="p">}</span>
-            <span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">collections</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">registrar</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">_registrars</span><span class="p">:</span>
+                <span class="n">collection</span> <span class="o">=</span> <span class="n">registrar</span><span class="o">.</span><span class="n">collection</span>
                 <span class="n">manager_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
                     <span class="n">collection</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">collection</span>
                 <span class="p">})</span>

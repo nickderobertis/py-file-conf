@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.11.0 documentation</title>
+  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.12.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -163,13 +163,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.data.models.collection</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.logic.convert</span> <span class="kn">import</span> <span class="n">convert_to_empty_obj_if_necessary</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_public_name_or_special_name</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.config</span> <span class="kn">import</span> <span class="n">SpecificClassConfig</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.func.load.args</span> <span class="kn">import</span> <span class="n">extract_function_args_and_arg_imports_from_import</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.obj</span> <span class="kn">import</span> <span class="n">ObjectImportStatement</span>
@@ -269,14 +267,6 @@
         <span class="n">item_config</span><span class="o">.</span><span class="n">imports</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">func_arg_imports</span><span class="p">)</span>
 
         <span class="n">item_config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="apply_config"><a class="viewcode-back" href="../../../../api/pyfileconf.data.models.html#pyfileconf.data.models.collection.apply_config">[docs]</a><span class="k">def</span> <span class="nf">apply_config</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;SpecificClassConfig&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">attributes</span> <span class="o">=</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">config_attr</span><span class="p">,</span> <span class="n">config_item</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="c1"># Skip irrelevant items</span>
-        <span class="k">if</span> <span class="n">config_attr</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">config_attr</span><span class="p">,</span> <span class="n">config_item</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.11.0 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.12.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -257,14 +257,27 @@
         <span class="k">return</span> <span class="n">exposed_properties</span> <span class="o">+</span> <span class="n">collection_attrs</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+
         <span class="c1"># When calling, assume user always wants the real item</span>
         <span class="n">actual_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="c1"># If this happened while running another item, add to dependencies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_to_config_dependencies_if_necessary</span><span class="p">()</span>
+
+        <span class="c1"># Determine whether this object is from a specific class collection</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="n">collection_name</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">manager</span><span class="o">.</span><span class="n">_registrar_dict</span><span class="p">[</span><span class="n">collection_name</span><span class="p">]</span>
+            <span class="n">specific_class</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">specific_class</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Handle depending on the type of item</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">partial</span><span class="p">):</span>
-            <span class="c1"># Got something in the general registrar, function or class</span>
+            <span class="c1"># Got a function in the general registrar</span>
             <span class="n">func</span> <span class="o">=</span> <span class="n">actual_item</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_classes</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">specific_class</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_classes</span><span class="p">):</span>
             <span class="c1"># Got specific registrar class</span>
             <span class="c1"># Need to look up the execute attribute and apply section path str</span>
             <span class="n">actual_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span>
@@ -275,29 +288,33 @@
             <span class="n">cannot_parse_error</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;could not parse actual item, expected partial, &#39;</span>
                                             <span class="sa">f</span><span class="s1">&#39;specific class, or method of specific class. &#39;</span>
                                             <span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{</span><span class="n">actual_item</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">actual_item</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">orig_item</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">orig_item</span> <span class="o">=</span> <span class="n">actual_item</span><span class="o">.</span><span class="vm">__self__</span>
-                <span class="c1"># Is bound method</span>
+                <span class="n">is_bound_method</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="c1"># Is not bound method</span>
-                <span class="k">raise</span> <span class="n">cannot_parse_error</span>
+                <span class="n">is_bound_method</span> <span class="o">=</span> <span class="kc">False</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">orig_item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_classes</span><span class="p">):</span>
-                <span class="c1"># Is bound method, but not for one of defined specific classes</span>
-                <span class="k">raise</span> <span class="n">cannot_parse_error</span>
+            <span class="k">if</span> <span class="n">is_bound_method</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">orig_item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_classes</span><span class="p">):</span>
+                    <span class="c1"># Is bound method, but not for one of defined specific classes</span>
+                    <span class="k">raise</span> <span class="n">cannot_parse_error</span>
 
-            <span class="c1"># Got specific class method</span>
-            <span class="c1"># Add section path to original item and then set method to be called</span>
-            <span class="n">orig_item_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">orig_item_sp_str</span> <span class="o">=</span> <span class="n">orig_item_sp</span><span class="o">.</span><span class="n">path_str</span>
-            <span class="n">orig_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="n">orig_item_sp_str</span>
-            <span class="n">func</span> <span class="o">=</span> <span class="n">actual_item</span>
+                <span class="c1"># Got specific class method</span>
+                <span class="c1"># Add section path to original item and then set method to be called</span>
+                <span class="n">orig_item_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">orig_item_sp_str</span> <span class="o">=</span> <span class="n">orig_item_sp</span><span class="o">.</span><span class="n">path_str</span>
+                <span class="n">orig_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="n">orig_item_sp_str</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="n">actual_item</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">actual_item</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">cannot_parse_error</span>
+                <span class="c1"># Got a class object in the general registrar</span>
+                <span class="n">actual_item</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span>
+                <span class="c1"># Simply return it</span>
+                <span class="k">return</span> <span class="n">actual_item</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">actual_item</span><span class="p">,</span> <span class="n">partial</span><span class="p">)</span> <span class="ow">and</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">actual_item</span><span class="o">.</span><span class="n">func</span><span class="p">):</span>
-            <span class="c1"># Got a class in the general collection, running these generates</span>
-            <span class="c1"># an instance of the object so add the section path in this case</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">_section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span>
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">__deepcopy__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memodict</span><span class="o">=</span><span class="p">{}):</span>

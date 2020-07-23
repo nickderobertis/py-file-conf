@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.context &mdash; pyfileconf 0.11.0 documentation</title>
+  <title>pyfileconf.context &mdash; pyfileconf 0.12.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.11.0
+                0.12.0
               </div>
             
           
@@ -210,6 +210,10 @@
         <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
         <span class="n">dependent_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_ambiguous</span><span class="p">(</span><span class="n">dependent</span><span class="p">)</span>
         <span class="n">depends_on_section_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_ambiguous</span><span class="p">(</span><span class="n">depends_on</span><span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
+        <span class="k">if</span> <span class="n">dependent_section_path</span><span class="o">.</span><span class="n">path_str</span> <span class="o">==</span> <span class="n">depends_on_section_path_str</span><span class="p">:</span>
+            <span class="c1"># Will hit here while running an item, as it gets itself while running</span>
+            <span class="c1"># No need to make config dependent on itself</span>
+            <span class="k">return</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config_dependencies</span><span class="p">[</span><span class="n">depends_on_section_path_str</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dependent_section_path</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">force_update</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">force_update_dependencies</span><span class="p">[</span><span class="n">depends_on_section_path_str</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dependent_section_path</span><span class="p">)</span></div>
