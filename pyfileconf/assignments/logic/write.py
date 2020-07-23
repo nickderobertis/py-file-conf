@@ -19,12 +19,12 @@ def _assignment_output_repr(value: Any, module_strs: List[str] = None):
 
     """
     from pyfileconf.selector.models.selector import _is_selector
-    from pyfileconf.selector.models.itemview import _is_item_view, ItemView
+    from pyfileconf.selector.models.itemview import is_item_view, ItemView
     if _is_selector(value):
         # accessing porperties of selector object will cause issues. Only need to return Selector()
         return 'Selector()'
 
-    if _is_item_view(value):
+    if is_item_view(value):
         # accessing properties of ItemView object will also cause issues. need to return s. and section path
         return f's.{value.section_path_str}'
 

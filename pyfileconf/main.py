@@ -298,7 +298,7 @@ class PipelineManager:
         :param kwargs: kwarg updates
         :return:
         """
-        from pyfileconf.selector.models.itemview import _is_item_view
+        from pyfileconf.selector.models.itemview import is_item_view
 
         new_updates_list: List[Dict[str, Any]] = plugin_manager.plm.hook.pyfileconf_pre_update(
             pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
@@ -320,7 +320,7 @@ class PipelineManager:
                 all_updates.update(d)
             full_sp = SectionPath.join(self.name, section_path_str)
             for value in all_updates.values():
-                if _is_item_view(value):
+                if is_item_view(value):
                     context.add_config_dependency(full_sp, value)
 
             # Refresh any configs which are dependent on attributes of this config
@@ -515,8 +515,8 @@ class PipelineManager:
             return self._get_section_path_str_from_section_path_str_or_view(run_list)
 
     def _get_section_path_str_from_section_path_str_or_view(self,section_path_str_or_view: 'StrOrView') -> str:
-        from pyfileconf.selector.models.itemview import _is_item_view
-        if _is_item_view(section_path_str_or_view):
+        from pyfileconf.selector.models.itemview import is_item_view
+        if is_item_view(section_path_str_or_view):
             # ItemView will have PipelineManager.name as first section, must strip
             section_path = SectionPath(section_path_str_or_view.section_path_str)  # type: ignore
             relative_section_path = SectionPath.from_section_str_list(section_path[1:])
