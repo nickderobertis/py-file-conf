@@ -92,7 +92,7 @@ class PipelineManager:
     def __dir__(self):
         exposed_methods = [
             'run',
-            'run_iter',
+            'run_product',
             'get',
             'update',
             'load',
@@ -155,8 +155,8 @@ class PipelineManager:
         else:
             return self._run_depending_on_settings(str_or_list_only)
 
-    def run_iter(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
-                 collect_results: bool = True) -> 'IterativeResults':
+    def run_product(self, section_path_str_or_list: 'RunnerArgs', config_updates: Sequence[Dict[str, Any]],
+                    collect_results: bool = True) -> 'IterativeResults':
         """
         Run one or multiple registered functions/sections multiple times, each time
         updating the config with a combination of the passed config updates.
