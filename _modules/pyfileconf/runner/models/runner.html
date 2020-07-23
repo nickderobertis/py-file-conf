@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.12.1 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.12.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.12.2
               </div>
             
           
@@ -427,9 +427,7 @@
             <span class="c1"># Get section path by which to call this item</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_specific_class</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">):</span>
                 <span class="c1"># If specific class, need to look up which key holds the name</span>
-                <span class="n">item_registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">)]</span>
-                <span class="n">item_key_attr</span> <span class="o">=</span> <span class="n">item_registrar</span><span class="o">.</span><span class="n">key_attr</span>
-                <span class="n">subsection_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">section_or_callable</span><span class="p">,</span> <span class="n">item_key_attr</span><span class="p">)</span>
+                <span class="n">subsection_name</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">name_for_obj</span><span class="p">(</span><span class="n">section_or_object_view</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># If in the main dict, or is a collection, the name attribute or function/class name holds the name</span>
                 <span class="n">subsection_name</span> <span class="o">=</span> <span class="n">_get_public_name_or_special_name</span><span class="p">(</span><span class="n">section_or_object_view</span><span class="p">,</span> <span class="n">accept_output_names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

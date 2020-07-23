@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.collection &mdash; pyfileconf 0.12.1 documentation</title>
+  <title>pyfileconf.basemodels.collection &mdash; pyfileconf 0.12.2 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.1
+                0.12.2
               </div>
             
           
@@ -163,7 +163,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.basemodels.collection</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.container</span> <span class="kn">import</span> <span class="n">Container</span>
@@ -175,6 +175,7 @@
 <span class="n">scaffolding_error</span> <span class="o">=</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;must use SpecificClassCollection or PipelineCollection, not base class Collection&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Collection"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection">[docs]</a><span class="k">class</span> <span class="nc">Collection</span><span class="p">(</span><span class="n">Container</span><span class="p">,</span> <span class="n">ReprMixin</span><span class="p">):</span>
+    <span class="n">name_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
     <span class="c1">#### Scaffolding functions. These should be overridden by collection subclasses ###</span>
 
@@ -241,6 +242,12 @@
 <div class="viewcode-block" id="Collection.extend"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.extend">[docs]</a>    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_name_map</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Collection.name_for_obj"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.name_for_obj">[docs]</a>    <span class="k">def</span> <span class="nf">name_for_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="n">item</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">name</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;did not find object </span><span class="si">{</span><span class="n">obj</span><span class="si">}</span><span class="s1"> in </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Collection.from_dict"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.collection.Collection.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dict_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
