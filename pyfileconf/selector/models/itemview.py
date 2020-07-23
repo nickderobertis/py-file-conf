@@ -162,7 +162,16 @@ class ItemView:
         return f'<{type(self).__name__}{repr_col_str}>'
 
     @property
-    def type(self):
+    def __class__(self) -> Type:
+        return self.type
+
+    @__class__.setter
+    def __class__(self, value):
+        # Setting class has no effect, still use type of underlying item
+        pass
+
+    @property
+    def type(self) -> Type:
         return self.selector.get_type(self.section_path_str)
 
     @property

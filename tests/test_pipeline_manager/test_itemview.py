@@ -23,6 +23,7 @@ class TestItemView(PipelineManagerTestBase):
         assert iv == list({iv})[0]
         assert {iv: 5}[iv] == 5
         assert iv.type == type(a_function)
+        assert isinstance(iv, type(a_function))
         assert hash(iv) == hash(iv.section_path_str)
 
     def assert_valid_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
@@ -36,6 +37,7 @@ class TestItemView(PipelineManagerTestBase):
         assert iv == list({iv})[0]
         assert {iv: 5}[iv] == 5
         assert iv.type == ExampleClass
+        assert isinstance(iv, ExampleClass)
         assert hash(iv) == hash(iv.section_path_str)
 
     def assert_valid_specific_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
@@ -51,6 +53,7 @@ class TestItemView(PipelineManagerTestBase):
         assert {iv: 5}[iv] == 5
         assert hash(iv) == hash(iv.section_path_str)
         assert iv.type == ExampleClass
+        assert isinstance(iv, ExampleClass)
         assert isinstance(iv, ExampleClassProtocol)
 
     def test_function_iv_from_selector(self):
