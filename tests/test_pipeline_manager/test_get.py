@@ -17,6 +17,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         iv_result = iv_func()
         str_func = pipeline_manager.get('stuff.a_function')
         str_result = str_func()
+        assert iv_func is str_func is iv.item
         assert iv_result == str_result == (None, None)
 
     def test_get_function_multiple_pms(self):
@@ -57,6 +58,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         iv_obj = iv_class()
         str_class = pipeline_manager.get('stuff.ExampleClass')
         str_obj = str_class()
+        assert iv_obj is str_obj is iv.item()
         assert iv_obj == str_obj == ExampleClass(None)
 
     def test_get_class_multiple_pms(self):
@@ -98,6 +100,7 @@ class TestPipelineManagerGetOne(PipelineManagerTestBase):
         expect_ec = ExampleClass(None, name='data')
         iv_obj = pipeline_manager.get(iv)
         str_obj = pipeline_manager.get('example_class.stuff.data')
+        assert iv_obj is str_obj is iv.item
         assert iv_obj.name == str_obj.name == expect_ec.name
         assert iv_obj.a == str_obj.a == expect_ec.a
 
