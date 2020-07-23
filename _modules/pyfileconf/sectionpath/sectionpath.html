@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.sectionpath.sectionpath &mdash; pyfileconf 0.10.9 documentation</title>
+  <title>pyfileconf.sectionpath.sectionpath &mdash; pyfileconf 0.11.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.9
+                0.11.0
               </div>
             
           
@@ -203,8 +203,8 @@
 
 <div class="viewcode-block" id="SectionPath.from_ambiguous"><a class="viewcode-back" href="../../../api/pyfileconf.sectionpath.html#pyfileconf.sectionpath.sectionpath.SectionPath.from_ambiguous">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_ambiguous</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="s1">&#39;SectionPath&#39;</span><span class="p">],</span> <span class="n">strip_manager_from_iv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">_is_item_view</span>
-        <span class="k">if</span> <span class="n">_is_item_view</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
+        <span class="k">if</span> <span class="n">is_item_view</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
             <span class="n">item</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
             <span class="n">sp</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">strip_manager_from_iv</span><span class="p">:</span>

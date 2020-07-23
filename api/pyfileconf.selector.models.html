@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models package &mdash; pyfileconf 0.10.9 documentation</title>
+  <title>pyfileconf.selector.models package &mdash; pyfileconf 0.11.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.10.9
+                0.11.0
               </div>
             
           
@@ -250,8 +250,38 @@ str containing the pipeline manager name</p>
 <dl class="method">
 <dt id="pyfileconf.selector.models.itemview.ItemView.type">
 <em class="property">property </em><code class="sig-name descname">type</code><a class="headerlink" href="#pyfileconf.selector.models.itemview.ItemView.type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.selector.models.itemview.is_item_view">
+<code class="sig-prename descclassname">pyfileconf.selector.models.itemview.</code><code class="sig-name descname">is_item_view</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/selector/models/itemview.html#is_item_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.selector.models.itemview.is_item_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether an object is an <a class="reference internal" href="#pyfileconf.selector.models.itemview.ItemView" title="pyfileconf.selector.models.itemview.ItemView"><code class="xref py py-class docutils literal notranslate"><span class="pre">ItemView</span></code></a>.</p>
+<p>When using the Selector, objects are proxied by ItemViews
+until an attribute is accessed. The ItemView is set up
+so that it will work nearly completely like the
+original object, including isinstance checks. In fact
+isinstance(item, ItemView) will always return False
+on an ItemView as the class appears to be the original
+class. This function is the preferred way to check
+whether an object is an ItemView.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.selector.models.itemview.is_item_view.params.obj"></span><strong>obj</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.selector.models.itemview.is_item_view.params.obj">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – An object which may or may not be an ItemView</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether the object is an ItemView</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

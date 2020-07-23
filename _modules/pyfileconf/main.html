@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.10.9 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.11.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.9
+                0.11.0
               </div>
             
           
@@ -463,7 +463,7 @@
 <span class="sd">        :param kwargs: kwarg updates</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">_is_item_view</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
 
         <span class="n">new_updates_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_pre_update</span><span class="p">(</span>
             <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
@@ -485,7 +485,7 @@
                 <span class="n">all_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
             <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_updates</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">_is_item_view</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">is_item_view</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                     <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency</span><span class="p">(</span><span class="n">full_sp</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
             <span class="c1"># Refresh any configs which are dependent on attributes of this config</span>
@@ -680,8 +680,8 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">run_list</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section_path_str_or_view</span><span class="p">:</span> <span class="s1">&#39;StrOrView&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">_is_item_view</span>
-        <span class="k">if</span> <span class="n">_is_item_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
+        <span class="k">if</span> <span class="n">is_item_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">):</span>
             <span class="c1"># ItemView will have PipelineManager.name as first section, must strip</span>
             <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
             <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">from_section_str_list</span><span class="p">(</span><span class="n">section_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.10.9 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.11.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.9
+                0.11.0
               </div>
             
           
@@ -165,7 +165,7 @@
   <h1>Source code for pyfileconf.selector.models.itemview</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
@@ -327,7 +327,16 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="n">repr_col_str</span><span class="si">}</span><span class="s1">&gt;&#39;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__class__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+
+    <span class="nd">@__class__</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">__class__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># Setting class has no effect, still use type of underlying item</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">get_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -371,11 +380,26 @@
         <span class="k">return</span> <span class="n">iv</span></div></div>
 
 
-<span class="k">def</span> <span class="nf">_is_item_view</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="n">is_item_view</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">is_item_view</span><span class="p">:</span>
+<div class="viewcode-block" id="is_item_view"><a class="viewcode-back" href="../../../../api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.is_item_view">[docs]</a><span class="k">def</span> <span class="nf">is_item_view</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine whether an object is an :class:`ItemView`.</span>
+
+<span class="sd">    When using the Selector, objects are proxied by ItemViews</span>
+<span class="sd">    until an attribute is accessed. The ItemView is set up</span>
+<span class="sd">    so that it will work nearly completely like the</span>
+<span class="sd">    original object, including isinstance checks. In fact</span>
+<span class="sd">    isinstance(item, ItemView) will always return False</span>
+<span class="sd">    on an ItemView as the class appears to be the original</span>
+<span class="sd">    class. This function is the preferred way to check</span>
+<span class="sd">    whether an object is an ItemView.</span>
+
+<span class="sd">    :param obj: An object which may or may not be an ItemView</span>
+<span class="sd">    :return: Whether the object is an ItemView</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">this_is_item_view</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">this_is_item_view</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ItemView</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">is_item_view</span>
+    <span class="k">return</span> <span class="n">this_is_item_view</span></div>
 </pre></div>
 
            </div>
