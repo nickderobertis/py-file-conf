@@ -38,11 +38,12 @@ class ConfigManager(ReprMixin):
     def load(self):
         self.section = ConfigSection.from_files(self.basepath)
 
-    def update(self, d: dict=None, section_path_str: str=None, **kwargs) -> None:
+    def update(self, d: dict=None, section_path_str: str=None, **kwargs) -> ConfigBase:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to update')
         config_obj.update(d, **kwargs)
+        return config_obj
 
     def refresh(self, section_path_str: str):
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
