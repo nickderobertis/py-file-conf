@@ -4,7 +4,7 @@ from typing import List, Tuple, Optional
 
 from tests.input_files.mypackage.cmodule import ExampleClass
 
-# TODO: better support for decorated functions
+# TODO [$5f197119050c86000769a5a1]: better support for decorated functions
 #
 # The argument introspection breaks if *args, **kwargs
 # is used in the decorator as it can no longer detect
