@@ -27,6 +27,7 @@ class ExampleClass:
         self.c = c
         self.d = d
         self.f = f
+        self._a = a  # only set via __init__, won't be set if just updating object attributes directly
         self._instances[id(self)] = self
 
     @property
