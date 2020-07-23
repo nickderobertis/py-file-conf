@@ -70,7 +70,6 @@ class SpecificClassCollection(Collection):
         )
 
         if os.path.exists(item_filepath):
-            file_existed = True
             # if config file already exists, load confguration from file, use to update file defaults
             existing_config = SpecificClassConfig.from_file(
                 item_filepath,
@@ -78,13 +77,8 @@ class SpecificClassCollection(Collection):
                 **class_config,  # type: ignore
             )
             existing_imports = existing_config._file.interface.imports
-            # Here using the ast config, for the purpose of writing to file
-            file_config_item = deepcopy(item)
-            apply_config(file_config_item, existing_config)
         else:
-            file_existed = False
             existing_imports = None
-            file_config_item = item
 
         item_config = SpecificClassConfig(imports=existing_imports,
                                                    file_path=item_filepath,
