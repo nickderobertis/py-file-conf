@@ -230,7 +230,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_1 = ExampleClass(ec2)
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == expect_1
-        assert ec.a().a == expected_a_result
+        assert ec.a().a == ec._a().a == expected_a_result
         assert context.config_dependencies == self.expect_pm_1_class_depends_on_pm_2_class
 
     def test_config_update_class_dependencies(self):
@@ -267,12 +267,12 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
         pipeline_manager.refresh(section_path.path_str)
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
     def test_config_update_by_file_for_specific_class_dict(self):
         self.write_example_class_dict_to_file()
@@ -288,7 +288,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
     def test_create_update_from_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()
@@ -317,7 +317,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
         # Assert that pipeline manager 2 is not updated yet
         ec = sel.test_pipeline_manager2.example_class.stuff.data
@@ -334,7 +334,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager2.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
     def test_create_update_from_specific_class_dict_multiple_dependent_pms(self):
         self.write_example_class_dict_to_file()
@@ -371,7 +371,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_1 = ExampleClass(name='data', a=ec2)
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
         assert ec == expect_1
-        assert ec.a.a == expected_a_result
+        assert ec.a.a == ec._a.a == expected_a_result
         assert context.config_dependencies == self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
 
     def test_create_update_specific_class_dependencies(self):
@@ -430,7 +430,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_1 = ExampleClass(name='data', a=ec2.a)
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
         assert ec == expect_1
-        assert ec.a == expected_a_result
+        assert ec.a == ec._a == expected_a_result
         assert context.config_dependencies == context.force_update_dependencies == \
                self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
 
@@ -457,7 +457,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         )
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == ec2.name == expect_ec.name
-        assert ec.a == ec2.a == expect_ec.a
+        assert ec.a == ec._a == ec2.a == ec2._a == expect_ec.a
 
     def test_create_update_from_multiple_specific_class_dicts_different(self):
         self.write_example_class_dict_to_file()  # example_class
@@ -483,7 +483,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         expect_ec = ExampleClass(name='data', a=expected_result)
         expect_sec = SecondExampleClass(name='data', b=expected_result)
         assert ec.name == sec.name == expect_ec.name
-        assert ec.a == sec.b == expect_ec.a == expect_sec.b
+        assert ec.a == ec._a == sec.b == expect_ec.a == expect_sec.b
 
     def test_config_reload_function(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -607,7 +607,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
     def test_config_reload_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()
@@ -644,13 +644,13 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
         # Assert that the reload of pipeline manager 1 did not affect pipeline manager 2
         ec = sel.test_pipeline_manager2.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
     def test_config_update_class_used_by_function_through_selector(self):
         self.write_a_function_to_pipeline_dict_file()
@@ -734,7 +734,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
-        assert ec.a == expect_ec.a
+        assert ec.a == ec._a == expect_ec.a
 
     def test_deep_copy_specific_class_dict_item_view(self):
         self.write_example_class_dict_to_file()

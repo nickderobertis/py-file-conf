@@ -374,13 +374,10 @@ class Runner(ReprMixin):
         return klass, config_dict
 
     def update(self, d: dict=None, section_path_str: str=None, **kwargs):
-        self._config.update(d, section_path_str, **kwargs)
+        new_config = self._config.update(d, section_path_str, **kwargs)
 
         if section_path_str in self._loaded_objects:
-            if d is None:
-                d = {}
-            d.update(**kwargs)
-            apply_config(self._loaded_objects[section_path_str], d)
+            apply_config(self._loaded_objects[section_path_str], new_config)
 
     def reset(self, section_path_str: str=None, allow_create: bool = False) -> None:
         """
