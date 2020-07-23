@@ -1,3 +1,4 @@
+import inspect
 from typing import Callable, List, Any
 import warnings
 
@@ -143,6 +144,15 @@ class Selector:
 
         # TODO [#20]: nicer error than KeyError for typo
         result = _get_from_nested_obj_by_section_path(collection_obj, relative_section_path)
+
+        if isinstance(result, ObjectView):
+            # Got an item from the general collection, need to load from the object view
+            result = result.load()
+            if inspect.isclass(result):
+                # If it is a class in the general collection, the class itself comes from
+                # loading so just return it
+                return result
+            # Otherwise, result is a function, so now function type must be returned
 
         return type(result)
 

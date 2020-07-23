@@ -5,7 +5,7 @@ from pyfileconf import Selector, PipelineManager
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.context import context
 from pyfileconf.selector.models.itemview import ItemView
-from tests.input_files.amodule import SecondExampleClass
+from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassProtocol
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
     DIFFERENT_CLASS_CONFIG_DICT_LIST
@@ -22,6 +22,7 @@ class TestItemView(PipelineManagerTestBase):
         assert iv2 in [iv]
         assert iv == list({iv})[0]
         assert {iv: 5}[iv] == 5
+        assert iv.type == type(a_function)
         assert hash(iv) == hash(iv.section_path_str)
 
     def assert_valid_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
@@ -34,6 +35,7 @@ class TestItemView(PipelineManagerTestBase):
         assert iv2 in [iv]
         assert iv == list({iv})[0]
         assert {iv: 5}[iv] == 5
+        assert iv.type == ExampleClass
         assert hash(iv) == hash(iv.section_path_str)
 
     def assert_valid_specific_class_iv(self, iv: ItemView, pipeline_manager: PipelineManager):
@@ -48,6 +50,7 @@ class TestItemView(PipelineManagerTestBase):
         assert iv == list({iv})[0]
         assert {iv: 5}[iv] == 5
         assert hash(iv) == hash(iv.section_path_str)
+        assert iv.type == ExampleClass
         assert isinstance(iv, ExampleClassProtocol)
 
     def test_function_iv_from_selector(self):
