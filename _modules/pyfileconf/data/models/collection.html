@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.10.8 documentation</title>
+  <title>pyfileconf.data.models.collection &mdash; pyfileconf 0.10.9 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.10.8
+                0.10.9
               </div>
             
           
@@ -235,7 +235,6 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">item_filepath</span><span class="p">):</span>
-            <span class="n">file_existed</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="c1"># if config file already exists, load confguration from file, use to update file defaults</span>
             <span class="n">existing_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span>
                 <span class="n">item_filepath</span><span class="p">,</span>
@@ -243,13 +242,8 @@
                 <span class="o">**</span><span class="n">class_config</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
             <span class="p">)</span>
             <span class="n">existing_imports</span> <span class="o">=</span> <span class="n">existing_config</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">imports</span>
-            <span class="c1"># Here using the ast config, for the purpose of writing to file</span>
-            <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-            <span class="n">apply_config</span><span class="p">(</span><span class="n">file_config_item</span><span class="p">,</span> <span class="n">existing_config</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">file_existed</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">existing_imports</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">file_config_item</span> <span class="o">=</span> <span class="n">item</span>
 
         <span class="n">item_config</span> <span class="o">=</span> <span class="n">SpecificClassConfig</span><span class="p">(</span><span class="n">imports</span><span class="o">=</span><span class="n">existing_imports</span><span class="p">,</span>
                                                    <span class="n">file_path</span><span class="o">=</span><span class="n">item_filepath</span><span class="p">,</span>
