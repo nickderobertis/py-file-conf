@@ -19,8 +19,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
-        pipeline_manager.create('thing', a_function)
         sel = Selector()
+        pipeline_manager.create('thing', a_function)
         iv = sel.test_pipeline_manager.thing.a_function
         module_folder = os.path.join(self.defaults_path, 'thing')
         function_path = os.path.join(module_folder, 'a_function.py')
@@ -32,9 +32,9 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
+        sel = Selector()
         pipeline_manager.create('thing.stuff', a_function)
         pipeline_manager.create('thing.woo', a_function)
-        sel = Selector()
         base_folder = os.path.join(self.defaults_path, 'thing')
         module_folders = [os.path.join(base_folder, attr) for attr in ['stuff', 'woo']]
         for module_folder in module_folders:
@@ -54,8 +54,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
-        pipeline_manager.create('thing', a_function)
         sel = Selector()
+        pipeline_manager.create('thing', a_function)
         iv = sel.test_pipeline_manager.thing.a_function
         module_folder = os.path.join(self.defaults_path, 'thing')
         function_path = os.path.join(module_folder, 'a_function.py')
@@ -81,7 +81,6 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             section_path_str=section_path.path_str
         )
         pipeline_manager.create('thing', a_function)
-        sel = Selector()
         iv = sel.test_pipeline_manager.thing.a_function
         module_folder = os.path.join(self.defaults_path, 'thing')
         function_path = os.path.join(module_folder, 'a_function.py')
@@ -95,8 +94,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
-        pipeline_manager.create('thing', a_function)
         sel = Selector()
+        pipeline_manager.create('thing', a_function)
         iv = sel.test_pipeline_manager.thing.a_function
         expected_b_result = ['a', 'b']
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
@@ -116,8 +115,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
-        pipeline_manager.create('thing', ExampleClass)
         sel = Selector()
+        pipeline_manager.create('thing', ExampleClass)
         iv = sel.test_pipeline_manager.thing.ExampleClass
         module_folder = os.path.join(self.defaults_path, 'thing')
         class_path = os.path.join(module_folder, 'ExampleClass.py')
@@ -129,9 +128,9 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
+        sel = Selector()
         pipeline_manager.create('thing.one', ExampleClass)
         pipeline_manager.create('thing.two', ExampleClass)
-        sel = Selector()
         base_folder = os.path.join(self.defaults_path, 'thing')
         module_folders = [os.path.join(base_folder, attr) for attr in ['one', 'two']]
         for module_folder in module_folders:
@@ -152,8 +151,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
-        pipeline_manager.create('thing', ExampleClass)
         sel = Selector()
+        pipeline_manager.create('thing', ExampleClass)
         iv = sel.test_pipeline_manager.thing.ExampleClass
         module_folder = os.path.join(self.defaults_path, 'stuff')
         function_path = os.path.join(module_folder, 'a_function.py')
@@ -172,8 +171,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
         )
         pipeline_manager.load()
-        pipeline_manager.create('example_class.thing.data')
         sel = Selector()
+        pipeline_manager.create('example_class.thing.data')
         iv = sel.test_pipeline_manager.example_class.thing.data
         class_folder = os.path.join(self.defaults_path, 'example_class')
         module_folder = os.path.join(class_folder, 'thing')
@@ -188,9 +187,9 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
         )
         pipeline_manager.load()
+        sel = Selector()
         pipeline_manager.create('example_class.thing.data')
         pipeline_manager.create('example_class.thing.data2')
-        sel = Selector()
         class_folder = os.path.join(self.defaults_path, 'example_class')
         module_folder = os.path.join(class_folder, 'thing')
         for attr in ['data', 'data2']:
@@ -222,7 +221,6 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             section_path_str=section_path.path_str
         )
         pipeline_manager.create('example_class.thing.data')
-        sel = Selector()
         iv = sel.test_pipeline_manager.example_class.thing.data
         class_folder = os.path.join(self.defaults_path, 'example_class')
         module_folder = os.path.join(class_folder, 'thing')
@@ -241,8 +239,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
         )
         pipeline_manager.load()
-        pipeline_manager.create('example_class.thing.data')
         sel = Selector()
+        pipeline_manager.create('example_class.thing.data')
         iv = sel.test_pipeline_manager.example_class.thing.data
         expected_a_result = (1, 2)
         section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
@@ -266,14 +264,12 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
         assert ec.name == expect_ec.name == got_ec.name
         assert ec.a == expect_ec.a == got_ec.a
 
-
-
     def test_create_deeply_nested_entry_for_function(self):
         self.write_a_function_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
         pipeline_manager.load()
-        pipeline_manager.create('thing.stuff.whoa', a_function)
         sel = Selector()
+        pipeline_manager.create('thing.stuff.whoa', a_function)
         iv = sel.test_pipeline_manager.thing.stuff.whoa.a_function
         module_folder = os.path.join(self.defaults_path, 'thing')
         module_folder = os.path.join(module_folder, 'stuff')
@@ -289,8 +285,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
         )
         pipeline_manager.load()
-        pipeline_manager.create('example_class.thing.stuff.whoa.data')
         sel = Selector()
+        pipeline_manager.create('example_class.thing.stuff.whoa.data')
         iv = sel.test_pipeline_manager.example_class.thing.stuff.whoa.data
         class_folder = os.path.join(self.defaults_path, 'example_class')
         module_folder = os.path.join(class_folder, 'thing')
@@ -307,8 +303,8 @@ class TestPipelineManagerCreateEntry(PipelineManagerCreateEntryTestBase):
             specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
         )
         pipeline_manager.load()
-        pipeline_manager.create('example_class.stuff.data2')
         sel = Selector()
+        pipeline_manager.create('example_class.stuff.data2')
         iv = sel.test_pipeline_manager.example_class.stuff.data2
         class_folder = os.path.join(self.defaults_path, 'example_class')
         module_folder = os.path.join(class_folder, 'stuff')
