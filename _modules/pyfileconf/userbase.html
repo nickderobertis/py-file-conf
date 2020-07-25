@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.interfaces &mdash; pyfileconf 0.12.6 documentation</title>
+  <title>pyfileconf.userbase &mdash; pyfileconf 0.12.6 documentation</title>
   
 
   
@@ -147,7 +147,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>pyfileconf.interfaces</li>
+      <li>pyfileconf.userbase</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,24 +162,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyfileconf.interfaces</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span>
+  <h1>Source code for pyfileconf.userbase</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="PyfileconfBase"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.userbase.PyfileconfBase">[docs]</a><span></span><span class="k">class</span> <span class="nc">PyfileconfBase</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A base class which can be used to autocomplete</span>
+<span class="sd">    the possible custom methods which modify</span>
+<span class="sd">    how pyfileconf works with the object.</span>
 
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">TypedDict</span>
+<span class="sd">    It is not necessary to use this base class, instead the</span>
+<span class="sd">    methods can be defined on any class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="k">def</span> <span class="nf">_pyfileconf_update_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called to apply configuration to the object. If this method</span>
+<span class="sd">        is not defined on the class, __init__ will be used instead.</span>
 
-<span class="n">SpecificClassConfigDict</span> <span class="o">=</span> <span class="n">TypedDict</span><span class="p">(</span>
-    <span class="s2">&quot;SpecificClassConfigDict&quot;</span><span class="p">,</span>
-    <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span>
-        <span class="s2">&quot;always_import_strs&quot;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="s2">&quot;always_assign_strs&quot;</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="s2">&quot;key_attr&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="s2">&quot;execute_attr&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="n">total</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">)</span>
+<span class="sd">        :param kwargs: key/value pairs where keys are name of config</span>
+<span class="sd">            attributes and values are the config values</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore</span></div>
 </pre></div>
 
            </div>

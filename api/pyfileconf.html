@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.12.5 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.12.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.12.5
+                0.12.6
               </div>
             
           
@@ -129,6 +129,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.iterate">pyfileconf.iterate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.main">pyfileconf.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.tracing">pyfileconf.tracing module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.userbase">pyfileconf.userbase module</a></li>
 </ul>
 </li>
 </ul>
@@ -1062,6 +1063,20 @@ if results are stored in some other way</p></li>
 <code class="sig-name descname">orig_running_section_path_str</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.tracing.RunningTracker.orig_running_section_path_str" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyfileconf.userbase">
+<span id="pyfileconf-userbase-module"></span><h2>pyfileconf.userbase module<a class="headerlink" href="#module-pyfileconf.userbase" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.userbase.PyfileconfBase">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.userbase.</code><code class="sig-name descname">PyfileconfBase</code><a class="reference internal" href="../_modules/pyfileconf/userbase.html#PyfileconfBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.userbase.PyfileconfBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A base class which can be used to autocomplete
+the possible custom methods which modify
+how pyfileconf works with the object.</p>
+<p>It is not necessary to use this base class, instead the
+methods can be defined on any class.</p>
 </dd></dl>
 
 </div>

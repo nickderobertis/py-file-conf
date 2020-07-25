@@ -80,3 +80,11 @@ pyfileconf.tracing module
    :undoc-members:
    :show-inheritance:
 
+pyfileconf.userbase module
+--------------------------
+
+.. automodule:: pyfileconf.userbase
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

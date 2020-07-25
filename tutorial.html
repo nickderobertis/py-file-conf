@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting started with pyfileconf &mdash; pyfileconf 0.12.5 documentation</title>
+  <title>Getting started with pyfileconf &mdash; pyfileconf 0.12.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.12.5
+                0.12.6
               </div>
             
           
@@ -98,6 +98,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started with pyfileconf</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-objects">Supported Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#object-model">Object Model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">This is my gallery</a></li>
@@ -186,6 +188,24 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyfileconf</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="supported-objects">
+<h2>Supported Objects<a class="headerlink" href="#supported-objects" title="Permalink to this headline">¶</a></h2>
+<p>While the goal is to support as many objects as possible, the library
+has some limitations on what kinds of objects it can support. Here are
+some of the currently known limitations:</p>
+<ul class="simple">
+<li><p>Classes which do not define <code class="docutils literal notranslate"><span class="pre">__init__</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dataclasses</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="object-model">
+<h2>Object Model<a class="headerlink" href="#object-model" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pyfileconf</span></code> is made to work with existing functions and classes
+without modification, but it is possible to define certain methods on
+the class to modify how <code class="docutils literal notranslate"><span class="pre">pyfileconf</span></code> works with the objects. See
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PyfileconfBase</span></code> for the available methods and what they
+do.</p>
 </div>
 </div>
 
