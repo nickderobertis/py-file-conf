@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.12.4 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.12.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.4
+                0.12.5
               </div>
             
           
@@ -554,10 +554,11 @@
             <span class="n">apply_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">],</span> <span class="n">default</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Runner.refresh"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+            <span class="n">apply_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_loaded_objects</span><span class="p">[</span><span class="n">section_path_str</span><span class="p">],</span> <span class="n">config</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_is_specific_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
