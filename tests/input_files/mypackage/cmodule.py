@@ -111,3 +111,18 @@ class ExampleClassProtocol(Protocol):
     @abstractmethod
     def my_call(self) -> str:
         ...
+
+
+class ExampleClassWithCustomUpdate:
+    _custom_update = 'a'
+
+    def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None):
+        self.a = a
+        self.name = name
+
+    def _pyfileconf_update_(self, **kwargs):
+        self.__init__(**kwargs)
+        self._custom_update = 'b'
+
+    def __eq__(self, other):
+        return self.a == other.a and self.name == other.name

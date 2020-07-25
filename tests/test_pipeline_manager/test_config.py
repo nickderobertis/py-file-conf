@@ -5,7 +5,7 @@ from pyfileconf import Selector, PipelineManager
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.context import context
 from tests.input_files.amodule import SecondExampleClass
-from tests.input_files.mypackage.cmodule import ExampleClass
+from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassWithCustomUpdate
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
     DIFFERENT_CLASS_CONFIG_DICT_LIST
 
@@ -150,6 +150,31 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         pipeline_manager.refresh(section_path.path_str)
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
+        assert ec._f == expected_f_value
+
+    def test_config_update_class_with_custom_update(self):
+        self.write_example_class_with_custom_update_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate
+        expected_a_result = (1, 2)
+        expected_f_value = 'woo'
+        assert iv._custom_update == 'a'
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate()
+        ec._f = expected_f_value
+        ec = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate()
+        assert ec == ExampleClassWithCustomUpdate(expected_a_result)
+        assert ec._f == expected_f_value
+        assert ec._custom_update == 'b'
+        pipeline_manager.refresh(section_path.path_str)
+        ec = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate()
+        assert ec == ExampleClassWithCustomUpdate(expected_a_result)
         assert ec._f == expected_f_value
 
     def test_config_update_by_file_for_class(self):
