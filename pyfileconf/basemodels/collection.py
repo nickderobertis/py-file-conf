@@ -4,6 +4,7 @@ import os
 from pyfileconf.basemodels.container import Container
 from mixins.repr import ReprMixin
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
+from pyfileconf.sectionpath.sectionpath import SectionPath
 
 StrList = List[str]
 
@@ -51,6 +52,18 @@ class Collection(Container, ReprMixin):
         self.klass = klass
         self.items = self._transform_items(items)
         self._set_name_map()
+
+    def get(self, section_path_str: str) -> Any:
+        sp = SectionPath(section_path_str)
+        obj = self
+        for section in sp:
+            if not isinstance(obj, self.__class__):
+                # We already got an item from the collection and now
+                # a further section is trying to be accessed. Therefore
+                # this section is not in the collection
+                raise AttributeError(section)
+            obj = getattr(obj, section)
+        return obj
 
     def __getattr__(self, item):
         try:

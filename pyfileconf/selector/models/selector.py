@@ -24,10 +24,9 @@ class Selector:
             return False
 
         collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(item)
-
         if relative_section_path is None:
             # got only the root data path, e.g. project.sources. Return the collection object itself
-            return collection_obj
+            return True
 
         # Only should return True if we find an ItemView
         # Three possible cases here.
@@ -35,11 +34,7 @@ class Selector:
         # Accessing an existing item, should be a collection, source, or function instance, return True
         # Accessing an existing attribute of an existing item, should not be an ItemView instance, return False
         try:
-            result = _get_from_nested_obj_by_section_path(
-                collection_obj,
-                relative_section_path,
-                prevent_property_access=True
-            )
+            result = collection_obj.get(relative_section_path.path_str)
         except AttributeError:
             return False
 
