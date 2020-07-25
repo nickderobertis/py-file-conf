@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.12.3 documentation</title>
+  <title>pyfileconf.selector.models.selector &mdash; pyfileconf 0.12.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.3
+                0.12.4
               </div>
             
           
@@ -189,10 +189,9 @@
             <span class="k">return</span> <span class="kc">False</span>
 
         <span class="n">collection_obj</span><span class="p">,</span> <span class="n">relative_section_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_collection_obj_and_relative_section_path_from_structure</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">relative_section_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># got only the root data path, e.g. project.sources. Return the collection object itself</span>
-            <span class="k">return</span> <span class="n">collection_obj</span>
+            <span class="k">return</span> <span class="kc">True</span>
 
         <span class="c1"># Only should return True if we find an ItemView</span>
         <span class="c1"># Three possible cases here.</span>
@@ -200,11 +199,7 @@
         <span class="c1"># Accessing an existing item, should be a collection, source, or function instance, return True</span>
         <span class="c1"># Accessing an existing attribute of an existing item, should not be an ItemView instance, return False</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">_get_from_nested_obj_by_section_path</span><span class="p">(</span>
-                <span class="n">collection_obj</span><span class="p">,</span>
-                <span class="n">relative_section_path</span><span class="p">,</span>
-                <span class="n">prevent_property_access</span><span class="o">=</span><span class="kc">True</span>
-            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">collection_obj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">relative_section_path</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
