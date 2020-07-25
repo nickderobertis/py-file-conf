@@ -271,7 +271,7 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         ec = sel.test_pipeline_manager.example_class.stuff.data
-        # TODO: setting attribute on selector should set attribute on underlying object
+        # TODO [$5f1ca61217ba6800072b8166]: setting attribute on selector should set attribute on underlying object
         #
         # Modify the next line in this test to `ec._f = expected_f_result` and
         # it will show the need for this behavior
