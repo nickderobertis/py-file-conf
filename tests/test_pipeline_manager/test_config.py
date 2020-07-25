@@ -5,9 +5,10 @@ from pyfileconf import Selector, PipelineManager
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.context import context
 from tests.input_files.amodule import SecondExampleClass
-from tests.input_files.mypackage.cmodule import ExampleClass
-from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
-    DIFFERENT_CLASS_CONFIG_DICT_LIST
+from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassWithCustomUpdate
+from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, \
+    SAME_CLASS_CONFIG_DICT_LIST, \
+    DIFFERENT_CLASS_CONFIG_DICT_LIST, CUSTOM_UPDATE_CLASS_CONFIG_DICT_LIST
 
 
 class TestPipelineManagerConfig(PipelineManagerTestBase):
@@ -152,6 +153,31 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert ec == ExampleClass(expected_a_result)
         assert ec._f == expected_f_value
 
+    def test_config_update_class_with_custom_update(self):
+        self.write_example_class_with_custom_update_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate
+        expected_a_result = (1, 2)
+        expected_f_value = 'woo'
+        assert iv._custom_update == 'a'
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate()
+        ec._f = expected_f_value
+        ec = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate()
+        assert ec == ExampleClassWithCustomUpdate(expected_a_result)
+        assert ec._f == expected_f_value
+        assert ec._custom_update == 'b'
+        pipeline_manager.refresh(section_path.path_str)
+        ec = sel.test_pipeline_manager.stuff.ExampleClassWithCustomUpdate()
+        assert ec == ExampleClassWithCustomUpdate(expected_a_result)
+        assert ec._f == expected_f_value
+
     def test_config_update_by_file_for_class(self):
         self.write_example_class_to_pipeline_dict_file()
         pipeline_manager = self.create_pm()
@@ -287,6 +313,37 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert ec.name == expect_ec.name
         assert ec.a == ec._a == expect_ec.a
         assert ec._f == expected_f_result
+
+    def test_create_update_from_specific_class_dict_with_custom_update(self):
+        self.write_example_class_dict_to_file(3)  # index 3 is with custom update
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CUSTOM_UPDATE_CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class_with_update.stuff.data
+        expected_a_result = (1, 2)
+        expected_f_result = 'woo'
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        ec = sel.test_pipeline_manager.example_class_with_update.stuff.data
+        ec.item._f = expected_f_result
+        ec = sel.test_pipeline_manager.example_class_with_update.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+        assert ec._f == expected_f_result
+        assert ec._custom_update == 'b'
+        pipeline_manager.refresh(section_path.path_str)
+        ec = sel.test_pipeline_manager.example_class_with_update.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == expect_ec.a
+        assert ec._f == expected_f_result
+        assert ec._custom_update == 'b'
 
     def test_config_update_by_file_for_specific_class_dict(self):
         self.write_example_class_dict_to_file()

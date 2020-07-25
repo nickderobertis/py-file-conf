@@ -9,7 +9,7 @@ from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf import context
 from tests.input_files.amodule import SecondExampleClass, a_function
-from tests.input_files.mypackage.cmodule import ExampleClass
+from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassWithCustomUpdate
 from tests.utils import delete_project, nested_pipeline_dict_str_with_obj, pipeline_dict_str_with_obj, \
     nested_class_dict_str, class_dict_str
 
@@ -27,8 +27,15 @@ SEC_CLASS_DICT = {
     'class': SecondExampleClass,
     'name': 'second_example_class'
 }
+CUSTOM_UPDATE_CLASS_DICT = {
+    'class': ExampleClassWithCustomUpdate,
+    'name': 'example_class_with_update'
+}
 CLASS_CONFIG_DICT_LIST = [
     EC_CLASS_DICT
+]
+CUSTOM_UPDATE_CLASS_CONFIG_DICT_LIST = [
+    CUSTOM_UPDATE_CLASS_DICT,
 ]
 SAME_CLASS_CONFIG_DICT_LIST = [
     EC_CLASS_DICT,
@@ -41,7 +48,8 @@ DIFFERENT_CLASS_CONFIG_DICT_LIST = [
 FULL_CLASS_DICT_LIST = [
     EC_CLASS_DICT,
     EC_CLASS_DICT2,
-    SEC_CLASS_DICT
+    SEC_CLASS_DICT,
+    CUSTOM_UPDATE_CLASS_DICT,
 ]
 
 
@@ -57,6 +65,7 @@ class PipelineManagerTestBase(TestCase):
         'example_class_dict.py',
         'example_class2_dict.py',
         'second_example_class_dict.py',
+        'example_class_with_update_dict.py'
     ]
     standard_section_path = os.path.join(defaults_path, 'stuff')
     standard_a_function_path = os.path.join(standard_section_path, 'a_function.py')
@@ -156,6 +165,12 @@ class PipelineManagerTestBase(TestCase):
             file_path = self.pipeline_dict_path
         with open(file_path, 'w') as f:
             f.write(pipeline_dict_str_with_obj(ExampleClass, 'stuff', 'tests.input_files.mypackage.cmodule'))
+
+    def write_example_class_with_custom_update_to_pipeline_dict_file(self, file_path: Optional[str] = None):
+        if file_path is None:
+            file_path = self.pipeline_dict_path
+        with open(file_path, 'w') as f:
+            f.write(pipeline_dict_str_with_obj(ExampleClassWithCustomUpdate, 'stuff', 'tests.input_files.mypackage.cmodule'))
 
     def write_example_class_dict_to_file(self, idx: int = 0, nest_section: bool = False,
                                          pm_index: Optional[int] = 0):
