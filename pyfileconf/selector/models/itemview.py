@@ -1,6 +1,6 @@
 import inspect
 from functools import partial
-from typing import cast, List, Type, Dict, Tuple, Any
+from typing import cast, List, Type, Dict, Tuple, Any, Optional
 
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -21,7 +21,9 @@ class ItemView:
     by delaying looking up the item until an attribute/method is accessed or item is called.
     """
 
-    def __init__(self, section_path_str: str, selector: Selector):
+    def __init__(self, section_path_str: str, selector: Optional[Selector] = None):
+        if selector is None:
+            selector = Selector()
         self.section_path_str = section_path_str
         self._section_path_str = section_path_str  # for compatibility with real items which have this attribute added
         self.selector = selector
