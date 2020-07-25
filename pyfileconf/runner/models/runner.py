@@ -389,10 +389,11 @@ class Runner(ReprMixin):
             apply_config(self._loaded_objects[section_path_str], default)
 
     def refresh(self, section_path_str: str):
-        if section_path_str in self._loaded_objects:
-            del self._loaded_objects[section_path_str]
-
         self._config.refresh(section_path_str)
+
+        if section_path_str in self._loaded_objects:
+            config = self._get_config(section_path_str)
+            apply_config(self._loaded_objects[section_path_str], config)
 
     def _is_specific_class(self, obj: Any) -> bool:
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
