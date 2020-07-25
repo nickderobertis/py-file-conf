@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Any, Dict
+from typing import Any, Dict, Callable
 
 from pyfileconf.imports.logic.load.func import function_args_as_dict
 
@@ -17,7 +17,8 @@ def apply_config_to_obj(obj: Any, config: dict) -> None:
     relevant_config: Dict[str, Any] = {
         attr: value for attr, value in config.items() if attr in init_args.keys()
     }
-    obj.__init__(**relevant_config)
+    update_func = _get_update_func(obj)
+    update_func(**relevant_config)
 
 
 def apply_config_to_partial(part: partial, config: dict) -> None:
@@ -26,3 +27,10 @@ def apply_config_to_partial(part: partial, config: dict) -> None:
         # Skip irrelevant items
         if config_attr in attributes:
             part.keywords[config_attr] = config_item
+
+
+def _get_update_func(obj: Any) -> Callable:
+    try:
+        return obj._pyfileconf_update_
+    except AttributeError:
+        return obj.__init__
