@@ -17,4 +17,4 @@ class PyfileconfBase:
             attributes and values are the config values
         :return: None
         """
-        self.__init__(**kwargs)
+        self.__init__(**kwargs)  # type: ignore
