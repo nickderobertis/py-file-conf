@@ -143,14 +143,14 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
-        ec.f = expected_f_value
+        ec._f = expected_f_value
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
-        assert ec.f == expected_f_value
+        assert ec._f == expected_f_value
         pipeline_manager.refresh(section_path.path_str)
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(expected_a_result)
-        assert ec.f == expected_f_value
+        assert ec._f == expected_f_value
 
     def test_config_update_by_file_for_class(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -271,18 +271,22 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         ec = sel.test_pipeline_manager.example_class.stuff.data
-        ec.f = expected_f_result
+        # TODO: setting attribute on selector should set attribute on underlying object
+        #
+        # Modify the next line in this test to `ec._f = expected_f_result` and
+        # it will show the need for this behavior
+        ec.item._f = expected_f_result
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
         assert ec.a == ec._a == expect_ec.a
-        assert ec.f == expected_f_result
+        assert ec._f == expected_f_result
         pipeline_manager.refresh(section_path.path_str)
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(name='data', a=expected_a_result)
         assert ec.name == expect_ec.name
         assert ec.a == ec._a == expect_ec.a
-        assert ec.f == expected_f_result
+        assert ec._f == expected_f_result
 
     def test_config_update_by_file_for_specific_class_dict(self):
         self.write_example_class_dict_to_file()
