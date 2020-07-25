@@ -96,6 +96,27 @@ class TestItemView(PipelineManagerTestBase):
         iv = sel.test_pipeline_manager.example_class.stuff.data
         self.assert_valid_specific_class_iv(iv, pipeline_manager)
 
+    def test_specific_class_iv_attribute_is_specific_class_from_selector(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        pipeline_manager.create('example_class.stuff.data2')
+        pipeline_manager.update(
+            section_path_str='example_class.stuff.data',
+            a=sel.test_pipeline_manager.example_class.stuff.data2
+        )
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data.a
+        self.assert_valid_specific_class_iv(iv, pipeline_manager)
+        # Accessing a second time was causing a new ItemView to be
+        # created for the attribute itself, which is not expected.
+        # Add this second check to ensure it doesn't happen again.
+        iv = sel.test_pipeline_manager.example_class.stuff.data.a
+        self.assert_valid_specific_class_iv(iv, pipeline_manager)
+
     def test_specific_class_iv_from_str(self):
         self.write_example_class_dict_to_file()
         pipeline_manager = self.create_pm(
