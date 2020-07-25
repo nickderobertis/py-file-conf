@@ -27,8 +27,15 @@ SEC_CLASS_DICT = {
     'class': SecondExampleClass,
     'name': 'second_example_class'
 }
+CUSTOM_UPDATE_CLASS_DICT = {
+    'class': ExampleClassWithCustomUpdate,
+    'name': 'example_class_with_update'
+}
 CLASS_CONFIG_DICT_LIST = [
     EC_CLASS_DICT
+]
+CUSTOM_UPDATE_CLASS_CONFIG_DICT_LIST = [
+    CUSTOM_UPDATE_CLASS_DICT,
 ]
 SAME_CLASS_CONFIG_DICT_LIST = [
     EC_CLASS_DICT,
@@ -41,7 +48,8 @@ DIFFERENT_CLASS_CONFIG_DICT_LIST = [
 FULL_CLASS_DICT_LIST = [
     EC_CLASS_DICT,
     EC_CLASS_DICT2,
-    SEC_CLASS_DICT
+    SEC_CLASS_DICT,
+    CUSTOM_UPDATE_CLASS_DICT,
 ]
 
 
@@ -57,6 +65,7 @@ class PipelineManagerTestBase(TestCase):
         'example_class_dict.py',
         'example_class2_dict.py',
         'second_example_class_dict.py',
+        'example_class_with_update_dict.py'
     ]
     standard_section_path = os.path.join(defaults_path, 'stuff')
     standard_a_function_path = os.path.join(standard_section_path, 'a_function.py')

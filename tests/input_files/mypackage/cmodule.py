@@ -114,11 +114,11 @@ class ExampleClassProtocol(Protocol):
 
 
 class ExampleClassWithCustomUpdate:
-    _custom_update = 'a'
 
     def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None):
         self.a = a
         self.name = name
+        self._custom_update = 'a'
 
     def _pyfileconf_update_(self, **kwargs):
         self.__init__(**kwargs)
