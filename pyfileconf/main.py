@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, S
     Iterator, Iterable
 
 from pyfileconf.basemodels.registrar import Registrar
+from pyfileconf.batch import BatchUpdater
 from pyfileconf.data.logic.convert import convert_to_empty_obj_if_necessary
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
@@ -341,18 +342,11 @@ class PipelineManager:
         :param updates: iterable of dictionaries of config updates
         :return: None
         """
-        updates_lol = plugin_manager.plm.hook.pyfileconf_pre_update_batch(
-            pm=self, updates=updates
+        updater = BatchUpdater(
+            base_section_path_str=self.name,
+            strip_manager_from_iv=True,
         )
-
-        all_updates = itertools.chain(*updates_lol)
-        for update in all_updates:
-            self._update(**update)
-
-        plugin_manager.plm.hook.pyfileconf_post_update_batch(
-            pm=self, updates=updates
-        )
-
+        updater.update(updates)
 
     def _update(self, d: dict=None, section_path_str: str=None, **kwargs):
         """
