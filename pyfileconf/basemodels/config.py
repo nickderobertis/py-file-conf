@@ -59,13 +59,14 @@ class ConfigBase(dict):
         return self.keys()
 
     # argument names to match dict.update
-    def update(self, E=None, **F):
+    def update(self, E=None, pyfileconf_persist: bool = True, **F):
         if E is None:
             E = {}
 
         # Track the updates so they can be applied later
         all_updates = {**E, **F}
-        self._applied_updates.update(all_updates)
+        if pyfileconf_persist:
+            self._applied_updates.update(all_updates)
 
         super().update(E, **F)
 

@@ -54,7 +54,7 @@ def pyfileconf_iter_update_for_case(
     )
     sp_strs = [conf['section_path_str'] for conf in updated_confs]
     bu.reset(sp_strs)
-    bu.update(case)
+    bu.update(updated_confs)
 
 
 @hookimpl

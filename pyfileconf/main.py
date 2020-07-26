@@ -305,7 +305,7 @@ class PipelineManager:
 
         self._loaded_modules = self._import_tracker.imported_modules
 
-    def update(self, d: dict=None, section_path_str: str=None, **kwargs):
+    def update(self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
         """
         Update the configuration for an item by section path.
 
@@ -314,6 +314,7 @@ class PipelineManager:
 
         :param d: dictionary of updates
         :param section_path_str: section path of item to be updated
+        :param pyfileconf_persist: whether to make changes last through refreshing config
         :param kwargs: kwarg updates
         :return:
         """
@@ -326,7 +327,7 @@ class PipelineManager:
                 d.update(new_updates_dict)
             kwargs.update(new_updates_dict)
 
-        self._update(d, section_path_str=section_path_str, **kwargs)
+        self._update(d, section_path_str=section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
         plugin_manager.plm.hook.pyfileconf_post_update(
             pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
@@ -348,18 +349,19 @@ class PipelineManager:
         )
         updater.update(updates)
 
-    def _update(self, d: dict=None, section_path_str: str=None, **kwargs):
+    def _update(self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
         """
         Update the configuration for an item by section path
 
         :param d: dictionary of updates
         :param section_path_str: section path of item to be updated
+        :param pyfileconf_persist: whether to make changes last through refreshing config
         :param kwargs: kwarg updates
         :return:
         """
         from pyfileconf.selector.models.itemview import is_item_view
 
-        self.runner.update(d, section_path_str, **kwargs)
+        self.runner.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
         if section_path_str:
             # If any of the updates are putting an ItemView as the value, then
