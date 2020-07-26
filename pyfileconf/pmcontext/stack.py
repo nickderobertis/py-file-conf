@@ -9,13 +9,15 @@ from pyfileconf.pmcontext.actions import PyfileconfActions
 
 class PyfileconfFrame:
 
-    def __init__(self, section_path: SectionPathLike, action: PyfileconfActions):
+    def __init__(self, section_path: SectionPathLike, action: PyfileconfActions, file_path: Optional[str] = None):
         from pyfileconf.sectionpath.sectionpath import SectionPath
         self.section_path = SectionPath.from_ambiguous(section_path)
         self.action = action
+        self.file_path = file_path
 
     def __repr__(self):
-        return f'<PyfileconfFrame(section_path={self.section_path.path_str}, action={self.action.value})>'
+        return f'<PyfileconfFrame(section_path={self.section_path.path_str}, ' \
+               f'action={self.action.value}, file_path={self.file_path})>'
 
 
 class PyfileconfStack:
