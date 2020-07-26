@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.13.3 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.13.4
               </div>
             
           
@@ -363,7 +363,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">_get_real_item</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.context</span> <span class="kn">import</span> <span class="n">context</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">context</span>
         <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency_for_currently_running_item_if_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="nd">@property</span>

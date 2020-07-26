@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.active.loader &mdash; pyfileconf 0.13.3 documentation</title>
+  <title>pyfileconf.io.file.load.active.loader &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.13.4
               </div>
             
           
@@ -165,6 +165,9 @@
   <h1>Source code for pyfileconf.io.file.load.active.loader</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.active.userdef</span> <span class="kn">import</span> <span class="n">get_user_defined_dict_from_filepath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.io.file.load.lazy.base.impassign</span> <span class="kn">import</span> <span class="n">ImportAssignmentLazyLoader</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pmcontext.actions</span> <span class="kn">import</span> <span class="n">PyfileconfActions</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pmcontext.tracing</span> <span class="kn">import</span> <span class="n">StackTracker</span>
+
 
 <div class="viewcode-block" id="ActiveConfigFileLoader"><a class="viewcode-back" href="../../../../../../api/pyfileconf.io.file.load.active.html#pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader">[docs]</a><span class="k">class</span> <span class="nc">ActiveConfigFileLoader</span><span class="p">(</span><span class="n">ImportAssignmentLazyLoader</span><span class="p">):</span>
 
@@ -174,9 +177,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>
 
         <span class="c1"># Actually import module</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">file_is_currently_being_loaded</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_user_defined_dict</span> <span class="o">=</span> <span class="n">get_user_defined_dict_from_filepath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">file_is_currently_being_loaded</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">with</span> <span class="n">StackTracker</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">PyfileconfActions</span><span class="o">.</span><span class="n">LOAD_FILE_EXECUTE</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_user_defined_dict</span> <span class="o">=</span> <span class="n">get_user_defined_dict_from_filepath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_defined_dict</span></div>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.13.3 documentation</title>
+  <title>pyfileconf.runner.models.runner &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.13.4
               </div>
             
           
@@ -189,7 +189,7 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.logic.write</span> <span class="kn">import</span> <span class="n">dict_as_function_kwarg_str</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.tracing</span> <span class="kn">import</span> <span class="n">RunningTracker</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.pmcontext.tracing</span> <span class="kn">import</span> <span class="n">StackTracker</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.views.object</span> <span class="kn">import</span> <span class="n">ObjectView</span>
 
 <div class="viewcode-block" id="Runner"><a class="viewcode-back" href="../../../../api/pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner">[docs]</a><span class="k">class</span> <span class="nc">Runner</span><span class="p">(</span><span class="n">ReprMixin</span><span class="p">):</span>
@@ -347,7 +347,7 @@
 
 
     <span class="k">def</span> <span class="nf">_run_one_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">StackTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
             <span class="n">func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_func_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
@@ -358,7 +358,7 @@
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">_run_one_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">StackTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
             <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_func_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
@@ -369,7 +369,7 @@
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">_run_one_specific_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">RunningTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">StackTracker</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">):</span>
             <span class="n">klass</span><span class="p">,</span> <span class="n">config_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_class_and_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_one_obj_with_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
             <span class="n">registrar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specific_class_registrar_map</span><span class="p">[</span><span class="n">klass</span><span class="p">]</span>
@@ -564,7 +564,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_specific_classes</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">def</span> <span class="nf">_add_to_config_dependencies_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.context</span> <span class="kn">import</span> <span class="n">context</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">context</span>
         <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_manager_name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
         <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency_for_currently_running_item_if_exists</span><span class="p">(</span><span class="n">full_sp</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.exceptions.assignments &mdash; pyfileconf 0.13.4 documentation</title>
+  <title>pyfileconf.pmcontext.actions &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -147,7 +147,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pyfileconf.exceptions.assignments</li>
+      <li>pyfileconf.pmcontext.actions</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,14 +162,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pyfileconf.exceptions.assignments</h1><div class="highlight"><pre>
-<span></span>
-<div class="viewcode-block" id="CouldNotExtractAssignmentException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.assignments.CouldNotExtractAssignmentException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotExtractAssignmentException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+  <h1>Source code for pyfileconf.pmcontext.actions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 
-<div class="viewcode-block" id="CouldNotExtractAssignmentFromAstException"><a class="viewcode-back" href="../../../api/pyfileconf.exceptions.html#pyfileconf.exceptions.assignments.CouldNotExtractAssignmentFromAstException">[docs]</a><span class="k">class</span> <span class="nc">CouldNotExtractAssignmentFromAstException</span><span class="p">(</span><span class="n">CouldNotExtractAssignmentException</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+<div class="viewcode-block" id="PyfileconfActions"><a class="viewcode-back" href="../../../api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.actions.PyfileconfActions">[docs]</a><span class="k">class</span> <span class="nc">PyfileconfActions</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">RUN</span> <span class="o">=</span> <span class="s1">&#39;run&#39;</span>
+    <span class="n">LOAD_FILE_EXECUTE</span> <span class="o">=</span> <span class="s1">&#39;load_file_execute&#39;</span>
+    <span class="n">LOAD_FILE_AST</span> <span class="o">=</span> <span class="s1">&#39;load_file_ast&#39;</span>
+    <span class="n">LOAD_PIPELINE_FILE_AST</span> <span class="o">=</span> <span class="s1">&#39;load_pipeline_file_ast&#39;</span></div>
 </pre></div>
 
            </div>

@@ -1,0 +1,43 @@
+pyfileconf.pmcontext package
+============================
+
+.. automodule:: pyfileconf.pmcontext
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.pmcontext.actions module
+-----------------------------------
+
+.. automodule:: pyfileconf.pmcontext.actions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pmcontext.main module
+--------------------------------
+
+.. automodule:: pyfileconf.pmcontext.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pmcontext.stack module
+---------------------------------
+
+.. automodule:: pyfileconf.pmcontext.stack
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.pmcontext.tracing module
+-----------------------------------
+
+.. automodule:: pyfileconf.pmcontext.tracing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

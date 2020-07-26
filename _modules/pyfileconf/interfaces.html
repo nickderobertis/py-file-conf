@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.interfaces &mdash; pyfileconf 0.13.3 documentation</title>
+  <title>pyfileconf.interfaces &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.13.4
               </div>
             
           
@@ -163,7 +163,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyfileconf.interfaces</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">ItemView</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">TypedDict</span>
 
@@ -180,6 +184,8 @@
     <span class="p">},</span>
     <span class="n">total</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
+
+<span class="n">SectionPathLike</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="s1">&#39;SectionPath&#39;</span><span class="p">]</span>
 </pre></div>
 
            </div>

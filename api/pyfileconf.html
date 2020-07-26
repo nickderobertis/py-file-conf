@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.13.3 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.13.4
               </div>
             
           
@@ -116,6 +116,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.plugin.html">pyfileconf.plugin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pmcontext.html">pyfileconf.pmcontext package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.sectionpath.html">pyfileconf.sectionpath package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.html">pyfileconf.selector package</a></li>
@@ -124,12 +125,10 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.batch">pyfileconf.batch module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.context">pyfileconf.context module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.debug">pyfileconf.debug module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.interfaces">pyfileconf.interfaces module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.iterate">pyfileconf.iterate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.main">pyfileconf.main module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.tracing">pyfileconf.tracing module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.userbase">pyfileconf.userbase module</a></li>
 </ul>
 </li>
@@ -471,6 +470,14 @@ dynamically updated, enabling powerful scripting.</p>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.plugin.html#module-pyfileconf.plugin.manager_utils">pyfileconf.plugin.manager_utils module</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.pmcontext.html">pyfileconf.pmcontext package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.pmcontext.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.pmcontext.html#module-pyfileconf.pmcontext.actions">pyfileconf.pmcontext.actions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.pmcontext.html#module-pyfileconf.pmcontext.main">pyfileconf.pmcontext.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.pmcontext.html#module-pyfileconf.pmcontext.stack">pyfileconf.pmcontext.stack module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.pmcontext.html#module-pyfileconf.pmcontext.tracing">pyfileconf.pmcontext.tracing module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.runner.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.runner.models.html">pyfileconf.runner.models package</a><ul>
@@ -578,66 +585,6 @@ section paths, regardless of in which manager they reside</p>
 <dl class="attribute">
 <dt id="pyfileconf.batch.BatchUpdater.updates">
 <code class="sig-name descname">updates</code><em class="property">: Iterable[Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.updates" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-pyfileconf.context">
-<span id="pyfileconf-context-module"></span><h2>pyfileconf.context module<a class="headerlink" href="#module-pyfileconf.context" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.context.PyFileConfContext">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.context.</code><code class="sig-name descname">PyFileConfContext</code><span class="sig-paren">(</span><em class="sig-param">config_dependencies=None</em>, <em class="sig-param">active_managers=None</em>, <em class="sig-param">force_update_dependencies=None</em>, <em class="sig-param">file_is_currently_being_loaded=False</em>, <em class="sig-param">currently_running_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/context.html#PyFileConfContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.context.PyFileConfContext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.context.PyFileConfContext.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">config_dependencies=None</em>, <em class="sig-param">active_managers=None</em>, <em class="sig-param">force_update_dependencies=None</em>, <em class="sig-param">file_is_currently_being_loaded=False</em>, <em class="sig-param">currently_running_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/context.html#PyFileConfContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.context.PyFileConfContext.active_managers">
-<code class="sig-name descname">active_managers</code><em class="property">: Dict[str, 'PipelineManager']</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.active_managers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.context.PyFileConfContext.add_config_dependency">
-<code class="sig-name descname">add_config_dependency</code><span class="sig-paren">(</span><em class="sig-param">dependent</em>, <em class="sig-param">depends_on</em>, <em class="sig-param">force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/context.html#PyFileConfContext.add_config_dependency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.add_config_dependency" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.context.PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists">
-<code class="sig-name descname">add_config_dependency_for_currently_running_item_if_exists</code><span class="sig-paren">(</span><em class="sig-param">depends_on</em>, <em class="sig-param">force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/context.html#PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.context.PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded">
-<code class="sig-name descname">add_config_dependency_if_file_is_currently_being_loaded</code><span class="sig-paren">(</span><em class="sig-param">dependent</em>, <em class="sig-param">depends_on</em>, <em class="sig-param">force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/context.html#PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.context.PyFileConfContext.config_dependencies">
-<code class="sig-name descname">config_dependencies</code><em class="property">: Dict[str, Set['SectionPath']]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.config_dependencies" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.context.PyFileConfContext.currently_running_section_path_str">
-<code class="sig-name descname">currently_running_section_path_str</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.currently_running_section_path_str" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.context.PyFileConfContext.file_is_currently_being_loaded">
-<code class="sig-name descname">file_is_currently_being_loaded</code><em class="property">: bool</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.file_is_currently_being_loaded" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.context.PyFileConfContext.force_update_dependencies">
-<code class="sig-name descname">force_update_dependencies</code><em class="property">: Dict[str, Set['SectionPath']]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.force_update_dependencies" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.context.PyFileConfContext.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/context.html#PyFileConfContext.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.context.PyFileConfContext.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1124,26 +1071,6 @@ pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks</p>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
-</dd></dl>
-
-</div>
-<div class="section" id="module-pyfileconf.tracing">
-<span id="pyfileconf-tracing-module"></span><h2>pyfileconf.tracing module<a class="headerlink" href="#module-pyfileconf.tracing" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.tracing.RunningTracker">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.tracing.</code><code class="sig-name descname">RunningTracker</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">base_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/tracing.html#RunningTracker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.tracing.RunningTracker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.tracing.RunningTracker.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">base_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/tracing.html#RunningTracker.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.tracing.RunningTracker.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.tracing.RunningTracker.orig_running_section_path_str">
-<code class="sig-name descname">orig_running_section_path_str</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.tracing.RunningTracker.orig_running_section_path_str" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>

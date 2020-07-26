@@ -24,6 +24,7 @@ Subpackages
    pyfileconf.mixins
    pyfileconf.pipelines
    pyfileconf.plugin
+   pyfileconf.pmcontext
    pyfileconf.runner
    pyfileconf.sectionpath
    pyfileconf.selector
@@ -36,14 +37,6 @@ pyfileconf.batch module
 -----------------------
 
 .. automodule:: pyfileconf.batch
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyfileconf.context module
--------------------------
-
-.. automodule:: pyfileconf.context
    :members:
    :undoc-members:
    :show-inheritance:
@@ -76,14 +69,6 @@ pyfileconf.main module
 ----------------------
 
 .. automodule:: pyfileconf.main
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyfileconf.tracing module
--------------------------
-
-.. automodule:: pyfileconf.tracing
    :members:
    :undoc-members:
    :show-inheritance:

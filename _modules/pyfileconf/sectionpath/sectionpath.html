@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.sectionpath.sectionpath &mdash; pyfileconf 0.13.3 documentation</title>
+  <title>pyfileconf.sectionpath.sectionpath &mdash; pyfileconf 0.13.4 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.3
+                0.13.4
               </div>
             
           
@@ -165,6 +165,8 @@
   <h1>Source code for pyfileconf.sectionpath.sectionpath</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
 
+<span class="kn">from</span> <span class="nn">pyfileconf.interfaces</span> <span class="kn">import</span> <span class="n">SectionPathLike</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">ItemView</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -202,7 +204,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">section_path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SectionPath.from_ambiguous"><a class="viewcode-back" href="../../../api/pyfileconf.sectionpath.html#pyfileconf.sectionpath.sectionpath.SectionPath.from_ambiguous">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_ambiguous</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="s1">&#39;SectionPath&#39;</span><span class="p">],</span> <span class="n">strip_manager_from_iv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">from_ambiguous</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">SectionPathLike</span><span class="p">,</span> <span class="n">strip_manager_from_iv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                        <span class="n">base_section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
         <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
@@ -230,14 +232,14 @@
 <div class="viewcode-block" id="SectionPath.list_from_ambiguous"><a class="viewcode-back" href="../../../api/pyfileconf.sectionpath.html#pyfileconf.sectionpath.sectionpath.SectionPath.list_from_ambiguous">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_from_ambiguous</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
-        <span class="n">items</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="s1">&#39;SectionPath&#39;</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="s1">&#39;SectionPath&#39;</span><span class="p">]]],</span>
+        <span class="n">items</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SectionPathLike</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SectionPathLike</span><span class="p">]],</span>
         <span class="n">base_section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">strip_manager_from_iv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;SectionPath&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="n">items_list</span> <span class="o">=</span> <span class="n">items</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">items</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;ItemView&#39;</span><span class="p">,</span> <span class="s1">&#39;SectionPath&#39;</span><span class="p">],</span> <span class="n">items</span><span class="p">)</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SectionPathLike</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
             <span class="n">items_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">items</span><span class="p">]</span>
 
         <span class="n">sp_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SectionPath</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
