@@ -41,6 +41,7 @@ class IterativeRunner:
         :param strip_manager_from_iv: whether to remove manager name from any incoming item views
         """
         self.base_section_path_str = base_section_path_str
+        self.strip_manager_from_iv = strip_manager_from_iv
         self.run_items = SectionPath.list_from_ambiguous(
             section_path_str_or_list,
             base_section_path_str=base_section_path_str,

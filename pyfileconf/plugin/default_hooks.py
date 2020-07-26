@@ -40,22 +40,15 @@ def pyfileconf_iter_update_for_case(
     :param runner: :class:`IterativeRunner` which has been constructed to call iteration
     :return: None
     """
-    from pyfileconf import PipelineManager
-    from pyfileconf.sectionpath.sectionpath import SectionPath
+    from pyfileconf.batch import BatchUpdater
 
-    for config_dict in case:
-        sp_str = config_dict["section_path_str"]
-        if runner.base_section_path_str is not None:
-            sp_str = SectionPath.join(runner.base_section_path_str, sp_str).path_str
-        pm = PipelineManager.get_manager_by_section_path_str(sp_str)
-        relative_section_path_str = SectionPath(
-            ".".join(SectionPath(sp_str)[1:])
-        ).path_str
-        pm.reset(relative_section_path_str)
-        relative_conf_dict = {**config_dict}
-        relative_conf_dict["section_path_str"] = relative_section_path_str
-        pm.update(**relative_conf_dict)
-    # manager.plm.hook.pyfileconf_iter_update_for_case(case=case, runner=self)
+    bu = BatchUpdater(
+        base_section_path_str=runner.base_section_path_str,
+        strip_manager_from_iv=runner.strip_manager_from_iv,
+    )
+    sp_strs = [conf['section_path_str'] for conf in case]
+    bu.reset(sp_strs)
+    bu.update(case)
 
 
 @hookimpl
