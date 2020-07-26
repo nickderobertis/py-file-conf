@@ -59,13 +59,14 @@ class ConfigBase(dict):
         return self.keys()
 
     # argument names to match dict.update
-    def update(self, E=None, **F):
+    def update(self, E=None, pyfileconf_persist: bool = True, **F):  # type: ignore
         if E is None:
             E = {}
 
         # Track the updates so they can be applied later
         all_updates = {**E, **F}
-        self._applied_updates.update(all_updates)
+        if pyfileconf_persist:
+            self._applied_updates.update(all_updates)
 
         super().update(E, **F)
 
@@ -121,5 +122,5 @@ class ConfigBase(dict):
                                               klass=self.klass, always_import_strs=self.always_import_strs,
                                               always_assign_strs=self.always_assign_strs)
         applied_updates = {**self._applied_updates}
-        self.update(**new_config)
-        self.update(**applied_updates)
+        self.update(**new_config, pyfileconf_persist=False)
+        self.update(**applied_updates, pyfileconf_persist=False)

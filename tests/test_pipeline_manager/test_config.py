@@ -1146,3 +1146,79 @@ class TestBatchUpdater(PipelineManagerTestBase):
             expect_ec = ExampleClass(name='data', a=None)
             assert ec.name == expect_ec.name
             assert ec.a == ec._a == expect_ec.a
+
+
+class TestConfigRefresh(PipelineManagerTestBase):
+    # NOTE: refresh permanent tested in other tests in this file
+    def test_refresh_transient_function(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        expected_b_result = ['a', 'b']
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str,
+            pyfileconf_persist=False
+        )
+        result = pipeline_manager.run(iv)
+        assert result == (None, expected_b_result)
+        pipeline_manager.refresh(section_path.path_str)
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
+
+    def test_refresh_transient_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        expected_a_result = (1, 2)
+        expected_f_value = 'woo'
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str,
+            pyfileconf_persist=False
+        )
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        ec._f = expected_f_value
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(expected_a_result)
+        assert ec._f == expected_f_value
+        pipeline_manager.refresh(section_path.path_str)
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(None)
+        assert ec._f == expected_f_value
+
+    def test_refresh_transient_specific_class(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expected_a_result = (1, 2)
+        expected_f_result = 'woo'
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str,
+            pyfileconf_persist=False
+        )
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        ec.item._f = expected_f_result
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=expected_a_result)
+        assert ec.name == expect_ec.name
+        assert ec.a == ec._a == expect_ec.a
+        assert ec._f == expected_f_result
+        pipeline_manager.refresh(section_path.path_str)
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(name='data', a=None)
+        assert ec.name == expect_ec.name
+        assert ec.a == ec._a == expect_ec.a
+        assert ec._f == expected_f_result
