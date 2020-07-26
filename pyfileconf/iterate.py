@@ -23,6 +23,7 @@ class IterativeRunner:
     run_items: List[SectionPath]
     config_updates: Sequence[Dict[str, Any]]
     cases: List[Tuple[Dict[str, Any], ...]]
+    last_case: Optional[Tuple[Dict[str, Any], ...]] = None
 
     def __init__(
         self,
@@ -73,6 +74,7 @@ class IterativeRunner:
             if collect_results:
                 in_out_tup = (case, result)
                 all_results.append(in_out_tup)
+            self.last_case = case
         return all_results
 
     def run_gen(self) -> Iterator[IterativeResult]:
@@ -81,6 +83,7 @@ class IterativeRunner:
             result = self._run()
             in_out_tup = (case, result)
             yield in_out_tup
+            self.last_case = case
 
     def _run(self) -> Any:
         from pyfileconf.main import PipelineManager

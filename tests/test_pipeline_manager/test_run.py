@@ -329,7 +329,8 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         ]
         iv = sel.test_pipeline_manager.stuff.a_function
         result = pipeline_manager.run_product(iv, config_dicts)
-        assert ExampleClassWithCustomUpdate.num_updates == 6
+        # 6 config resets, 6 config updates, corresponding to when config changes
+        assert ExampleClassWithCustomUpdate.num_updates == 12
         assert result == expect_results
         for res, expect_res in zip(pipeline_manager.run_product_gen(iv, config_dicts), expect_results):
             assert res == expect_res
