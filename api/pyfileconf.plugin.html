@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin package &mdash; pyfileconf 0.13.1 documentation</title>
+  <title>pyfileconf.plugin package &mdash; pyfileconf 0.13.2 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.13.1
+                0.13.2
               </div>
             
           
@@ -345,7 +345,7 @@ then it can also be modified in place.</p>
 
 <dl class="function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_update">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d</em>, <em class="sig-param">section_path_str</em>, <em class="sig-param">kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the end of PipelineManager.update.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -408,7 +408,7 @@ PipelineManager.run</p></li>
 
 <dl class="function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">kwargs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d</em>, <em class="sig-param">section_path_str</em>, <em class="sig-param">kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of PipelineManager.update. Can optionally return
 a dictionary of updates which will be used to update the passed dictionary.
 Can also modify the passed dictionaries in place.</p>
