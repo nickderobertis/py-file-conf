@@ -1,4 +1,5 @@
-from typing import Sequence, List, Union, TYPE_CHECKING, Optional
+from typing import Sequence, List, TYPE_CHECKING, Optional, Iterator
+
 if TYPE_CHECKING:
     from pyfileconf.sectionpath.sectionpath import SectionPath
 
@@ -7,16 +8,23 @@ from pyfileconf.pmcontext.actions import PyfileconfActions
 
 
 class PyfileconfFrame:
-
-    def __init__(self, section_path: SectionPathLike, action: PyfileconfActions, file_path: Optional[str] = None):
+    def __init__(
+        self,
+        section_path: SectionPathLike,
+        action: PyfileconfActions,
+        file_path: Optional[str] = None,
+    ):
         from pyfileconf.sectionpath.sectionpath import SectionPath
+
         self.section_path = SectionPath.from_ambiguous(section_path)
         self.action = action
         self.file_path = file_path
 
     def __repr__(self):
-        return f'<PyfileconfFrame(section_path={self.section_path.path_str}, ' \
-               f'action={self.action.value}, file_path={self.file_path})>'
+        return (
+            f"<PyfileconfFrame(section_path={self.section_path.path_str}, "
+            f"action={self.action.value}, file_path={self.file_path})>"
+        )
 
     @classmethod
     def from_file_path(cls, file_path: str, action: PyfileconfActions):
@@ -24,7 +32,9 @@ class PyfileconfFrame:
         from pyfileconf.sectionpath.sectionpath import SectionPath
 
         dependent_manager = PipelineManager.get_manager_by_filepath(file_path)
-        dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, file_path)
+        dependent_sp = SectionPath.from_filepath(
+            dependent_manager.default_config_path, file_path
+        )
         full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
         return cls(full_sp, action, file_path=file_path)
 
@@ -35,15 +45,15 @@ class PyfileconfStack:
     def __init__(self, frames: Sequence[PyfileconfFrame]):
         self.frames = list(frames)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> PyfileconfFrame:
         return self.frames[item]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[PyfileconfFrame]:
         yield from self.frames
 
     def __repr__(self):
-        frame_repr = '\n'.join(f'{i}\t{repr(frame)}' for i, frame in enumerate(self))
-        return f'<PyfileconfStack(\n{frame_repr}\n)>'
+        frame_repr = "\n".join(f"{i}\t{repr(frame)}" for i, frame in enumerate(self))
+        return f"<PyfileconfStack(\n{frame_repr}\n)>"
 
     def add_frame(self, frame: PyfileconfFrame):
         self.frames.append(frame)
@@ -65,12 +75,20 @@ class PyfileconfStack:
 
     @property
     def file_is_currently_being_loaded(self) -> bool:
-        load_frames = [frame for frame in self if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE]
+        load_frames = [
+            frame
+            for frame in self
+            if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE
+        ]
         return len(load_frames) > 0
 
     @property
-    def currently_loading_file_section_path(self) -> Optional['SectionPath']:
-        load_frames = [frame for frame in self if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE]
+    def currently_loading_file_section_path(self) -> Optional["SectionPath"]:
+        load_frames = [
+            frame
+            for frame in self
+            if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE
+        ]
         if not load_frames:
             return None
 
