@@ -1,4 +1,5 @@
 import ast
+import itertools
 import sys
 import os
 import traceback
@@ -8,9 +9,11 @@ from functools import partial
 import bdb
 import warnings
 from copy import deepcopy
-from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict, Set, Iterator
+from typing import TYPE_CHECKING, Union, List, Callable, Tuple, Optional, Any, Sequence, Type, cast, Dict, Set, \
+    Iterator, Iterable
 
 from pyfileconf.basemodels.registrar import Registrar
+from pyfileconf.batch import BatchUpdater
 from pyfileconf.data.logic.convert import convert_to_empty_obj_if_necessary
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.data.models.dictconfig import SpecificClassDictConfig
@@ -304,15 +307,16 @@ class PipelineManager:
 
     def update(self, d: dict=None, section_path_str: str=None, **kwargs):
         """
-        Update the configuration for an item by section path
+        Update the configuration for an item by section path.
+
+        The main logic is in _update but this also calls the
+        pyfileconf_pre_update and pyfileconf_post_update hooks
 
         :param d: dictionary of updates
         :param section_path_str: section path of item to be updated
         :param kwargs: kwarg updates
         :return:
         """
-        from pyfileconf.selector.models.itemview import is_item_view
-
         new_updates_list: List[Dict[str, Any]] = plugin_manager.plm.hook.pyfileconf_pre_update(
             pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
         )
@@ -321,6 +325,39 @@ class PipelineManager:
             if d is not None:
                 d.update(new_updates_dict)
             kwargs.update(new_updates_dict)
+
+        self._update(d, section_path_str=section_path_str, **kwargs)
+
+        plugin_manager.plm.hook.pyfileconf_post_update(
+            pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
+        )
+
+    def update_batch(self, updates: Iterable[dict]):
+        """
+        Update the configuration for an multiple items by section path.
+
+        The main logic is just calling _update in a loop but this also calls the
+        pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks
+
+        :param updates: iterable of dictionaries of config updates
+        :return: None
+        """
+        updater = BatchUpdater(
+            base_section_path_str=self.name,
+            strip_manager_from_iv=True,
+        )
+        updater.update(updates)
+
+    def _update(self, d: dict=None, section_path_str: str=None, **kwargs):
+        """
+        Update the configuration for an item by section path
+
+        :param d: dictionary of updates
+        :param section_path_str: section path of item to be updated
+        :param kwargs: kwarg updates
+        :return:
+        """
+        from pyfileconf.selector.models.itemview import is_item_view
 
         self.runner.update(d, section_path_str, **kwargs)
 
@@ -343,10 +380,6 @@ class PipelineManager:
                 manager = self.__class__.get_manager_by_section_path_str(dependent_sp.path_str)
                 relative_section_path = SectionPath('.'.join(dependent_sp[1:]))
                 manager.refresh(relative_section_path.path_str)
-
-        plugin_manager.plm.hook.pyfileconf_post_update(
-            pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
-        )
 
     def refresh(self, section_path_str: str):
         """

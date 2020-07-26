@@ -37,21 +37,30 @@ class SectionPath(ReprMixin):
         return cls(section_path)
 
     @classmethod
-    def from_ambiguous(cls, item: Union[str, 'ItemView', 'SectionPath'], strip_manager_from_iv: bool = False):
+    def from_ambiguous(cls, item: Union[str, 'ItemView', 'SectionPath'], strip_manager_from_iv: bool = False,
+                       base_section_path_str: Optional[str] = None):
         from pyfileconf.selector.models.itemview import is_item_view
+        result = None
         if is_item_view(item):
             item = cast('ItemView', item)
             sp = cls(item.section_path_str)
             if strip_manager_from_iv:
                 relative_section_path = cls.from_section_str_list(sp[1:])
-                return relative_section_path
+                result = relative_section_path
             else:
-                return sp
+                result = sp
         if isinstance(item, cls):
-            return item
-        if isinstance(item, str):
-            return cls(item)
-        raise ValueError(f'cannot parse {item} of type {item} to create SectionPath')
+            result = item
+        elif isinstance(item, str):
+            result = cls(item)
+
+        if result is None:
+            raise ValueError(f'cannot parse {item} of type {item} to create SectionPath')
+
+        if base_section_path_str is not None:
+            result = SectionPath.join(base_section_path_str, result)
+
+        return result
 
     @classmethod
     def list_from_ambiguous(
@@ -68,9 +77,9 @@ class SectionPath(ReprMixin):
 
         sp_results: List[SectionPath] = []
         for item in items_list:
-            sp = SectionPath.from_ambiguous(item, strip_manager_from_iv=strip_manager_from_iv)
-            if base_section_path_str is not None:
-                sp = SectionPath.join(base_section_path_str, sp)
+            sp = SectionPath.from_ambiguous(
+                item, strip_manager_from_iv=strip_manager_from_iv, base_section_path_str=base_section_path_str
+            )
             sp_results.append(sp)
 
         return sp_results

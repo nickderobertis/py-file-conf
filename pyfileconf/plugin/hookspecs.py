@@ -1,7 +1,7 @@
 """
 Contains the hooks which may be attached to in creating plugins
 """
-from typing import Any, Dict, Sequence, List, Tuple, Optional, TYPE_CHECKING
+from typing import Any, Dict, Sequence, List, Tuple, Optional, TYPE_CHECKING, Iterable
 
 from pyfileconf.runner.models.runner import Runner
 
@@ -107,6 +107,12 @@ def pyfileconf_pre_update(
     :param section_path_str: section path of config to be updated
     :param kwargs: dictionary of config updates
     :return: optional updates to config updates
+
+    :Notes:
+
+        This is not called at the beginning of PipelineManager.update_batch,
+        for that use :func:`pyfileconf_pre_update_batch`
+
     """
 
 
@@ -124,5 +130,40 @@ def pyfileconf_post_update(
     :param d: dictionary of config updates
     :param section_path_str: section path of config which was updated
     :param kwargs: dictionary of config updates
+    :return: None
+
+    :Notes:
+
+        This is not called at the end of PipelineManager.update_batch,
+        for that use :func:`pyfileconf_post_update_batch`
+    """
+
+
+@hookspec
+def pyfileconf_pre_update_batch(
+    pm: "PipelineManager",
+    updates: Iterable[dict],
+) -> Iterable[dict]:
+    """
+    Called at the beginning of PipelineManager.update_batch. Should
+    return an iterable of updates, which will be included in the
+    updates to be run
+
+    :param pm: The manager responsible for the run
+    :param updates: iterable of dictionaries of config updates
+    :return: optional updates to config updates
+    """
+
+
+@hookspec
+def pyfileconf_post_update_batch(
+    pm: "PipelineManager",
+    updates: Iterable[dict],
+):
+    """
+    Called at the end of PipelineManager.update_batch.
+
+    :param pm: The manager responsible for the run
+    :param updates: iterable of dictionaries of config updates
     :return: None
     """

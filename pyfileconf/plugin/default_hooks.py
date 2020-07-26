@@ -1,12 +1,14 @@
 """
 Default behavior to be run on hooks
 """
-from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING
+from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING, Iterable, Optional
 
 if TYPE_CHECKING:
     from pyfileconf.iterate import IterativeRunner
+    from pyfileconf.main import PipelineManager
 
 from pyfileconf.plugin.impl import hookimpl
+from pyfileconf.plugin import manager
 
 
 @hookimpl
@@ -38,20 +40,19 @@ def pyfileconf_iter_update_for_case(
     :param runner: :class:`IterativeRunner` which has been constructed to call iteration
     :return: None
     """
-    from pyfileconf import PipelineManager
-    from pyfileconf.sectionpath.sectionpath import SectionPath
+    from pyfileconf.batch import BatchUpdater
 
-    for config_dict in case:
-        sp_str = config_dict["section_path_str"]
-        if runner.base_section_path_str is not None:
-            sp_str = SectionPath.join(
-                runner.base_section_path_str, sp_str
-            ).path_str
-        manager = PipelineManager.get_manager_by_section_path_str(sp_str)
-        relative_section_path_str = SectionPath(
-            ".".join(SectionPath(sp_str)[1:])
-        ).path_str
-        manager.reset(relative_section_path_str)
-        relative_conf_dict = {**config_dict}
-        relative_conf_dict["section_path_str"] = relative_section_path_str
-        manager.update(**relative_conf_dict)
+    bu = BatchUpdater(
+        base_section_path_str=runner.base_section_path_str,
+        strip_manager_from_iv=runner.strip_manager_from_iv,
+    )
+    sp_strs = [conf['section_path_str'] for conf in case]
+    bu.reset(sp_strs)
+    bu.update(case)
+
+
+@hookimpl
+def pyfileconf_pre_update_batch(
+    pm: "PipelineManager", updates: Iterable[dict],
+) -> Iterable[dict]:
+    return updates
