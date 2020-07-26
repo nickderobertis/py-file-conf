@@ -670,6 +670,22 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         result = pipeline_manager.run(iv)
         assert result == (None, None)
 
+    def test_config_reset_function(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        expected_b_result = ['a', 'b']
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            b=expected_b_result,
+            section_path_str=section_path.path_str
+        )
+        pipeline_manager.reset(section_path.path_str)
+        result = pipeline_manager.run(iv)
+        assert result == (None, None)
+
     def test_config_reload_function_multiple_pms(self):
         self.write_a_function_to_pipeline_dict_file()
         self.write_a_function_to_pipeline_dict_file(file_path=self.second_pipeline_dict_path)
@@ -719,6 +735,22 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         pipeline_manager.reload()
+        ec = sel.test_pipeline_manager.stuff.ExampleClass()
+        assert ec == ExampleClass(None)
+
+    def test_config_reset_class(self):
+        self.write_example_class_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.ExampleClass
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        pipeline_manager.reset(section_path.path_str)
         ec = sel.test_pipeline_manager.stuff.ExampleClass()
         assert ec == ExampleClass(None)
 
@@ -773,6 +805,26 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
             section_path_str=section_path.path_str
         )
         pipeline_manager.reload()
+        ec = sel.test_pipeline_manager.example_class.stuff.data
+        expect_ec = ExampleClass(None, name='data')
+        assert ec.name == expect_ec.name
+        assert ec.a == ec._a == expect_ec.a
+
+    def test_config_reset_specific_class_dict(self):
+        self.write_example_class_dict_to_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CLASS_CONFIG_DICT_LIST
+        )
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.example_class.stuff.data
+        expected_a_result = (1, 2)
+        section_path = SectionPath.from_section_str_list(SectionPath(iv.section_path_str)[1:])
+        pipeline_manager.update(
+            a=expected_a_result,
+            section_path_str=section_path.path_str
+        )
+        pipeline_manager.reset(section_path.path_str)
         ec = sel.test_pipeline_manager.example_class.stuff.data
         expect_ec = ExampleClass(None, name='data')
         assert ec.name == expect_ec.name
