@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyfileconf 0.12.6 documentation</title>
+  <title>Index &mdash; pyfileconf 0.13.0 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.12.6
+                0.13.0
               </div>
             
           
@@ -207,6 +207,8 @@
         <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase.__init__">(pyfileconf.basemodels.file.ConfigFileBase method)</a>
 </li>
         <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.registrar.Registrar.__init__">(pyfileconf.basemodels.registrar.Registrar method)</a>
+</li>
+        <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.__init__">(pyfileconf.batch.BatchUpdater method)</a>
 </li>
         <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.__init__">(pyfileconf.config.models.manager.ConfigManager method)</a>
 </li>
@@ -393,10 +395,16 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.params.base_section_path_str">base_section_path_str (pyfileconf.iterate.IterativeRunner parameter)</a>
+      <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.params.base_section_path_str">base_section_path_str (pyfileconf.batch.BatchUpdater parameter)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.params.base_section_path_str">(pyfileconf.iterate.IterativeRunner parameter)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater">BatchUpdater (class in pyfileconf.batch)</a>
+</li>
       <li><a href="api/pyfileconf.io.file.load.lazy.base.html#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.body">body() (pyfileconf.io.file.load.lazy.base.loader.LazyLoader property)</a>
 </li>
   </ul></td>
@@ -1092,9 +1100,13 @@
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update.params.pm">pm (pyfileconf.plugin.hookspecs.pyfileconf_post_update parameter)</a>
 
       <ul>
+        <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch.params.pm">(pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch parameter)</a>
+</li>
         <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_run.params.pm">(pyfileconf.plugin.hookspecs.pyfileconf_pre_run parameter)</a>
 </li>
         <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.pm">(pyfileconf.plugin.hookspecs.pyfileconf_pre_update parameter)</a>
+</li>
+        <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch.params.pm">(pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch parameter)</a>
 </li>
       </ul></li>
       <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.pop">pop() (pyfileconf.config.models.manager.ConfigManager method)</a>
@@ -1130,6 +1142,8 @@
       <li><a href="api/pyfileconf.basemodels.html#module-pyfileconf.basemodels.file">pyfileconf.basemodels.file (module)</a>
 </li>
       <li><a href="api/pyfileconf.basemodels.html#module-pyfileconf.basemodels.registrar">pyfileconf.basemodels.registrar (module)</a>
+</li>
+      <li><a href="api/pyfileconf.html#module-pyfileconf.batch">pyfileconf.batch (module)</a>
 </li>
       <li><a href="api/pyfileconf.config.html#module-pyfileconf.config">pyfileconf.config (module)</a>
 </li>
@@ -1431,10 +1445,18 @@
 </li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update">pyfileconf_post_update() (in module pyfileconf.plugin.hookspecs)</a>
 </li>
+      <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch">pyfileconf_post_update_batch() (in module pyfileconf.plugin.hookspecs)</a>
+</li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_run">pyfileconf_pre_run() (in module pyfileconf.plugin.hookspecs)</a>
 </li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update">pyfileconf_pre_update() (in module pyfileconf.plugin.hookspecs)</a>
 </li>
+      <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch">pyfileconf_pre_update_batch() (in module pyfileconf.plugin.default_hooks)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch">(in module pyfileconf.plugin.hookspecs)</a>
+</li>
+      </ul></li>
       <li><a href="api/pyfileconf.html#pyfileconf.userbase.PyfileconfBase">PyfileconfBase (class in pyfileconf.userbase)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.context.PyFileConfContext">PyFileConfContext (class in pyfileconf.context)</a>
@@ -1521,9 +1543,11 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">reset() (pyfileconf.config.models.manager.ConfigManager method)</a>
+      <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.reset">reset() (pyfileconf.batch.BatchUpdater method)</a>
 
       <ul>
+        <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">(pyfileconf.config.models.manager.ConfigManager method)</a>
+</li>
         <li><a href="api/pyfileconf.html#pyfileconf.context.PyFileConfContext.reset">(pyfileconf.context.PyFileConfContext method)</a>
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.reset">(pyfileconf.main.PipelineManager method)</a>
@@ -1657,8 +1681,14 @@
 </li>
       <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.stdout_also_logged">stdout_also_logged() (in module pyfileconf.logger)</a>
 </li>
-      <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.params.strip_manager_from_iv">strip_manager_from_iv (pyfileconf.iterate.IterativeRunner parameter)</a>
+      <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.strip_manager_from_iv">strip_manager_from_iv (pyfileconf.batch.BatchUpdater attribute)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.params.strip_manager_from_iv">(pyfileconf.batch.BatchUpdater parameter)</a>
 </li>
+        <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.params.strip_manager_from_iv">(pyfileconf.iterate.IterativeRunner parameter)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1698,6 +1728,8 @@
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.update">update() (pyfileconf.basemodels.config.ConfigBase method)</a>
 
       <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.update">(pyfileconf.batch.BatchUpdater method)</a>
+</li>
         <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.update">(pyfileconf.config.models.manager.ConfigManager method)</a>
 </li>
         <li><a href="api/pyfileconf.config.models.html#pyfileconf.config.models.section.ConfigSection.update">(pyfileconf.config.models.section.ConfigSection method)</a>
@@ -1709,6 +1741,20 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update_batch">update_batch() (pyfileconf.main.PipelineManager method)</a>
+</li>
+      <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.updates">updates (pyfileconf.batch.BatchUpdater attribute)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.update.params.updates">(pyfileconf.batch.BatchUpdater.update parameter)</a>
+</li>
+        <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update_batch.params.updates">(pyfileconf.main.PipelineManager.update_batch parameter)</a>
+</li>
+        <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch.params.updates">(pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch parameter)</a>
+</li>
+        <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch.params.updates">(pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch parameter)</a>
+</li>
+      </ul></li>
       <li><a href="api/pyfileconf.io.file.load.active.html#pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader.user_defined_dict">user_defined_dict() (pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader property)</a>
 </li>
   </ul></td>

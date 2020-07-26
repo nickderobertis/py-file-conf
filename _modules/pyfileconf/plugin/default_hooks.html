@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.default_hooks &mdash; pyfileconf 0.12.6 documentation</title>
+  <title>pyfileconf.plugin.default_hooks &mdash; pyfileconf 0.13.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.6
+                0.13.0
               </div>
             
           
@@ -166,12 +166,14 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Default behavior to be run on hooks</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">IterativeRunner</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.plugin.impl</span> <span class="kn">import</span> <span class="n">hookimpl</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.plugin</span> <span class="kn">import</span> <span class="n">manager</span>
 
 
 <div class="viewcode-block" id="pyfileconf_iter_get_cases"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.default_hooks.pyfileconf_iter_get_cases">[docs]</a><span class="nd">@hookimpl</span>
@@ -203,23 +205,22 @@
 <span class="sd">    :param runner: :class:`IterativeRunner` which has been constructed to call iteration</span>
 <span class="sd">    :return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
-    <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.batch</span> <span class="kn">import</span> <span class="n">BatchUpdater</span>
 
-    <span class="k">for</span> <span class="n">config_dict</span> <span class="ow">in</span> <span class="n">case</span><span class="p">:</span>
-        <span class="n">sp_str</span> <span class="o">=</span> <span class="n">config_dict</span><span class="p">[</span><span class="s2">&quot;section_path_str&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">runner</span><span class="o">.</span><span class="n">base_section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sp_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="n">runner</span><span class="o">.</span><span class="n">base_section_path_str</span><span class="p">,</span> <span class="n">sp_str</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
-        <span class="n">manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">sp_str</span><span class="p">)</span>
-        <span class="n">relative_section_path_str</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span>
-            <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SectionPath</span><span class="p">(</span><span class="n">sp_str</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">path_str</span>
-        <span class="n">manager</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">relative_section_path_str</span><span class="p">)</span>
-        <span class="n">relative_conf_dict</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">config_dict</span><span class="p">}</span>
-        <span class="n">relative_conf_dict</span><span class="p">[</span><span class="s2">&quot;section_path_str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relative_section_path_str</span>
-        <span class="n">manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">relative_conf_dict</span><span class="p">)</span></div>
+    <span class="n">bu</span> <span class="o">=</span> <span class="n">BatchUpdater</span><span class="p">(</span>
+        <span class="n">base_section_path_str</span><span class="o">=</span><span class="n">runner</span><span class="o">.</span><span class="n">base_section_path_str</span><span class="p">,</span>
+        <span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="n">runner</span><span class="o">.</span><span class="n">strip_manager_from_iv</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sp_strs</span> <span class="o">=</span> <span class="p">[</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;section_path_str&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">conf</span> <span class="ow">in</span> <span class="n">case</span><span class="p">]</span>
+    <span class="n">bu</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">sp_strs</span><span class="p">)</span>
+    <span class="n">bu</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">case</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_pre_update_batch"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch">[docs]</a><span class="nd">@hookimpl</span>
+<span class="k">def</span> <span class="nf">pyfileconf_pre_update_batch</span><span class="p">(</span>
+    <span class="n">pm</span><span class="p">:</span> <span class="s2">&quot;PipelineManager&quot;</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">updates</span></div>
 </pre></div>
 
            </div>

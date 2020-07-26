@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.12.6 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.13.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.12.6
+                0.13.0
               </div>
             
           
@@ -123,6 +123,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.batch">pyfileconf.batch module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.context">pyfileconf.context module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.debug">pyfileconf.debug module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyfileconf.interfaces">pyfileconf.interfaces module</a></li>
@@ -525,6 +526,62 @@ dynamically updated, enabling powerful scripting.</p>
 </div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyfileconf.batch">
+<span id="pyfileconf-batch-module"></span><h2>pyfileconf.batch module<a class="headerlink" href="#module-pyfileconf.batch" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyfileconf.batch.BatchUpdater">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.batch.</code><code class="sig-name descname">BatchUpdater</code><span class="sig-paren">(</span><em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class that enables config changes across multiple pipeline managers</p>
+<p>Update one or multiple registered functions/sections by their full
+section paths, regardless of in which manager they reside</p>
+<dl class="method">
+<dt id="pyfileconf.batch.BatchUpdater.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.batch.BatchUpdater.params.base_section_path_str"></span><strong>base_section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.batch.BatchUpdater.params.base_section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – section path str to put at beginning of all passed section paths</p></li>
+<li><p><span class="target" id="pyfileconf.batch.BatchUpdater.params.strip_manager_from_iv"></span><strong>strip_manager_from_iv</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.batch.BatchUpdater.params.strip_manager_from_iv">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to remove manager name from any incoming item views</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.batch.BatchUpdater.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_strs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.batch.BatchUpdater.strip_manager_from_iv">
+<code class="sig-name descname">strip_manager_from_iv</code><em class="property">: bool</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.strip_manager_from_iv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.batch.BatchUpdater.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.update" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.batch.BatchUpdater.update.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.batch.BatchUpdater.update.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – list of kwarg dictionaries which would normally be provided to .update_batch</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyfileconf.batch.BatchUpdater.updates">
+<code class="sig-name descname">updates</code><em class="property">: Iterable[Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.updates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-pyfileconf.context">
 <span id="pyfileconf-context-module"></span><h2>pyfileconf.context module<a class="headerlink" href="#module-pyfileconf.context" title="Permalink to this headline">¶</a></h2>
@@ -980,7 +1037,9 @@ if results are stored in some other way</p></li>
 <dl class="method">
 <dt id="pyfileconf.main.PipelineManager.update">
 <code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the configuration for an item by section path</p>
+<dd><p>Update the configuration for an item by section path.</p>
+<p>The main logic is in _update but this also calls the
+pyfileconf_pre_update and pyfileconf_post_update hooks</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -991,6 +1050,22 @@ if results are stored in some other way</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.main.PipelineManager.update_batch">
+<code class="sig-name descname">update_batch</code><span class="sig-paren">(</span><em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the configuration for an multiple items by section path.</p>
+<p>The main logic is just calling _update in a loop but this also calls the
+pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.main.PipelineManager.update_batch.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.update_batch.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]) – iterable of dictionaries of config updates</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

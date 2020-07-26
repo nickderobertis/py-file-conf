@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin package &mdash; pyfileconf 0.12.6 documentation</title>
+  <title>pyfileconf.plugin package &mdash; pyfileconf 0.13.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.12.6
+                0.13.0
               </div>
             
           
@@ -123,6 +123,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.batch">pyfileconf.batch module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.context">pyfileconf.context module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.debug">pyfileconf.debug module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.interfaces">pyfileconf.interfaces module</a></li>
@@ -248,6 +249,16 @@ this case.</p>
 </dl>
 </dd></dl>
 
+<dl class="function">
+<dt id="pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch">
+<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_pre_update_batch</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_pre_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-pyfileconf.plugin.hookspecs">
 <span id="pyfileconf-plugin-hookspecs-module"></span><h2>pyfileconf.plugin.hookspecs module<a class="headerlink" href="#module-pyfileconf.plugin.hookspecs" title="Permalink to this headline">¶</a></h2>
@@ -348,6 +359,27 @@ then it can also be modified in place.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>None</p>
 </dd>
+<dt class="field-odd">Notes</dt>
+<dd class="field-odd"><p>This is not called at the end of PipelineManager.update_batch,
+for that use <a class="reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch" title="pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyfileconf_post_update_batch()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch">
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update_batch</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the end of PipelineManager.update_batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch.params.pm"></span><strong>pm</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch.params.pm">¶</a> (<a class="reference internal" href="pyfileconf.html#pyfileconf.main.PipelineManager" title="pyfileconf.main.PipelineManager"><em>PipelineManager</em></a>) – The manager responsible for the run</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]) – iterable of dictionaries of config updates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -391,6 +423,32 @@ Can also modify the passed dictionaries in place.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>optional updates to config updates</p>
+</dd>
+<dt class="field-even">Notes</dt>
+<dd class="field-even"><p>This is not called at the beginning of PipelineManager.update_batch,
+for that use <a class="reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch" title="pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyfileconf_pre_update_batch()</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch">
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update_batch</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the beginning of PipelineManager.update_batch. Should
+return an iterable of updates, which will be included in the
+updates to be run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch.params.pm"></span><strong>pm</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch.params.pm">¶</a> (<a class="reference internal" href="pyfileconf.html#pyfileconf.main.PipelineManager" title="pyfileconf.main.PipelineManager"><em>PipelineManager</em></a>) – The manager responsible for the run</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]) – iterable of dictionaries of config updates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>optional updates to config updates</p>

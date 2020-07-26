@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.12.6 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.13.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.12.6
+                0.13.0
               </div>
             
           
@@ -164,6 +164,7 @@
             
   <h1>Source code for pyfileconf.main</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
@@ -173,9 +174,11 @@
 <span class="kn">import</span> <span class="nn">bdb</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> \
+    <span class="n">Iterator</span><span class="p">,</span> <span class="n">Iterable</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.registrar</span> <span class="kn">import</span> <span class="n">Registrar</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.batch</span> <span class="kn">import</span> <span class="n">BatchUpdater</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.logic.convert</span> <span class="kn">import</span> <span class="n">convert_to_empty_obj_if_necessary</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.collection</span> <span class="kn">import</span> <span class="n">SpecificClassCollection</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.data.models.dictconfig</span> <span class="kn">import</span> <span class="n">SpecificClassDictConfig</span>
@@ -469,15 +472,16 @@
 
 <div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Update the configuration for an item by section path</span>
+<span class="sd">        Update the configuration for an item by section path.</span>
+
+<span class="sd">        The main logic is in _update but this also calls the</span>
+<span class="sd">        pyfileconf_pre_update and pyfileconf_post_update hooks</span>
 
 <span class="sd">        :param d: dictionary of updates</span>
 <span class="sd">        :param section_path_str: section path of item to be updated</span>
 <span class="sd">        :param kwargs: kwarg updates</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
-
         <span class="n">new_updates_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_pre_update</span><span class="p">(</span>
             <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
         <span class="p">)</span>
@@ -486,6 +490,39 @@
             <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_post_update</span><span class="p">(</span>
+            <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PipelineManager.update_batch"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update_batch">[docs]</a>    <span class="k">def</span> <span class="nf">update_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the configuration for an multiple items by section path.</span>
+
+<span class="sd">        The main logic is just calling _update in a loop but this also calls the</span>
+<span class="sd">        pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks</span>
+
+<span class="sd">        :param updates: iterable of dictionaries of config updates</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">updater</span> <span class="o">=</span> <span class="n">BatchUpdater</span><span class="p">(</span>
+            <span class="n">base_section_path_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">updater</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updates</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the configuration for an item by section path</span>
+
+<span class="sd">        :param d: dictionary of updates</span>
+<span class="sd">        :param section_path_str: section path of item to be updated</span>
+<span class="sd">        :param kwargs: kwarg updates</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -508,10 +545,6 @@
                 <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">dependent_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
                 <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dependent_sp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
                 <span class="n">manager</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">relative_section_path</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
-
-        <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_post_update</span><span class="p">(</span>
-            <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
-        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.refresh"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
