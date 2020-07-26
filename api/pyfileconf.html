@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.13.2 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.13.3 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -1041,7 +1041,7 @@ if results are stored in some other way</p></li>
 
 <dl class="method">
 <dt id="pyfileconf.main.PipelineManager.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">pyfileconf_persist=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the configuration for an item by section path.</p>
 <p>The main logic is in _update but this also calls the
 pyfileconf_pre_update and pyfileconf_post_update hooks</p>
@@ -1050,6 +1050,7 @@ pyfileconf_pre_update and pyfileconf_post_update hooks</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><span class="target" id="pyfileconf.main.PipelineManager.update.params.d"></span><strong>d</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.update.params.d">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]) – dictionary of updates</p></li>
 <li><p><span class="target" id="pyfileconf.main.PipelineManager.update.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.update.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – section path of item to be updated</p></li>
+<li><p><span class="target" id="pyfileconf.main.PipelineManager.update.params.pyfileconf_persist"></span><strong>pyfileconf_persist</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.update.params.pyfileconf_persist">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to make changes last through refreshing config</p></li>
 <li><p><span class="target" id="pyfileconf.main.PipelineManager.update.params.kwargs"></span><strong>kwargs</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.main.PipelineManager.update.params.kwargs">¶</a> – kwarg updates</p></li>
 </ul>
 </dd>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.13.2 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.13.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -470,7 +470,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span></div>
 
-<div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the configuration for an item by section path.</span>
 
@@ -479,6 +479,7 @@
 
 <span class="sd">        :param d: dictionary of updates</span>
 <span class="sd">        :param section_path_str: section path of item to be updated</span>
+<span class="sd">        :param pyfileconf_persist: whether to make changes last through refreshing config</span>
 <span class="sd">        :param kwargs: kwarg updates</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -491,7 +492,7 @@
                 <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_post_update</span><span class="p">(</span>
             <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
@@ -513,18 +514,19 @@
         <span class="p">)</span>
         <span class="n">updater</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updates</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the configuration for an item by section path</span>
 
 <span class="sd">        :param d: dictionary of updates</span>
 <span class="sd">        :param section_path_str: section path of item to be updated</span>
+<span class="sd">        :param pyfileconf_persist: whether to make changes last through refreshing config</span>
 <span class="sd">        :param kwargs: kwarg updates</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">section_path_str</span><span class="p">:</span>
             <span class="c1"># If any of the updates are putting an ItemView as the value, then</span>

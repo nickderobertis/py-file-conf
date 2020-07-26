@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels.config &mdash; pyfileconf 0.13.2 documentation</title>
+  <title>pyfileconf.basemodels.config &mdash; pyfileconf 0.13.3 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.2
+                0.13.3
               </div>
             
           
@@ -224,13 +224,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
     <span class="c1"># argument names to match dict.update</span>
-<div class="viewcode-block" id="ConfigBase.update"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigBase.update"><a class="viewcode-back" href="../../../api/pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="k">if</span> <span class="n">E</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">E</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># Track the updates so they can be applied later</span>
         <span class="n">all_updates</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">E</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_applied_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_updates</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pyfileconf_persist</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_applied_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_updates</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">E</span><span class="p">,</span> <span class="o">**</span><span class="n">F</span><span class="p">)</span></div>
 
@@ -286,8 +287,8 @@
                                               <span class="n">klass</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">klass</span><span class="p">,</span> <span class="n">always_import_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_import_strs</span><span class="p">,</span>
                                               <span class="n">always_assign_strs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">always_assign_strs</span><span class="p">)</span>
         <span class="n">applied_updates</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_applied_updates</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_config</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">applied_updates</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">new_config</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">applied_updates</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
