@@ -42,11 +42,17 @@ def pyfileconf_iter_update_for_case(
     """
     from pyfileconf.batch import BatchUpdater
 
+    updated_confs: Sequence[Dict[str, Any]]
+    if runner.last_case is not None:
+        updated_confs = [conf for conf in case if conf not in runner.last_case]
+    else:
+        updated_confs = case
+
     bu = BatchUpdater(
         base_section_path_str=runner.base_section_path_str,
         strip_manager_from_iv=runner.strip_manager_from_iv,
     )
-    sp_strs = [conf['section_path_str'] for conf in case]
+    sp_strs = [conf['section_path_str'] for conf in updated_confs]
     bu.reset(sp_strs)
     bu.update(case)
 

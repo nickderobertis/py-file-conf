@@ -5,9 +5,10 @@ from pyfileconf.iterate import IterativeRunner
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf import context
 from tests.input_files.amodule import SecondExampleClass, a_function
-from tests.input_files.mypackage.cmodule import ExampleClass
-from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, SAME_CLASS_CONFIG_DICT_LIST, \
-    DIFFERENT_CLASS_CONFIG_DICT_LIST
+from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassWithCustomUpdate
+from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, \
+    SAME_CLASS_CONFIG_DICT_LIST, \
+    DIFFERENT_CLASS_CONFIG_DICT_LIST, CUSTOM_UPDATE_CLASS_CONFIG_DICT_LIST
 
 
 class TestPipelineManagerRun(PipelineManagerTestBase):
@@ -270,6 +271,72 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
             assert res == expect_res
         result = pipeline_manager.run_product(iv, config_dicts, collect_results=False)
         assert result == []
+
+    def test_run_iter_function_dependent_on_class(self):
+        cd_d1_1 = dict(
+            section_path_str='example_class_with_update.stuff.data',
+            a=2
+        )
+        cd_d1_2 = dict(
+            section_path_str='example_class_with_update.stuff.data',
+            a=10
+        )
+        cd_d2_1 = dict(
+            section_path_str='example_class_with_update.stuff2.data',
+            a=15
+        )
+        cd_d2_2 = dict(
+            section_path_str='example_class_with_update.stuff2.data',
+            a=30
+        )
+        config_dicts = [cd_d1_1, cd_d1_2, cd_d2_1, cd_d2_2]
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm(
+            specific_class_config_dicts=CUSTOM_UPDATE_CLASS_CONFIG_DICT_LIST,
+        )
+        pipeline_manager.load()
+        pipeline_manager.create('example_class_with_update.stuff.data')
+        pipeline_manager.create('example_class_with_update.stuff2.data')
+        self.append_to_a_function_config('a = s.test_pipeline_manager.example_class_with_update.stuff.data\n')
+        self.append_to_a_function_config('b = s.test_pipeline_manager.example_class_with_update.stuff2.data')
+        pipeline_manager.reload()
+        sel = Selector()
+        expect_results = [
+            (
+                (cd_d1_1, cd_d2_1),
+                (
+                    sel.test_pipeline_manager.example_class_with_update.stuff.data,
+                    sel.test_pipeline_manager.example_class_with_update.stuff2.data)
+            ),
+            (
+                (cd_d1_1, cd_d2_2),
+                (
+                    sel.test_pipeline_manager.example_class_with_update.stuff.data,
+                    sel.test_pipeline_manager.example_class_with_update.stuff2.data)
+            ),
+            (
+                (cd_d1_2, cd_d2_1),
+                (
+                    sel.test_pipeline_manager.example_class_with_update.stuff.data,
+                    sel.test_pipeline_manager.example_class_with_update.stuff2.data)
+            ),
+            (
+                (cd_d1_2, cd_d2_2),
+                (
+                    sel.test_pipeline_manager.example_class_with_update.stuff.data,
+                    sel.test_pipeline_manager.example_class_with_update.stuff2.data)
+            ),
+        ]
+        iv = sel.test_pipeline_manager.stuff.a_function
+        result = pipeline_manager.run_product(iv, config_dicts)
+        # 6 config resets, 6 config updates, corresponding to when config changes
+        assert ExampleClassWithCustomUpdate.num_updates == 12
+        assert result == expect_results
+        for res, expect_res in zip(pipeline_manager.run_product_gen(iv, config_dicts), expect_results):
+            assert res == expect_res
+        result = pipeline_manager.run_product(iv, config_dicts, collect_results=False)
+        assert result == []
+
 
     def test_run_iter_function_multiple_pms(self):
         cd = dict(
