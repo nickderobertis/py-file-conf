@@ -16,7 +16,7 @@ class StackTracker:
         if section_path_str is None and file_path is None:
             raise ValueError("must provide one of section_path_str or file_path")
 
-        if base_section_path_str is not None:
+        if base_section_path_str is not None and section_path_str is not None:
             new_sp = SectionPath.join(base_section_path_str, section_path_str)
             section_path_str = new_sp.path_str
         self.section_path_str = section_path_str

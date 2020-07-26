@@ -1,9 +1,8 @@
 from typing import Sequence, List, Union, TYPE_CHECKING, Optional
-
-from mixins.repr import ReprMixin
+if TYPE_CHECKING:
+    from pyfileconf.sectionpath.sectionpath import SectionPath
 
 from pyfileconf.interfaces import SectionPathLike
-
 from pyfileconf.pmcontext.actions import PyfileconfActions
 
 
@@ -39,6 +38,9 @@ class PyfileconfStack:
     def __getitem__(self, item):
         return self.frames[item]
 
+    def __iter__(self):
+        yield from self.frames
+
     def __repr__(self):
         frame_repr = '\n'.join(f'{i}\t{repr(frame)}' for i, frame in enumerate(self))
         return f'<PyfileconfStack(\n{frame_repr}\n)>'
@@ -65,3 +67,11 @@ class PyfileconfStack:
     def file_is_currently_being_loaded(self) -> bool:
         load_frames = [frame for frame in self if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE]
         return len(load_frames) > 0
+
+    @property
+    def currently_loading_file_section_path(self) -> Optional['SectionPath']:
+        load_frames = [frame for frame in self if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE]
+        if not load_frames:
+            return None
+
+        return load_frames[-1].section_path
