@@ -1047,10 +1047,16 @@ class TestBatchUpdater(PipelineManagerTestBase):
         bu = BatchUpdater()
         bu.update(updates)
 
-        # Assert update pipeline manager 2
         for pm, iv in zip(pms, ivs):
             result = pm.run(iv)
             assert result == (None, expected_b_result)
+
+        sp_strs = [conf['section_path_str'] for conf in updates]
+        bu.reset(sp_strs)
+
+        for pm, iv in zip(pms, ivs):
+            result = pm.run(iv)
+            assert result == (None, None)
 
     def test_batch_updater_class_multiple_pms(self):
         self.write_example_class_to_pipeline_dict_file()
@@ -1086,6 +1092,13 @@ class TestBatchUpdater(PipelineManagerTestBase):
         for iv in ivs:
             ec = iv()
             assert ec == ExampleClass(expected_a_result)
+
+        sp_strs = [conf['section_path_str'] for conf in updates]
+        bu.reset(sp_strs)
+
+        for iv in ivs:
+            ec = iv()
+            assert ec == ExampleClass(None)
 
     def test_batch_updater_specific_class_dict_multiple_pms(self):
         self.write_example_class_dict_to_file()
@@ -1123,5 +1136,13 @@ class TestBatchUpdater(PipelineManagerTestBase):
 
         for ec in ivs:
             expect_ec = ExampleClass(name='data', a=expected_a_result)
+            assert ec.name == expect_ec.name
+            assert ec.a == ec._a == expect_ec.a
+
+        sp_strs = [conf['section_path_str'] for conf in updates]
+        bu.reset(sp_strs)
+
+        for ec in ivs:
+            expect_ec = ExampleClass(name='data', a=None)
             assert ec.name == expect_ec.name
             assert ec.a == ec._a == expect_ec.a

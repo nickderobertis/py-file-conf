@@ -57,3 +57,15 @@ class BatchUpdater:
             pm=self, updates=updates
         )
 
+    def reset(self, section_path_strs: Iterable[str]):
+        from pyfileconf.main import PipelineManager
+
+        for sp_str in section_path_strs:
+            sp = SectionPath.from_ambiguous(
+                sp_str,
+                base_section_path_str=self.base_section_path_str,
+                strip_manager_from_iv=self.strip_manager_from_iv
+            )
+            pm = PipelineManager.get_manager_by_section_path_str(sp.path_str)
+            relative_section_path_str = SectionPath(".".join(sp[1:])).path_str
+            pm.reset(relative_section_path_str)
