@@ -94,8 +94,9 @@ class ExampleClass:
 
     def dependent_call_with_context_update(self):
         from pyfileconf import context
-        context.currently_running_section_path_str = 'test_pipeline_manager.example_class.stuff.data4'
-        return self.dependent_call()
+        context.stack.add_running_item('test_pipeline_manager.example_class.stuff.data4')
+        result = self.dependent_call()
+        context.stack.pop_frame()
 
     def return_section_path_str(self):
         return self._section_path_str  # type: ignore

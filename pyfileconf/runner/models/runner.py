@@ -24,7 +24,7 @@ from pyfileconf.pipelines.models.interfaces import (
 )
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.config.logic.write import dict_as_function_kwarg_str
-from pyfileconf.tracing import RunningTracker
+from pyfileconf.pmcontext.tracing import StackTracker
 from pyfileconf.views.object import ObjectView
 
 class Runner(ReprMixin):
@@ -182,7 +182,7 @@ class Runner(ReprMixin):
 
 
     def _run_one_func(self, section_path_str: str) -> Result:
-        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+        with StackTracker(section_path_str, base_section_path_str=self._manager_name):
             _, config_dict = self._get_func_and_config(section_path_str)
             func = self._get_one_func_with_config(section_path_str)
 
@@ -193,7 +193,7 @@ class Runner(ReprMixin):
         return result
 
     def _run_one_class(self, section_path_str: str) -> Result:
-        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+        with StackTracker(section_path_str, base_section_path_str=self._manager_name):
             klass, config_dict = self._get_func_and_config(section_path_str)
             obj = self._get_one_obj_with_config(section_path_str)
 
@@ -204,7 +204,7 @@ class Runner(ReprMixin):
         return result
 
     def _run_one_specific_class(self, section_path_str: str) -> Result:
-        with RunningTracker(section_path_str, base_section_path_str=self._manager_name):
+        with StackTracker(section_path_str, base_section_path_str=self._manager_name):
             klass, config_dict = self._get_class_and_config(section_path_str)
             obj = self._get_one_obj_with_config(section_path_str)
             registrar = self._specific_class_registrar_map[klass]
@@ -399,7 +399,7 @@ class Runner(ReprMixin):
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
 
     def _add_to_config_dependencies_if_necessary(self, section_path_str: str):
-        from pyfileconf.context import context
+        from pyfileconf import context
         full_sp = SectionPath.join(self._manager_name, section_path_str)
         context.add_config_dependency_for_currently_running_item_if_exists(full_sp, force_update=True)
 

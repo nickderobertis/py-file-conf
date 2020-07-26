@@ -3,7 +3,6 @@ from typing import Callable, List, Any
 import warnings
 
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
-from pyfileconf.logic.inspect import get_caller_filepath
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.pipelines.models.collection import PipelineCollection
 from pyfileconf.data.models.collection import SpecificClassCollection
@@ -17,7 +16,7 @@ class Selector:
         self._is_selector = True
 
     def __contains__(self, item):
-        from pyfileconf.context import context
+        from pyfileconf import context
 
         if not isinstance(item, (str, SectionPath)):
             warnings.warn('check for if non-str object in Selector will always return False')
@@ -50,14 +49,12 @@ class Selector:
         if isinstance(result, pfc_types):
             if context.file_is_currently_being_loaded and isinstance(result, item_types):
                 # This item is being accessed within another config
-                full_sp = self._get_full_section_path_of_caller()
                 # Add the config where this item is
                 # being accessed as a dependent config of this item
-                context.add_config_dependency(full_sp, item)
+                context.add_config_dependency(context.stack.currently_loading_file_section_path, item)
             return True
 
         return False
-
 
     def __getattr__(self, item):
         from pyfileconf.selector.models.itemview import ItemView
@@ -75,16 +72,6 @@ class Selector:
         managers = list(self._managers.keys())
 
         return exposed_methods + managers
-
-    def _get_full_section_path_of_caller(self, caller_levels: int = 4) -> SectionPath:
-        # TODO [#88]: don't inspect stack to get calling section path, set in context when loading file
-        from pyfileconf.main import PipelineManager
-
-        filepath = get_caller_filepath(caller_levels=caller_levels)
-        dependent_manager = PipelineManager.get_manager_by_filepath(filepath)
-        dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, filepath)
-        full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
-        return full_sp
 
     def _get_dir_for_section_path(self, section_path_str: str) -> List[str]:
         collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(
@@ -156,7 +143,7 @@ class Selector:
 
         if context.file_is_currently_being_loaded:
             context.add_config_dependency(
-                self._get_full_section_path_of_caller(caller_levels=5), item, force_update=True
+                context.stack.currently_loading_file_section_path, item, force_update=True
             )
 
         return _get_from_nested_obj_by_section_path(manager, relative_section_path)

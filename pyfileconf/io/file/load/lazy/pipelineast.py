@@ -1,5 +1,8 @@
 from pyfileconf.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoader
 from pyfileconf.io.file.load.parsers.assign import extract_assignment_from_ast_by_name
+from pyfileconf.pmcontext.actions import PyfileconfActions
+from pyfileconf.pmcontext.tracing import StackTracker
+
 
 class PipelineAstLoader(ImportAssignmentLazyLoader):
 
@@ -9,7 +12,8 @@ class PipelineAstLoader(ImportAssignmentLazyLoader):
 
         # Store pipeline dict assignment
         if self._ast is not None:
-            self._pipeline_dict_assign = extract_assignment_from_ast_by_name(self._ast, 'pipeline_dict')
+            with StackTracker(file_path=self.filepath, action=PyfileconfActions.LOAD_PIPELINE_FILE_AST):
+                self._pipeline_dict_assign = extract_assignment_from_ast_by_name(self._ast, 'pipeline_dict')
         else:
             self._pipeline_dict_assign = None
 

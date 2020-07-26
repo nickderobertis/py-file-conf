@@ -46,7 +46,7 @@ from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedExcept
     NoPipelineManagerForFilepathException, NoPipelineManagerForSectionPathException
 from pyfileconf.logger import stdout_also_logged
 from pyfileconf.interfaces import SpecificClassConfigDict
-from pyfileconf.context import context
+from pyfileconf import context
 
 
 class PipelineManager:

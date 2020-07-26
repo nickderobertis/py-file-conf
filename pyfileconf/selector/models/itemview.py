@@ -198,7 +198,7 @@ class ItemView:
         return self.selector._get_real_item(self.section_path_str)
 
     def _add_to_config_dependencies_if_necessary(self):
-        from pyfileconf.context import context
+        from pyfileconf import context
         context.add_config_dependency_for_currently_running_item_if_exists(self.section_path_str, force_update=True)
 
     @property
