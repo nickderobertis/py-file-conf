@@ -51,7 +51,7 @@ class BatchUpdater:
             pm = PipelineManager.get_manager_by_section_path_str(sp.path_str)
             relative_section_path_str = SectionPath(".".join(sp[1:])).path_str
             new_update = {**update, 'section_path_str': relative_section_path_str}
-            pm._update(**new_update)
+            pm._update(**new_update)  # type: ignore
 
         manager.plm.hook.pyfileconf_post_update_batch(
             pm=self, updates=updates
