@@ -78,24 +78,28 @@ class ExamplePlugin:
     def pyfileconf_pre_update(
         self,
         pm: "PipelineManager",
-        d: dict = None,
-        section_path_str: str = None,
-        kwargs: Dict[str, Any] = None,
+        d: dict,
+        section_path_str: str,
+        kwargs: Dict[str, Any],
     ) -> Optional[Dict[str, Any]]:
         global PRE_UPDATE_COUNTER
         PRE_UPDATE_COUNTER += 1
+        assert section_path_str is not None
+        assert kwargs is not None
         return dict(b=OVERRIDDEN_B_RESULT)
 
     @hookimpl
     def pyfileconf_post_update(
         self,
         pm: "PipelineManager",
-        d: dict = None,
-        section_path_str: str = None,
-        kwargs: Dict[str, Any] = None,
+        d: dict,
+        section_path_str: str,
+        kwargs: Dict[str, Any],
     ):
         global POST_UPDATE_COUNTER
         POST_UPDATE_COUNTER += 1
+        assert section_path_str is not None
+        assert kwargs is not None
 
     @hookimpl(trylast=True)
     def pyfileconf_pre_update_batch(
