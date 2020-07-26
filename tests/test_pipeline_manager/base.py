@@ -146,6 +146,7 @@ class PipelineManagerTestBase(TestCase):
     def reset_example_class(self):
         ExampleClass._instances = WeakValueDictionary()
         ExampleClass._a_function_instances = WeakValueDictionary()
+        ExampleClassWithCustomUpdate.num_updates = 0
 
     def write_a_function_to_pipeline_dict_file(self, nest_section: bool = False, file_path: Optional[str] = None):
         if file_path is None:

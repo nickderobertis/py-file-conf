@@ -114,6 +114,7 @@ class ExampleClassProtocol(Protocol):
 
 
 class ExampleClassWithCustomUpdate:
+    num_updates = 0
 
     def __init__(self, a: typing.Tuple[int, int], name: Optional[str] = None):
         self.a = a
@@ -123,6 +124,7 @@ class ExampleClassWithCustomUpdate:
     def _pyfileconf_update_(self, **kwargs):
         self.__init__(**kwargs)
         self._custom_update = 'b'
+        self.__class__.num_updates += 1
 
     def __eq__(self, other):
         return self.a == other.a and self.name == other.name
