@@ -1,6 +1,9 @@
 from collections import defaultdict
 from typing import Dict, Set, Optional, Union, TYPE_CHECKING
 
+from pyfileconf.interfaces import SectionPathLike
+from pyfileconf.pmcontext.stack import PyfileconfStack
+
 if TYPE_CHECKING:
     from pyfileconf.main import PipelineManager
     from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -12,35 +15,41 @@ class PyFileConfContext:
     active_managers: Dict[str, 'PipelineManager']
     force_update_dependencies: Dict[str, Set['SectionPath']]
     file_is_currently_being_loaded: bool
-    currently_running_section_path_str: Optional[str]
+    stack: PyfileconfStack
 
     def __init__(self, config_dependencies: Optional[Dict[str, Set['SectionPath']]] = None,
                  active_managers: Optional[Dict[str, 'PipelineManager']] = None,
                  force_update_dependencies: Optional[Dict[str, Set['SectionPath']]] = None,
                  file_is_currently_being_loaded: bool = False,
-                 currently_running_section_path_str: Optional[str] = None):
+                 stack: Optional[PyfileconfStack] = None):
         if config_dependencies is None:
             config_dependencies = defaultdict(lambda: set())
         if active_managers is None:
             active_managers = {}
         if force_update_dependencies is None:
             force_update_dependencies = defaultdict(lambda: set())
+        if stack is None:
+            stack = PyfileconfStack([])
 
         self.config_dependencies = config_dependencies
         self.active_managers = active_managers
         self.force_update_dependencies = force_update_dependencies
         self.file_is_currently_being_loaded = file_is_currently_being_loaded
-        self.currently_running_section_path_str = currently_running_section_path_str
+        self.stack = stack
 
     def reset(self):
         self.config_dependencies = defaultdict(lambda: set())
         self.active_managers = {}
         self.force_update_dependencies = defaultdict(lambda: set())
         self.file_is_currently_being_loaded = False
-        self.currently_running_section_path_str = None
+        self.stack = PyfileconfStack([])
 
-    def add_config_dependency(self, dependent: Union[str, 'ItemView', 'SectionPath'],
-                              depends_on: Union[str, 'ItemView', 'SectionPath'], force_update: bool = False):
+    @property
+    def currently_running_section_path_str(self) -> Optional[str]:
+        return self.stack.currently_running_section_path_str
+
+    def add_config_dependency(self, dependent: SectionPathLike,
+                              depends_on: SectionPathLike, force_update: bool = False):
         from pyfileconf.sectionpath.sectionpath import SectionPath
         dependent_section_path = SectionPath.from_ambiguous(dependent)
         depends_on_section_path_str = SectionPath.from_ambiguous(depends_on).path_str
@@ -52,7 +61,7 @@ class PyFileConfContext:
         if force_update:
             self.force_update_dependencies[depends_on_section_path_str].add(dependent_section_path)
 
-    def add_config_dependency_for_currently_running_item_if_exists(self, depends_on: Union[str, 'ItemView', 'SectionPath'],
+    def add_config_dependency_for_currently_running_item_if_exists(self, depends_on: SectionPathLike,
                                                                    force_update: bool = False):
         if self.currently_running_section_path_str is not None:
             self.add_config_dependency(
@@ -61,8 +70,8 @@ class PyFileConfContext:
 
     def add_config_dependency_if_file_is_currently_being_loaded(
         self,
-        dependent: Union[str, 'ItemView', 'SectionPath'],
-        depends_on: Union[str, 'ItemView', 'SectionPath'],
+        dependent: SectionPathLike,
+        depends_on: SectionPathLike,
         force_update: bool = False
     ):
         if self.file_is_currently_being_loaded:

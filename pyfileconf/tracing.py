@@ -15,9 +15,8 @@ class RunningTracker:
 
     def __enter__(self):
         from pyfileconf import context
-        self.orig_running_section_path_str = context.currently_running_section_path_str
-        context.currently_running_section_path_str = self.section_path_str
+        context.stack.add_running_item(self.section_path_str)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         from pyfileconf import context
-        context.currently_running_section_path_str = self.orig_running_section_path_str
+        context.stack.pop_frame()

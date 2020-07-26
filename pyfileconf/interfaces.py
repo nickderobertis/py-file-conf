@@ -1,4 +1,8 @@
-from typing import Type, List
+from typing import Type, List, Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pyfileconf.selector.models.itemview import ItemView
+    from pyfileconf.sectionpath.sectionpath import SectionPath
 
 from typing_extensions import TypedDict
 
@@ -15,3 +19,5 @@ SpecificClassConfigDict = TypedDict(
     },
     total=False
 )
+
+SectionPathLike = Union[str, 'ItemView', 'SectionPath']
