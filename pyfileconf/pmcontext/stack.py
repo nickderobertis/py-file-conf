@@ -7,7 +7,7 @@ from pyfileconf.interfaces import SectionPathLike
 from pyfileconf.pmcontext.actions import PyfileconfActions
 
 
-class PyfileconfFrame(ReprMixin):
+class PyfileconfFrame:
 
     def __init__(self, section_path: SectionPathLike, action: PyfileconfActions):
         from pyfileconf.sectionpath.sectionpath import SectionPath
