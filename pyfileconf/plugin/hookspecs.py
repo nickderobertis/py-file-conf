@@ -93,9 +93,9 @@ def pyfileconf_post_run(
 @hookspec
 def pyfileconf_pre_update(
     pm: "PipelineManager",
-    d: dict = None,
-    section_path_str: str = None,
-    kwargs: Dict[str, Any] = None,
+    d: dict,
+    section_path_str: str,
+    kwargs: Dict[str, Any],
 ) -> Optional[Dict[str, Any]]:
     """
     Called at the beginning of PipelineManager.update. Can optionally return
@@ -119,9 +119,9 @@ def pyfileconf_pre_update(
 @hookspec
 def pyfileconf_post_update(
     pm: "PipelineManager",
-    d: dict = None,
-    section_path_str: str = None,
-    kwargs: Dict[str, Any] = None,
+    d: dict,
+    section_path_str: str,
+    kwargs: Dict[str, Any],
 ):
     """
     Called at the end of PipelineManager.update.
