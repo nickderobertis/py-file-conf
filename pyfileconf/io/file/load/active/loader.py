@@ -1,5 +1,8 @@
 from pyfileconf.io.file.load.active.userdef import get_user_defined_dict_from_filepath
 from pyfileconf.io.file.load.lazy.base.impassign import ImportAssignmentLazyLoader
+from pyfileconf.pmcontext.actions import PyfileconfActions
+from pyfileconf.pmcontext.tracing import StackTracker
+
 
 class ActiveConfigFileLoader(ImportAssignmentLazyLoader):
 
@@ -9,9 +12,8 @@ class ActiveConfigFileLoader(ImportAssignmentLazyLoader):
         super().register()
 
         # Actually import module
-        context.file_is_currently_being_loaded = True
-        self._user_defined_dict = get_user_defined_dict_from_filepath(self.filepath)
-        context.file_is_currently_being_loaded = False
+        with StackTracker(file_path=self.filepath, action=PyfileconfActions.LOAD_FILE_EXECUTE):
+            self._user_defined_dict = get_user_defined_dict_from_filepath(self.filepath)
 
         return self._user_defined_dict
 

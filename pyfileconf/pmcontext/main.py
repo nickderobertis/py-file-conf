@@ -14,7 +14,6 @@ class PyFileConfContext:
     config_dependencies: Dict[str, Set['SectionPath']]
     active_managers: Dict[str, 'PipelineManager']
     force_update_dependencies: Dict[str, Set['SectionPath']]
-    file_is_currently_being_loaded: bool
     stack: PyfileconfStack
 
     def __init__(self, config_dependencies: Optional[Dict[str, Set['SectionPath']]] = None,
@@ -34,19 +33,21 @@ class PyFileConfContext:
         self.config_dependencies = config_dependencies
         self.active_managers = active_managers
         self.force_update_dependencies = force_update_dependencies
-        self.file_is_currently_being_loaded = file_is_currently_being_loaded
         self.stack = stack
 
     def reset(self):
         self.config_dependencies = defaultdict(lambda: set())
         self.active_managers = {}
         self.force_update_dependencies = defaultdict(lambda: set())
-        self.file_is_currently_being_loaded = False
         self.stack = PyfileconfStack([])
 
     @property
     def currently_running_section_path_str(self) -> Optional[str]:
         return self.stack.currently_running_section_path_str
+
+    @property
+    def file_is_currently_being_loaded(self) -> bool:
+        return self.stack.file_is_currently_being_loaded
 
     def add_config_dependency(self, dependent: SectionPathLike,
                               depends_on: SectionPathLike, force_update: bool = False):

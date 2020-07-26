@@ -19,6 +19,16 @@ class PyfileconfFrame:
         return f'<PyfileconfFrame(section_path={self.section_path.path_str}, ' \
                f'action={self.action.value}, file_path={self.file_path})>'
 
+    @classmethod
+    def from_file_path(cls, file_path: str, action: PyfileconfActions):
+        from pyfileconf import PipelineManager
+        from pyfileconf.sectionpath.sectionpath import SectionPath
+
+        dependent_manager = PipelineManager.get_manager_by_filepath(file_path)
+        dependent_sp = SectionPath.from_filepath(dependent_manager.default_config_path, file_path)
+        full_sp = SectionPath.join(dependent_manager.name, dependent_sp)
+        return cls(full_sp, action, file_path=file_path)
+
 
 class PyfileconfStack:
     frames: List[PyfileconfFrame]
@@ -50,3 +60,8 @@ class PyfileconfStack:
             return None
 
         return run_frames[-1].section_path.path_str
+
+    @property
+    def file_is_currently_being_loaded(self) -> bool:
+        load_frames = [frame for frame in self if frame.action == PyfileconfActions.LOAD_FILE_EXECUTE]
+        return len(load_frames) > 0
