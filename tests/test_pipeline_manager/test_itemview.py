@@ -1,9 +1,8 @@
 import os
 from copy import deepcopy
 
-from pyfileconf import Selector, PipelineManager
+from pyfileconf import Selector, PipelineManager, context
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from pyfileconf.context import context
 from pyfileconf.selector.models.itemview import ItemView
 from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassProtocol

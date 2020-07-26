@@ -17,7 +17,7 @@ class Selector:
         self._is_selector = True
 
     def __contains__(self, item):
-        from pyfileconf.context import context
+        from pyfileconf import context
 
         if not isinstance(item, (str, SectionPath)):
             warnings.warn('check for if non-str object in Selector will always return False')

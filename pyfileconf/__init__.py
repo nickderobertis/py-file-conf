@@ -6,10 +6,10 @@ individually, in a list, in sections, or a combination thereof. Configuration ca
 dynamically updated, enabling powerful scripting.
 """
 from pyfileconf.plugin.impl import hookimpl
+from pyfileconf.pmcontext.main import context
 from pyfileconf.main import PipelineManager
 from pyfileconf.selector.models.selector import Selector
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.batch import BatchUpdater
 from pyfileconf.plugin.manager_utils import reset_plugins, remove_default_plugins
-from pyfileconf.context import context
 from pyfileconf.selector.models.itemview import is_item_view

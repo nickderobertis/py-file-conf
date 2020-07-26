@@ -1,11 +1,10 @@
 from collections import defaultdict
-from typing import Dict, Set, Optional, TYPE_CHECKING, Union
-
+from typing import Dict, Set, Optional, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pyfileconf.main import PipelineManager
-    from pyfileconf.selector.models.itemview import ItemView
     from pyfileconf.sectionpath.sectionpath import SectionPath
+    from pyfileconf.selector.models.itemview import ItemView
 
 
 class PyFileConfContext:

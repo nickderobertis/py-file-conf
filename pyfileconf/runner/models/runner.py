@@ -399,7 +399,7 @@ class Runner(ReprMixin):
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore
 
     def _add_to_config_dependencies_if_necessary(self, section_path_str: str):
-        from pyfileconf.context import context
+        from pyfileconf import context
         full_sp = SectionPath.join(self._manager_name, section_path_str)
         context.add_config_dependency_for_currently_running_item_if_exists(full_sp, force_update=True)
 

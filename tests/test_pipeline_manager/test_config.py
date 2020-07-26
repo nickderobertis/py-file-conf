@@ -1,10 +1,9 @@
 import os
 from copy import deepcopy
 
-from pyfileconf import Selector, PipelineManager
+from pyfileconf import Selector, PipelineManager, context
 from pyfileconf.batch import BatchUpdater
 from pyfileconf.sectionpath.sectionpath import SectionPath
-from pyfileconf.context import context
 from tests.input_files.amodule import SecondExampleClass, a_function
 from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassWithCustomUpdate
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, \
