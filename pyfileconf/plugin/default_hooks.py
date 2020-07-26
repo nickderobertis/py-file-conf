@@ -1,10 +1,11 @@
 """
 Default behavior to be run on hooks
 """
-from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING
+from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING, Iterable, Optional
 
 if TYPE_CHECKING:
     from pyfileconf.iterate import IterativeRunner
+    from pyfileconf.main import PipelineManager
 
 from pyfileconf.plugin.impl import hookimpl
 
@@ -44,9 +45,7 @@ def pyfileconf_iter_update_for_case(
     for config_dict in case:
         sp_str = config_dict["section_path_str"]
         if runner.base_section_path_str is not None:
-            sp_str = SectionPath.join(
-                runner.base_section_path_str, sp_str
-            ).path_str
+            sp_str = SectionPath.join(runner.base_section_path_str, sp_str).path_str
         manager = PipelineManager.get_manager_by_section_path_str(sp_str)
         relative_section_path_str = SectionPath(
             ".".join(SectionPath(sp_str)[1:])
@@ -55,3 +54,10 @@ def pyfileconf_iter_update_for_case(
         relative_conf_dict = {**config_dict}
         relative_conf_dict["section_path_str"] = relative_section_path_str
         manager.update(**relative_conf_dict)
+
+
+@hookimpl
+def pyfileconf_pre_update_batch(
+    pm: "PipelineManager", updates: Iterable[dict],
+) -> Iterable[dict]:
+    return updates
