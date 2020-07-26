@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Sequence, Dict, Any, List, Tuple, Type, Optional
+from typing import Sequence, Dict, Any, List, Tuple, Type, Optional, Iterable
 
 from pyfileconf import (
     Selector,
@@ -12,6 +12,7 @@ from pyfileconf import (
 from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import RunnerArgs, ResultOrResults
 from pyfileconf.sectionpath.sectionpath import SectionPath
+from tests.input_files.amodule import a_function
 from tests.test_pipeline_manager.base import (
     PipelineManagerTestBase,
     CLASS_CONFIG_DICT_LIST,
@@ -33,6 +34,8 @@ POST_RUN_COUNTER = 0
 PRE_UPDATE_COUNTER = 0
 POST_UPDATE_COUNTER = 0
 ITER_UPDATE_COUNTER = 0
+PRE_UPDATE_BATCH_COUNTER = 0
+POST_UPDATE_BATCH_COUNTER = 0
 
 
 class ExamplePlugin:
@@ -94,6 +97,28 @@ class ExamplePlugin:
         global POST_UPDATE_COUNTER
         POST_UPDATE_COUNTER += 1
 
+    @hookimpl(trylast=True)
+    def pyfileconf_pre_update_batch(
+            pm: "PipelineManager",
+            updates: Iterable[dict],
+    ) -> Iterable[dict]:
+        global PRE_UPDATE_BATCH_COUNTER
+        PRE_UPDATE_BATCH_COUNTER += 1
+        new_items = []
+        for item in updates:
+            new_update = {**item}
+            new_update['b'] = OVERRIDDEN_B_RESULT
+            new_items.append(new_update)
+        return new_items
+
+    @hookimpl
+    def pyfileconf_post_update_batch(
+        pm: "PipelineManager",
+        updates: Iterable[dict],
+    ):
+        global POST_UPDATE_BATCH_COUNTER
+        POST_UPDATE_BATCH_COUNTER += 1
+
 
 class PluginsTest(PipelineManagerTestBase):
     def teardown_method(self, method):
@@ -114,11 +139,15 @@ class PluginsTest(PipelineManagerTestBase):
         global PRE_UPDATE_COUNTER
         global POST_UPDATE_COUNTER
         global ITER_UPDATE_COUNTER
+        global PRE_UPDATE_BATCH_COUNTER
+        global POST_UPDATE_BATCH_COUNTER
         PRE_RUN_COUNTER = 0
         POST_RUN_COUNTER = 0
         PRE_UPDATE_COUNTER = 0
         POST_UPDATE_COUNTER = 0
         ITER_UPDATE_COUNTER = 0
+        PRE_UPDATE_BATCH_COUNTER = 0
+        POST_UPDATE_BATCH_COUNTER = 0
 
 
 class TestIterPlugins(PluginsTest):
@@ -329,3 +358,60 @@ class TestUpdatePlugins(PluginsTest):
         ]
         assert PRE_UPDATE_COUNTER == 1
         assert POST_UPDATE_COUNTER == 1
+
+    def test_update_batch_no_plugins(self):
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager.create('stuff2', a_function)
+        sel = Selector()
+        ivs = [
+            sel.test_pipeline_manager.stuff.a_function,
+            sel.test_pipeline_manager.stuff2.a_function,
+        ]
+        expected_b_result = ["a", "b"]
+        updates = []
+        for iv in ivs:
+            section_path = SectionPath.from_section_str_list(
+                SectionPath(iv.section_path_str)[1:]
+            )
+            updates.append(dict(
+                b=expected_b_result, section_path_str=section_path.path_str
+            ))
+        pipeline_manager.update_batch(updates)
+        for iv in ivs:
+            result = pipeline_manager.run(iv)
+            assert result == (None, expected_b_result)
+        assert PRE_UPDATE_BATCH_COUNTER == 0
+        assert POST_UPDATE_BATCH_COUNTER == 0
+
+    def test_update_batch_with_plugins(self):
+        self.add_plugin()
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        pipeline_manager.create('stuff2', a_function)
+        sel = Selector()
+        ivs = [
+            sel.test_pipeline_manager.stuff.a_function,
+            sel.test_pipeline_manager.stuff2.a_function,
+        ]
+        expected_b_result = ["a", "b"]
+        updates = []
+        for iv in ivs:
+            section_path = SectionPath.from_section_str_list(
+                SectionPath(iv.section_path_str)[1:]
+            )
+            updates.append(dict(
+                b=expected_b_result, section_path_str=section_path.path_str
+            ))
+        pipeline_manager.update_batch(updates)
+        for iv in ivs:
+            result = pipeline_manager.run(iv)
+            assert result == [
+                (None, OVERRIDDEN_B_RESULT),
+                (None, OVERRIDDEN_B_RESULT),
+                "abc",
+            ]
+        assert PRE_UPDATE_BATCH_COUNTER == 1
+        assert POST_UPDATE_BATCH_COUNTER == 1
