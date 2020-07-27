@@ -4,7 +4,7 @@ from pyfileconf import Selector, PipelineManager
 from pyfileconf.iterate import IterativeRunner
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf import context
-from tests.input_files.amodule import SecondExampleClass, a_function
+from tests.input_files.amodule import SecondExampleClass, a_function, a_function_that_calls_iterative_runner
 from tests.input_files.mypackage.cmodule import ExampleClass, ExampleClassWithCustomUpdate
 from tests.test_pipeline_manager.base import PipelineManagerTestBase, CLASS_CONFIG_DICT_LIST, \
     SAME_CLASS_CONFIG_DICT_LIST, \
@@ -271,6 +271,40 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
             assert res == expect_res
         result = pipeline_manager.run_product(iv, config_dicts, collect_results=False)
         assert result == []
+
+    def test_run_function_with_underlying_iterative_runner_and_nested_configs(self):
+        cd = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=10,
+            a=2
+        )
+        cd2 = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=20
+        )
+        config_dicts = [cd, cd2]
+        expect_results = [((cd,), (2, 10)), ((cd2,), (None, 20))]
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        pipeline_manager.create('stuff', a_function_that_calls_iterative_runner)
+        pipeline_manager.create('stuff', ExampleClass)
+        pipeline_manager.create('stuff2', ExampleClass)
+        pipeline_manager.update(
+            section_path_str='stuff.ExampleClass',
+            a=sel.test_pipeline_manager.stuff2.ExampleClass
+        )
+        pipeline_manager.update(
+            section_path_str='stuff.a_function_that_calls_iterative_runner',
+            to_run=[sel.test_pipeline_manager.stuff.a_function],
+            cases=config_dicts,
+            ec=sel.test_pipeline_manager.stuff.ExampleClass
+        )
+
+        iv = sel.test_pipeline_manager.stuff.a_function_that_calls_iterative_runner
+        result = pipeline_manager.run(iv)
+        assert result == expect_results
 
     def test_run_iter_function_dependent_on_class(self):
         cd_d1_1 = dict(

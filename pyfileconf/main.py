@@ -377,11 +377,7 @@ class PipelineManager:
 
             # Refresh any configs which are dependent on attributes of this config
             # Dependent configs are determined in Selector._get_real_item
-            full_sp = SectionPath.join(self.name, section_path_str)
-            for dependent_sp in context.force_update_dependencies[full_sp.path_str]:
-                manager = self.__class__.get_manager_by_section_path_str(dependent_sp.path_str)
-                relative_section_path = SectionPath('.'.join(dependent_sp[1:]))
-                manager.refresh(relative_section_path.path_str)
+            self.config.refresh_dependent_configs(section_path_str, self.name)
 
     def refresh(self, section_path_str: str):
         """
