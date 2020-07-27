@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.13.4 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.13.5 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.4
+                0.13.5
               </div>
             
           
@@ -164,13 +164,13 @@
             
   <h1>Source code for pyfileconf.config.models.manager</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterable</span>
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.file</span> <span class="kn">import</span> <span class="n">ActiveFunctionConfigFile</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.config</span> <span class="kn">import</span> <span class="n">ConfigManagerNotLoadedException</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.exceptions.config</span> <span class="kn">import</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">,</span> <span class="n">CannotResolveConfigDependenciesException</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.get</span> <span class="kn">import</span> <span class="n">_get_from_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.set</span> <span class="kn">import</span> <span class="n">_set_in_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.interfaces</span> <span class="kn">import</span> <span class="n">ConfigSectionOrConfig</span>
@@ -217,6 +217,22 @@
         <span class="k">if</span> <span class="n">config_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to refresh&#39;</span><span class="p">)</span>
         <span class="n">config_obj</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ConfigManager.refresh_dependent_configs"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.refresh_dependent_configs">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_dependent_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">manager_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">context</span>
+        <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">manager_name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
+        <span class="n">update_deps</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">context</span><span class="o">.</span><span class="n">force_update_dependencies</span><span class="p">[</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">]}</span>
+        <span class="n">all_updated_deps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">update_deps</span><span class="p">:</span>
+            <span class="n">_refresh_configs</span><span class="p">(</span><span class="n">update_deps</span><span class="p">)</span>
+            <span class="n">all_updated_deps</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">update_deps</span><span class="p">)</span>
+            <span class="c1"># Get any newly updated dependencies caused by process of updating dependencies</span>
+            <span class="n">new_update_deps</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">force_update_dependencies</span><span class="p">[</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">]</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">all_updated_deps</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">update_deps</span> <span class="o">==</span> <span class="n">new_update_deps</span><span class="p">:</span>
+                <span class="c1"># Not expected, but somehow got stuck in an infinite loop where it is</span>
+                <span class="c1"># always trying to update the same dependency</span>
+                <span class="k">raise</span> <span class="n">CannotResolveConfigDependenciesException</span><span class="p">(</span><span class="n">update_deps</span><span class="p">)</span>
+            <span class="n">update_deps</span> <span class="o">=</span> <span class="n">new_update_deps</span></div>
 
 <div class="viewcode-block" id="ConfigManager.reset"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConfigBase</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -433,6 +449,15 @@
         <span class="k">return</span> <span class="n">config_or_section</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ActiveFunctionConfig</span><span class="p">)</span>
 
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;expected Config or ConfigSection, got </span><span class="si">{</span><span class="n">config_or_section</span><span class="si">}</span><span class="s1"> of type </span><span class="si">{</span><span class="n">config_or_section</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_refresh_configs</span><span class="p">(</span><span class="n">section_paths</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">SectionPath</span><span class="p">]):</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+
+    <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="n">section_paths</span><span class="p">:</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
+        <span class="n">relative_section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">relative_section_path</span><span class="o">.</span><span class="n">path_str</span><span class="p">)</span>
 </pre></div>
 
            </div>
