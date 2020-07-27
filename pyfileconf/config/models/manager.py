@@ -1,11 +1,11 @@
 import os
-from typing import Union, Any, Optional
+from typing import Union, Any, Optional, Iterable
 
 from mixins.repr import ReprMixin
 
 from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.config.models.file import ActiveFunctionConfigFile
-from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
+from pyfileconf.exceptions.config import ConfigManagerNotLoadedException, CannotResolveConfigDependenciesException
 from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.config.models.interfaces import ConfigSectionOrConfig
@@ -52,6 +52,22 @@ class ConfigManager(ReprMixin):
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to refresh')
         config_obj.refresh()
+
+    def refresh_dependent_configs(self, section_path_str: str, manager_name: str):
+        from pyfileconf import context
+        full_sp = SectionPath.join(manager_name, section_path_str)
+        update_deps = {*context.force_update_dependencies[full_sp.path_str]}
+        all_updated_deps = set()
+        while update_deps:
+            _refresh_configs(update_deps)
+            all_updated_deps.update(update_deps)
+            # Get any newly updated dependencies caused by process of updating dependencies
+            new_update_deps = context.force_update_dependencies[full_sp.path_str].difference(all_updated_deps)
+            if update_deps == new_update_deps:
+                # Not expected, but somehow got stuck in an infinite loop where it is
+                # always trying to update the same dependency
+                raise CannotResolveConfigDependenciesException(update_deps)
+            update_deps = new_update_deps
 
     def reset(self, section_path_str: str=None, allow_create: bool = False) -> ConfigBase:
         """
@@ -268,3 +284,12 @@ def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig)
         return config_or_section.load(ActiveFunctionConfig)
 
     raise ValueError(f'expected Config or ConfigSection, got {config_or_section} of type {config_or_section}')
+
+
+def _refresh_configs(section_paths: Iterable[SectionPath]):
+    from pyfileconf import PipelineManager
+
+    for sp in section_paths:
+        manager = PipelineManager.get_manager_by_section_path_str(sp.path_str)
+        relative_section_path = SectionPath('.'.join(sp[1:]))
+        manager.refresh(relative_section_path.path_str)

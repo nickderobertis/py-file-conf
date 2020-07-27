@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from functools import wraps
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union, Sequence, Iterable, Any, Dict
 
+from pyfileconf import IterativeRunner
+from pyfileconf.runner.models.interfaces import IterativeResults
+from pyfileconf.selector.models.itemview import ItemView
 from tests.input_files.mypackage.cmodule import ExampleClass
 
 # TODO [#102]: better support for decorated functions
@@ -29,6 +32,22 @@ def a_function(a: ExampleClass, b: List[str]) -> Tuple[ExampleClass, List[str]]:
     An example function
     """
     return a, b
+
+
+def a_function_that_calls_iterative_runner(to_run: List[Union[str, ItemView]],
+                                           cases: Sequence[Dict[str, Any]],
+                                           ec: ExampleClass) -> IterativeResults:
+    """
+    An example function which calls IterativeRunner
+    """
+    runner = IterativeRunner(to_run, cases)
+    runner._run()  # sets config dependencies
+    results = runner.run()
+
+    # access attribute of another config
+    ec.a
+
+    return results
 
 
 @dataclass
