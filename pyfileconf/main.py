@@ -305,32 +305,32 @@ class PipelineManager:
 
         self._loaded_modules = self._import_tracker.imported_modules
 
-    def update(self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
+    def update(self, d_: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
         """
         Update the configuration for an item by section path.
 
         The main logic is in _update but this also calls the
         pyfileconf_pre_update and pyfileconf_post_update hooks
 
-        :param d: dictionary of updates
+        :param d_: dictionary of updates
         :param section_path_str: section path of item to be updated
         :param pyfileconf_persist: whether to make changes last through refreshing config
         :param kwargs: kwarg updates
         :return:
         """
         new_updates_list: List[Dict[str, Any]] = plugin_manager.plm.hook.pyfileconf_pre_update(
-            pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
+            pm=self, d_=d_, section_path_str=section_path_str, kwargs=kwargs
         )
         new_updates_dict: Dict[str, Any] = {k: v for d in new_updates_list for k, v in d.items()}
         if new_updates_dict:
-            if d is not None:
-                d.update(new_updates_dict)
+            if d_ is not None:
+                d_.update(new_updates_dict)
             kwargs.update(new_updates_dict)
 
-        self._update(d, section_path_str=section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
+        self._update(d_, section_path_str=section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
         plugin_manager.plm.hook.pyfileconf_post_update(
-            pm=self, d=d, section_path_str=section_path_str, kwargs=kwargs
+            pm=self, d_=d_, section_path_str=section_path_str, kwargs=kwargs
         )
 
     def update_batch(self, updates: Iterable[dict]):
@@ -349,11 +349,11 @@ class PipelineManager:
         )
         updater.update(updates)
 
-    def _update(self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
+    def _update(self, d_: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
         """
         Update the configuration for an item by section path
 
-        :param d: dictionary of updates
+        :param d_: dictionary of updates
         :param section_path_str: section path of item to be updated
         :param pyfileconf_persist: whether to make changes last through refreshing config
         :param kwargs: kwarg updates
@@ -366,14 +366,14 @@ class PipelineManager:
             # record that this config is dependent on the config referenced
             # by the ItemView
             all_updates = {**kwargs}
-            if d is not None:
-                all_updates.update(d)
+            if d_ is not None:
+                all_updates.update(d_)
             full_sp = SectionPath.join(self.name, section_path_str)
             for value in all_updates.values():
                 if is_item_view(value):
                     context.add_config_dependency(full_sp, value)
 
-        self.runner.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
+        self.runner.update(d_, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
     def refresh(self, section_path_str: str):
         """

@@ -45,11 +45,11 @@ class ConfigManager(ReprMixin):
         self.section = ConfigSection.from_files(self.basepath)
 
     def update(
-        self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs
+        self, d_: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs
     ) -> Tuple[ConfigBase, bool]:
         """
 
-        :param d:
+        :param d_:
         :param section_path_str:
         :param pyfileconf_persist:
         :param kwargs:
@@ -59,10 +59,10 @@ class ConfigManager(ReprMixin):
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to update')
         would_update = self._determine_and_track_if_config_would_be_updated(
-            config_obj, section_path_str, d, **kwargs
+            config_obj, section_path_str, d_, **kwargs
         )
         if would_update:
-            config_obj.update(d, pyfileconf_persist=pyfileconf_persist, **kwargs)
+            config_obj.update(d_, pyfileconf_persist=pyfileconf_persist, **kwargs)
         return config_obj, would_update
 
     def refresh(self, section_path_str: str) -> Tuple[ConfigBase, bool, Dict[str, Any]]:
@@ -307,24 +307,24 @@ class ConfigManager(ReprMixin):
             manager=self, orig_config=config, updates=all_updates, section_path_str=section_path_str
         )
 
-    def track_post_update(self, config: ConfigBase, section_path_str: str, d: Optional[dict] = None, **updates):
+    def track_post_update(self, config_: ConfigBase, section_path_str: str, d: Optional[dict] = None, **updates):
         if d is None:
             d = {}
 
         all_updates = {**d, **updates}
         manager.plm.hook.pyfileconf_post_config_changed(
-            manager=self, new_config=config, updates=all_updates, section_path_str=section_path_str
+            manager=self, new_config=config_, updates=all_updates, section_path_str=section_path_str
         )
 
-    def _determine_and_track_if_config_would_be_updated(self, config: ConfigBase, section_path_str: str,
-                                                        d: Optional[dict] = None, **updates) -> bool:
-        if d is None:
-            d = {}
+    def _determine_and_track_if_config_would_be_updated(self, config_: ConfigBase, section_path_str: str,
+                                                        d_: Optional[dict] = None, **updates) -> bool:
+        if d_ is None:
+            d_ = {}
 
-        all_updates = {**d, **updates}
-        would_update = config.would_update(all_updates)
+        all_updates = {**d_, **updates}
+        would_update = config_.would_update(all_updates)
         if would_update:
-            self._track_pre_update(config, section_path_str, all_updates)
+            self._track_pre_update(config_, section_path_str, all_updates)
         return would_update
 
     def _determine_and_track_if_config_would_be_refreshed(self, config: ConfigBase, section_path_str: str) -> bool:

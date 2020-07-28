@@ -94,7 +94,7 @@ def pyfileconf_post_run(
 @hookspec
 def pyfileconf_pre_update(
     pm: "PipelineManager",
-    d: dict,
+    d_: dict,
     section_path_str: str,
     kwargs: Dict[str, Any],
 ) -> Optional[Dict[str, Any]]:
@@ -104,7 +104,7 @@ def pyfileconf_pre_update(
     Can also modify the passed dictionaries in place.
 
     :param pm: The manager responsible for the run
-    :param d: dictionary of config updates
+    :param d_: dictionary of config updates
     :param section_path_str: section path of config to be updated
     :param kwargs: dictionary of config updates
     :return: optional updates to config updates
@@ -120,7 +120,7 @@ def pyfileconf_pre_update(
 @hookspec
 def pyfileconf_post_update(
     pm: "PipelineManager",
-    d: dict,
+    d_: dict,
     section_path_str: str,
     kwargs: Dict[str, Any],
 ):
@@ -128,7 +128,7 @@ def pyfileconf_post_update(
     Called at the end of PipelineManager.update.
 
     :param pm: The manager responsible for the run
-    :param d: dictionary of config updates
+    :param d_: dictionary of config updates
     :param section_path_str: section path of config which was updated
     :param kwargs: dictionary of config updates
     :return: None

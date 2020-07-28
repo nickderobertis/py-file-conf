@@ -373,12 +373,12 @@ class Runner(ReprMixin):
 
         return klass, config_dict
 
-    def update(self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
-        new_config, updated = self._config.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
+    def update(self, d_: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
+        new_config, updated = self._config.update(d_, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
         if updated and section_path_str in self._loaded_objects:
             apply_config(self._loaded_objects[section_path_str], new_config)
-            self._config.track_post_update(new_config, section_path_str, d, **kwargs)
+            self._config.track_post_update(new_config, section_path_str, d_, **kwargs)
 
     def reset(self, section_path_str: str=None, allow_create: bool = False) -> None:
         """

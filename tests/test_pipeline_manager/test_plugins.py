@@ -78,7 +78,7 @@ class ExamplePlugin:
     def pyfileconf_pre_update(
         self,
         pm: "PipelineManager",
-        d: dict,
+        d_: dict,
         section_path_str: str,
         kwargs: Dict[str, Any],
     ) -> Optional[Dict[str, Any]]:
@@ -92,7 +92,7 @@ class ExamplePlugin:
     def pyfileconf_post_update(
         self,
         pm: "PipelineManager",
-        d: dict,
+        d_: dict,
         section_path_str: str,
         kwargs: Dict[str, Any],
     ):
