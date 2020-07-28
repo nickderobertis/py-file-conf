@@ -3,13 +3,12 @@ Contains the hooks which may be attached to in creating plugins
 """
 from typing import Any, Dict, Sequence, List, Tuple, Optional, TYPE_CHECKING, Iterable
 
-from pyfileconf.basemodels.config import ConfigBase
-from pyfileconf.config.models.manager import ConfigManager
-from pyfileconf.runner.models.runner import Runner
-
 if TYPE_CHECKING:
     from pyfileconf.main import PipelineManager
     from pyfileconf.iterate import IterativeRunner
+    from pyfileconf.basemodels.config import ConfigBase
+    from pyfileconf.config.models.manager import ConfigManager
+    from pyfileconf.runner.models.runner import Runner
 
 import pluggy
 
@@ -79,7 +78,7 @@ def pyfileconf_pre_run(
 
 @hookspec
 def pyfileconf_post_run(
-    results: ResultOrResults, runner: Runner
+    results: ResultOrResults, runner: 'Runner'
 ) -> Optional[ResultOrResults]:
     """
     Called at the end of PipelineManager.run. Can optionally return

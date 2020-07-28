@@ -1,5 +1,7 @@
 import os
-from typing import Union, Any, Optional, Iterable, Dict
+from typing import Union, Any, Optional, Iterable, Dict, TYPE_CHECKING
+if TYPE_CHECKING:
+    from pyfileconf.main import PipelineManager
 
 from mixins.repr import ReprMixin
 
@@ -10,16 +12,17 @@ from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.config.models.interfaces import ConfigSectionOrConfig
 from pyfileconf.config.models.section import ConfigSection, ActiveFunctionConfig
-from pyfileconf.pipelines.models.file import FunctionConfigFile
 from pyfileconf.plugin import manager
 from pyfileconf.sectionpath.sectionpath import SectionPath
+
 
 class ConfigManager(ReprMixin):
     repr_cols = ['basepath', 'section']
 
-    def __init__(self, basepath: str, main_section: ConfigSection=None):
+    def __init__(self, basepath: str, pipeline_manager_name: str, main_section: Optional[ConfigSection] = None):
         self.section = main_section
         self.basepath = basepath
+        self.pipeline_manager_name = pipeline_manager_name
         self.local_config = ActiveFunctionConfig()
 
     def __getattr__(self, item):
@@ -33,6 +36,7 @@ class ConfigManager(ReprMixin):
         ]
         exposed_attrs = [
             'basepath',
+            'pipeline_manager_name',
         ]
         return exposed_methods + exposed_attrs + list(self.section.config_map.keys())
 
@@ -60,9 +64,9 @@ class ConfigManager(ReprMixin):
         if would_refresh:
             config_obj.refresh()
 
-    def refresh_dependent_configs(self, section_path_str: str, manager_name: str):
+    def refresh_dependent_configs(self, section_path_str: str):
         from pyfileconf import context
-        full_sp = SectionPath.join(manager_name, section_path_str)
+        full_sp = SectionPath.join(self.pipeline_manager_name, section_path_str)
         update_deps = {*context.force_update_dependencies[full_sp.path_str]}
         all_updated_deps = set()
         while update_deps:
@@ -310,6 +314,10 @@ class ConfigManager(ReprMixin):
             self._track_update(config, section_path_str, updates)
         return updates != {}
 
+    @property
+    def pipeline_manager(self) -> 'PipelineManager':
+        from pyfileconf.main import PipelineManager
+        return PipelineManager.get_manager_by_section_path_str(self.pipeline_manager_name)
 
 
 def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Optional[ActiveFunctionConfig]:

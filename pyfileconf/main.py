@@ -377,7 +377,7 @@ class PipelineManager:
 
             # Refresh any configs which are dependent on attributes of this config
             # Dependent configs are determined in Selector._get_real_item
-            self.config.refresh_dependent_configs(section_path_str, self.name)
+            self.config.refresh_dependent_configs(section_path_str)
 
     def refresh(self, section_path_str: str):
         """
@@ -539,7 +539,7 @@ class PipelineManager:
             manager_name=self.name,
         )
 
-        self.config = ConfigManager(self.default_config_path)
+        self.config = ConfigManager(self.default_config_path, self.name)
         self.config.load()
 
         self.runner = Runner(
