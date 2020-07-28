@@ -77,7 +77,8 @@ class IterativeRunner:
             sp = SectionPath(sp_str)
             relative_section_path_str = SectionPath(".".join(sp[1:])).path_str
             config = pm.config.get(relative_section_path_str)
-            defaults[sp_str] = {**config}
+            if config is not None:
+                defaults[sp_str] = {**config}
         return defaults
 
     def _fill_case_with_defaults(self, case: Tuple[Dict[str, Any], ...]) -> Tuple[Dict[str, Any], ...]:

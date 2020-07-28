@@ -130,7 +130,7 @@ class ConfigBase(dict):
         # Reload from file
         new_config = self._get_new_config_from_file()
         all_updates = {**new_config, **self._applied_updates}
-        self.update(**all_updates, pyfileconf_persist=False)
+        self.update(pyfileconf_persist=False, **all_updates)
         return all_updates
 
     def would_update(self, E=None, **F) -> bool:

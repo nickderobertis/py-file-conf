@@ -1,5 +1,5 @@
 import os
-from typing import Union, Any, Optional, Iterable, Dict, TYPE_CHECKING, Tuple
+from typing import Union, Any, Optional, Iterable, Dict, TYPE_CHECKING, Tuple, cast
 
 if TYPE_CHECKING:
     from pyfileconf.main import PipelineManager
@@ -173,18 +173,26 @@ class ConfigManager(ReprMixin):
 
         if section_path_str is None:
             # updating local config
+            value = cast(ActiveFunctionConfig, value)
             self.local_config = value
             return value, True
 
-        would_update = False
         try:
             current_config = self._get_project_config_or_local_config_by_section_path(section_path_str)
         except KeyError:
             # This is a new config, will always update
-            would_update = True
-        if not would_update:
-            # Not a new config, need to actually determine whether would be updated
-            would_update = self._determine_and_track_if_config_would_be_updated(current_config, section_path_str, **value)
+            new_config = True
+        else:
+            new_config = current_config is None
+
+        if new_config:
+            self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
+            return value, True
+
+        assert current_config is not None  # should never fail this, for mypy
+
+        # Not a new config, need to actually determine whether would be updated
+        would_update = self._determine_and_track_if_config_would_be_updated(current_config, section_path_str, **value)
         if would_update:
             self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
         return value, would_update
@@ -316,14 +324,15 @@ class ConfigManager(ReprMixin):
             manager=self, new_config=config_, updates=all_updates, section_path_str=section_path_str
         )
 
-    def _determine_and_track_if_config_would_be_updated(self, config_: ConfigBase, section_path_str: str,
+    def _determine_and_track_if_config_would_be_updated(self, config_: ConfigBase,
+                                                        section_path_str: Optional[str] = None,
                                                         d_: Optional[dict] = None, **updates) -> bool:
         if d_ is None:
             d_ = {}
 
         all_updates = {**d_, **updates}
         would_update = config_.would_update(all_updates)
-        if would_update:
+        if would_update and section_path_str is not None:
             self._track_pre_update(config_, section_path_str, all_updates)
         return would_update
 
