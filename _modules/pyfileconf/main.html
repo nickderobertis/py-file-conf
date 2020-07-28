@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.13.5 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.14.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.5
+                0.14.0
               </div>
             
           
@@ -470,32 +470,32 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span></div>
 
-<div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the configuration for an item by section path.</span>
 
 <span class="sd">        The main logic is in _update but this also calls the</span>
 <span class="sd">        pyfileconf_pre_update and pyfileconf_post_update hooks</span>
 
-<span class="sd">        :param d: dictionary of updates</span>
+<span class="sd">        :param d_: dictionary of updates</span>
 <span class="sd">        :param section_path_str: section path of item to be updated</span>
 <span class="sd">        :param pyfileconf_persist: whether to make changes last through refreshing config</span>
 <span class="sd">        :param kwargs: kwarg updates</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">new_updates_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_pre_update</span><span class="p">(</span>
-            <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+            <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_</span><span class="o">=</span><span class="n">d_</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
         <span class="p">)</span>
         <span class="n">new_updates_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">new_updates_list</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">if</span> <span class="n">new_updates_dict</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">d_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">d_</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_updates_dict</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">d_</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">plugin_manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_post_update</span><span class="p">(</span>
-            <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
+            <span class="n">pm</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_</span><span class="o">=</span><span class="n">d_</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.update_batch"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update_batch">[docs]</a>    <span class="k">def</span> <span class="nf">update_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updates</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]):</span>
@@ -514,11 +514,11 @@
         <span class="p">)</span>
         <span class="n">updater</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updates</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the configuration for an item by section path</span>
 
-<span class="sd">        :param d: dictionary of updates</span>
+<span class="sd">        :param d_: dictionary of updates</span>
 <span class="sd">        :param section_path_str: section path of item to be updated</span>
 <span class="sd">        :param pyfileconf_persist: whether to make changes last through refreshing config</span>
 <span class="sd">        :param kwargs: kwarg updates</span>
@@ -526,23 +526,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">section_path_str</span><span class="p">:</span>
             <span class="c1"># If any of the updates are putting an ItemView as the value, then</span>
             <span class="c1"># record that this config is dependent on the config referenced</span>
             <span class="c1"># by the ItemView</span>
             <span class="n">all_updates</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
-            <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">all_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">d_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">all_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d_</span><span class="p">)</span>
             <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_updates</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">is_item_view</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                     <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency</span><span class="p">(</span><span class="n">full_sp</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-            <span class="c1"># Refresh any configs which are dependent on attributes of this config</span>
-            <span class="c1"># Dependent configs are determined in Selector._get_real_item</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">refresh_dependent_configs</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d_</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PipelineManager.refresh"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -704,7 +700,7 @@
             <span class="n">manager_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_config_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_config_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="p">(</span>

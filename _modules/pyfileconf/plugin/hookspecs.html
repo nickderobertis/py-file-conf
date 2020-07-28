@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.13.5 documentation</title>
+  <title>pyfileconf.plugin.hookspecs &mdash; pyfileconf 0.14.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.5
+                0.14.0
               </div>
             
           
@@ -168,11 +168,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Iterable</span>
 
-<span class="kn">from</span> <span class="nn">pyfileconf.runner.models.runner</span> <span class="kn">import</span> <span class="n">Runner</span>
-
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
     <span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">IterativeRunner</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.config.models.manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.runner</span> <span class="kn">import</span> <span class="n">Runner</span>
 
 <span class="kn">import</span> <span class="nn">pluggy</span>
 
@@ -242,7 +243,7 @@
 
 <div class="viewcode-block" id="pyfileconf_post_run"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_run">[docs]</a><span class="nd">@hookspec</span>
 <span class="k">def</span> <span class="nf">pyfileconf_post_run</span><span class="p">(</span>
-    <span class="n">results</span><span class="p">:</span> <span class="n">ResultOrResults</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">Runner</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">ResultOrResults</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="s1">&#39;Runner&#39;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ResultOrResults</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Called at the end of PipelineManager.run. Can optionally return</span>
@@ -258,7 +259,7 @@
 <div class="viewcode-block" id="pyfileconf_pre_update"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update">[docs]</a><span class="nd">@hookspec</span>
 <span class="k">def</span> <span class="nf">pyfileconf_pre_update</span><span class="p">(</span>
     <span class="n">pm</span><span class="p">:</span> <span class="s2">&quot;PipelineManager&quot;</span><span class="p">,</span>
-    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">d_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
@@ -268,7 +269,7 @@
 <span class="sd">    Can also modify the passed dictionaries in place.</span>
 
 <span class="sd">    :param pm: The manager responsible for the run</span>
-<span class="sd">    :param d: dictionary of config updates</span>
+<span class="sd">    :param d_: dictionary of config updates</span>
 <span class="sd">    :param section_path_str: section path of config to be updated</span>
 <span class="sd">    :param kwargs: dictionary of config updates</span>
 <span class="sd">    :return: optional updates to config updates</span>
@@ -284,7 +285,7 @@
 <div class="viewcode-block" id="pyfileconf_post_update"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_update">[docs]</a><span class="nd">@hookspec</span>
 <span class="k">def</span> <span class="nf">pyfileconf_post_update</span><span class="p">(</span>
     <span class="n">pm</span><span class="p">:</span> <span class="s2">&quot;PipelineManager&quot;</span><span class="p">,</span>
-    <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">d_</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">):</span>
@@ -292,7 +293,7 @@
 <span class="sd">    Called at the end of PipelineManager.update.</span>
 
 <span class="sd">    :param pm: The manager responsible for the run</span>
-<span class="sd">    :param d: dictionary of config updates</span>
+<span class="sd">    :param d_: dictionary of config updates</span>
 <span class="sd">    :param section_path_str: section path of config which was updated</span>
 <span class="sd">    :param kwargs: dictionary of config updates</span>
 <span class="sd">    :return: None</span>
@@ -331,6 +332,56 @@
 <span class="sd">    :param pm: The manager responsible for the run</span>
 <span class="sd">    :param updates: iterable of dictionaries of config updates</span>
 <span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_pre_config_changed"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed">[docs]</a><span class="nd">@hookspec</span>
+<span class="k">def</span> <span class="nf">pyfileconf_pre_config_changed</span><span class="p">(</span>
+    <span class="n">manager</span><span class="p">:</span> <span class="s1">&#39;ConfigManager&#39;</span><span class="p">,</span>
+    <span class="n">orig_config</span><span class="p">:</span> <span class="s1">&#39;ConfigBase&#39;</span><span class="p">,</span>
+    <span class="n">updates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called just before a config changes, regardless of whether</span>
+<span class="sd">    the change is due to update, reset, or refresh.</span>
+
+<span class="sd">    :param manager: the config manager in which the changing</span>
+<span class="sd">        config resides</span>
+<span class="sd">    :param orig_config: the original config, before any changes</span>
+<span class="sd">    :param updates: the updates which will be made to the config</span>
+<span class="sd">    :param section_path_str: the section path string which can</span>
+<span class="sd">        be used to look up the config</span>
+<span class="sd">    :return: None</span>
+
+<span class="sd">    :Notes:</span>
+
+<span class="sd">        Only called if the action would actually modify the config</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="pyfileconf_post_config_changed"><a class="viewcode-back" href="../../../api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed">[docs]</a><span class="nd">@hookspec</span>
+<span class="k">def</span> <span class="nf">pyfileconf_post_config_changed</span><span class="p">(</span>
+    <span class="n">manager</span><span class="p">:</span> <span class="s1">&#39;ConfigManager&#39;</span><span class="p">,</span>
+    <span class="n">new_config</span><span class="p">:</span> <span class="s1">&#39;ConfigBase&#39;</span><span class="p">,</span>
+    <span class="n">updates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called just after a config changes, regardless of whether</span>
+<span class="sd">    the change is due to update, reset, or refresh.</span>
+
+<span class="sd">    :param manager: the config manager in which the changing</span>
+<span class="sd">        config resides</span>
+<span class="sd">    :param new_config: the config after any changes</span>
+<span class="sd">    :param updates: the updates which were made to the config</span>
+<span class="sd">    :param section_path_str: the section path string which can</span>
+<span class="sd">        be used to look up the config</span>
+<span class="sd">    :return: None</span>
+
+<span class="sd">    :Notes:</span>
+
+<span class="sd">        Only called if the action actually modified the config</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 

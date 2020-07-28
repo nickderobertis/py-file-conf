@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models package &mdash; pyfileconf 0.13.5 documentation</title>
+  <title>pyfileconf.config.models package &mdash; pyfileconf 0.14.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.13.5
+                0.14.0
               </div>
             
           
@@ -257,11 +257,11 @@
 <span id="pyfileconf-config-models-manager-module"></span><h2>pyfileconf.config.models.manager module<a class="headerlink" href="#module-pyfileconf.config.models.manager" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfileconf.config.models.manager.ConfigManager">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.config.models.manager.</code><code class="sig-name descname">ConfigManager</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">main_section=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.config.models.manager.</code><code class="sig-name descname">ConfigManager</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">pipeline_manager_name</em>, <em class="sig-param">main_section=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mixins.repr.ReprMixin</span></code></p>
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">main_section=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">pipeline_manager_name</em>, <em class="sig-param">main_section=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -287,6 +287,16 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="pyfileconf.config.models.manager.ConfigManager.pipeline_manager">
+<em class="property">property </em><code class="sig-name descname">pipeline_manager</code><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.pipeline_manager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.html#pyfileconf.main.PipelineManager" title="pyfileconf.main.PipelineManager">PipelineManager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.pop">
 <code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.pop" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -299,11 +309,16 @@
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.refresh">
 <code class="sig-name descname">refresh</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.refresh_dependent_configs">
-<code class="sig-name descname">refresh_dependent_configs</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">manager_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.refresh_dependent_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.refresh_dependent_configs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">refresh_dependent_configs</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.refresh_dependent_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.refresh_dependent_configs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -318,7 +333,7 @@
 <p>To reset all configs, use .load() instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the default configuration</p>
@@ -330,20 +345,45 @@
 <dt id="pyfileconf.config.models.manager.ConfigManager.set">
 <code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em>, <em class="sig-param">value=None</em>, <em class="sig-param">allow_create=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>In contrast to update, completely replaces the config object.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>section_path_str:
-value:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.set.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.set.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – </p></li>
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.set.params.value"></span><strong>value</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.set.params.value">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a>]) – </p></li>
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.set.params.allow_create"></span><strong>allow_create</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.set.params.allow_create">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>new config, whether config was updated</p>
 </dd>
 </dl>
-<p>Returns:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyfileconf.config.models.manager.ConfigManager.track_post_update">
+<code class="sig-name descname">track_post_update</code><span class="sig-paren">(</span><em class="sig-param">config_</em>, <em class="sig-param">section_path_str</em>, <em class="sig-param">d=None</em>, <em class="sig-param">**updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.track_post_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.track_post_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="pyfileconf.config.models.manager.ConfigManager.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">pyfileconf_persist=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">d_=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">pyfileconf_persist=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/config/models/manager.html#ConfigManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.config.models.manager.ConfigManager.update" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.update.params.d_"></span><strong>d_</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.update.params.d_">¶</a> – </p></li>
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.update.params.section_path_str"></span><strong>section_path_str</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.update.params.section_path_str">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – </p></li>
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.update.params.pyfileconf_persist"></span><strong>pyfileconf_persist</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.update.params.pyfileconf_persist">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – </p></li>
+<li><p><span class="target" id="pyfileconf.config.models.manager.ConfigManager.update.params.kwargs"></span><strong>kwargs</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.config.models.manager.ConfigManager.update.params.kwargs">¶</a> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigBase</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>new config, whether config was updated</p>
 </dd>
 </dl>
 </dd></dl>

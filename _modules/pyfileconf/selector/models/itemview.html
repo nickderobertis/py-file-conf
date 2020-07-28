@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.13.5 documentation</title>
+  <title>pyfileconf.selector.models.itemview &mdash; pyfileconf 0.14.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.5
+                0.14.0
               </div>
             
           
@@ -416,9 +416,11 @@
 <span class="sd">    :return: Whether the object is an ItemView</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">this_is_item_view</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_is_item_view&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">this_is_item_view</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">this_is_item_view</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ItemView</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">this_is_item_view</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
 </pre></div>
 
            </div>

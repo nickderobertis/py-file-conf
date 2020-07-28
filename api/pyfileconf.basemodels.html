@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.13.5 documentation</title>
+  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.14.0 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.13.5
+                0.14.0
               </div>
             
           
@@ -313,6 +313,24 @@ The argument must be an iterable if specified.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="pyfileconf.basemodels.config.ConfigBase.change_from_refresh">
+<code class="sig-name descname">change_from_refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.change_from_refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.change_from_refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether refresh would actually cause
+a change in the config and returns a dictionary of
+what would be updated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the new config dict that would apply
+while calling .refresh if it would be updated,
+otherwise an empty dict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="pyfileconf.basemodels.config.ConfigBase.config_file_class">
 <code class="sig-name descname">config_file_class</code><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.config_file_class" title="Permalink to this definition">¶</a></dt>
@@ -332,9 +350,10 @@ The argument must be an iterable if specified.</p>
 <dl class="method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.refresh">
 <code class="sig-name descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.refresh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reloads from the existing, then reapplies any config updates. Useful for when
+<dd><p>Reloads from the existing, then re-applies any config updates. Useful for when
 this config depends on the attribute of some other config which was updated.
-:return:</p>
+:rtype: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]
+:return: The updates made to the config</p>
 </dd></dl>
 
 <dl class="method">
@@ -348,6 +367,28 @@ this config depends on the attribute of some other config which was updated.
 <dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
 If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
 In either case, this is followed by: for k in F:  D[k] = F[k]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyfileconf.basemodels.config.ConfigBase.would_update">
+<code class="sig-name descname">would_update</code><span class="sig-paren">(</span><em class="sig-param">E=None</em>, <em class="sig-param">**F</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.would_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.would_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether updates would actually cause
+a change in the config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.basemodels.config.ConfigBase.would_update.params.E"></span><strong>E</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.basemodels.config.ConfigBase.would_update.params.E">¶</a> – dictionary of updates</p></li>
+<li><p><span class="target" id="pyfileconf.basemodels.config.ConfigBase.would_update.params.F"></span><strong>F</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.basemodels.config.ConfigBase.would_update.params.F">¶</a> – kwargs of updates</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>whether config would actually change when calling .update with
+the same arguments</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

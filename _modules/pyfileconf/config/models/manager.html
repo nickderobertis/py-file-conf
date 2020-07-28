@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.13.5 documentation</title>
+  <title>pyfileconf.config.models.manager &mdash; pyfileconf 0.14.0 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                0.13.5
+                0.14.0
               </div>
             
           
@@ -164,7 +164,10 @@
             
   <h1>Source code for pyfileconf.config.models.manager</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
 
 <span class="kn">from</span> <span class="nn">mixins.repr</span> <span class="kn">import</span> <span class="n">ReprMixin</span>
 
@@ -175,15 +178,17 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.set</span> <span class="kn">import</span> <span class="n">_set_in_nested_obj_by_section_path</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.interfaces</span> <span class="kn">import</span> <span class="n">ConfigSectionOrConfig</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.config.models.section</span> <span class="kn">import</span> <span class="n">ConfigSection</span><span class="p">,</span> <span class="n">ActiveFunctionConfig</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.file</span> <span class="kn">import</span> <span class="n">FunctionConfigFile</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.plugin</span> <span class="kn">import</span> <span class="n">manager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
+
 
 <div class="viewcode-block" id="ConfigManager"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager">[docs]</a><span class="k">class</span> <span class="nc">ConfigManager</span><span class="p">(</span><span class="n">ReprMixin</span><span class="p">):</span>
     <span class="n">repr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;basepath&#39;</span><span class="p">,</span> <span class="s1">&#39;section&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="ConfigManager.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">main_section</span><span class="p">:</span> <span class="n">ConfigSection</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigManager.__init__"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pipeline_manager_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">main_section</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigSection</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">main_section</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span> <span class="o">=</span> <span class="n">basepath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_manager_name</span> <span class="o">=</span> <span class="n">pipeline_manager_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">local_config</span> <span class="o">=</span> <span class="n">ActiveFunctionConfig</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
@@ -197,6 +202,7 @@
         <span class="p">]</span>
         <span class="n">exposed_attrs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s1">&#39;basepath&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;pipeline_manager_name&#39;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">exposed_methods</span> <span class="o">+</span> <span class="n">exposed_attrs</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">config_map</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
@@ -204,23 +210,40 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">ConfigSection</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConfigManager.update"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConfigBase</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">d_</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ConfigBase</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param d_:</span>
+<span class="sd">        :param section_path_str:</span>
+<span class="sd">        :param pyfileconf_persist:</span>
+<span class="sd">        :param kwargs:</span>
+<span class="sd">        :return: new config, whether config was updated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">config_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to update&#39;</span><span class="p">)</span>
-        <span class="n">config_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">config_obj</span></div>
+        <span class="n">would_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_and_track_if_config_would_be_updated</span><span class="p">(</span>
+            <span class="n">config_obj</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">d_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">would_update</span><span class="p">:</span>
+            <span class="n">config_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d_</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config_obj</span><span class="p">,</span> <span class="n">would_update</span></div>
 
-<div class="viewcode-block" id="ConfigManager.refresh"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigManager.refresh"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ConfigBase</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
         <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">config_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ConfigManagerNotLoadedException</span><span class="p">(</span><span class="s1">&#39;no config to refresh&#39;</span><span class="p">)</span>
-        <span class="n">config_obj</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span></div>
+        <span class="n">would_refresh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_and_track_if_config_would_be_refreshed</span><span class="p">(</span><span class="n">config_obj</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">would_refresh</span><span class="p">:</span>
+            <span class="n">updates</span> <span class="o">=</span> <span class="n">config_obj</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">updates</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">config_obj</span><span class="p">,</span> <span class="n">would_refresh</span><span class="p">,</span> <span class="n">updates</span></div>
 
-<div class="viewcode-block" id="ConfigManager.refresh_dependent_configs"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.refresh_dependent_configs">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_dependent_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">manager_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigManager.refresh_dependent_configs"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.refresh_dependent_configs">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_dependent_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">context</span>
-        <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">manager_name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
+        <span class="n">full_sp</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_manager_name</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">)</span>
         <span class="n">update_deps</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">context</span><span class="o">.</span><span class="n">force_update_dependencies</span><span class="p">[</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">]}</span>
         <span class="n">all_updated_deps</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">while</span> <span class="n">update_deps</span><span class="p">:</span>
@@ -234,7 +257,7 @@
                 <span class="k">raise</span> <span class="n">CannotResolveConfigDependenciesException</span><span class="p">(</span><span class="n">update_deps</span><span class="p">)</span>
             <span class="n">update_deps</span> <span class="o">=</span> <span class="n">new_update_deps</span></div>
 
-<div class="viewcode-block" id="ConfigManager.reset"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConfigBase</span><span class="p">:</span>
+<div class="viewcode-block" id="ConfigManager.reset"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ConfigBase</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resets a function or section config to default. If no section_path_str is passed, resets local config.</span>
 
@@ -244,8 +267,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_func_or_section_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">default</span></div>
+        <span class="n">new_config</span><span class="p">,</span> <span class="n">updated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_config</span><span class="p">,</span> <span class="n">updated</span></div>
 
 <div class="viewcode-block" id="ConfigManager.pop"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
@@ -299,28 +322,45 @@
 
         <span class="k">return</span> <span class="n">config</span></div>
 
-<div class="viewcode-block" id="ConfigManager.set"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigManager.set"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">allow_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ConfigBase</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        In contrast to update, completely replaces the config object.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            section_path_str:</span>
-<span class="sd">            value:</span>
-
-<span class="sd">        Returns:</span>
-
+<span class="sd">        :param section_path_str:</span>
+<span class="sd">        :param value:</span>
+<span class="sd">        :param allow_create:</span>
+<span class="sd">        :return: new config, whether config was updated</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># empty config</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># empty config</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">ActiveFunctionConfig</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">section_path_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># updating local config</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">ActiveFunctionConfig</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">local_config</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_func_or_section_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">current_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_project_config_or_local_config_by_section_path</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="c1"># This is a new config, will always update</span>
+            <span class="n">new_config</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_config</span> <span class="o">=</span> <span class="n">current_config</span> <span class="ow">is</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="n">new_config</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_func_or_section_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span>
+
+        <span class="k">assert</span> <span class="n">current_config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># should never fail this, for mypy</span>
+
+        <span class="c1"># Not a new config, need to actually determine whether would be updated</span>
+        <span class="n">would_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_and_track_if_config_would_be_updated</span><span class="p">(</span><span class="n">current_config</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="o">**</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">would_update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_func_or_section_config</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="n">would_update</span></div>
 
     <span class="k">def</span> <span class="nf">_get_func_or_section_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -433,7 +473,44 @@
             <span class="c1"># If no section passed, update local config</span>
             <span class="n">config_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_config</span>
 
-        <span class="k">return</span> <span class="n">config_obj</span></div>
+        <span class="k">return</span> <span class="n">config_obj</span>
+
+    <span class="k">def</span> <span class="nf">_track_pre_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">all_updates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_pre_config_changed</span><span class="p">(</span>
+            <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">orig_config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">updates</span><span class="o">=</span><span class="n">all_updates</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="ConfigManager.track_post_update"><a class="viewcode-back" href="../../../../api/pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager.track_post_update">[docs]</a>    <span class="k">def</span> <span class="nf">track_post_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_</span><span class="p">:</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">updates</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">all_updates</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">d</span><span class="p">,</span> <span class="o">**</span><span class="n">updates</span><span class="p">}</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_post_config_changed</span><span class="p">(</span>
+            <span class="n">manager</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_config</span><span class="o">=</span><span class="n">config_</span><span class="p">,</span> <span class="n">updates</span><span class="o">=</span><span class="n">all_updates</span><span class="p">,</span> <span class="n">section_path_str</span><span class="o">=</span><span class="n">section_path_str</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_determine_and_track_if_config_would_be_updated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_</span><span class="p">:</span> <span class="n">ConfigBase</span><span class="p">,</span>
+                                                        <span class="n">section_path_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">d_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">updates</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">d_</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">all_updates</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">d_</span><span class="p">,</span> <span class="o">**</span><span class="n">updates</span><span class="p">}</span>
+        <span class="n">would_update</span> <span class="o">=</span> <span class="n">config_</span><span class="o">.</span><span class="n">would_update</span><span class="p">(</span><span class="n">all_updates</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">would_update</span> <span class="ow">and</span> <span class="n">section_path_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_track_pre_update</span><span class="p">(</span><span class="n">config_</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">all_updates</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">would_update</span>
+
+    <span class="k">def</span> <span class="nf">_determine_and_track_if_config_would_be_refreshed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ConfigBase</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">change_from_refresh</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">updates</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_track_pre_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">updates</span> <span class="o">!=</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pipeline_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
+        <span class="k">return</span> <span class="n">PipelineManager</span><span class="o">.</span><span class="n">get_manager_by_section_path_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_manager_name</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_get_config_from_config_or_section</span><span class="p">(</span><span class="n">config_or_section</span><span class="p">:</span> <span class="n">ConfigSectionOrConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ActiveFunctionConfig</span><span class="p">]:</span>
