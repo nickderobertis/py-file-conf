@@ -53,3 +53,4 @@ resolve over time so that (nearly) any valid Python is supported.
 * Functions and classes cannot be defined in config files (``def``
   and ``class`` statements. Other ways of creating them such as
   ``lambdas`` and using class factory functions work fine.)
+* Cannot do multiple inline assignments in config files (``a = b = 5``)

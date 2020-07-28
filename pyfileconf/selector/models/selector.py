@@ -73,6 +73,12 @@ class Selector:
 
         return exposed_methods + managers
 
+    def __eq__(self, other):
+        try:
+            return self._structure == other._structure
+        except AttributeError:
+            return False
+
     def _get_dir_for_section_path(self, section_path_str: str) -> List[str]:
         collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(
             section_path_str
@@ -153,7 +159,7 @@ class Selector:
         manager_name = section_path[0]
         manager = self._managers[manager_name]
         relative_section_path_str = '.'.join(section_path[1:])
-        manager.config.update(
+        manager.update(
             {attr: value},
             section_path_str=relative_section_path_str
         )

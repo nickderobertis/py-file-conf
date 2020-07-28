@@ -1,6 +1,9 @@
+import warnings
 from typing import Tuple, Optional, Type, Sequence, Any, Dict
 import os
 from copy import deepcopy
+
+import pandas as pd
 
 from pyfileconf.basemodels.file import ConfigFileBase
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
@@ -111,16 +114,78 @@ class ConfigBase(dict):
     def copy(self):
         return deepcopy(self)
 
-    def refresh(self):
+    def _get_new_config_from_file(self):
+        return self.__class__.from_file(
+            self._file.filepath, name=self.name,
+            klass=self.klass, always_import_strs=self.always_import_strs,
+            always_assign_strs=self.always_assign_strs
+        )
+
+    def refresh(self) -> Dict[str, Any]:
         """
-        Reloads from the existing, then reapplies any config updates. Useful for when
+        Reloads from the existing, then re-applies any config updates. Useful for when
         this config depends on the attribute of some other config which was updated.
-        :return:
+        :return: The updates made to the config
         """
         # Reload from file
-        new_config = self.__class__.from_file(self._file.filepath, name=self.name,
-                                              klass=self.klass, always_import_strs=self.always_import_strs,
-                                              always_assign_strs=self.always_assign_strs)
-        applied_updates = {**self._applied_updates}
-        self.update(**new_config, pyfileconf_persist=False)
-        self.update(**applied_updates, pyfileconf_persist=False)
+        new_config = self._get_new_config_from_file()
+        all_updates = {**new_config, **self._applied_updates}
+        self.update(pyfileconf_persist=False, **all_updates)
+        return all_updates
+
+    def would_update(self, E=None, **F) -> bool:
+        """
+        Determines whether updates would actually cause
+        a change in the config
+
+        :param E: dictionary of updates
+        :param F: kwargs of updates
+        :return: whether config would actually change when calling .update with
+            the same arguments
+        """
+        if E is None:
+            E = {}
+
+        all_updates = {**E, **F}
+        for key, value in all_updates.items():
+            if key not in self:
+                continue
+            orig_value = self[key]
+            if not _values_are_equal(orig_value, value):
+                return True
+
+        return False
+
+    def change_from_refresh(self) -> Dict[str, Any]:
+        """
+        Determines whether refresh would actually cause
+        a change in the config and returns a dictionary of
+        what would be updated
+
+        :return: the new config dict that would apply
+            while calling .refresh if it would be updated,
+            otherwise an empty dict
+        """
+        new_config = self._get_new_config_from_file()
+        final_updates = {**new_config, **self._applied_updates}
+        would_update = self.would_update(final_updates)
+        if would_update:
+            return final_updates
+        return {}
+
+
+def _values_are_equal(val1: Any, val2: Any) -> bool:
+    # Special handling for pandas
+    if isinstance(val1, (pd.DataFrame, pd.Series)):
+        return val1.equals(val2)
+    elif isinstance(val2, (pd.DataFrame, pd.Series)):
+        # First is not pandas object, so must not be equal
+        return False
+
+    try:
+        return val1 == val2
+    except Exception as e:
+        warnings.warn(f'Could not check if values {val1} and {val2} of '
+                      f'type {type(val1)} and {type(val2)} are '
+                      f'equal. Returning False. Got exception: {e}')
+        return False

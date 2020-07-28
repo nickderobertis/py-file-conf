@@ -251,6 +251,8 @@ def is_item_view(obj: Any) -> bool:
     :return: Whether the object is an ItemView
     """
     this_is_item_view = getattr(obj, '_is_item_view', False)
-    if this_is_item_view:
+    if this_is_item_view is True:
         obj = cast(ItemView, obj)
-    return this_is_item_view
+        return True
+
+    return False

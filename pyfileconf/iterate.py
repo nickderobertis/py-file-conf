@@ -3,6 +3,7 @@ from collections import defaultdict
 from copy import deepcopy
 from typing import List, Dict, Any, Tuple, Sequence, Optional, Iterator
 
+from pyfileconf.basemodels.config import ConfigBase
 from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import RunnerArgs, IterativeResults, IterativeResult
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -24,6 +25,7 @@ class IterativeRunner:
     config_updates: Sequence[Dict[str, Any]]
     cases: List[Tuple[Dict[str, Any], ...]]
     last_case: Optional[Tuple[Dict[str, Any], ...]] = None
+    defaults: Dict[str, Dict[str, Any]]
 
     def __init__(
         self,
@@ -50,6 +52,7 @@ class IterativeRunner:
         )
         self.config_updates = config_updates
         self.cases = self.get_cases()
+        self.defaults = self.get_defaults()
 
     def get_cases(self) -> List[Tuple[Dict[str, Any], ...]]:
         cases_lol: List[
@@ -58,6 +61,39 @@ class IterativeRunner:
         cases = list(itertools.chain(*cases_lol))
         manager.plm.hook.pyfileconf_iter_modify_cases(cases=cases, runner=self)
         return cases
+
+    def get_defaults(self) -> Dict[str, Dict[str, Any]]:
+        from pyfileconf import PipelineManager
+
+        if not hasattr(self, 'cases'):
+            raise ValueError('must set cases before calling get_defaults')
+        case = self.cases[0]
+        section_path_strs = [
+            self._get_full_section_path_str(conf['section_path_str']) for conf in case
+        ]
+        defaults: Dict[str, Dict[str, Any]] = {}
+        for sp_str in section_path_strs:
+            pm = PipelineManager.get_manager_by_section_path_str(sp_str)
+            sp = SectionPath(sp_str)
+            relative_section_path_str = SectionPath(".".join(sp[1:])).path_str
+            config = pm.config.get(relative_section_path_str)
+            if config is not None:
+                defaults[sp_str] = {**config}
+        return defaults
+
+    def _fill_case_with_defaults(self, case: Tuple[Dict[str, Any], ...]) -> Tuple[Dict[str, Any], ...]:
+        new_confs: List[Dict[str, Any]] = []
+        for conf in case:
+            sp_str = self._get_full_section_path_str(conf['section_path_str'])
+            defaults = self.defaults[sp_str]
+            new_conf = {**defaults, **conf}
+            new_confs.append(new_conf)
+        return tuple(new_confs)
+
+    def _get_full_section_path_str(self, section_path_str: str) -> str:
+        if not self.base_section_path_str:
+            return section_path_str
+        return SectionPath.join(self.base_section_path_str, section_path_str).path_str
 
     def run(self, collect_results: bool = True) -> IterativeResults:
         """
@@ -69,21 +105,24 @@ class IterativeRunner:
 
         all_results = []
         for case in self.cases:
-            manager.plm.hook.pyfileconf_iter_update_for_case(case=case, runner=self)
-            result = self._run()
+            result = self._run_case(case)
             if collect_results:
                 in_out_tup = (case, result)
                 all_results.append(in_out_tup)
-            self.last_case = case
         return all_results
 
     def run_gen(self) -> Iterator[IterativeResult]:
         for case in self.cases:
-            manager.plm.hook.pyfileconf_iter_update_for_case(case=case, runner=self)
-            result = self._run()
+            result = self._run_case(case)
             in_out_tup = (case, result)
             yield in_out_tup
-            self.last_case = case
+
+    def _run_case(self, case: Tuple[Dict[str, Any], ...]) -> Any:
+        case_with_defaults = self._fill_case_with_defaults(case)
+        manager.plm.hook.pyfileconf_iter_update_for_case(case=case_with_defaults, runner=self)
+        result = self._run()
+        self.last_case = case_with_defaults
+        return result
 
     def _run(self) -> Any:
         from pyfileconf.main import PipelineManager
@@ -91,9 +130,9 @@ class IterativeRunner:
         results = []
         for sp in self.run_items:
             # Look up appropriate manager and run it
-            manager = PipelineManager.get_manager_by_section_path_str(sp.path_str)
+            pm = PipelineManager.get_manager_by_section_path_str(sp.path_str)
             relative_section_path_str = SectionPath(".".join(sp[1:])).path_str
-            result = manager.run(relative_section_path_str)
+            result = pm.run(relative_section_path_str)
             results.append(result)
 
         if len(results) == 1:

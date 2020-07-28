@@ -1,5 +1,8 @@
 import os
-from typing import Union, Any, Optional, Iterable
+from typing import Union, Any, Optional, Iterable, Dict, TYPE_CHECKING, Tuple, cast
+
+if TYPE_CHECKING:
+    from pyfileconf.main import PipelineManager
 
 from mixins.repr import ReprMixin
 
@@ -10,15 +13,17 @@ from pyfileconf.logic.get import _get_from_nested_obj_by_section_path
 from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.config.models.interfaces import ConfigSectionOrConfig
 from pyfileconf.config.models.section import ConfigSection, ActiveFunctionConfig
-from pyfileconf.pipelines.models.file import FunctionConfigFile
+from pyfileconf.plugin import manager
 from pyfileconf.sectionpath.sectionpath import SectionPath
+
 
 class ConfigManager(ReprMixin):
     repr_cols = ['basepath', 'section']
 
-    def __init__(self, basepath: str, main_section: ConfigSection=None):
+    def __init__(self, basepath: str, pipeline_manager_name: str, main_section: Optional[ConfigSection] = None):
         self.section = main_section
         self.basepath = basepath
+        self.pipeline_manager_name = pipeline_manager_name
         self.local_config = ActiveFunctionConfig()
 
     def __getattr__(self, item):
@@ -32,6 +37,7 @@ class ConfigManager(ReprMixin):
         ]
         exposed_attrs = [
             'basepath',
+            'pipeline_manager_name',
         ]
         return exposed_methods + exposed_attrs + list(self.section.config_map.keys())
 
@@ -39,23 +45,40 @@ class ConfigManager(ReprMixin):
         self.section = ConfigSection.from_files(self.basepath)
 
     def update(
-        self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs
-    ) -> ConfigBase:
+        self, d_: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs
+    ) -> Tuple[ConfigBase, bool]:
+        """
+
+        :param d_:
+        :param section_path_str:
+        :param pyfileconf_persist:
+        :param kwargs:
+        :return: new config, whether config was updated
+        """
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to update')
-        config_obj.update(d, pyfileconf_persist=pyfileconf_persist, **kwargs)
-        return config_obj
+        would_update = self._determine_and_track_if_config_would_be_updated(
+            config_obj, section_path_str, d_, **kwargs
+        )
+        if would_update:
+            config_obj.update(d_, pyfileconf_persist=pyfileconf_persist, **kwargs)
+        return config_obj, would_update
 
-    def refresh(self, section_path_str: str):
+    def refresh(self, section_path_str: str) -> Tuple[ConfigBase, bool, Dict[str, Any]]:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to refresh')
-        config_obj.refresh()
+        would_refresh = self._determine_and_track_if_config_would_be_refreshed(config_obj, section_path_str)
+        if would_refresh:
+            updates = config_obj.refresh()
+        else:
+            updates = {}
+        return config_obj, would_refresh, updates
 
-    def refresh_dependent_configs(self, section_path_str: str, manager_name: str):
+    def refresh_dependent_configs(self, section_path_str: str):
         from pyfileconf import context
-        full_sp = SectionPath.join(manager_name, section_path_str)
+        full_sp = SectionPath.join(self.pipeline_manager_name, section_path_str)
         update_deps = {*context.force_update_dependencies[full_sp.path_str]}
         all_updated_deps = set()
         while update_deps:
@@ -69,7 +92,7 @@ class ConfigManager(ReprMixin):
                 raise CannotResolveConfigDependenciesException(update_deps)
             update_deps = new_update_deps
 
-    def reset(self, section_path_str: str=None, allow_create: bool = False) -> ConfigBase:
+    def reset(self, section_path_str: str=None, allow_create: bool = False) -> Tuple[ConfigBase, bool]:
         """
         Resets a function or section config to default. If no section_path_str is passed, resets local config.
 
@@ -79,8 +102,8 @@ class ConfigManager(ReprMixin):
 
         """
         default = self._get_default_func_or_section_config(section_path_str, create=allow_create)
-        self.set(section_path_str, default, allow_create=allow_create)
-        return default
+        new_config, updated = self.set(section_path_str, default, allow_create=allow_create)
+        return new_config, updated
 
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
@@ -134,28 +157,45 @@ class ConfigManager(ReprMixin):
 
         return config
 
-    def set(self, section_path_str: str=None, value=None, allow_create: bool = True):
+    def set(self, section_path_str: Optional[str] = None, value: Optional[ConfigBase] = None,
+            allow_create: bool = True) -> Tuple[ConfigBase, bool]:
         """
         In contrast to update, completely replaces the config object.
 
-        Args:
-            section_path_str:
-            value:
-
-        Returns:
-
+        :param section_path_str:
+        :param value:
+        :param allow_create:
+        :return: new config, whether config was updated
         """
 
-        if value == None: # empty config
+        if value is None:  # empty config
             value = ActiveFunctionConfig()
 
         if section_path_str is None:
             # updating local config
+            value = cast(ActiveFunctionConfig, value)
             self.local_config = value
-            return
+            return value, True
 
-        self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
+        try:
+            current_config = self._get_project_config_or_local_config_by_section_path(section_path_str)
+        except KeyError:
+            # This is a new config, will always update
+            new_config = True
+        else:
+            new_config = current_config is None
 
+        if new_config:
+            self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
+            return value, True
+
+        assert current_config is not None  # should never fail this, for mypy
+
+        # Not a new config, need to actually determine whether would be updated
+        would_update = self._determine_and_track_if_config_would_be_updated(current_config, section_path_str, **value)
+        if would_update:
+            self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
+        return value, would_update
 
     def _get_func_or_section_configs(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
         """
@@ -269,6 +309,43 @@ class ConfigManager(ReprMixin):
             config_obj = self.local_config
 
         return config_obj
+
+    def _track_pre_update(self, config: ConfigBase, section_path_str: str, all_updates: Dict[str, Any]):
+        manager.plm.hook.pyfileconf_pre_config_changed(
+            manager=self, orig_config=config, updates=all_updates, section_path_str=section_path_str
+        )
+
+    def track_post_update(self, config_: ConfigBase, section_path_str: str, d: Optional[dict] = None, **updates):
+        if d is None:
+            d = {}
+
+        all_updates = {**d, **updates}
+        manager.plm.hook.pyfileconf_post_config_changed(
+            manager=self, new_config=config_, updates=all_updates, section_path_str=section_path_str
+        )
+
+    def _determine_and_track_if_config_would_be_updated(self, config_: ConfigBase,
+                                                        section_path_str: Optional[str] = None,
+                                                        d_: Optional[dict] = None, **updates) -> bool:
+        if d_ is None:
+            d_ = {}
+
+        all_updates = {**d_, **updates}
+        would_update = config_.would_update(all_updates)
+        if would_update and section_path_str is not None:
+            self._track_pre_update(config_, section_path_str, all_updates)
+        return would_update
+
+    def _determine_and_track_if_config_would_be_refreshed(self, config: ConfigBase, section_path_str: str) -> bool:
+        updates = config.change_from_refresh()
+        if updates:
+            self._track_pre_update(config, section_path_str, updates)
+        return updates != {}
+
+    @property
+    def pipeline_manager(self) -> 'PipelineManager':
+        from pyfileconf.main import PipelineManager
+        return PipelineManager.get_manager_by_section_path_str(self.pipeline_manager_name)
 
 
 def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Optional[ActiveFunctionConfig]:

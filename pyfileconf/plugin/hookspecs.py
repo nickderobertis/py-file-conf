@@ -3,11 +3,12 @@ Contains the hooks which may be attached to in creating plugins
 """
 from typing import Any, Dict, Sequence, List, Tuple, Optional, TYPE_CHECKING, Iterable
 
-from pyfileconf.runner.models.runner import Runner
-
 if TYPE_CHECKING:
     from pyfileconf.main import PipelineManager
     from pyfileconf.iterate import IterativeRunner
+    from pyfileconf.basemodels.config import ConfigBase
+    from pyfileconf.config.models.manager import ConfigManager
+    from pyfileconf.runner.models.runner import Runner
 
 import pluggy
 
@@ -77,7 +78,7 @@ def pyfileconf_pre_run(
 
 @hookspec
 def pyfileconf_post_run(
-    results: ResultOrResults, runner: Runner
+    results: ResultOrResults, runner: 'Runner'
 ) -> Optional[ResultOrResults]:
     """
     Called at the end of PipelineManager.run. Can optionally return
@@ -93,7 +94,7 @@ def pyfileconf_post_run(
 @hookspec
 def pyfileconf_pre_update(
     pm: "PipelineManager",
-    d: dict,
+    d_: dict,
     section_path_str: str,
     kwargs: Dict[str, Any],
 ) -> Optional[Dict[str, Any]]:
@@ -103,7 +104,7 @@ def pyfileconf_pre_update(
     Can also modify the passed dictionaries in place.
 
     :param pm: The manager responsible for the run
-    :param d: dictionary of config updates
+    :param d_: dictionary of config updates
     :param section_path_str: section path of config to be updated
     :param kwargs: dictionary of config updates
     :return: optional updates to config updates
@@ -119,7 +120,7 @@ def pyfileconf_pre_update(
 @hookspec
 def pyfileconf_post_update(
     pm: "PipelineManager",
-    d: dict,
+    d_: dict,
     section_path_str: str,
     kwargs: Dict[str, Any],
 ):
@@ -127,7 +128,7 @@ def pyfileconf_post_update(
     Called at the end of PipelineManager.update.
 
     :param pm: The manager responsible for the run
-    :param d: dictionary of config updates
+    :param d_: dictionary of config updates
     :param section_path_str: section path of config which was updated
     :param kwargs: dictionary of config updates
     :return: None
@@ -166,4 +167,54 @@ def pyfileconf_post_update_batch(
     :param pm: The manager responsible for the run
     :param updates: iterable of dictionaries of config updates
     :return: None
+    """
+
+
+@hookspec
+def pyfileconf_pre_config_changed(
+    manager: 'ConfigManager',
+    orig_config: 'ConfigBase',
+    updates: Dict[str, Any],
+    section_path_str: str,
+) -> None:
+    """
+    Called just before a config changes, regardless of whether
+    the change is due to update, reset, or refresh.
+
+    :param manager: the config manager in which the changing
+        config resides
+    :param orig_config: the original config, before any changes
+    :param updates: the updates which will be made to the config
+    :param section_path_str: the section path string which can
+        be used to look up the config
+    :return: None
+
+    :Notes:
+
+        Only called if the action would actually modify the config
+    """
+
+
+@hookspec
+def pyfileconf_post_config_changed(
+    manager: 'ConfigManager',
+    new_config: 'ConfigBase',
+    updates: Dict[str, Any],
+    section_path_str: str,
+) -> None:
+    """
+    Called just after a config changes, regardless of whether
+    the change is due to update, reset, or refresh.
+
+    :param manager: the config manager in which the changing
+        config resides
+    :param new_config: the config after any changes
+    :param updates: the updates which were made to the config
+    :param section_path_str: the section path string which can
+        be used to look up the config
+    :return: None
+
+    :Notes:
+
+        Only called if the action actually modified the config
     """
