@@ -578,8 +578,8 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         ec = sel.test_pipeline_manager2.example_class.stuff.data.item
         assert ec == expect_1
         assert ec.a == ec._a == expected_a_result
-        assert context.config_dependencies == context.force_update_dependencies == \
-               self.expect_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2
+        assert context.config_dependencies == self.expect_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2
+        assert context.force_update_dependencies == self.expect_force_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2
 
     def test_create_update_from_multiple_specific_class_dicts_same(self):
         self.write_example_class_dict_to_file()  # example_class

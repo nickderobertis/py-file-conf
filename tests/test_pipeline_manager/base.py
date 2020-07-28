@@ -108,6 +108,10 @@ class PipelineManagerTestBase(TestCase):
         'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
         'test_pipeline_manager.example_class.stuff.data2': {SectionPath('test_pipeline_manager2.example_class.stuff.data')},
     }
+    expect_force_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2 = {
+        **expect_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2,
+        'test_pipeline_manager.example_class.stuff.data': set(),
+    }
     expect_pm_1_specific_class_depends_on_pm_1_specific_class_3_class_1_2_function_1_2 = {
         'test_pipeline_manager.example_class.stuff.data3': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
         'test_pipeline_manager.ec.ExampleClass': {SectionPath('test_pipeline_manager.example_class.stuff.data')},

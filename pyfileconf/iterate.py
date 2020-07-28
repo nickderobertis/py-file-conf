@@ -25,7 +25,7 @@ class IterativeRunner:
     config_updates: Sequence[Dict[str, Any]]
     cases: List[Tuple[Dict[str, Any], ...]]
     last_case: Optional[Tuple[Dict[str, Any], ...]] = None
-    defaults: Dict[str, ConfigBase]
+    defaults: Dict[str, Dict[str, Any]]
 
     def __init__(
         self,
@@ -62,7 +62,7 @@ class IterativeRunner:
         manager.plm.hook.pyfileconf_iter_modify_cases(cases=cases, runner=self)
         return cases
 
-    def get_defaults(self) -> Dict[str, ConfigBase]:
+    def get_defaults(self) -> Dict[str, Dict[str, Any]]:
         from pyfileconf import PipelineManager
 
         if not hasattr(self, 'cases'):
@@ -71,13 +71,13 @@ class IterativeRunner:
         section_path_strs = [
             self._get_full_section_path_str(conf['section_path_str']) for conf in case
         ]
-        defaults: Dict[str, ConfigBase] = {}
+        defaults: Dict[str, Dict[str, Any]] = {}
         for sp_str in section_path_strs:
             pm = PipelineManager.get_manager_by_section_path_str(sp_str)
             sp = SectionPath(sp_str)
             relative_section_path_str = SectionPath(".".join(sp[1:])).path_str
             config = pm.config.get(relative_section_path_str)
-            defaults[sp_str] = config
+            defaults[sp_str] = {**config}
         return defaults
 
     def _fill_case_with_defaults(self, case: Tuple[Dict[str, Any], ...]) -> Tuple[Dict[str, Any], ...]:
