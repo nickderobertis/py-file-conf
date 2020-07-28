@@ -374,26 +374,29 @@ class Runner(ReprMixin):
         return klass, config_dict
 
     def update(self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
-        new_config = self._config.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
+        new_config, updated = self._config.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
-        if section_path_str in self._loaded_objects:
+        if updated and section_path_str in self._loaded_objects:
             apply_config(self._loaded_objects[section_path_str], new_config)
+            self._config.track_post_update(new_config, section_path_str, d, **kwargs)
 
     def reset(self, section_path_str: str=None, allow_create: bool = False) -> None:
         """
         Resets a function or section config to default. If no section_path_str
         is passed, resets local config.
         """
-        default = self._config.reset(section_path_str=section_path_str, allow_create=allow_create)
-        if section_path_str in self._loaded_objects:
+        default, updated = self._config.reset(section_path_str=section_path_str, allow_create=allow_create)
+        if updated and section_path_str in self._loaded_objects:
             apply_config(self._loaded_objects[section_path_str], default)
+            self._config.track_post_update(default, section_path_str, **default)
 
     def refresh(self, section_path_str: str):
-        self._config.refresh(section_path_str)
+        config, updated, updates = self._config.refresh(section_path_str)
 
-        if section_path_str in self._loaded_objects:
+        if updated and section_path_str in self._loaded_objects:
             config = self._get_config(section_path_str)
             apply_config(self._loaded_objects[section_path_str], config)
+            self._config.track_post_update(config, section_path_str, updates)
 
     def _is_specific_class(self, obj: Any) -> bool:
         return self._all_specific_classes and isinstance(obj, self._all_specific_classes)  # type: ignore

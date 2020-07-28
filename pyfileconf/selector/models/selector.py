@@ -159,7 +159,7 @@ class Selector:
         manager_name = section_path[0]
         manager = self._managers[manager_name]
         relative_section_path_str = '.'.join(section_path[1:])
-        manager.config.update(
+        manager.update(
             {attr: value},
             section_path_str=relative_section_path_str
         )

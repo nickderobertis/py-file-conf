@@ -50,18 +50,11 @@ def pyfileconf_iter_update_for_case(
     else:
         updated_confs = case
 
-    use_confs: List[Dict[str, Any]] = []
-    for conf in updated_confs:
-        conf = {**conf, 'pyfileconf_persist': False}
-        use_confs.append(conf)
-
     bu = BatchUpdater(
         base_section_path_str=runner.base_section_path_str,
         strip_manager_from_iv=runner.strip_manager_from_iv,
     )
-    sp_strs = [conf['section_path_str'] for conf in use_confs]
-    bu.reset(sp_strs)
-    bu.update(use_confs)
+    bu.update(updated_confs)
 
 
 @hookimpl

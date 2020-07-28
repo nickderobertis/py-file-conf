@@ -334,7 +334,10 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         self.append_to_a_function_config('a = s.test_pipeline_manager.example_class_with_update.stuff.data.a\n')
         self.append_to_a_function_config('b = s.test_pipeline_manager.example_class_with_update.stuff2.data.a')
         pipeline_manager.reload()
-        pipeline_manager.run('stuff.a_function')  # run to set attribute dependencies. counts as one change
+        # run to set attribute dependencies. counts as two changes
+        # first change is setting config for example_class_with_update.stuff.data
+        # second change is setting config for example_class_with_update.stuff2.data
+        pipeline_manager.run('stuff.a_function')
         sel = Selector()
         expect_results = [
             (
@@ -360,8 +363,8 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         ]
         iv = sel.test_pipeline_manager.stuff.a_function
         result = pipeline_manager.run_product(iv, config_dicts)
-        # 7 changes, 14 operations in all: 7 config resets, 7 config updates, corresponding to when config changes
-        assert ExampleClassWithCustomUpdate.num_updates == 14
+        # 7 config updates, corresponding to when config changes
+        assert ExampleClassWithCustomUpdate.num_updates == 8
         assert result == expect_results
         for res, expect_res in zip(pipeline_manager.run_product_gen(iv, config_dicts), expect_results):
             assert res == expect_res

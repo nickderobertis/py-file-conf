@@ -1,5 +1,6 @@
 import os
-from typing import Union, Any, Optional, Iterable, Dict, TYPE_CHECKING
+from typing import Union, Any, Optional, Iterable, Dict, TYPE_CHECKING, Tuple
+
 if TYPE_CHECKING:
     from pyfileconf.main import PipelineManager
 
@@ -45,7 +46,15 @@ class ConfigManager(ReprMixin):
 
     def update(
         self, d: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs
-    ) -> ConfigBase:
+    ) -> Tuple[ConfigBase, bool]:
+        """
+
+        :param d:
+        :param section_path_str:
+        :param pyfileconf_persist:
+        :param kwargs:
+        :return: new config, whether config was updated
+        """
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to update')
@@ -54,17 +63,18 @@ class ConfigManager(ReprMixin):
         )
         if would_update:
             config_obj.update(d, pyfileconf_persist=pyfileconf_persist, **kwargs)
-            self._track_post_update(config_obj, section_path_str, d, **kwargs)
-        return config_obj
+        return config_obj, would_update
 
-    def refresh(self, section_path_str: str):
+    def refresh(self, section_path_str: str) -> Tuple[ConfigBase, bool, Dict[str, Any]]:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to refresh')
         would_refresh = self._determine_and_track_if_config_would_be_refreshed(config_obj, section_path_str)
         if would_refresh:
             updates = config_obj.refresh()
-            self._track_post_update(config_obj, section_path_str, updates)
+        else:
+            updates = {}
+        return config_obj, would_refresh, updates
 
     def refresh_dependent_configs(self, section_path_str: str):
         from pyfileconf import context
@@ -82,7 +92,7 @@ class ConfigManager(ReprMixin):
                 raise CannotResolveConfigDependenciesException(update_deps)
             update_deps = new_update_deps
 
-    def reset(self, section_path_str: str=None, allow_create: bool = False) -> ConfigBase:
+    def reset(self, section_path_str: str=None, allow_create: bool = False) -> Tuple[ConfigBase, bool]:
         """
         Resets a function or section config to default. If no section_path_str is passed, resets local config.
 
@@ -92,8 +102,8 @@ class ConfigManager(ReprMixin):
 
         """
         default = self._get_default_func_or_section_config(section_path_str, create=allow_create)
-        self.set(section_path_str, default, allow_create=allow_create)
-        return default
+        new_config, updated = self.set(section_path_str, default, allow_create=allow_create)
+        return new_config, updated
 
     def pop(self, key: str, section_path_str: str=None) -> Any:
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
@@ -148,16 +158,14 @@ class ConfigManager(ReprMixin):
         return config
 
     def set(self, section_path_str: Optional[str] = None, value: Optional[ConfigBase] = None,
-            allow_create: bool = True):
+            allow_create: bool = True) -> Tuple[ConfigBase, bool]:
         """
         In contrast to update, completely replaces the config object.
 
-        Args:
-            section_path_str:
-            value:
-
-        Returns:
-
+        :param section_path_str:
+        :param value:
+        :param allow_create:
+        :return: new config, whether config was updated
         """
 
         if value is None:  # empty config
@@ -166,7 +174,7 @@ class ConfigManager(ReprMixin):
         if section_path_str is None:
             # updating local config
             self.local_config = value
-            return
+            return value, True
 
         would_update = False
         try:
@@ -179,8 +187,7 @@ class ConfigManager(ReprMixin):
             would_update = self._determine_and_track_if_config_would_be_updated(current_config, section_path_str, **value)
         if would_update:
             self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
-            self._track_post_update(value, section_path_str, **value)
-
+        return value, would_update
 
     def _get_func_or_section_configs(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
         """
@@ -300,7 +307,7 @@ class ConfigManager(ReprMixin):
             manager=self, orig_config=config, updates=all_updates, section_path_str=section_path_str
         )
 
-    def _track_post_update(self, config: ConfigBase, section_path_str: str, d: Optional[dict] = None, **updates):
+    def track_post_update(self, config: ConfigBase, section_path_str: str, d: Optional[dict] = None, **updates):
         if d is None:
             d = {}
 
