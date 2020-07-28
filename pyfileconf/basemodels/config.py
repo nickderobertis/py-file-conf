@@ -111,6 +111,13 @@ class ConfigBase(dict):
     def copy(self):
         return deepcopy(self)
 
+    def _get_new_config_from_file(self):
+        return self.__class__.from_file(
+            self._file.filepath, name=self.name,
+            klass=self.klass, always_import_strs=self.always_import_strs,
+            always_assign_strs=self.always_assign_strs
+        )
+
     def refresh(self):
         """
         Reloads from the existing, then reapplies any config updates. Useful for when
@@ -118,9 +125,47 @@ class ConfigBase(dict):
         :return:
         """
         # Reload from file
-        new_config = self.__class__.from_file(self._file.filepath, name=self.name,
-                                              klass=self.klass, always_import_strs=self.always_import_strs,
-                                              always_assign_strs=self.always_assign_strs)
+        new_config = self._get_new_config_from_file()
         applied_updates = {**self._applied_updates}
         self.update(**new_config, pyfileconf_persist=False)
         self.update(**applied_updates, pyfileconf_persist=False)
+
+    def would_update(self, E=None, **F) -> bool:
+        """
+        Determines whether updates would actually cause
+        a change in the config
+
+        :param E: dictionary of updates
+        :param F: kwargs of updates
+        :return: whether config would actually change when calling .update with
+            the same arguments
+        """
+        if E is None:
+            E = {}
+
+        all_updates = {**E, **F}
+        for key, value in all_updates.items():
+            if key not in self:
+                continue
+            orig_value = self[key]
+            if orig_value != value:
+                return True
+
+        return False
+
+    def change_from_refresh(self) -> Dict[str, Any]:
+        """
+        Determines whether refresh would actually cause
+        a change in the config and returns a dictionary of
+        what would be updated
+
+        :return: the new config dict that would apply
+            while calling .refresh if it would be updated,
+            otherwise an empty dict
+        """
+        new_config = self._get_new_config_from_file()
+        final_updates = {**new_config, **self._applied_updates}
+        would_update = self.would_update(final_updates)
+        if would_update:
+            return final_updates
+        return {}

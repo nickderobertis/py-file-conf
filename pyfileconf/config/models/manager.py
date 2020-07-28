@@ -1,5 +1,5 @@
 import os
-from typing import Union, Any, Optional, Iterable
+from typing import Union, Any, Optional, Iterable, Dict
 
 from mixins.repr import ReprMixin
 
@@ -11,6 +11,7 @@ from pyfileconf.logic.set import _set_in_nested_obj_by_section_path
 from pyfileconf.config.models.interfaces import ConfigSectionOrConfig
 from pyfileconf.config.models.section import ConfigSection, ActiveFunctionConfig
 from pyfileconf.pipelines.models.file import FunctionConfigFile
+from pyfileconf.plugin import manager
 from pyfileconf.sectionpath.sectionpath import SectionPath
 
 class ConfigManager(ReprMixin):
@@ -44,14 +45,20 @@ class ConfigManager(ReprMixin):
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to update')
-        config_obj.update(d, pyfileconf_persist=pyfileconf_persist, **kwargs)
+        would_update = self._determine_and_track_if_config_would_be_updated(
+            config_obj, section_path_str, d, **kwargs
+        )
+        if would_update:
+            config_obj.update(d, pyfileconf_persist=pyfileconf_persist, **kwargs)
         return config_obj
 
     def refresh(self, section_path_str: str):
         config_obj = self._get_project_config_or_local_config_by_section_path(section_path_str)
         if config_obj is None:
             raise ConfigManagerNotLoadedException('no config to refresh')
-        config_obj.refresh()
+        would_refresh = self._determine_and_track_if_config_would_be_refreshed(config_obj, section_path_str)
+        if would_refresh:
+            config_obj.refresh()
 
     def refresh_dependent_configs(self, section_path_str: str, manager_name: str):
         from pyfileconf import context
@@ -134,7 +141,8 @@ class ConfigManager(ReprMixin):
 
         return config
 
-    def set(self, section_path_str: str=None, value=None, allow_create: bool = True):
+    def set(self, section_path_str: Optional[str] = None, value: Optional[ConfigBase] = None,
+            allow_create: bool = True):
         """
         In contrast to update, completely replaces the config object.
 
@@ -154,7 +162,17 @@ class ConfigManager(ReprMixin):
             self.local_config = value
             return
 
-        self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
+        would_update = False
+        try:
+            current_config = self._get_project_config_or_local_config_by_section_path(section_path_str)
+        except KeyError:
+            # This is a new config, will always update
+            would_update = True
+        if not would_update:
+            # Not a new config, need to actually determine whether would be updated
+            would_update = self._determine_and_track_if_config_would_be_updated(current_config, section_path_str, **value)
+        if would_update:
+            self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
 
 
     def _get_func_or_section_configs(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
@@ -269,6 +287,29 @@ class ConfigManager(ReprMixin):
             config_obj = self.local_config
 
         return config_obj
+
+    def _track_update(self, config: ConfigBase, section_path_str: str, all_updates: Dict[str, Any]):
+        manager.plm.hook.pyfileconf_config_changed(
+            manager=self, orig_config=config, updates=all_updates, section_path_str=section_path_str
+        )
+
+    def _determine_and_track_if_config_would_be_updated(self, config: ConfigBase, section_path_str: str,
+                                                        d: Optional[dict] = None, **updates) -> bool:
+        if d is None:
+            d = {}
+
+        all_updates = {**d, **updates}
+        would_update = config.would_update(all_updates)
+        if would_update:
+            self._track_update(config, section_path_str, all_updates)
+        return would_update
+
+    def _determine_and_track_if_config_would_be_refreshed(self, config: ConfigBase, section_path_str: str) -> bool:
+        updates = config.change_from_refresh()
+        if updates:
+            self._track_update(config, section_path_str, updates)
+        return updates != {}
+
 
 
 def _get_config_from_config_or_section(config_or_section: ConfigSectionOrConfig) -> Optional[ActiveFunctionConfig]:

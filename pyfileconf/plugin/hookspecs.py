@@ -3,6 +3,8 @@ Contains the hooks which may be attached to in creating plugins
 """
 from typing import Any, Dict, Sequence, List, Tuple, Optional, TYPE_CHECKING, Iterable
 
+from pyfileconf.basemodels.config import ConfigBase
+from pyfileconf.config.models.manager import ConfigManager
 from pyfileconf.runner.models.runner import Runner
 
 if TYPE_CHECKING:
@@ -166,4 +168,21 @@ def pyfileconf_post_update_batch(
     :param pm: The manager responsible for the run
     :param updates: iterable of dictionaries of config updates
     :return: None
+    """
+
+
+@hookspec
+def pyfileconf_config_changed(
+    manager: 'ConfigManager',
+    orig_config: 'ConfigBase',
+    updates: Dict[str, Any],
+    section_path_str: str,
+) -> None:
+    """
+
+    :param manager:
+    :param orig_config:
+    :param updates:
+    :param section_path_str:
+    :return:
     """
