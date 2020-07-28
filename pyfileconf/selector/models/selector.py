@@ -73,6 +73,12 @@ class Selector:
 
         return exposed_methods + managers
 
+    def __eq__(self, other):
+        try:
+            return self._structure == other._structure
+        except AttributeError:
+            return False
+
     def _get_dir_for_section_path(self, section_path_str: str) -> List[str]:
         collection_obj, relative_section_path = self._get_collection_obj_and_relative_section_path_from_structure(
             section_path_str

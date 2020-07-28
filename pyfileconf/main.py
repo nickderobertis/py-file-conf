@@ -361,8 +361,6 @@ class PipelineManager:
         """
         from pyfileconf.selector.models.itemview import is_item_view
 
-        self.runner.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
-
         if section_path_str:
             # If any of the updates are putting an ItemView as the value, then
             # record that this config is dependent on the config referenced
@@ -375,9 +373,7 @@ class PipelineManager:
                 if is_item_view(value):
                     context.add_config_dependency(full_sp, value)
 
-            # Refresh any configs which are dependent on attributes of this config
-            # Dependent configs are determined in Selector._get_real_item
-            self.config.refresh_dependent_configs(section_path_str)
+        self.runner.update(d, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
 
     def refresh(self, section_path_str: str):
         """

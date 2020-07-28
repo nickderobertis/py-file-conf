@@ -6,6 +6,8 @@ from typing import Any, Dict, Sequence, List, Tuple, TYPE_CHECKING, Iterable, Op
 if TYPE_CHECKING:
     from pyfileconf.iterate import IterativeRunner
     from pyfileconf.main import PipelineManager
+    from pyfileconf.basemodels.config import ConfigBase
+    from pyfileconf.config.models.manager import ConfigManager
 
 from pyfileconf.plugin.impl import hookimpl
 from pyfileconf.plugin import manager
@@ -67,3 +69,24 @@ def pyfileconf_pre_update_batch(
     pm: "PipelineManager", updates: Iterable[dict],
 ) -> Iterable[dict]:
     return updates
+
+@hookimpl
+def pyfileconf_config_changed(
+    manager: 'ConfigManager',
+    orig_config: 'ConfigBase',
+    updates: Dict[str, Any],
+    section_path_str: str,
+) -> None:
+    """
+    Called just before a config changes, regardless of whether
+    the change is due to update, reset, or refresh.
+
+    :param manager: the config manager in which the changing
+        config resides
+    :param orig_config: the original config, before any changes
+    :param updates: the updates which will be made to the config
+    :param section_path_str: the section path string which can
+        be used to look up the config
+    :return: None
+    """
+    manager.refresh_dependent_configs(section_path_str)

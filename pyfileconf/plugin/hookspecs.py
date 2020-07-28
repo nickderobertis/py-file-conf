@@ -178,10 +178,14 @@ def pyfileconf_config_changed(
     section_path_str: str,
 ) -> None:
     """
+    Called just before a config changes, regardless of whether
+    the change is due to update, reset, or refresh.
 
-    :param manager:
-    :param orig_config:
-    :param updates:
-    :param section_path_str:
-    :return:
+    :param manager: the config manager in which the changing
+        config resides
+    :param orig_config: the original config, before any changes
+    :param updates: the updates which will be made to the config
+    :param section_path_str: the section path string which can
+        be used to look up the config
+    :return: None
     """
