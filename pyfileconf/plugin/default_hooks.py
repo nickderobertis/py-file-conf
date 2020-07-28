@@ -70,23 +70,27 @@ def pyfileconf_pre_update_batch(
 ) -> Iterable[dict]:
     return updates
 
+
 @hookimpl
-def pyfileconf_config_changed(
+def pyfileconf_post_config_changed(
     manager: 'ConfigManager',
-    orig_config: 'ConfigBase',
+    new_config: 'ConfigBase',
     updates: Dict[str, Any],
     section_path_str: str,
 ) -> None:
     """
-    Called just before a config changes, regardless of whether
-    the change is due to update, reset, or refresh.
+    Refresh dependent configs after config change
 
     :param manager: the config manager in which the changing
         config resides
-    :param orig_config: the original config, before any changes
-    :param updates: the updates which will be made to the config
+    :param new_config: the config after any changes
+    :param updates: the updates which were made to the config
     :param section_path_str: the section path string which can
         be used to look up the config
     :return: None
+
+    :Notes:
+
+        Only called if the action actually modified the config
     """
     manager.refresh_dependent_configs(section_path_str)

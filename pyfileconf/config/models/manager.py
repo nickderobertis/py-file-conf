@@ -54,6 +54,7 @@ class ConfigManager(ReprMixin):
         )
         if would_update:
             config_obj.update(d, pyfileconf_persist=pyfileconf_persist, **kwargs)
+            self._track_post_update(config_obj, section_path_str, d, **kwargs)
         return config_obj
 
     def refresh(self, section_path_str: str):
@@ -62,7 +63,8 @@ class ConfigManager(ReprMixin):
             raise ConfigManagerNotLoadedException('no config to refresh')
         would_refresh = self._determine_and_track_if_config_would_be_refreshed(config_obj, section_path_str)
         if would_refresh:
-            config_obj.refresh()
+            updates = config_obj.refresh()
+            self._track_post_update(config_obj, section_path_str, updates)
 
     def refresh_dependent_configs(self, section_path_str: str):
         from pyfileconf import context
@@ -158,7 +160,7 @@ class ConfigManager(ReprMixin):
 
         """
 
-        if value == None: # empty config
+        if value is None:  # empty config
             value = ActiveFunctionConfig()
 
         if section_path_str is None:
@@ -177,6 +179,7 @@ class ConfigManager(ReprMixin):
             would_update = self._determine_and_track_if_config_would_be_updated(current_config, section_path_str, **value)
         if would_update:
             self._set_func_or_section_config(section_path_str, value=value, allow_create=allow_create)
+            self._track_post_update(value, section_path_str, **value)
 
 
     def _get_func_or_section_configs(self, section_path_str: str) -> Optional[ActiveFunctionConfig]:
@@ -292,9 +295,18 @@ class ConfigManager(ReprMixin):
 
         return config_obj
 
-    def _track_update(self, config: ConfigBase, section_path_str: str, all_updates: Dict[str, Any]):
-        manager.plm.hook.pyfileconf_config_changed(
+    def _track_pre_update(self, config: ConfigBase, section_path_str: str, all_updates: Dict[str, Any]):
+        manager.plm.hook.pyfileconf_pre_config_changed(
             manager=self, orig_config=config, updates=all_updates, section_path_str=section_path_str
+        )
+
+    def _track_post_update(self, config: ConfigBase, section_path_str: str, d: Optional[dict] = None, **updates):
+        if d is None:
+            d = {}
+
+        all_updates = {**d, **updates}
+        manager.plm.hook.pyfileconf_post_config_changed(
+            manager=self, new_config=config, updates=all_updates, section_path_str=section_path_str
         )
 
     def _determine_and_track_if_config_would_be_updated(self, config: ConfigBase, section_path_str: str,
@@ -305,13 +317,13 @@ class ConfigManager(ReprMixin):
         all_updates = {**d, **updates}
         would_update = config.would_update(all_updates)
         if would_update:
-            self._track_update(config, section_path_str, all_updates)
+            self._track_pre_update(config, section_path_str, all_updates)
         return would_update
 
     def _determine_and_track_if_config_would_be_refreshed(self, config: ConfigBase, section_path_str: str) -> bool:
         updates = config.change_from_refresh()
         if updates:
-            self._track_update(config, section_path_str, updates)
+            self._track_pre_update(config, section_path_str, updates)
         return updates != {}
 
     @property

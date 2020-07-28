@@ -171,7 +171,7 @@ def pyfileconf_post_update_batch(
 
 
 @hookspec
-def pyfileconf_config_changed(
+def pyfileconf_pre_config_changed(
     manager: 'ConfigManager',
     orig_config: 'ConfigBase',
     updates: Dict[str, Any],
@@ -188,4 +188,33 @@ def pyfileconf_config_changed(
     :param section_path_str: the section path string which can
         be used to look up the config
     :return: None
+
+    :Notes:
+
+        Only called if the action would actually modify the config
+    """
+
+
+@hookspec
+def pyfileconf_post_config_changed(
+    manager: 'ConfigManager',
+    new_config: 'ConfigBase',
+    updates: Dict[str, Any],
+    section_path_str: str,
+) -> None:
+    """
+    Called just after a config changes, regardless of whether
+    the change is due to update, reset, or refresh.
+
+    :param manager: the config manager in which the changing
+        config resides
+    :param new_config: the config after any changes
+    :param updates: the updates which were made to the config
+    :param section_path_str: the section path string which can
+        be used to look up the config
+    :return: None
+
+    :Notes:
+
+        Only called if the action actually modified the config
     """

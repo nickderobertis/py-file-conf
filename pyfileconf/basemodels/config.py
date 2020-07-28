@@ -118,17 +118,17 @@ class ConfigBase(dict):
             always_assign_strs=self.always_assign_strs
         )
 
-    def refresh(self):
+    def refresh(self) -> Dict[str, Any]:
         """
-        Reloads from the existing, then reapplies any config updates. Useful for when
+        Reloads from the existing, then re-applies any config updates. Useful for when
         this config depends on the attribute of some other config which was updated.
-        :return:
+        :return: The updates made to the config
         """
         # Reload from file
         new_config = self._get_new_config_from_file()
-        applied_updates = {**self._applied_updates}
-        self.update(**new_config, pyfileconf_persist=False)
-        self.update(**applied_updates, pyfileconf_persist=False)
+        all_updates = {**new_config, **self._applied_updates}
+        self.update(**all_updates, pyfileconf_persist=False)
+        return all_updates
 
     def would_update(self, E=None, **F) -> bool:
         """
