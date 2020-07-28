@@ -540,7 +540,10 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         self.append_to_specific_class_config('a = s.test_pipeline_manager2.example_class.stuff.data.a')
         pipeline_manager.reload()
         sel = Selector()
+        pipeline_manager.create('example_class.stuff.data2')
+        self.append_to_specific_class_config('a = s.test_pipeline_manager.example_class.stuff.data2.a', pm_index=1)
         iv2 = sel.test_pipeline_manager2.example_class.stuff.data
+        iv3 = sel.test_pipeline_manager.example_class.stuff.data2
 
         # Assert original pipeline manager 1 has pipeline manager 2 example class as a
         ec2 = sel.test_pipeline_manager2.example_class.stuff.data
@@ -549,20 +552,34 @@ class TestPipelineManagerConfig(PipelineManagerTestBase):
         assert ec == expect_1
         assert ec.a is None
 
-        # Assert that update pipeline manager 2 affects pipeline manager 1
+        # Assert original pipeline manager 2 has pipeline manager 1 example class 2 as a
+        ec1_2 = sel.test_pipeline_manager.example_class.stuff.data2
+        expect_2 = ExampleClass(name='data', a=ec1_2.a)
+        ec = sel.test_pipeline_manager2.example_class.stuff.data.item
+        assert ec == expect_2
+        assert ec.a is None
+
+        # Assert that update pipeline manager 1 ec 2 affects pipeline manager 2 ec which affects pipeline manager 1 ec 1
         expected_a_result = (1, 2)
-        section_path = SectionPath.from_section_str_list(SectionPath(iv2.section_path_str)[1:])
-        pipeline_manager2.update(
+        section_path = SectionPath.from_section_str_list(SectionPath(iv3.section_path_str)[1:])
+        pipeline_manager.update(
             a=expected_a_result,
             section_path_str=section_path.path_str
         )
+        # Assert update affects pipeline manager 1 ec 1
         ec2 = sel.test_pipeline_manager2.example_class.stuff.data
         expect_1 = ExampleClass(name='data', a=ec2.a)
         ec = sel.test_pipeline_manager.example_class.stuff.data.item
         assert ec == expect_1
         assert ec.a == ec._a == expected_a_result
+        # Assert update affects pipeline manager 2 ec 1
+        ec2 = sel.test_pipeline_manager.example_class.stuff.data2
+        expect_1 = ExampleClass(name='data', a=ec2.a)
+        ec = sel.test_pipeline_manager2.example_class.stuff.data.item
+        assert ec == expect_1
+        assert ec.a == ec._a == expected_a_result
         assert context.config_dependencies == context.force_update_dependencies == \
-               self.expect_pm_1_specific_class_depends_on_pm_2_specific_class
+               self.expect_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2
 
     def test_create_update_from_multiple_specific_class_dicts_same(self):
         self.write_example_class_dict_to_file()  # example_class

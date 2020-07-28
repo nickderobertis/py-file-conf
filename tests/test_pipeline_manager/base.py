@@ -58,7 +58,7 @@ class PipelineManagerTestBase(TestCase):
     pm_folder = os.path.join(BASE_GENERATED_DIR, 'first')
     second_pm_folder = os.path.join(BASE_GENERATED_DIR, 'second')
     defaults_path = os.path.join(pm_folder, defaults_folder_name)
-    second_defaults_path = os.path.join(pm_folder, defaults_folder_name)
+    second_defaults_path = os.path.join(second_pm_folder, defaults_folder_name)
     pipeline_dict_path = os.path.join(pm_folder, 'pipeline_dict.py')
     second_pipeline_dict_path = os.path.join(second_pm_folder, 'pipeline_dict.py')
     example_class_file_names = [
@@ -103,6 +103,10 @@ class PipelineManagerTestBase(TestCase):
     }
     expect_pm_1_specific_class_depends_on_pm_2_specific_class = {
         'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.example_class.stuff.data')}
+    }
+    expect_pm_1_specific_class_depends_on_pm_2_specific_class_which_depends_on_pm_1_specific_class_2 = {
+        'test_pipeline_manager2.example_class.stuff.data': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
+        'test_pipeline_manager.example_class.stuff.data2': {SectionPath('test_pipeline_manager2.example_class.stuff.data')},
     }
     expect_pm_1_specific_class_depends_on_pm_1_specific_class_3_class_1_2_function_1_2 = {
         'test_pipeline_manager.example_class.stuff.data3': {SectionPath('test_pipeline_manager.example_class.stuff.data')},
@@ -218,9 +222,16 @@ class PipelineManagerTestBase(TestCase):
         with open(config_path, 'a') as f:
             f.write(to_add)
 
-    def append_to_specific_class_config(self, to_add: str):
-        class_folder = os.path.join(self.defaults_path, 'example_class')
+    def append_to_specific_class_config(self, to_add: str, item_name: str = 'data', pm_index: int = 0):
+        if pm_index == 0:
+            pm_folder = self.defaults_path
+        elif pm_index == 1:
+            pm_folder = self.second_defaults_path
+        else:
+            raise ValueError(f'must pass 0 or 1 for pm_index, got {pm_index}')
+
+        class_folder = os.path.join(pm_folder, 'example_class')
         section_folder = os.path.join(class_folder, 'stuff')
-        config_path = os.path.join(section_folder, 'data.py')
+        config_path = os.path.join(section_folder, f'{item_name}.py')
         with open(config_path, 'a') as f:
             f.write(to_add)
