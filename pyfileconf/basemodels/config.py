@@ -1,6 +1,9 @@
+import warnings
 from typing import Tuple, Optional, Type, Sequence, Any, Dict
 import os
 from copy import deepcopy
+
+import pandas as pd
 
 from pyfileconf.basemodels.file import ConfigFileBase
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
@@ -148,7 +151,7 @@ class ConfigBase(dict):
             if key not in self:
                 continue
             orig_value = self[key]
-            if orig_value != value:
+            if not _values_are_equal(orig_value, value):
                 return True
 
         return False
@@ -169,3 +172,20 @@ class ConfigBase(dict):
         if would_update:
             return final_updates
         return {}
+
+
+def _values_are_equal(val1: Any, val2: Any) -> bool:
+    # Special handling for pandas
+    if isinstance(val1, (pd.DataFrame, pd.Series)):
+        return val1.equals(val2)
+    elif isinstance(val2, (pd.DataFrame, pd.Series)):
+        # First is not pandas object, so must not be equal
+        return False
+
+    try:
+        return val1 == val2
+    except Exception as e:
+        warnings.warn(f'Could not check if values {val1} and {val2} of '
+                      f'type {type(val1)} and {type(val2)} are '
+                      f'equal. Returning False. Got exception: {e}')
+        return False
