@@ -101,7 +101,14 @@ def _module_key_value_generator(module: ModuleType) -> Iterator[Tuple[str, Any]]
 
 def _obj_in_module(obj, module: ModuleType) -> bool:
     for key in dir(module):
-        if obj is getattr(module, key):
+        try:
+            compare_obj = getattr(module, key)
+        except AttributeError:
+            # Not expected on normal modules, but can
+            # be necessary in the case of some dynamically
+            # modified modules, e.g. pytest.collect in pytest>=6.0.0
+            continue
+        if obj is compare_obj:
             return True
 
     return False
