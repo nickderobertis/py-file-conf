@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.lazy.base package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.io.file.load.lazy.base package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.io.file.load.parsers package" href="pyfileconf.io.file.load.parsers.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -218,87 +219,9 @@
 </div>
 <div class="section" id="module-pyfileconf.io.file.load.lazy.base.impassign">
 <span id="pyfileconf-io-file-load-lazy-base-impassign-module"></span><h2>pyfileconf.io.file.load.lazy.base.impassign module<a class="headerlink" href="#module-pyfileconf.io.file.load.lazy.base.impassign" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.lazy.base.impassign.</code><code class="sig-name descname">ImportAssignmentLazyLoader</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/lazy/base/impassign.html#ImportAssignmentLazyLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader" title="pyfileconf.io.file.load.lazy.base.loader.LazyLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.lazy.base.loader.LazyLoader</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.assigns">
-<em class="property">property </em><code class="sig-name descname">assigns</code><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.assigns" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer" title="pyfileconf.assignments.models.container.AssignmentStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssignmentStatementContainer</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.imports">
-<em class="property">property </em><code class="sig-name descname">imports</code><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.imports" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.register">
-<code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/lazy/base/impassign.html#ImportAssignmentLazyLoader.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader.register" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-pyfileconf.io.file.load.lazy.base.loader">
 <span id="pyfileconf-io-file-load-lazy-base-loader-module"></span><h2>pyfileconf.io.file.load.lazy.base.loader module<a class="headerlink" href="#module-pyfileconf.io.file.load.lazy.base.loader" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.lazy.base.loader.</code><code class="sig-name descname">LazyLoader</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/lazy/base/loader.html#LazyLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mixins.propertycache.SimplePropertyCacheMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">mixins.repr.ReprMixin</span></code></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/lazy/base/loader.html#LazyLoader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader.ast">
-<em class="property">property </em><code class="sig-name descname">ast</code><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.ast" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">AST</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader.body">
-<em class="property">property </em><code class="sig-name descname">body</code><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.body" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/lazy/base/loader.html#LazyLoader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader.register">
-<code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/lazy/base/loader.html#LazyLoader.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.register" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.io.file.load.lazy.base.loader.LazyLoader.repr_cols">
-<code class="sig-name descname">repr_cols</code><em class="property"> = ['filepath']</em><a class="headerlink" href="#pyfileconf.io.file.load.lazy.base.loader.LazyLoader.repr_cols" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 </div>
 

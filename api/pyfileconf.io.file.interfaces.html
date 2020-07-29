@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.interfaces package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.io.file.interfaces package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.io.file.load package" href="pyfileconf.io.file.load.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -214,59 +215,15 @@
 </div>
 <div class="section" id="module-pyfileconf.io.file.interfaces.activeconfig">
 <span id="pyfileconf-io-file-interfaces-activeconfig-module"></span><h2>pyfileconf.io.file.interfaces.activeconfig module<a class="headerlink" href="#module-pyfileconf.io.file.interfaces.activeconfig" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.interfaces.activeconfig.ActiveConfigFileInterface">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.interfaces.activeconfig.</code><code class="sig-name descname">ActiveConfigFileInterface</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/activeconfig.html#ActiveConfigFileInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.activeconfig.ActiveConfigFileInterface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pyfileconf.io.file.load.active.html#pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader" title="pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.interfaces.activeconfig.ActiveConfigFileInterface.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/activeconfig.html#ActiveConfigFileInterface.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.activeconfig.ActiveConfigFileInterface.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-pyfileconf.io.file.interfaces.config">
 <span id="pyfileconf-io-file-interfaces-config-module"></span><h2>pyfileconf.io.file.interfaces.config module<a class="headerlink" href="#module-pyfileconf.io.file.interfaces.config" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.interfaces.config.ConfigFileInterface">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.interfaces.config.</code><code class="sig-name descname">ConfigFileInterface</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/config.html#ConfigFileInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.config.ConfigFileInterface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.config.ConfigFileLoader" title="pyfileconf.io.file.load.lazy.config.ConfigFileLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.lazy.config.ConfigFileLoader</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.interfaces.config.ConfigFileInterface.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/config.html#ConfigFileInterface.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.config.ConfigFileInterface.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-pyfileconf.io.file.interfaces.datadict">
 <span id="pyfileconf-io-file-interfaces-datadict-module"></span><h2>pyfileconf.io.file.interfaces.datadict module<a class="headerlink" href="#module-pyfileconf.io.file.interfaces.datadict" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.interfaces.datadict.</code><code class="sig-name descname">SpecificClassDictInterface</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/datadict.html#SpecificClassDictInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader" title="pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.lazy.datadict.SpecificClassDictLoader</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/datadict.html#SpecificClassDictInterface.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.datadict.SpecificClassDictInterface.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-pyfileconf.io.file.interfaces.pipeline">
 <span id="pyfileconf-io-file-interfaces-pipeline-module"></span><h2>pyfileconf.io.file.interfaces.pipeline module<a class="headerlink" href="#module-pyfileconf.io.file.interfaces.pipeline" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.interfaces.pipeline.</code><code class="sig-name descname">PipelineDictInterface</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/pipeline.html#PipelineDictInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pyfileconf.io.file.load.lazy.html#pyfileconf.io.file.load.lazy.pipeline.PipelineDictLoader" title="pyfileconf.io.file.load.lazy.pipeline.PipelineDictLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.lazy.pipeline.PipelineDictLoader</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/interfaces/pipeline.html#PipelineDictInterface.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.interfaces.pipeline.PipelineDictInterface.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 </div>
 

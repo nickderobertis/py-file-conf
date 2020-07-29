@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.assignments package" href="pyfileconf.assignments.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -536,16 +537,16 @@ dynamically updated, enabling powerful scripting.</p>
 </div>
 <div class="section" id="module-pyfileconf.batch">
 <span id="pyfileconf-batch-module"></span><h2>pyfileconf.batch module<a class="headerlink" href="#module-pyfileconf.batch" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.batch.BatchUpdater">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.batch.</code><code class="sig-name descname">BatchUpdater</code><span class="sig-paren">(</span><em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.batch.</code><code class="sig-name descname">BatchUpdater</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class that enables config changes across multiple pipeline managers</p>
 <p>Update one or multiple registered functions/sections by their full
 section paths, regardless of in which manager they reside</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.batch.BatchUpdater.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">base_section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -556,19 +557,19 @@ section paths, regardless of in which manager they reside</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.batch.BatchUpdater.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_strs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_strs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.batch.BatchUpdater.strip_manager_from_iv">
-<code class="sig-name descname">strip_manager_from_iv</code><em class="property">: bool</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.strip_manager_from_iv" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">strip_manager_from_iv</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.strip_manager_from_iv" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.batch.BatchUpdater.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/batch.html#BatchUpdater.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.update" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><span class="target" id="pyfileconf.batch.BatchUpdater.update.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.batch.BatchUpdater.update.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – list of kwarg dictionaries which would normally be provided to .update_batch</p>
@@ -582,9 +583,9 @@ section paths, regardless of in which manager they reside</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.batch.BatchUpdater.updates">
-<code class="sig-name descname">updates</code><em class="property">: Iterable[Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.updates" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">updates</code><em class="property">: Iterable<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#pyfileconf.batch.BatchUpdater.updates" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -592,9 +593,9 @@ section paths, regardless of in which manager they reside</p>
 </div>
 <div class="section" id="module-pyfileconf.debug">
 <span id="pyfileconf-debug-module"></span><h2>pyfileconf.debug module<a class="headerlink" href="#module-pyfileconf.debug" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.debug.pdb_post_mortem_or_passed_debug_fn">
-<code class="sig-prename descclassname">pyfileconf.debug.</code><code class="sig-name descname">pdb_post_mortem_or_passed_debug_fn</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">debug_fn=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/debug.html#pdb_post_mortem_or_passed_debug_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.debug.pdb_post_mortem_or_passed_debug_fn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.debug.</code><code class="sig-name descname">pdb_post_mortem_or_passed_debug_fn</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">debug_fn</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/debug.html#pdb_post_mortem_or_passed_debug_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.debug.pdb_post_mortem_or_passed_debug_fn" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
@@ -602,9 +603,9 @@ section paths, regardless of in which manager they reside</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.debug.post_mortem">
-<code class="sig-prename descclassname">pyfileconf.debug.</code><code class="sig-name descname">post_mortem</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">debug_fn=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/debug.html#post_mortem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.debug.post_mortem" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.debug.</code><code class="sig-name descname">post_mortem</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">debug_fn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/debug.html#post_mortem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.debug.post_mortem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Post-mortem, using a custom debug function if passed</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -622,38 +623,38 @@ section paths, regardless of in which manager they reside</p>
 </div>
 <div class="section" id="module-pyfileconf.interfaces">
 <span id="pyfileconf-interfaces-module"></span><h2>pyfileconf.interfaces module<a class="headerlink" href="#module-pyfileconf.interfaces" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.interfaces.</code><code class="sig-name descname">SpecificClassConfigDict</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.interfaces.</code><code class="sig-name descname">SpecificClassConfigDict</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict.always_assign_strs">
-<code class="sig-name descname">always_assign_strs</code><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.always_assign_strs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_assign_strs</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.always_assign_strs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict.always_import_strs">
-<code class="sig-name descname">always_import_strs</code><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.always_import_strs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_import_strs</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.always_import_strs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict.class">
-<code class="sig-name descname">class</code><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.class" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">class</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.class" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict.execute_attr">
-<code class="sig-name descname">execute_attr</code><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.execute_attr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">execute_attr</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.execute_attr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict.key_attr">
-<code class="sig-name descname">key_attr</code><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.key_attr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">key_attr</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.key_attr" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.interfaces.SpecificClassConfigDict.name">
-<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><a class="headerlink" href="#pyfileconf.interfaces.SpecificClassConfigDict.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -661,9 +662,9 @@ section paths, regardless of in which manager they reside</p>
 </div>
 <div class="section" id="module-pyfileconf.iterate">
 <span id="pyfileconf-iterate-module"></span><h2>pyfileconf.iterate module<a class="headerlink" href="#module-pyfileconf.iterate" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.iterate.IterativeRunner">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.iterate.</code><code class="sig-name descname">IterativeRunner</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.iterate.</code><code class="sig-name descname">IterativeRunner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_list</span></em>, <em class="sig-param"><span class="n">config_updates</span></em>, <em class="sig-param"><span class="n">base_section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class that enables running functions/sections with different combinations of config updates,
 even across multiple pipeline managers</p>
@@ -671,9 +672,9 @@ even across multiple pipeline managers</p>
 updating the config with a combination of the passed config updates.</p>
 <p>Aggregates the updates to each config, then takes the itertools product of all the config
 updates to run the functions with each combination of the configs.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.iterate.IterativeRunner.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">base_section_path_str=None</em>, <em class="sig-param">strip_manager_from_iv=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_list</span></em>, <em class="sig-param"><span class="n">config_updates</span></em>, <em class="sig-param"><span class="n">base_section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_manager_from_iv</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -688,22 +689,22 @@ or when running multiple functions/sections, e.g. [‘main.data’, ‘main.anal
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.iterate.IterativeRunner.cases">
-<code class="sig-name descname">cases</code><em class="property">: List[Tuple[Dict[str, Any], ...]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.cases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cases</code><em class="property">: List[Tuple[Dict[str, Any], …]]</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.cases" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.iterate.IterativeRunner.config_updates">
-<code class="sig-name descname">config_updates</code><em class="property">: Sequence[Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.config_updates" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">config_updates</code><em class="property">: Sequence<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.config_updates" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.iterate.IterativeRunner.defaults">
-<code class="sig-name descname">defaults</code><em class="property">: Dict[str, Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.defaults" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">defaults</code><em class="property">: Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.defaults" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.iterate.IterativeRunner.get_cases">
 <code class="sig-name descname">get_cases</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.get_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.get_cases" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -713,7 +714,7 @@ or when running multiple functions/sections, e.g. [‘main.data’, ‘main.anal
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.iterate.IterativeRunner.get_defaults">
 <code class="sig-name descname">get_defaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.get_defaults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.get_defaults" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -723,14 +724,14 @@ or when running multiple functions/sections, e.g. [‘main.data’, ‘main.anal
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.iterate.IterativeRunner.last_case">
-<code class="sig-name descname">last_case</code><em class="property">: Optional[Tuple[Dict[str, Any], ...]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.last_case" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">last_case</code><em class="property">: Optional[Tuple[Dict[str, Any], …]]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.last_case" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.iterate.IterativeRunner.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">collect_results=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collect_results</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><span class="target" id="pyfileconf.iterate.IterativeRunner.run.params.collect_results"></span><strong>collect_results</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.run.params.collect_results">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to aggregate and return results, set to False to save memory
@@ -745,7 +746,7 @@ if results are stored in some other way</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.iterate.IterativeRunner.run_gen">
 <code class="sig-name descname">run_gen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.run_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_gen" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -755,16 +756,16 @@ if results are stored in some other way</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.iterate.IterativeRunner.run_items">
-<code class="sig-name descname">run_items</code><em class="property">: List[SectionPath]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_items</code><em class="property">: List<span class="p">[</span>SectionPath<span class="p">]</span></em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.iterate.get_config_product">
-<code class="sig-prename descclassname">pyfileconf.iterate.</code><code class="sig-name descname">get_config_product</code><span class="sig-paren">(</span><em class="sig-param">config_dicts</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#get_config_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.get_config_product" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.iterate.</code><code class="sig-name descname">get_config_product</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_dicts</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#get_config_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.get_config_product" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><span class="target" id="pyfileconf.iterate.get_config_product.params.config_dicts"></span><strong>config_dicts</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.get_config_product.params.config_dicts">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – </p>
@@ -802,20 +803,20 @@ if results are stored in some other way</p>
 </div>
 <div class="section" id="module-pyfileconf.main">
 <span id="pyfileconf-main-module"></span><h2>pyfileconf.main module<a class="headerlink" href="#module-pyfileconf.main" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.main.PipelineManager">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">specific_class_config_dicts=None</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em>, <em class="sig-param">default_config_folder_name='defaults'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'project'</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_pdb</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_continue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">log_folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_config_folder_name</span><span class="o">=</span><span class="default_value">'defaults'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Main class for managing flow-based programming and configuration.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">name='project'</em>, <em class="sig-param">specific_class_config_dicts=None</em>, <em class="sig-param">auto_pdb=False</em>, <em class="sig-param">force_continue=False</em>, <em class="sig-param">log_folder=None</em>, <em class="sig-param">default_config_folder_name='defaults'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'project'</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_pdb</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_continue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">log_folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_config_folder_name</span><span class="o">=</span><span class="default_value">'defaults'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.create">
-<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">func_or_class=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.create" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str</span></em>, <em class="sig-param"><span class="n">func_or_class</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new configuration entry dynamically rather than manually modifying dict file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -830,14 +831,14 @@ if results are stored in some other way</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_view</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.get_manager_by_filepath">
-<em class="property">classmethod </em><code class="sig-name descname">get_manager_by_filepath</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get_manager_by_filepath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get_manager_by_filepath" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">get_manager_by_filepath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get_manager_by_filepath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get_manager_by_filepath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the active pipeline manager which references the passed
 filepath.</p>
 <dl class="field-list simple">
@@ -857,9 +858,9 @@ manager has a config file matching the file path</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.get_manager_by_section_path_str">
-<em class="property">classmethod </em><code class="sig-name descname">get_manager_by_section_path_str</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get_manager_by_section_path_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get_manager_by_section_path_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">get_manager_by_section_path_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.get_manager_by_section_path_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.get_manager_by_section_path_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the active pipeline manager which references the passed
 section path.</p>
 <dl class="field-list simple">
@@ -879,7 +880,7 @@ manager has a config file matching the file path</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.load">
 <code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper to track imported modules so that can reimport them upon reloading</p>
@@ -890,9 +891,9 @@ manager has a config file matching the file path</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.refresh">
-<code class="sig-name descname">refresh</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.refresh" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">refresh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reloads from the existing file, then reapplies any config updates. Useful for when
 this config depends on the attribute of some other config which was updated.</p>
 <dl class="field-list simple">
@@ -905,7 +906,7 @@ this config depends on the attribute of some other config which was updated.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.reload">
 <code class="sig-name descname">reload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.reload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.reload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Useful for getting file system changes without having to start a new Python session. Also resets
@@ -920,9 +921,9 @@ and updates configuration from files.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.reset">
-<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_view</em>, <em class="sig-param">allow_create=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.reset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_view</span></em>, <em class="sig-param"><span class="n">allow_create</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets a function or section config to default.</p>
 <p>To reset all configs, use .reload() instead.</p>
 <dl class="field-list simple">
@@ -935,9 +936,9 @@ and updates configuration from files.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use to run registered pipelines/functions/sections. Pass a single section path or a list
 of section paths. If a list is passed, the return value will also be a list, with each
 result item corresponding to the function at the same index.</p>
@@ -964,9 +965,9 @@ or when running multiple functions/sections, e.g.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.run_product">
-<code class="sig-name descname">run_product</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em>, <em class="sig-param">collect_results=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_product" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_product</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_list</span></em>, <em class="sig-param"><span class="n">config_updates</span></em>, <em class="sig-param"><span class="n">collect_results</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_product" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run one or multiple registered functions/sections multiple times, each time
 updating the config with a combination of the passed config updates.</p>
 <p>Aggregates the updates to each config, then takes the itertools product of all the config
@@ -991,9 +992,9 @@ if results are stored in some other way</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.run_product_gen">
-<code class="sig-name descname">run_product_gen</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">config_updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_product_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_product_gen" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_product_gen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_list</span></em>, <em class="sig-param"><span class="n">config_updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.run_product_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.run_product_gen" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ForwardRef" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ForwardRef</span></code></a>]</p>
@@ -1001,9 +1002,9 @@ if results are stored in some other way</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">d_=None</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">pyfileconf_persist=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d_</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pyfileconf_persist</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the configuration for an item by section path.</p>
 <p>The main logic is in _update but this also calls the
 pyfileconf_pre_update and pyfileconf_post_update hooks</p>
@@ -1022,9 +1023,9 @@ pyfileconf_pre_update and pyfileconf_post_update hooks</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.update_batch">
-<code class="sig-name descname">update_batch</code><span class="sig-paren">(</span><em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.update_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the configuration for an multiple items by section path.</p>
 <p>The main logic is just calling _update in a loop but this also calls the
 pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks</p>
@@ -1040,47 +1041,47 @@ pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks</p>
 
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="pyfileconf.main.RunnerException">
-<em class="property">exception </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">RunnerException</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">RunnerException</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trace_back</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.main.RunnerException.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">section_path_str=None</em>, <em class="sig-param">trace_back=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">section_path_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trace_back</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#RunnerException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.RunnerException.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.main.create_collections">
-<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_collections</code><span class="sig-paren">(</span><em class="sig-param">specific_class_config_dicts</em>, <em class="sig-param">basepath</em>, <em class="sig-param">pipeline_folder</em>, <em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">manager_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_collections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_collections" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_collections</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">specific_class_config_dicts</span></em>, <em class="sig-param"><span class="n">basepath</span></em>, <em class="sig-param"><span class="n">pipeline_folder</span></em>, <em class="sig-param"><span class="n">pipeline_dict_path</span></em>, <em class="sig-param"><span class="n">manager_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_collections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_collections" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="pyfileconf.data.models.html#pyfileconf.data.models.collection.SpecificClassCollection" title="pyfileconf.data.models.collection.SpecificClassCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificClassCollection</span></code></a>], <a class="reference internal" href="pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.collection.PipelineCollection" title="pyfileconf.pipelines.models.collection.PipelineCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCollection</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificClassCollection</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCollection</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.main.create_project">
-<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_project</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">logs_path</em>, <em class="sig-param">specific_class_config_dicts=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">logs_path</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new pyfileconf project file structure</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.main.create_registrars">
-<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_registrars</code><span class="sig-paren">(</span><em class="sig-param">specific_class_config_dicts</em>, <em class="sig-param">basepath</em>, <em class="sig-param">pipeline_folder</em>, <em class="sig-param">pipeline_dict_path</em>, <em class="sig-param">manager_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_registrars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_registrars" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">create_registrars</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">specific_class_config_dicts</span></em>, <em class="sig-param"><span class="n">basepath</span></em>, <em class="sig-param"><span class="n">pipeline_folder</span></em>, <em class="sig-param"><span class="n">pipeline_dict_path</span></em>, <em class="sig-param"><span class="n">manager_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#create_registrars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.create_registrars" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="pyfileconf.data.models.html#pyfileconf.data.models.registrar.SpecificRegistrar" title="pyfileconf.data.models.registrar.SpecificRegistrar"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificRegistrar</span></code></a>], <a class="reference internal" href="pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.registrar.PipelineRegistrar" title="pyfileconf.pipelines.models.registrar.PipelineRegistrar"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineRegistrar</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">SpecificRegistrar</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineRegistrar</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.main.report_runner_exceptions">
-<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">report_runner_exceptions</code><span class="sig-paren">(</span><em class="sig-param">runner_exceptions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#report_runner_exceptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.report_runner_exceptions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">report_runner_exceptions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">runner_exceptions</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#report_runner_exceptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.report_runner_exceptions" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
@@ -1091,7 +1092,7 @@ pyfileconf_pre_update_batch and pyfileconf_post_update_batch hooks</p>
 </div>
 <div class="section" id="module-pyfileconf.userbase">
 <span id="pyfileconf-userbase-module"></span><h2>pyfileconf.userbase module<a class="headerlink" href="#module-pyfileconf.userbase" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.userbase.PyfileconfBase">
 <em class="property">class </em><code class="sig-prename descclassname">pyfileconf.userbase.</code><code class="sig-name descname">PyfileconfBase</code><a class="reference internal" href="../_modules/pyfileconf/userbase.html#PyfileconfBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.userbase.PyfileconfBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>

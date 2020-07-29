@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.write package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.io.file.write package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.io.func package" href="pyfileconf.io.func.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -214,9 +215,9 @@
 </div>
 <div class="section" id="module-pyfileconf.io.file.write.asttosource">
 <span id="pyfileconf-io-file-write-asttosource-module"></span><h2>pyfileconf.io.file.write.asttosource module<a class="headerlink" href="#module-pyfileconf.io.file.write.asttosource" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.io.file.write.asttosource.ast_node_to_source">
-<code class="sig-prename descclassname">pyfileconf.io.file.write.asttosource.</code><code class="sig-name descname">ast_node_to_source</code><span class="sig-paren">(</span><em class="sig-param">ast_node</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/asttosource.html#ast_node_to_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.asttosource.ast_node_to_source" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.io.file.write.asttosource.</code><code class="sig-name descname">ast_node_to_source</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ast_node</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/asttosource.html#ast_node_to_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.asttosource.ast_node_to_source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses astor package to produce source code from ast</p>
 <p>Also handles low-level ast functions, such as wrapping in a module if necessary,
 and fixing line numbers for modified/extracted ast</p>
@@ -235,13 +236,13 @@ and fixing line numbers for modified/extracted ast</p>
 </div>
 <div class="section" id="module-pyfileconf.io.file.write.base">
 <span id="pyfileconf-io-file-write-base-module"></span><h2>pyfileconf.io.file.write.base module<a class="headerlink" href="#module-pyfileconf.io.file.write.base" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.io.file.write.base.FileStr">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.write.base.</code><code class="sig-name descname">FileStr</code><span class="sig-paren">(</span><em class="sig-param">import_assignment_obj</em>, <em class="sig-param">existing_imports</em>, <em class="sig-param">existing_assigns</em>, <em class="sig-param">existing_body</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/base.html#FileStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.base.FileStr" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.write.base.</code><code class="sig-name descname">FileStr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">import_assignment_obj</span></em>, <em class="sig-param"><span class="n">existing_imports</span></em>, <em class="sig-param"><span class="n">existing_assigns</span></em>, <em class="sig-param"><span class="n">existing_body</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/base.html#FileStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.base.FileStr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.io.file.write.base.FileStr.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">import_assignment_obj</em>, <em class="sig-param">existing_imports</em>, <em class="sig-param">existing_assigns</em>, <em class="sig-param">existing_body</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/base.html#FileStr.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.base.FileStr.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">import_assignment_obj</span></em>, <em class="sig-param"><span class="n">existing_imports</span></em>, <em class="sig-param"><span class="n">existing_assigns</span></em>, <em class="sig-param"><span class="n">existing_body</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/base.html#FileStr.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.base.FileStr.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Args:</dt><dd><p>import_assignment_obj: object which has method obj.as_imports_and_assignments()
 existing_imports:
@@ -256,13 +257,13 @@ existing_body: should not contain imports, but should contain rest of existing f
 </div>
 <div class="section" id="module-pyfileconf.io.file.write.config">
 <span id="pyfileconf-io-file-write-config-module"></span><h2>pyfileconf.io.file.write.config module<a class="headerlink" href="#module-pyfileconf.io.file.write.config" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.io.file.write.config.ConfigFileStr">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.write.config.</code><code class="sig-name descname">ConfigFileStr</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">existing_imports</em>, <em class="sig-param">existing_assigns</em>, <em class="sig-param">existing_body</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/config.html#ConfigFileStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.config.ConfigFileStr" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.write.config.</code><code class="sig-name descname">ConfigFileStr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">existing_imports</span></em>, <em class="sig-param"><span class="n">existing_assigns</span></em>, <em class="sig-param"><span class="n">existing_body</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/config.html#ConfigFileStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.config.ConfigFileStr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.file.write.base.FileStr" title="pyfileconf.io.file.write.base.FileStr"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.write.base.FileStr</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.io.file.write.config.ConfigFileStr.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">config</em>, <em class="sig-param">existing_imports</em>, <em class="sig-param">existing_assigns</em>, <em class="sig-param">existing_body</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/config.html#ConfigFileStr.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.config.ConfigFileStr.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">existing_imports</span></em>, <em class="sig-param"><span class="n">existing_assigns</span></em>, <em class="sig-param"><span class="n">existing_body</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/write/config.html#ConfigFileStr.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.write.config.ConfigFileStr.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Args:
 import_assignment_obj: object which has method obj.as_imports_and_assignments()
 existing_imports:

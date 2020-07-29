@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.pmcontext package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.pmcontext package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.runner package" href="pyfileconf.runner.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -210,27 +211,27 @@
 </div>
 <div class="section" id="module-pyfileconf.pmcontext.actions">
 <span id="pyfileconf-pmcontext-actions-module"></span><h2>pyfileconf.pmcontext.actions module<a class="headerlink" href="#module-pyfileconf.pmcontext.actions" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.pmcontext.actions.PyfileconfActions">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.actions.</code><code class="sig-name descname">PyfileconfActions</code><a class="reference internal" href="../_modules/pyfileconf/pmcontext/actions.html#PyfileconfActions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.actions.PyfileconfActions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.actions.</code><code class="sig-name descname">PyfileconfActions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/actions.html#PyfileconfActions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.actions.PyfileconfActions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>An enumeration.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_FILE_AST">
 <code class="sig-name descname">LOAD_FILE_AST</code><em class="property"> = 'load_file_ast'</em><a class="headerlink" href="#pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_FILE_AST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_FILE_EXECUTE">
 <code class="sig-name descname">LOAD_FILE_EXECUTE</code><em class="property"> = 'load_file_execute'</em><a class="headerlink" href="#pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_FILE_EXECUTE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_PIPELINE_FILE_AST">
 <code class="sig-name descname">LOAD_PIPELINE_FILE_AST</code><em class="property"> = 'load_pipeline_file_ast'</em><a class="headerlink" href="#pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_PIPELINE_FILE_AST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.actions.PyfileconfActions.RUN">
 <code class="sig-name descname">RUN</code><em class="property"> = 'run'</em><a class="headerlink" href="#pyfileconf.pmcontext.actions.PyfileconfActions.RUN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -240,42 +241,42 @@
 </div>
 <div class="section" id="module-pyfileconf.pmcontext.main">
 <span id="pyfileconf-pmcontext-main-module"></span><h2>pyfileconf.pmcontext.main module<a class="headerlink" href="#module-pyfileconf.pmcontext.main" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.main.</code><code class="sig-name descname">PyFileConfContext</code><span class="sig-paren">(</span><em class="sig-param">config_dependencies=None</em>, <em class="sig-param">active_managers=None</em>, <em class="sig-param">force_update_dependencies=None</em>, <em class="sig-param">file_is_currently_being_loaded=False</em>, <em class="sig-param">stack=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.main.</code><code class="sig-name descname">PyFileConfContext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_dependencies</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">active_managers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force_update_dependencies</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_is_currently_being_loaded</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">stack</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">config_dependencies=None</em>, <em class="sig-param">active_managers=None</em>, <em class="sig-param">force_update_dependencies=None</em>, <em class="sig-param">file_is_currently_being_loaded=False</em>, <em class="sig-param">stack=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_dependencies</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">active_managers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force_update_dependencies</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_is_currently_being_loaded</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">stack</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.active_managers">
-<code class="sig-name descname">active_managers</code><em class="property">: Dict[str, 'PipelineManager']</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.active_managers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">active_managers</code><em class="property">: Dict[str, ‘PipelineManager’]</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.active_managers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency">
-<code class="sig-name descname">add_config_dependency</code><span class="sig-paren">(</span><em class="sig-param">dependent</em>, <em class="sig-param">depends_on</em>, <em class="sig-param">force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.add_config_dependency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_config_dependency</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dependent</span></em>, <em class="sig-param"><span class="n">depends_on</span></em>, <em class="sig-param"><span class="n">force_update</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.add_config_dependency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists">
-<code class="sig-name descname">add_config_dependency_for_currently_running_item_if_exists</code><span class="sig-paren">(</span><em class="sig-param">depends_on</em>, <em class="sig-param">force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_config_dependency_for_currently_running_item_if_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">depends_on</span></em>, <em class="sig-param"><span class="n">force_update</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_for_currently_running_item_if_exists" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded">
-<code class="sig-name descname">add_config_dependency_if_file_is_currently_being_loaded</code><span class="sig-paren">(</span><em class="sig-param">dependent</em>, <em class="sig-param">depends_on</em>, <em class="sig-param">force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_config_dependency_if_file_is_currently_being_loaded</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dependent</span></em>, <em class="sig-param"><span class="n">depends_on</span></em>, <em class="sig-param"><span class="n">force_update</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.config_dependencies">
-<code class="sig-name descname">config_dependencies</code><em class="property">: Dict[str, Set['SectionPath']]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.config_dependencies" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">config_dependencies</code><em class="property">: Dict[str, Set[‘SectionPath’]]</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.config_dependencies" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.currently_running_section_path_str">
 <em class="property">property </em><code class="sig-name descname">currently_running_section_path_str</code><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.currently_running_section_path_str" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -285,7 +286,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.file_is_currently_being_loaded">
 <em class="property">property </em><code class="sig-name descname">file_is_currently_being_loaded</code><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.file_is_currently_being_loaded" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -295,19 +296,19 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.force_update_dependencies">
-<code class="sig-name descname">force_update_dependencies</code><em class="property">: Dict[str, Set['SectionPath']]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.force_update_dependencies" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">force_update_dependencies</code><em class="property">: Dict[str, Set[‘SectionPath’]]</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.force_update_dependencies" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.reset">
 <code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/main.html#PyFileConfContext.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.main.PyFileConfContext.stack">
-<code class="sig-name descname">stack</code><em class="property">: PyfileconfStack</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.stack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stack</code><em class="property">: PyfileconfStack</em><a class="headerlink" href="#pyfileconf.pmcontext.main.PyFileConfContext.stack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -315,44 +316,44 @@
 </div>
 <div class="section" id="module-pyfileconf.pmcontext.stack">
 <span id="pyfileconf-pmcontext-stack-module"></span><h2>pyfileconf.pmcontext.stack module<a class="headerlink" href="#module-pyfileconf.pmcontext.stack" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfFrame">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.stack.</code><code class="sig-name descname">PyfileconfFrame</code><span class="sig-paren">(</span><em class="sig-param">section_path</em>, <em class="sig-param">action</em>, <em class="sig-param">file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfFrame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.stack.</code><code class="sig-name descname">PyfileconfFrame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path</span></em>, <em class="sig-param"><span class="n">action</span></em>, <em class="sig-param"><span class="n">file_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfFrame.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">section_path</em>, <em class="sig-param">action</em>, <em class="sig-param">file_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfFrame.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfFrame.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path</span></em>, <em class="sig-param"><span class="n">action</span></em>, <em class="sig-param"><span class="n">file_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfFrame.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfFrame.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfFrame.from_file_path">
-<em class="property">classmethod </em><code class="sig-name descname">from_file_path</code><span class="sig-paren">(</span><em class="sig-param">file_path</em>, <em class="sig-param">action</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfFrame.from_file_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfFrame.from_file_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_file_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_path</span></em>, <em class="sig-param"><span class="n">action</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfFrame.from_file_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfFrame.from_file_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.stack.</code><code class="sig-name descname">PyfileconfStack</code><span class="sig-paren">(</span><em class="sig-param">frames</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.stack.</code><code class="sig-name descname">PyfileconfStack</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frames</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">frames</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frames</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.add_frame">
-<code class="sig-name descname">add_frame</code><span class="sig-paren">(</span><em class="sig-param">frame</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.add_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.add_frame" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_frame</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">frame</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.add_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.add_frame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.add_running_item">
-<code class="sig-name descname">add_running_item</code><span class="sig-paren">(</span><em class="sig-param">section_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.add_running_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.add_running_item" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_running_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.add_running_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.add_running_item" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.currently_loading_file_section_path">
 <em class="property">property </em><code class="sig-name descname">currently_loading_file_section_path</code><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.currently_loading_file_section_path" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -362,7 +363,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.currently_running_section_path_str">
 <em class="property">property </em><code class="sig-name descname">currently_running_section_path_str</code><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.currently_running_section_path_str" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -372,7 +373,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.file_is_currently_being_loaded">
 <em class="property">property </em><code class="sig-name descname">file_is_currently_being_loaded</code><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.file_is_currently_being_loaded" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -382,12 +383,12 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.frames">
-<code class="sig-name descname">frames</code><em class="property">: List[PyfileconfFrame]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.frames" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">frames</code><em class="property">: List<span class="p">[</span>PyfileconfFrame<span class="p">]</span></em><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.frames" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.stack.PyfileconfStack.pop_frame">
 <code class="sig-name descname">pop_frame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/stack.html#PyfileconfStack.pop_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.stack.PyfileconfStack.pop_frame" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -402,11 +403,11 @@
 </div>
 <div class="section" id="module-pyfileconf.pmcontext.tracing">
 <span id="pyfileconf-pmcontext-tracing-module"></span><h2>pyfileconf.pmcontext.tracing module<a class="headerlink" href="#module-pyfileconf.pmcontext.tracing" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.pmcontext.tracing.StackTracker">
 <em class="property">class </em><code class="sig-prename descclassname">pyfileconf.pmcontext.tracing.</code><code class="sig-name descname">StackTracker</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em>, <em class="sig-param">action=&lt;PyfileconfActions.RUN: 'run'&gt;</em>, <em class="sig-param">file_path=None</em>, <em class="sig-param">base_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/tracing.html#StackTracker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.tracing.StackTracker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.pmcontext.tracing.StackTracker.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">section_path_str=None</em>, <em class="sig-param">action=&lt;PyfileconfActions.RUN: 'run'&gt;</em>, <em class="sig-param">file_path=None</em>, <em class="sig-param">base_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/pmcontext/tracing.html#StackTracker.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.pmcontext.tracing.StackTracker.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>

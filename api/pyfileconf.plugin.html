@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.plugin package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.plugin package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.pmcontext package" href="pyfileconf.pmcontext.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -211,9 +212,9 @@
 <div class="section" id="module-pyfileconf.plugin.default_hooks">
 <span id="pyfileconf-plugin-default-hooks-module"></span><h2>pyfileconf.plugin.default_hooks module<a class="headerlink" href="#module-pyfileconf.plugin.default_hooks" title="Permalink to this headline">¶</a></h2>
 <p>Default behavior to be run on hooks</p>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.default_hooks.pyfileconf_iter_get_cases">
-<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_iter_get_cases</code><span class="sig-paren">(</span><em class="sig-param">config_updates</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_iter_get_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_get_cases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_iter_get_cases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_updates</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_iter_get_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_get_cases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect user passed casses by section path str then call
 itertools.product to produce the cases</p>
 <dl class="field-list simple">
@@ -229,9 +230,9 @@ itertools.product to produce the cases</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case">
-<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_iter_update_for_case</code><span class="sig-paren">(</span><em class="sig-param">case</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_iter_update_for_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_iter_update_for_case</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">case</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_iter_update_for_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_iter_update_for_case" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called in PipelineManager.run_iter and IterativeRunner to take the case
 containing all the updates and actually run the updates, before running
 this case.</p>
@@ -248,14 +249,14 @@ this case.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed">
-<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_post_config_changed</code><span class="sig-paren">(</span><em class="sig-param">manager</em>, <em class="sig-param">new_config</em>, <em class="sig-param">updates</em>, <em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_post_config_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_post_config_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">manager</span></em>, <em class="sig-param"><span class="n">new_config</span></em>, <em class="sig-param"><span class="n">updates</span></em>, <em class="sig-param"><span class="n">section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_post_config_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refresh dependent configs after config change</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span class="target" id="pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.manager"></span><strong>manager</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.manager">¶</a> (<a class="reference internal" href="pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager" title="pyfileconf.config.models.manager.ConfigManager"><em>ConfigManager</em></a>) – the config manager in which the changing
+<li><p><span class="target" id="pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.manager"></span><strong>manager</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.manager">¶</a> (<em>ConfigManager</em>) – the config manager in which the changing
 config resides</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.new_config"></span><strong>new_config</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.new_config">¶</a> (<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><em>ConfigBase</em></a>) – the config after any changes</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – the updates which were made to the config</p></li>
@@ -275,9 +276,9 @@ be used to look up the config</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch">
-<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_pre_update_batch</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_pre_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.default_hooks.</code><code class="sig-name descname">pyfileconf_pre_update_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pm</span></em>, <em class="sig-param"><span class="n">updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/default_hooks.html#pyfileconf_pre_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.default_hooks.pyfileconf_pre_update_batch" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</p>
@@ -289,9 +290,9 @@ be used to look up the config</p></li>
 <div class="section" id="module-pyfileconf.plugin.hookspecs">
 <span id="pyfileconf-plugin-hookspecs-module"></span><h2>pyfileconf.plugin.hookspecs module<a class="headerlink" href="#module-pyfileconf.plugin.hookspecs" title="Permalink to this headline">¶</a></h2>
 <p>Contains the hooks which may be attached to in creating plugins</p>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_iter_get_cases">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_get_cases</code><span class="sig-paren">(</span><em class="sig-param">config_updates</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_get_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_get_cases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_get_cases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_updates</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_get_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_get_cases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called in PipelineManager.run_iter and IterativeRunner to take the user passed
 config updates and return the config cases to be run</p>
 <dl class="field-list simple">
@@ -310,9 +311,9 @@ config updates and return the config cases to be run</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_modify_cases</code><span class="sig-paren">(</span><em class="sig-param">cases</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_modify_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_modify_cases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cases</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_modify_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_modify_cases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called in PipelineManager.run_iter and IterativeRunner to take the collected
 config cases to be run and modify them in place.</p>
 <dl class="field-list simple">
@@ -328,9 +329,9 @@ config cases to be run and modify them in place.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_update_for_case</code><span class="sig-paren">(</span><em class="sig-param">case</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_update_for_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_iter_update_for_case</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">case</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_iter_update_for_case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_iter_update_for_case" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called in PipelineManager.run_iter and IterativeRunner to take the case
 containing all the updates and actually run the updates, before running
 this case.</p>
@@ -347,15 +348,15 @@ this case.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_config_changed</code><span class="sig-paren">(</span><em class="sig-param">manager</em>, <em class="sig-param">new_config</em>, <em class="sig-param">updates</em>, <em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_config_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_config_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">manager</span></em>, <em class="sig-param"><span class="n">new_config</span></em>, <em class="sig-param"><span class="n">updates</span></em>, <em class="sig-param"><span class="n">section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_config_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called just after a config changes, regardless of whether
 the change is due to update, reset, or refresh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.manager"></span><strong>manager</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.manager">¶</a> (<a class="reference internal" href="pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager" title="pyfileconf.config.models.manager.ConfigManager"><em>ConfigManager</em></a>) – the config manager in which the changing
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.manager"></span><strong>manager</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.manager">¶</a> (<em>ConfigManager</em>) – the config manager in which the changing
 config resides</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.new_config"></span><strong>new_config</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.new_config">¶</a> (<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><em>ConfigBase</em></a>) – the config after any changes</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_config_changed.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – the updates which were made to the config</p></li>
@@ -375,9 +376,9 @@ be used to look up the config</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_run">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_run</code><span class="sig-paren">(</span><em class="sig-param">results</em>, <em class="sig-param">runner</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">results</span></em>, <em class="sig-param"><span class="n">runner</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the end of PipelineManager.run. Can optionally return
 additional results which will be appended to the results list. If results is mutable
 then it can also be modified in place.</p>
@@ -385,7 +386,7 @@ then it can also be modified in place.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.results"></span><strong>results</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.results">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]) – results from running section/function</p></li>
-<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.runner"></span><strong>runner</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.runner">¶</a> (<a class="reference internal" href="pyfileconf.runner.models.html#pyfileconf.runner.models.runner.Runner" title="pyfileconf.runner.models.runner.Runner"><em>Runner</em></a>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">Runner</span></code> which has been called to run function/section</p></li>
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.runner"></span><strong>runner</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.runner">¶</a> (<em>Runner</em>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">Runner</span></code> which has been called to run function/section</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -397,9 +398,9 @@ then it can also be modified in place.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_update">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d_</em>, <em class="sig-param">section_path_str</em>, <em class="sig-param">kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pm</span></em>, <em class="sig-param"><span class="n">d_</span></em>, <em class="sig-param"><span class="n">section_path_str</span></em>, <em class="sig-param"><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the end of PipelineManager.update.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -420,9 +421,9 @@ for that use <a class="reference internal" href="#pyfileconf.plugin.hookspecs.py
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update_batch</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_post_update_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pm</span></em>, <em class="sig-param"><span class="n">updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_post_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_post_update_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the end of PipelineManager.update_batch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -437,15 +438,15 @@ for that use <a class="reference internal" href="#pyfileconf.plugin.hookspecs.py
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_config_changed</code><span class="sig-paren">(</span><em class="sig-param">manager</em>, <em class="sig-param">orig_config</em>, <em class="sig-param">updates</em>, <em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_config_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_config_changed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">manager</span></em>, <em class="sig-param"><span class="n">orig_config</span></em>, <em class="sig-param"><span class="n">updates</span></em>, <em class="sig-param"><span class="n">section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_config_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called just before a config changes, regardless of whether
 the change is due to update, reset, or refresh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.manager"></span><strong>manager</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.manager">¶</a> (<a class="reference internal" href="pyfileconf.config.models.html#pyfileconf.config.models.manager.ConfigManager" title="pyfileconf.config.models.manager.ConfigManager"><em>ConfigManager</em></a>) – the config manager in which the changing
+<li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.manager"></span><strong>manager</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.manager">¶</a> (<em>ConfigManager</em>) – the config manager in which the changing
 config resides</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.orig_config"></span><strong>orig_config</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.orig_config">¶</a> (<a class="reference internal" href="pyfileconf.basemodels.html#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase"><em>ConfigBase</em></a>) – the original config, before any changes</p></li>
 <li><p><span class="target" id="pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.updates"></span><strong>updates</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.updates">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – the updates which will be made to the config</p></li>
@@ -465,9 +466,9 @@ be used to look up the config</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_run">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_run</code><span class="sig-paren">(</span><em class="sig-param">section_path_str_or_list</em>, <em class="sig-param">pm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">section_path_str_or_list</span></em>, <em class="sig-param"><span class="n">pm</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of PipelineManager.run. Can optionally return
 additional section paths to run. If section_path_str_or_list is a
 list then it can also be modified in place.</p>
@@ -488,9 +489,9 @@ PipelineManager.run</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">d_</em>, <em class="sig-param">section_path_str</em>, <em class="sig-param">kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pm</span></em>, <em class="sig-param"><span class="n">d_</span></em>, <em class="sig-param"><span class="n">section_path_str</span></em>, <em class="sig-param"><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of PipelineManager.update. Can optionally return
 a dictionary of updates which will be used to update the passed dictionary.
 Can also modify the passed dictionaries in place.</p>
@@ -516,9 +517,9 @@ for that use <a class="reference internal" href="#pyfileconf.plugin.hookspecs.py
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch">
-<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update_batch</code><span class="sig-paren">(</span><em class="sig-param">pm</em>, <em class="sig-param">updates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.plugin.hookspecs.</code><code class="sig-name descname">pyfileconf_pre_update_batch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pm</span></em>, <em class="sig-param"><span class="n">updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/hookspecs.html#pyfileconf_pre_update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.hookspecs.pyfileconf_pre_update_batch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called at the beginning of PipelineManager.update_batch. Should
 return an iterable of updates, which will be included in the
 updates to be run</p>
@@ -547,7 +548,7 @@ updates to be run</p>
 </div>
 <div class="section" id="module-pyfileconf.plugin.manager_utils">
 <span id="pyfileconf-plugin-manager-utils-module"></span><h2>pyfileconf.plugin.manager_utils module<a class="headerlink" href="#module-pyfileconf.plugin.manager_utils" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.manager_utils.get_plugin_manager">
 <code class="sig-prename descclassname">pyfileconf.plugin.manager_utils.</code><code class="sig-name descname">get_plugin_manager</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/manager_utils.html#get_plugin_manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.manager_utils.get_plugin_manager" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -557,12 +558,12 @@ updates to be run</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.manager_utils.remove_default_plugins">
 <code class="sig-prename descclassname">pyfileconf.plugin.manager_utils.</code><code class="sig-name descname">remove_default_plugins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/manager_utils.html#remove_default_plugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.manager_utils.remove_default_plugins" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.plugin.manager_utils.reset_plugins">
 <code class="sig-prename descclassname">pyfileconf.plugin.manager_utils.</code><code class="sig-name descname">reset_plugins</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/plugin/manager_utils.html#reset_plugins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.plugin.manager_utils.reset_plugins" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>

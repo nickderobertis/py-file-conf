@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.file.load.active package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.io.file.load.active package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.io.file.load.lazy package" href="pyfileconf.io.file.load.lazy.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -216,33 +217,12 @@
 </div>
 <div class="section" id="module-pyfileconf.io.file.load.active.loader">
 <span id="pyfileconf-io-file-load-active-loader-module"></span><h2>pyfileconf.io.file.load.active.loader module<a class="headerlink" href="#module-pyfileconf.io.file.load.active.loader" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.file.load.active.loader.</code><code class="sig-name descname">ActiveConfigFileLoader</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/active/loader.html#ActiveConfigFileLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="pyfileconf.io.file.load.lazy.base.html#pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader" title="pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.load.lazy.base.impassign.ImportAssignmentLazyLoader</span></code></a></p>
-<dl class="method">
-<dt id="pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/active/loader.html#ActiveConfigFileLoader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader.user_defined_dict">
-<em class="property">property </em><code class="sig-name descname">user_defined_dict</code><a class="headerlink" href="#pyfileconf.io.file.load.active.loader.ActiveConfigFileLoader.user_defined_dict" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-pyfileconf.io.file.load.active.userdef">
 <span id="pyfileconf-io-file-load-active-userdef-module"></span><h2>pyfileconf.io.file.load.active.userdef module<a class="headerlink" href="#module-pyfileconf.io.file.load.active.userdef" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.io.file.load.active.userdef.get_user_defined_dict_from_filepath">
-<code class="sig-prename descclassname">pyfileconf.io.file.load.active.userdef.</code><code class="sig-name descname">get_user_defined_dict_from_filepath</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">module_name=None</em>, <em class="sig-param">remove_imports=False</em>, <em class="sig-param">imports=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/active/userdef.html#get_user_defined_dict_from_filepath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.active.userdef.get_user_defined_dict_from_filepath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.io.file.load.active.userdef.</code><code class="sig-name descname">get_user_defined_dict_from_filepath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em>, <em class="sig-param"><span class="n">module_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">remove_imports</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">imports</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/file/load/active/userdef.html#get_user_defined_dict_from_filepath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.file.load.active.userdef.get_user_defined_dict_from_filepath" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>

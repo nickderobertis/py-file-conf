@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.imports.logic.load package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.imports.logic.load package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.imports.models package" href="pyfileconf.imports.models.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -214,9 +215,9 @@
 </div>
 <div class="section" id="module-pyfileconf.imports.logic.load.ext_importlib">
 <span id="pyfileconf-imports-logic-load-ext-importlib-module"></span><h2>pyfileconf.imports.logic.load.ext_importlib module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.ext_importlib" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.ext_importlib.find_spec">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.ext_importlib.</code><code class="sig-name descname">find_spec</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">package=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/ext_importlib.html#find_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.ext_importlib.find_spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.ext_importlib.</code><code class="sig-name descname">find_spec</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">package</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/ext_importlib.html#find_spec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.ext_importlib.find_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the spec for the specified module.</p>
 <p>Note: this is a modification of importlib.util.find_spec which does not
 import parent packages. It instead recursively searches through the parents.</p>
@@ -237,22 +238,22 @@ In other words, relative module names (with leading dots) work.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.ext_importlib.</code><code class="sig-name descname">get_filepath_from_module_str</code><span class="sig-paren">(</span><em class="sig-param">module_str</em>, <em class="sig-param">location_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/ext_importlib.html#get_filepath_from_module_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.ext_importlib.</code><code class="sig-name descname">get_filepath_from_module_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module_str</span></em>, <em class="sig-param"><span class="n">location_section_path_str</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/ext_importlib.html#get_filepath_from_module_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.ext_importlib.get_filepath_from_module_str" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-pyfileconf.imports.logic.load.func">
 <span id="pyfileconf-imports-logic-load-func-module"></span><h2>pyfileconf.imports.logic.load.func module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.func" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.func.function_args_as_dict">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.func.</code><code class="sig-name descname">function_args_as_dict</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/func.html#function_args_as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.func.function_args_as_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.func.</code><code class="sig-name descname">function_args_as_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/func.html#function_args_as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.func.function_args_as_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.func.get_variable_name_of_obj">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.func.</code><code class="sig-name descname">get_variable_name_of_obj</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/func.html#get_variable_name_of_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.func.get_variable_name_of_obj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.func.</code><code class="sig-name descname">get_variable_name_of_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/func.html#get_variable_name_of_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.func.get_variable_name_of_obj" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
@@ -263,9 +264,9 @@ In other words, relative module names (with leading dots) work.</p>
 </div>
 <div class="section" id="module-pyfileconf.imports.logic.load.klass">
 <span id="pyfileconf-imports-logic-load-klass-module"></span><h2>pyfileconf.imports.logic.load.klass module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.klass" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.klass.class_function_args_as_dict">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.klass.</code><code class="sig-name descname">class_function_args_as_dict</code><span class="sig-paren">(</span><em class="sig-param">klass</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/klass.html#class_function_args_as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.klass.class_function_args_as_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.klass.</code><code class="sig-name descname">class_function_args_as_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">klass</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/klass.html#class_function_args_as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.klass.class_function_args_as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>To be used on regular methods of a class e.g. ExampleClass.__init__, not on methods of an instance of the class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -277,9 +278,9 @@ In other words, relative module names (with leading dots) work.</p>
 </div>
 <div class="section" id="module-pyfileconf.imports.logic.load.name">
 <span id="pyfileconf-imports-logic-load-name-module"></span><h2>pyfileconf.imports.logic.load.name module<a class="headerlink" href="#module-pyfileconf.imports.logic.load.name" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.name.get_imported_obj_variable_name">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">get_imported_obj_variable_name</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">module</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#get_imported_obj_variable_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.get_imported_obj_variable_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">get_imported_obj_variable_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">module</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#get_imported_obj_variable_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.get_imported_obj_variable_name" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
@@ -287,9 +288,9 @@ In other words, relative module names (with leading dots) work.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.name.get_module_and_name_imported_from">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">get_module_and_name_imported_from</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">search_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#get_module_and_name_imported_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.get_module_and_name_imported_from" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">get_module_and_name_imported_from</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">search_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#get_module_and_name_imported_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.get_module_and_name_imported_from" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">module</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
@@ -297,9 +298,9 @@ In other words, relative module names (with leading dots) work.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.name.is_imported_name">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">is_imported_name</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">search_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#is_imported_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.is_imported_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">is_imported_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">search_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#is_imported_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.is_imported_name" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
@@ -307,9 +308,9 @@ In other words, relative module names (with leading dots) work.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.imports.logic.load.name.is_imported_obj">
-<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">is_imported_obj</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">search_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#is_imported_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.is_imported_obj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.imports.logic.load.name.</code><code class="sig-name descname">is_imported_obj</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">search_list</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/imports/logic/load/name.html#is_imported_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.imports.logic.load.name.is_imported_obj" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>

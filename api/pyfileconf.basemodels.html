@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.basemodels package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.config package" href="pyfileconf.config.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -210,110 +211,35 @@
 </div>
 <div class="section" id="module-pyfileconf.basemodels.collection">
 <span id="pyfileconf-basemodels-collection-module"></span><h2>pyfileconf.basemodels.collection module<a class="headerlink" href="#module-pyfileconf.basemodels.collection" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.basemodels.collection.Collection">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.collection.</code><code class="sig-name descname">Collection</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">items</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pyfileconf.basemodels.container.Container" title="pyfileconf.basemodels.container.Container"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.container.Container</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">mixins.repr.ReprMixin</span></code></p>
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">basepath</em>, <em class="sig-param">items</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.append" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">items</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.extend" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.from_dict">
-<em class="property">classmethod </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param">dict_</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.from_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.from_list">
-<em class="property">classmethod </em><code class="sig-name descname">from_list</code><span class="sig-paren">(</span><em class="sig-param">list_</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.from_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.from_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.get" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.items">
-<em class="property">property </em><code class="sig-name descname">items</code><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.items" title="Permalink to this definition">¶</a></dt>
-<dd><p>Built-in mutable sequence.</p>
-<p>If no argument is given, the constructor creates a new empty list.
-The argument must be an iterable if specified.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.basemodels.collection.Collection.name_dict">
-<code class="sig-name descname">name_dict</code><em class="property">: Dict[str, Any]</em><em class="property"> = None</em><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.name_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.name_for_obj">
-<code class="sig-name descname">name_for_obj</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.name_for_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.name_for_obj" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.basemodels.collection.Collection.repr_cols">
-<code class="sig-name descname">repr_cols</code><em class="property"> = ['name', 'basepath', 'items']</em><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.repr_cols" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.collection.Collection.to_nested_dict">
-<code class="sig-name descname">to_nested_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#Collection.to_nested_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.Collection.to_nested_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.basemodels.collection.to_nested_dict">
-<code class="sig-prename descclassname">pyfileconf.basemodels.collection.</code><code class="sig-name descname">to_nested_dict</code><span class="sig-paren">(</span><em class="sig-param">collection</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#to_nested_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.to_nested_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.basemodels.collection.</code><code class="sig-name descname">to_nested_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/collection.html#to_nested_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.collection.to_nested_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-pyfileconf.basemodels.config">
 <span id="pyfileconf-basemodels-config-module"></span><h2>pyfileconf.basemodels.config module<a class="headerlink" href="#module-pyfileconf.basemodels.config" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.basemodels.config.ConfigBase">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.config.</code><code class="sig-name descname">ConfigBase</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.config.</code><code class="sig-name descname">ConfigBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annotations</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">imports</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">begin_assignments</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">klass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_import_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_assign_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">d=None</em>, <em class="sig-param">name=None</em>, <em class="sig-param">annotations=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">_file=None</em>, <em class="sig-param">begin_assignments=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annotations</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">imports</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">begin_assignments</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">klass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_import_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_assign_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.as_imports_and_assignments">
 <code class="sig-name descname">as_imports_and_assignments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.as_imports_and_assignments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.as_imports_and_assignments" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a>, <a class="reference internal" href="pyfileconf.assignments.models.html#pyfileconf.assignments.models.container.AssignmentStatementContainer" title="pyfileconf.assignments.models.container.AssignmentStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssignmentStatementContainer</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AssignmentStatementContainer</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.change_from_refresh">
 <code class="sig-name descname">change_from_refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.change_from_refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.change_from_refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines whether refresh would actually cause
@@ -331,23 +257,23 @@ otherwise an empty dict</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.basemodels.config.ConfigBase.config_file_class">
 <code class="sig-name descname">config_file_class</code><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.config_file_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#pyfileconf.basemodels.file.ConfigFileBase" title="pyfileconf.basemodels.file.ConfigFileBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.file.ConfigFileBase</span></code></a></p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.copy">
 <code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a shallow copy of D<a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.from_file">
-<em class="property">classmethod </em><code class="sig-name descname">from_file</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.from_file" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">klass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_import_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_assign_strs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.from_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.refresh">
 <code class="sig-name descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reloads from the existing, then re-applies any config updates. Useful for when
@@ -356,22 +282,22 @@ this config depends on the attribute of some other config which was updated.
 :return: The updates made to the config</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.to_file">
-<code class="sig-name descname">to_file</code><span class="sig-paren">(</span><em class="sig-param">filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.to_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.to_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">E=None</em>, <em class="sig-param">pyfileconf_persist=True</em>, <em class="sig-param">**F</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">E</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pyfileconf_persist</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">F</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
 If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
 In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.config.ConfigBase.would_update">
-<code class="sig-name descname">would_update</code><span class="sig-paren">(</span><em class="sig-param">E=None</em>, <em class="sig-param">**F</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.would_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.would_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">would_update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">E</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">F</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/config.html#ConfigBase.would_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.config.ConfigBase.would_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines whether updates would actually cause
 a change in the config</p>
 <dl class="field-list simple">
@@ -396,52 +322,52 @@ the same arguments</p>
 </div>
 <div class="section" id="module-pyfileconf.basemodels.container">
 <span id="pyfileconf-basemodels-container-module"></span><h2>pyfileconf.basemodels.container module<a class="headerlink" href="#module-pyfileconf.basemodels.container" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.basemodels.container.Container">
 <em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.container.</code><code class="sig-name descname">Container</code><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.add_if_missing">
-<code class="sig-name descname">add_if_missing</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.add_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.add_if_missing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_if_missing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.add_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.add_if_missing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if item is in container. If so, doesn’t do anything.</p>
 <p>Assuming item is not in container,
 checks for prefer_beginning attribute of item. If True, insert at position 0.
 If False, or doesn’t have attr, append to end.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.append" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.append" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.append_if_missing">
-<code class="sig-name descname">append_if_missing</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.append_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.append_if_missing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">append_if_missing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.append_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.append_if_missing" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.copy">
 <code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">items</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.extend" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.extend" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.insert">
-<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.insert" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em>, <em class="sig-param"><span class="n">item</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.insert" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.container.Container.insert_if_missing">
-<code class="sig-name descname">insert_if_missing</code><span class="sig-paren">(</span><em class="sig-param">index</em>, <em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.insert_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.insert_if_missing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">insert_if_missing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span></em>, <em class="sig-param"><span class="n">item</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/container.html#Container.insert_if_missing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.container.Container.insert_if_missing" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.basemodels.container.Container.items">
-<code class="sig-name descname">items</code><em class="property">: List[Any]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.container.Container.items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">items</code><em class="property">: List<span class="p">[</span>Any<span class="p">]</span></em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.container.Container.items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -449,40 +375,34 @@ If False, or doesn’t have attr, append to end.</p>
 </div>
 <div class="section" id="module-pyfileconf.basemodels.file">
 <span id="pyfileconf-basemodels-file-module"></span><h2>pyfileconf.basemodels.file module<a class="headerlink" href="#module-pyfileconf.basemodels.file" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.file.</code><code class="sig-name descname">ConfigFileBase</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.file.</code><code class="sig-name descname">ConfigFileBase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">klass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_import_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_assign_strs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">klass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_import_strs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">always_assign_strs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict">
-<code class="sig-name descname">always_assign_with_names_dict</code><em class="property">: Dict[str, List[pyfileconf.assignments.models.statement.AssignmentStatement]]</em><em class="property"> = {}</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_assign_with_names_dict</code><em class="property">: Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span>List<span class="p">[</span>pyfileconf.assignments.models.statement.AssignmentStatement<span class="p">]</span><span class="p">]</span></em><em class="property"> = {}</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assign_with_names_dict" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.always_assigns">
-<code class="sig-name descname">always_assigns</code><em class="property">: List[pyfileconf.assignments.models.statement.AssignmentStatement]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assigns" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_assigns</code><em class="property">: List<span class="p">[</span>pyfileconf.assignments.models.statement.AssignmentStatement<span class="p">]</span></em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_assigns" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.always_imports">
-<code class="sig-name descname">always_imports</code><em class="property">: List[Union[pyfileconf.imports.models.statements.module.ModuleImportStatement, pyfileconf.imports.models.statements.obj.ObjectImportStatement]]</em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_imports" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">always_imports</code><em class="property">: List<span class="p">[</span>Union<span class="p">[</span>pyfileconf.imports.models.statements.module.ModuleImportStatement<span class="p">, </span>pyfileconf.imports.models.statements.obj.ObjectImportStatement<span class="p">]</span><span class="p">]</span></em><em class="property"> = []</em><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.always_imports" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="pyfileconf.basemodels.file.ConfigFileBase.interface_class">
-<code class="sig-name descname">interface_class</code><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.interface_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="pyfileconf.io.file.interfaces.html#pyfileconf.io.file.interfaces.config.ConfigFileInterface" title="pyfileconf.io.file.interfaces.config.ConfigFileInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.file.interfaces.config.ConfigFileInterface</span></code></a></p>
-</dd></dl>
-
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">config_class=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_class</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.load" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyfileconf.basemodels.config.ConfigBase" title="pyfileconf.basemodels.config.ConfigBase">ConfigBase</a></p>
@@ -490,9 +410,9 @@ If False, or doesn’t have attr, append to end.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.basemodels.file.ConfigFileBase.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.save" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/file.html#ConfigFileBase.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.file.ConfigFileBase.save" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
@@ -505,59 +425,6 @@ If False, or doesn’t have attr, append to end.</p>
 </div>
 <div class="section" id="module-pyfileconf.basemodels.registrar">
 <span id="pyfileconf-basemodels-registrar-module"></span><h2>pyfileconf.basemodels.registrar module<a class="headerlink" href="#module-pyfileconf.basemodels.registrar" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pyfileconf.basemodels.registrar.Registrar">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.basemodels.registrar.</code><code class="sig-name descname">Registrar</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mixins.repr.ReprMixin</span></code></p>
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">collection</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.basemodels.registrar.Registrar.collection_class">
-<code class="sig-name descname">collection_class</code><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.collection_class" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#pyfileconf.basemodels.collection.Collection" title="pyfileconf.basemodels.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.basemodels.collection.Collection</span></code></a></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.from_dict">
-<em class="property">classmethod </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param">dict_</em>, <em class="sig-param">basepath</em>, <em class="sig-param">name=None</em>, <em class="sig-param">imports=None</em>, <em class="sig-param">always_import_strs=None</em>, <em class="sig-param">always_assign_strs=None</em>, <em class="sig-param">klass=None</em>, <em class="sig-param">key_attr='name'</em>, <em class="sig-param">execute_attr='__call__'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.from_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.get" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="pyfileconf.basemodels.registrar.Registrar.repr_cols">
-<code class="sig-name descname">repr_cols</code><em class="property"> = ['name', 'basepath', 'collection']</em><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.repr_cols" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.scaffold_config">
-<code class="sig-name descname">scaffold_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.scaffold_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.scaffold_config" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.scaffold_config_for">
-<code class="sig-name descname">scaffold_config_for</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.scaffold_config_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.scaffold_config_for" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">section_path_str</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="pyfileconf.basemodels.registrar.Registrar.to_nested_dict">
-<code class="sig-name descname">to_nested_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/basemodels/registrar.html#Registrar.to_nested_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.basemodels.registrar.Registrar.to_nested_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 </div>
 

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.io.func.load package &mdash; pyfileconf 0.14.0 documentation</title>
+  <title>pyfileconf.io.func.load package &mdash; pyfileconf 0.14.1 documentation</title>
   
 
   
@@ -28,7 +28,6 @@
         <script src="../_static/language_data.js"></script>
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
-        <script >var copybuttonSkipText = '>>> ';</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,10 +36,12 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyfileconf.logger package" href="pyfileconf.logger.html" />
@@ -68,7 +69,7 @@
             
             
               <div class="version">
-                0.14.0
+                0.14.1
               </div>
             
           
@@ -214,60 +215,60 @@
 </div>
 <div class="section" id="module-pyfileconf.io.func.load.args">
 <span id="pyfileconf-io-func-load-args-module"></span><h2>pyfileconf.io.func.load.args module<a class="headerlink" href="#module-pyfileconf.io.func.load.args" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.io.func.load.args.FunctionArgsExtractor">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.func.load.args.</code><code class="sig-name descname">FunctionArgsExtractor</code><span class="sig-paren">(</span><em class="sig-param">object_view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#FunctionArgsExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.FunctionArgsExtractor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.func.load.args.</code><code class="sig-name descname">FunctionArgsExtractor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_view</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#FunctionArgsExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.FunctionArgsExtractor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.io.func.load.args.FunctionArgsExtractor.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">object_view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#FunctionArgsExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.FunctionArgsExtractor.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_view</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#FunctionArgsExtractor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.FunctionArgsExtractor.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.io.func.load.args.FunctionArgsExtractor.extract_args">
 <code class="sig-name descname">extract_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#FunctionArgsExtractor.extract_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.FunctionArgsExtractor.extract_args" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">arguments</span></code>, <a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">arguments</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.io.func.load.args.extract_function_args_and_arg_imports_from_import">
-<code class="sig-prename descclassname">pyfileconf.io.func.load.args.</code><code class="sig-name descname">extract_function_args_and_arg_imports_from_import</code><span class="sig-paren">(</span><em class="sig-param">function_name</em>, <em class="sig-param">imp</em>, <em class="sig-param">import_section_path_str=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#extract_function_args_and_arg_imports_from_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.extract_function_args_and_arg_imports_from_import" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.io.func.load.args.</code><code class="sig-name descname">extract_function_args_and_arg_imports_from_import</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function_name</span></em>, <em class="sig-param"><span class="n">imp</span></em>, <em class="sig-param"><span class="n">import_section_path_str</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#extract_function_args_and_arg_imports_from_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.extract_function_args_and_arg_imports_from_import" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">arguments</span></code>, <a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">arguments</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.io.func.load.args.get_module_filepath_from_import">
-<code class="sig-prename descclassname">pyfileconf.io.func.load.args.</code><code class="sig-name descname">get_module_filepath_from_import</code><span class="sig-paren">(</span><em class="sig-param">imp</em>, <em class="sig-param">import_section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#get_module_filepath_from_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.get_module_filepath_from_import" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.io.func.load.args.</code><code class="sig-name descname">get_module_filepath_from_import</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">imp</span></em>, <em class="sig-param"><span class="n">import_section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/args.html#get_module_filepath_from_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.args.get_module_filepath_from_import" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-pyfileconf.io.func.load.config">
 <span id="pyfileconf-io-func-load-config-module"></span><h2>pyfileconf.io.func.load.config module<a class="headerlink" href="#module-pyfileconf.io.func.load.config" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="pyfileconf.io.func.load.config.FunctionConfigExtractor">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.func.load.config.</code><code class="sig-name descname">FunctionConfigExtractor</code><span class="sig-paren">(</span><em class="sig-param">object_view</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/config.html#FunctionConfigExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.config.FunctionConfigExtractor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.io.func.load.config.</code><code class="sig-name descname">FunctionConfigExtractor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object_view</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/config.html#FunctionConfigExtractor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.config.FunctionConfigExtractor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyfileconf.io.func.load.args.FunctionArgsExtractor" title="pyfileconf.io.func.load.args.FunctionArgsExtractor"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyfileconf.io.func.load.args.FunctionArgsExtractor</span></code></a></p>
-<dl class="method">
+<dl class="py method">
 <dt id="pyfileconf.io.func.load.config.FunctionConfigExtractor.extract_config">
-<code class="sig-name descname">extract_config</code><span class="sig-paren">(</span><em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/config.html#FunctionConfigExtractor.extract_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.config.FunctionConfigExtractor.extract_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extract_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/config.html#FunctionConfigExtractor.extract_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.config.FunctionConfigExtractor.extract_config" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.io.func.load.config.function_args_as_arg_and_annotation_dict">
-<code class="sig-prename descclassname">pyfileconf.io.func.load.config.</code><code class="sig-name descname">function_args_as_arg_and_annotation_dict</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/config.html#function_args_as_arg_and_annotation_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.config.function_args_as_arg_and_annotation_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.io.func.load.config.</code><code class="sig-name descname">function_args_as_arg_and_annotation_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/config.html#function_args_as_arg_and_annotation_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.config.function_args_as_arg_and_annotation_dict" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</p>
@@ -278,12 +279,12 @@
 </div>
 <div class="section" id="module-pyfileconf.io.func.load.extractimp">
 <span id="pyfileconf-io-func-load-extractimp-module"></span><h2>pyfileconf.io.func.load.extractimp module<a class="headerlink" href="#module-pyfileconf.io.func.load.extractimp" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="pyfileconf.io.func.load.extractimp.extract_import_statements_from_function_args_imports_and_assigns">
-<code class="sig-prename descclassname">pyfileconf.io.func.load.extractimp.</code><code class="sig-name descname">extract_import_statements_from_function_args_imports_and_assigns</code><span class="sig-paren">(</span><em class="sig-param">args</em>, <em class="sig-param">imports</em>, <em class="sig-param">assigns</em>, <em class="sig-param">current_module_section_path_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/extractimp.html#extract_import_statements_from_function_args_imports_and_assigns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.extractimp.extract_import_statements_from_function_args_imports_and_assigns" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyfileconf.io.func.load.extractimp.</code><code class="sig-name descname">extract_import_statements_from_function_args_imports_and_assigns</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em>, <em class="sig-param"><span class="n">imports</span></em>, <em class="sig-param"><span class="n">assigns</span></em>, <em class="sig-param"><span class="n">current_module_section_path_str</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/io/func/load/extractimp.html#extract_import_statements_from_function_args_imports_and_assigns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.io.func.load.extractimp.extract_import_statements_from_function_args_imports_and_assigns" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="pyfileconf.imports.models.statements.html#pyfileconf.imports.models.statements.container.ImportStatementContainer" title="pyfileconf.imports.models.statements.container.ImportStatementContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></a></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ImportStatementContainer</span></code></p>
 </dd>
 </dl>
 </dd></dl>
