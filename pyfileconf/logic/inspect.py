@@ -14,7 +14,9 @@ def get_caller_filepath(caller_levels: int = 2) -> str:
     this_frame = get_caller_frame()
     frame = this_frame
     for _ in range(caller_levels):
-        frame = frame.f_back
+        f_back = frame.f_back
+        if f_back is not None:
+            frame = f_back
     return frame.f_code.co_filename
 
 
