@@ -188,7 +188,7 @@ class TestLogOptions(OptionsTest):
         assert len(self.mock_logs.messages['error']) == 2  # one for error at original time, one for error summary
         with open(self.logs_path, 'r') as f:
             contents = f.read()
-            assert '[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = None\n)\n[pyfileconf INFO]: print\n[pyfileconf INFO]: Result:\n(None, None)\n\n[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = r\'raise_error\'\n)\n[pyfileconf INFO]: print\n[pyfileconf ERROR]: Error while running stuff.a_function:\n\nTraceback (most recent call last):' \
+            assert '[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = None\n)\n[pyfileconf INFO]: print\n[pyfileconf INFO]: Result:\n(None, None)\n\n[pyfileconf INFO]: Updating stuff.a_function with config: {\'b\': \'raise_error\'}\n[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = r\'raise_error\'\n)\n[pyfileconf INFO]: print\n[pyfileconf ERROR]: Error while running stuff.a_function:\n\nTraceback (most recent call last):' \
                    in contents
             assert 'raise ValueError(\'error was supposed to be raised\')\nValueError: error was supposed to be raised\n\n[pyfileconf ERROR]: Exception summary for running stuff.a_function (exceptions were also shown when raised):\nError while running stuff.a_function:\n\nTraceback (most recent call last):' \
                    in contents

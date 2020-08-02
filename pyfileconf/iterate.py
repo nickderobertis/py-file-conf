@@ -4,6 +4,7 @@ from copy import deepcopy
 from typing import List, Dict, Any, Tuple, Sequence, Optional, Iterator
 
 from pyfileconf.basemodels.config import ConfigBase
+from pyfileconf.logger.logger import logger
 from pyfileconf.plugin import manager
 from pyfileconf.runner.models.interfaces import RunnerArgs, IterativeResults, IterativeResult
 from pyfileconf.sectionpath.sectionpath import SectionPath
@@ -55,14 +56,17 @@ class IterativeRunner:
         self.defaults = self.get_defaults()
 
     def get_cases(self) -> List[Tuple[Dict[str, Any], ...]]:
+        logger.debug('Determining cases for IterativeRunner')
         cases_lol: List[
             List[Tuple[Dict[str, Any], ...]]
         ] = manager.plm.hook.pyfileconf_iter_get_cases(config_updates=self.config_updates, runner=self)
         cases = list(itertools.chain(*cases_lol))
         manager.plm.hook.pyfileconf_iter_modify_cases(cases=cases, runner=self)
+        logger.debug(f'Got {cases} for IterativeRunner.cases')
         return cases
 
     def get_defaults(self) -> Dict[str, Dict[str, Any]]:
+        logger.debug('Determining defaults for IterativeRunner')
         from pyfileconf import PipelineManager
 
         if not hasattr(self, 'cases'):
@@ -79,6 +83,7 @@ class IterativeRunner:
             config = pm.config.get(relative_section_path_str)
             if config is not None:
                 defaults[sp_str] = {**config}
+        logger.debug(f'Got {defaults} for IterativeRunner.defaults')
         return defaults
 
     def _fill_case_with_defaults(self, case: Tuple[Dict[str, Any], ...]) -> Tuple[Dict[str, Any], ...]:
@@ -102,16 +107,18 @@ class IterativeRunner:
         :return:
         """
         from pyfileconf.main import PipelineManager
-
+        logger.info(f'Running {self.run_items} with cases')
         all_results = []
         for case in self.cases:
             result = self._run_case(case)
             if collect_results:
                 in_out_tup = (case, result)
                 all_results.append(in_out_tup)
+        logger.debug(f'Finished running {self.run_items} with cases {self.cases}')
         return all_results
 
     def run_gen(self) -> Iterator[IterativeResult]:
+        logger.info(f'Running {self.run_items} with cases')
         for case in self.cases:
             result = self._run_case(case)
             in_out_tup = (case, result)
