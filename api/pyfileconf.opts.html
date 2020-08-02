@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pyfileconf.opts package &mdash; pyfileconf 0.15.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyfileconf.pipelines package" href="pyfileconf.pipelines.html" />
+    <link rel="prev" title="pyfileconf.mixins package" href="pyfileconf.mixins.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pyfileconf
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.15.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Getting started with pyfileconf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pyfileconf</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pyfileconf.html">pyfileconf package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pyfileconf.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.assignments.html">pyfileconf.assignments package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.basemodels.html">pyfileconf.basemodels package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.config.html">pyfileconf.config package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.data.html">pyfileconf.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.dictfiles.html">pyfileconf.dictfiles package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.exceptions.html">pyfileconf.exceptions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.imports.html">pyfileconf.imports package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.io.html">pyfileconf.io package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pyfileconf.opts package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.plugin.html">pyfileconf.plugin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.pmcontext.html">pyfileconf.pmcontext package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.runner.html">pyfileconf.runner package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.sectionpath.html">pyfileconf.sectionpath package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.selector.html">pyfileconf.selector package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.views.html">pyfileconf.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.batch">pyfileconf.batch module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.debug">pyfileconf.debug module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.interfaces">pyfileconf.interfaces module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.iterate">pyfileconf.iterate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.main">pyfileconf.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pyfileconf.html#module-pyfileconf.userbase">pyfileconf.userbase module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyfileconf</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pyfileconf</a> &raquo;</li>
+        
+          <li><a href="pyfileconf.html">pyfileconf package</a> &raquo;</li>
+        
+      <li>pyfileconf.opts package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/pyfileconf.opts.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyfileconf.opts">
+<span id="pyfileconf-opts-package"></span><h1>pyfileconf.opts package<a class="headerlink" href="#module-pyfileconf.opts" title="Permalink to this headline">¶</a></h1>
+<p>Options system for pyfileconf</p>
+<p>To add a new option, the attribute and type hint to PyfileconfOptions,
+add it to PyfileconfOptions.option_attrs,
+add it to init and initialize it with the default,
+and add a param docstring for it to PyfileconfOptionsManager.</p>
+<p>Optionally, functions can be registered in PyfileconfOptions.option_callbacks
+to perform an action upon setting or resetting the option. The callbacks
+should accept the name of the option as the first argument and the value
+being set as the second argument.</p>
+<dl class="py class">
+<dt id="pyfileconf.opts.PyfileconfOption">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.opts.</code><code class="sig-name descname">PyfileconfOption</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">callback</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOption.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">callback</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOption.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOption.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOption.default_value">
+<em class="property">property </em><code class="sig-name descname">default_value</code><a class="headerlink" href="#pyfileconf.opts.PyfileconfOption.default_value" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOption.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOption.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOption.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOption.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#pyfileconf.opts.PyfileconfOption.value" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyfileconf.opts.PyfileconfOptions">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.opts.</code><code class="sig-name descname">PyfileconfOptions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_stdout</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">log_folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_file_rollover_freq</span><span class="o">=</span><span class="default_value">'D'</span></em>, <em class="sig-param"><span class="n">log_file_num_keep</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptions.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_stdout</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">log_folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_file_rollover_freq</span><span class="o">=</span><span class="default_value">'D'</span></em>, <em class="sig-param"><span class="n">log_file_num_keep</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptions.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pyfileconf.opts.PyfileconfOptions.log_file_num_keep">
+<code class="sig-name descname">log_file_num_keep</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></em><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.log_file_num_keep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyfileconf.opts.PyfileconfOptions.log_file_rollover_freq">
+<code class="sig-name descname">log_file_rollover_freq</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></em><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.log_file_rollover_freq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyfileconf.opts.PyfileconfOptions.log_folder">
+<code class="sig-name descname">log_folder</code><em class="property">: Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span></em><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.log_folder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyfileconf.opts.PyfileconfOptions.log_stdout">
+<code class="sig-name descname">log_stdout</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></em><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.log_stdout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyfileconf.opts.PyfileconfOptions.option_attrs">
+<code class="sig-name descname">option_attrs</code><em class="property">: Tuple[str, …]</em><em class="property"> = ('log_stdout', 'log_folder', 'log_file_rollover_freq', 'log_file_num_keep')</em><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.option_attrs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyfileconf.opts.PyfileconfOptions.option_callbacks">
+<code class="sig-name descname">option_callbacks</code><em class="property">: Dict[str, Callable[[str, Any], None]]</em><em class="property"> = {'log_folder': &lt;function add_file_handler_if_log_folder_exists_else_remove_handler&gt;}</em><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.option_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptions.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">opts</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptions.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptions.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager">
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.opts.</code><code class="sig-name descname">PyfileconfOptionsManager</code><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Allows setting options for the pyfileconf library</p>
+<dl class="field-list simple">
+<dt class="field-odd">Usage</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyfileconf</span>
+</pre></div>
+</div>
+<p>Use as a context manager with a single change:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;log_stdout&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>     <span class="c1"># Do something</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Now options have been reset</span>
+</pre></div>
+</div>
+<p>Use as a context manager with multiple individual changes:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># Change using set_option and the attribute name</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;log_stdout&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># Change using option value attribute</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">log_stdout</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># More options changes, then desired operations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Now options have been reset</span>
+</pre></div>
+</div>
+<p>Use as a context manager with multiple changes at once:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">set_options</span><span class="p">([(</span><span class="s1">&#39;log_stdout&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;log_folder&#39;</span><span class="p">,</span> <span class="s1">&#39;MyLogs&#39;</span><span class="p">)]):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1"># Operations needing options</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Now options have been reset</span>
+</pre></div>
+</div>
+<p>Usage without context manager. The following three are equivalent to set options:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;log_stdout&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">set_options</span><span class="p">([(</span><span class="s2">&quot;log_stdout&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">log_stdout</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>When using without the context manager, options will last until
+they are reset. Options can be reset individually, as a group,
+or all at once.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">log_stdout</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># reset only the log_stdout option</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">reset_option</span><span class="p">(</span><span class="s1">&#39;log_stdout&#39;</span><span class="p">)</span>  <span class="c1"># reset only the log_stdout option</span>
+<span class="go"># reset only the log_stdout option, but other options could be included</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">reset_options</span><span class="p">([</span><span class="s1">&#39;log_stdout&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># reset all the options</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Available Options</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.params.log_stdout"></span><strong>log_stdout</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.params.log_stdout">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Whether to capture stdout and log it in the
+pyfileconf logger</p></li>
+<li><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.params.log_folder"></span><strong>log_folder</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.params.log_folder">¶</a> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>]</em>) – The folder in which logs should be stored</p></li>
+<li><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.params.log_file_rollover_freq"></span><strong>log_file_rollover_freq</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.params.log_file_rollover_freq">¶</a> – How often to roll over to a new
+log file, see <a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.handlers.TimedRotatingFileHandler" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handlers.TimedRotatingFileHandler</span></code></a>
+when option</p></li>
+<li><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.params.log_file_num_keep"></span><strong>log_file_num_keep</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.params.log_file_num_keep">¶</a> – Number of log files to keep, see
+<a class="reference external" href="https://docs.python.org/3/library/logging.handlers.html#logging.handlers.TimedRotatingFileHandler" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handlers.TimedRotatingFileHandler</span></code></a> backupCount option</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undo all changes made through the options interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager.reset_option">
+<code class="sig-name descname">reset_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager.reset_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager.reset_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset a particular option by name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.reset_option.params.attr"></span><strong>attr</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.reset_option.params.attr">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of option</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager.reset_options">
+<code class="sig-name descname">reset_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attrs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager.reset_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager.reset_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset multiple options at once by their names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.reset_options.params.attrs"></span><strong>attrs</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.reset_options.params.attrs">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – Option names</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager.set_option">
+<code class="sig-name descname">set_option</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attr</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager.set_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager.set_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a particular option by its name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.set_option.params.attr"></span><strong>attr</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.set_option.params.attr">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Option name</p></li>
+<li><p><span class="target" id="pyfileconf.opts.PyfileconfOptionsManager.set_option.params.value"></span><strong>value</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.opts.PyfileconfOptionsManager.set_option.params.value">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – New option value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.opts.PyfileconfOptionsManager.set_options">
+<code class="sig-name descname">set_options</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">updates</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts.html#PyfileconfOptionsManager.set_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.PyfileconfOptionsManager.set_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set multiple options at once by their name
+:type _sphinx_paramlinks_pyfileconf.opts.PyfileconfOptionsManager.set_options.updates: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]
+:param _sphinx_paramlinks_pyfileconf.opts.PyfileconfOptionsManager.set_options.updates: Multiple option updates
+:return:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Examples</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyfileconf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyfileconf</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">set_options</span><span class="p">([(</span><span class="s1">&#39;log_stdout&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;log_folder&#39;</span><span class="p">,</span> <span class="s1">&#39;MyLogs&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pyfileconf.opts.filelog">
+<span id="pyfileconf-opts-filelog-module"></span><h2>pyfileconf.opts.filelog module<a class="headerlink" href="#module-pyfileconf.opts.filelog" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="pyfileconf.opts.filelog.add_file_handler_if_log_folder_exists_else_remove_handler">
+<code class="sig-prename descclassname">pyfileconf.opts.filelog.</code><code class="sig-name descname">add_file_handler_if_log_folder_exists_else_remove_handler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attr_name</span></em>, <em class="sig-param"><span class="n">log_folder</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/opts/filelog.html#add_file_handler_if_log_folder_exists_else_remove_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.opts.filelog.add_file_handler_if_log_folder_exists_else_remove_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pyfileconf.pipelines.html" class="btn btn-neutral float-right" title="pyfileconf.pipelines package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pyfileconf.mixins.html" class="btn btn-neutral float-left" title="pyfileconf.mixins package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-157523037-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>

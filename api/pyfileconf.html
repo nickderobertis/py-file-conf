@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.14.1 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.15.0 documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.14.1
+                0.15.0
               </div>
             
           
@@ -115,6 +115,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pyfileconf.opts.html">pyfileconf.opts package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.plugin.html">pyfileconf.plugin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="pyfileconf.pmcontext.html">pyfileconf.pmcontext package</a></li>
@@ -430,7 +431,12 @@ dynamically updated, enabling powerful scripting.</p>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.logger.html">pyfileconf.logger package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logger.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logger.html#module-pyfileconf.logger.bind_stdout">pyfileconf.logger.bind_stdout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.logger.html#module-pyfileconf.logger.logger">pyfileconf.logger.logger module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.logic.html">pyfileconf.logic package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.logic.html#module-pyfileconf.logic.combine">pyfileconf.logic.combine module</a></li>
@@ -443,6 +449,11 @@ dynamically updated, enabling powerful scripting.</p>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.mixins.html">pyfileconf.mixins package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.mixins.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyfileconf.mixins.html#module-pyfileconf.mixins.orderpref">pyfileconf.mixins.orderpref module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pyfileconf.opts.html">pyfileconf.opts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.opts.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyfileconf.opts.html#module-pyfileconf.opts.filelog">pyfileconf.opts.filelog module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pyfileconf.pipelines.html">pyfileconf.pipelines package</a><ul>
@@ -805,12 +816,12 @@ if results are stored in some other way</p>
 <span id="pyfileconf-main-module"></span><h2>pyfileconf.main module<a class="headerlink" href="#module-pyfileconf.main" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyfileconf.main.PipelineManager">
-<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'project'</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_pdb</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_continue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">log_folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_config_folder_name</span><span class="o">=</span><span class="default_value">'defaults'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyfileconf.main.</code><code class="sig-name descname">PipelineManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'project'</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_pdb</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_continue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">default_config_folder_name</span><span class="o">=</span><span class="default_value">'defaults'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Main class for managing flow-based programming and configuration.</p>
 <dl class="py method">
 <dt id="pyfileconf.main.PipelineManager.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'project'</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_pdb</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_continue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">log_folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_config_folder_name</span><span class="o">=</span><span class="default_value">'defaults'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'project'</span></em>, <em class="sig-param"><span class="n">specific_class_config_dicts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">auto_pdb</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">force_continue</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">default_config_folder_name</span><span class="o">=</span><span class="default_value">'defaults'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/main.html#PipelineManager.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.main.PipelineManager.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 

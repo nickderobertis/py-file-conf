@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.14.1 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.15.0 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.14.1
+                0.15.0
               </div>
             
           
@@ -190,6 +190,7 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.container</span> <span class="kn">import</span> <span class="n">ImportStatementContainer</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.imports.models.statements.obj</span> <span class="kn">import</span> <span class="n">ObjectImportStatement</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.iterate</span> <span class="kn">import</span> <span class="n">IterativeRunner</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logger.logger</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.logic.combine</span> <span class="kn">import</span> \
     <span class="n">combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.pipelines.models.collection</span> <span class="kn">import</span> <span class="n">PipelineCollection</span>
@@ -210,9 +211,10 @@
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.exceptions.pipelinemanager</span> <span class="kn">import</span> <span class="n">PipelineManagerNotLoadedException</span><span class="p">,</span> \
     <span class="n">NoPipelineManagerForFilepathException</span><span class="p">,</span> <span class="n">NoPipelineManagerForSectionPathException</span>
-<span class="kn">from</span> <span class="nn">pyfileconf.logger</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logger.bind_stdout</span> <span class="kn">import</span> <span class="n">stdout_also_logged</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.interfaces</span> <span class="kn">import</span> <span class="n">SpecificClassConfigDict</span>
 <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.opts</span> <span class="kn">import</span> <span class="n">options</span>
 
 
 <div class="viewcode-block" id="PipelineManager"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager">[docs]</a><span class="k">class</span> <span class="nc">PipelineManager</span><span class="p">:</span>
@@ -224,7 +226,6 @@
                  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
                  <span class="n">specific_class_config_dicts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SpecificClassConfigDict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">auto_pdb</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">force_continue</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                 <span class="n">log_folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">default_config_folder_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;defaults&#39;</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">specific_class_config_dicts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -238,7 +239,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auto_pdb</span> <span class="o">=</span> <span class="n">auto_pdb</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">force_continue</span> <span class="o">=</span> <span class="n">force_continue</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="o">=</span> <span class="n">log_folder</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_registrars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Registrar</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_general_registrar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PipelineRegistrar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -319,8 +319,8 @@
             <span class="n">str_or_list_only</span><span class="p">,</span> <span class="n">additional_items</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">stdout_also_logged</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">log_stdout</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">stdout_also_logged</span><span class="p">():</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">str_or_list_only</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_depending_on_settings</span><span class="p">(</span><span class="n">str_or_list_only</span><span class="p">)</span></div>
@@ -396,6 +396,7 @@
 
         <span class="n">exceptions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RunnerException</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="k">for</span> <span class="n">section_path_str</span> <span class="ow">in</span> <span class="n">section_path_str_or_list</span><span class="p">:</span>
             <span class="n">result</span><span class="p">,</span> <span class="n">successful</span> <span class="o">=</span> <span class="n">_try_except_run_func_except_user_interrupts</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">,</span>
@@ -403,6 +404,7 @@
                 <span class="n">try_func_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
                     <span class="n">section_path_str_or_list</span><span class="o">=</span><span class="n">section_path_str</span>
                 <span class="p">),</span>
+                <span class="n">print_traceback</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">successful</span><span class="p">:</span>
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -414,11 +416,14 @@
                     <span class="n">trace_back</span><span class="o">=</span><span class="n">tb</span>
                 <span class="p">)</span>
                 <span class="n">exceptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">re</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="p">)</span>
-
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">re</span><span class="p">)</span>
         <span class="n">report_runner_exceptions</span><span class="p">(</span><span class="n">exceptions</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">strip_list_at_end</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;should not have multiple results&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">results</span>
@@ -742,14 +747,14 @@
 
     <span class="k">def</span> <span class="nf">_create_project_if_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_to_create_project</span><span class="p">():</span>
-            <span class="n">create_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_config_dicts</span><span class="p">)</span>
+            <span class="n">create_project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">log_folder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_config_dicts</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_need_to_create_project</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">([</span>
             <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">),</span>
             <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipeline_dict_path</span><span class="p">),</span>
             <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_config_path</span><span class="p">),</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_folder</span><span class="p">),</span>
+            <span class="n">options</span><span class="o">.</span><span class="n">log_folder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">log_folder</span><span class="p">),</span>
             <span class="o">*</span><span class="p">[</span>
                 <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span>
                 <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_dict.py&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_names</span><span class="p">]</span>
@@ -809,7 +814,7 @@
         <span class="n">quit</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">print_traceback</span><span class="p">:</span>
-            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">except_func_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">except_result</span> <span class="o">=</span> <span class="n">except_func</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -838,14 +843,16 @@
 
         <span class="k">return</span> <span class="n">output_str</span></div>
 
-<div class="viewcode-block" id="report_runner_exceptions"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.report_runner_exceptions">[docs]</a><span class="k">def</span> <span class="nf">report_runner_exceptions</span><span class="p">(</span><span class="n">runner_exceptions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RunnerException</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">runner_exception</span> <span class="ow">in</span> <span class="n">runner_exceptions</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">runner_exception</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="report_runner_exceptions"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.report_runner_exceptions">[docs]</a><span class="k">def</span> <span class="nf">report_runner_exceptions</span><span class="p">(</span><span class="n">runner_exceptions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RunnerException</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">runner_exceptions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Everything ran successfully, no exceptions to report.</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Everything ran successfully, no exceptions to report.</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">sp_strs</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">section_path_str</span><span class="p">)</span> <span class="k">for</span> <span class="n">exc</span> <span class="ow">in</span> <span class="n">runner_exceptions</span><span class="p">])</span>
+    <span class="n">full_exc_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Exception summary for running </span><span class="si">{</span><span class="n">sp_strs</span><span class="si">}</span><span class="s1"> (exceptions were also shown when raised):</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="n">full_exc_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span> <span class="k">for</span> <span class="n">exc</span> <span class="ow">in</span> <span class="n">runner_exceptions</span><span class="p">])</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">full_exc_str</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="create_project"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.create_project">[docs]</a><span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">logs_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -858,7 +865,7 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">defaults_path</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">defaults_path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">logs_path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">logs_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">logs_path</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">logs_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pipeline_path</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pipeline_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

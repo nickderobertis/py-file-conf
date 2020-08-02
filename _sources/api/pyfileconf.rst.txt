@@ -22,6 +22,7 @@ Subpackages
    pyfileconf.logger
    pyfileconf.logic
    pyfileconf.mixins
+   pyfileconf.opts
    pyfileconf.pipelines
    pyfileconf.plugin
    pyfileconf.pmcontext

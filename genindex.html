@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; pyfileconf 0.14.1 documentation</title>
+  <title>Index &mdash; pyfileconf 0.15.0 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.14.1
+                0.15.0
               </div>
             
           
@@ -235,11 +235,17 @@
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.__init__">(pyfileconf.iterate.IterativeRunner method)</a>
 </li>
-        <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.Logger.__init__">(pyfileconf.logger.Logger method)</a>
+        <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.bind_stdout.StdoutLogger.__init__">(pyfileconf.logger.bind_stdout.StdoutLogger method)</a>
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.__init__">(pyfileconf.main.PipelineManager method)</a>
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.RunnerException.__init__">(pyfileconf.main.RunnerException method)</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOption.__init__">(pyfileconf.opts.PyfileconfOption method)</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.__init__">(pyfileconf.opts.PyfileconfOptions method)</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.__init__">(pyfileconf.opts.PyfileconfOptionsManager method)</a>
 </li>
         <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.main.PyFileConfContext.__init__">(pyfileconf.pmcontext.main.PyFileConfContext method)</a>
 </li>
@@ -272,6 +278,10 @@
 </li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.main.PyFileConfContext.add_config_dependency_if_file_is_currently_being_loaded">add_config_dependency_if_file_is_currently_being_loaded() (pyfileconf.pmcontext.main.PyFileConfContext method)</a>
 </li>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.logger.add_file_handler">add_file_handler() (in module pyfileconf.logger.logger)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.filelog.add_file_handler_if_log_folder_exists_else_remove_handler">add_file_handler_if_log_folder_exists_else_remove_handler() (in module pyfileconf.opts.filelog)</a>
+</li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.stack.PyfileconfStack.add_frame">add_frame() (pyfileconf.pmcontext.stack.PyfileconfStack method)</a>
 </li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.add_if_missing">add_if_missing() (pyfileconf.basemodels.container.Container method)</a>
@@ -298,8 +308,6 @@
       </ul></li>
       <li><a href="api/pyfileconf.html#pyfileconf.interfaces.SpecificClassConfigDict.always_import_strs">always_import_strs (pyfileconf.interfaces.SpecificClassConfigDict attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.file.ConfigFileBase.always_imports">always_imports (pyfileconf.basemodels.file.ConfigFileBase attribute)</a>
 
       <ul>
@@ -310,6 +318,8 @@
         <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.file.FunctionConfigFile.always_imports">(pyfileconf.pipelines.models.file.FunctionConfigFile attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.append">append() (pyfileconf.basemodels.container.Container method)</a>
 </li>
       <li><a href="api/pyfileconf.basemodels.html#pyfileconf.basemodels.container.Container.append_if_missing">append_if_missing() (pyfileconf.basemodels.container.Container method)</a>
@@ -339,6 +349,14 @@
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.astitems.ast_str">ast_str() (in module pyfileconf.data.models.astitems)</a>
 </li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.collections.AstDictListConverter">AstDictListConverter (class in pyfileconf.io.file.load.parsers.collections)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.reset_option.params.attr">attr (pyfileconf.opts.PyfileconfOptionsManager.reset_option parameter)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.set_option.params.attr">(pyfileconf.opts.PyfileconfOptionsManager.set_option parameter)</a>
+</li>
+      </ul></li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.reset_options.params.attrs">attrs (pyfileconf.opts.PyfileconfOptionsManager.reset_options parameter)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -474,6 +492,8 @@
         <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.stack.PyfileconfStack.currently_running_section_path_str">(pyfileconf.pmcontext.stack.PyfileconfStack property)</a>
 </li>
       </ul></li>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.logger.CustomFormatter">CustomFormatter (class in pyfileconf.logger.logger)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -488,9 +508,13 @@
         <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_update.params.d_">(pyfileconf.plugin.hookspecs.pyfileconf_pre_update parameter)</a>
 </li>
       </ul></li>
+      <li><a href="api/pyfileconf.html#pyfileconf.debug.post_mortem.params.debug_fn">debug_fn (pyfileconf.debug.post_mortem parameter)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pyfileconf.html#pyfileconf.debug.post_mortem.params.debug_fn">debug_fn (pyfileconf.debug.post_mortem parameter)</a>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.logger.CustomFormatter.debug_formatter">debug_formatter (pyfileconf.logger.logger.CustomFormatter attribute)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOption.default_value">default_value() (pyfileconf.opts.PyfileconfOption property)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.defaults">defaults (pyfileconf.iterate.IterativeRunner attribute)</a>
 </li>
@@ -586,11 +610,13 @@
 </li>
       <li><a href="api/pyfileconf.imports.logic.load.html#pyfileconf.imports.logic.load.ext_importlib.find_spec">find_spec() (in module pyfileconf.imports.logic.load.ext_importlib)</a>
 </li>
-      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.Logger.flush">flush() (pyfileconf.logger.Logger method)</a>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.bind_stdout.StdoutLogger.flush">flush() (pyfileconf.logger.bind_stdout.StdoutLogger method)</a>
 </li>
       <li><a href="api/pyfileconf.pipelines.models.html#pyfileconf.pipelines.models.config.FunctionConfig.for_function">for_function() (pyfileconf.pipelines.models.config.FunctionConfig method)</a>
 </li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.main.PyFileConfContext.force_update_dependencies">force_update_dependencies (pyfileconf.pmcontext.main.PyFileConfContext attribute)</a>
+</li>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.logger.CustomFormatter.format">format() (pyfileconf.logger.logger.CustomFormatter method)</a>
 </li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.stack.PyfileconfStack.frames">frames (pyfileconf.pmcontext.stack.PyfileconfStack attribute)</a>
 </li>
@@ -782,8 +808,30 @@
 </li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.actions.PyfileconfActions.LOAD_PIPELINE_FILE_AST">LOAD_PIPELINE_FILE_AST (pyfileconf.pmcontext.actions.PyfileconfActions attribute)</a>
 </li>
-      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.Logger">Logger (class in pyfileconf.logger)</a>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.log_file_num_keep">log_file_num_keep (pyfileconf.opts.PyfileconfOptions attribute)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.params.log_file_num_keep">(pyfileconf.opts.PyfileconfOptionsManager parameter)</a>
 </li>
+      </ul></li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.log_file_rollover_freq">log_file_rollover_freq (pyfileconf.opts.PyfileconfOptions attribute)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.params.log_file_rollover_freq">(pyfileconf.opts.PyfileconfOptionsManager parameter)</a>
+</li>
+      </ul></li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.log_folder">log_folder (pyfileconf.opts.PyfileconfOptions attribute)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.params.log_folder">(pyfileconf.opts.PyfileconfOptionsManager parameter)</a>
+</li>
+      </ul></li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.log_stdout">log_stdout (pyfileconf.opts.PyfileconfOptions attribute)</a>
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.params.log_stdout">(pyfileconf.opts.PyfileconfOptionsManager parameter)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1024,6 +1072,10 @@
 </li>
         <li><a href="api/pyfileconf.logger.html#module-pyfileconf.logger">pyfileconf.logger</a>
 </li>
+        <li><a href="api/pyfileconf.logger.html#module-pyfileconf.logger.bind_stdout">pyfileconf.logger.bind_stdout</a>
+</li>
+        <li><a href="api/pyfileconf.logger.html#module-pyfileconf.logger.logger">pyfileconf.logger.logger</a>
+</li>
         <li><a href="api/pyfileconf.logic.html#module-pyfileconf.logic">pyfileconf.logic</a>
 </li>
         <li><a href="api/pyfileconf.logic.html#module-pyfileconf.logic.combine">pyfileconf.logic.combine</a>
@@ -1041,6 +1093,10 @@
         <li><a href="api/pyfileconf.mixins.html#module-pyfileconf.mixins">pyfileconf.mixins</a>
 </li>
         <li><a href="api/pyfileconf.mixins.html#module-pyfileconf.mixins.orderpref">pyfileconf.mixins.orderpref</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#module-pyfileconf.opts">pyfileconf.opts</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#module-pyfileconf.opts.filelog">pyfileconf.opts.filelog</a>
 </li>
         <li><a href="api/pyfileconf.pipelines.html#module-pyfileconf.pipelines">pyfileconf.pipelines</a>
 </li>
@@ -1157,11 +1213,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.selector.models.html#pyfileconf.selector.models.itemview.is_item_view.params.obj">obj (pyfileconf.selector.models.itemview.is_item_view parameter)</a>
 </li>
-      <li><a href="api/pyfileconf.mixins.html#pyfileconf.mixins.orderpref.OrderPreferenceMixin">OrderPreferenceMixin (class in pyfileconf.mixins.orderpref)</a>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.option_attrs">option_attrs (pyfileconf.opts.PyfileconfOptions attribute)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.option_callbacks">option_callbacks (pyfileconf.opts.PyfileconfOptions attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.mixins.html#pyfileconf.mixins.orderpref.OrderPreferenceMixin">OrderPreferenceMixin (class in pyfileconf.mixins.orderpref)</a>
+</li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed.params.orig_config">orig_config (pyfileconf.plugin.hookspecs.pyfileconf_pre_config_changed parameter)</a>
+</li>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.logger.CustomFormatter.other_formatter">other_formatter (pyfileconf.logger.logger.CustomFormatter attribute)</a>
 </li>
       <li><a href="api/pyfileconf.data.logic.merge.html#pyfileconf.data.logic.merge.outer_merge_df">outer_merge_df() (in module pyfileconf.data.logic.merge)</a>
 </li>
@@ -1768,8 +1830,6 @@
         <li><a href="api/pyfileconf.io.file.load.lazy.html#module-pyfileconf.io.file.load.lazy">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyfileconf.io.file.load.lazy.base
 
@@ -1784,6 +1844,8 @@
         <li><a href="api/pyfileconf.io.file.load.lazy.base.html#module-pyfileconf.io.file.load.lazy.base.impassign">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pyfileconf.io.file.load.lazy.base.loader
 
@@ -1974,6 +2036,20 @@
 </li>
       </ul></li>
       <li>
+    pyfileconf.logger.bind_stdout
+
+      <ul>
+        <li><a href="api/pyfileconf.logger.html#module-pyfileconf.logger.bind_stdout">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyfileconf.logger.logger
+
+      <ul>
+        <li><a href="api/pyfileconf.logger.html#module-pyfileconf.logger.logger">module</a>
+</li>
+      </ul></li>
+      <li>
     pyfileconf.logic
 
       <ul>
@@ -2034,6 +2110,20 @@
 
       <ul>
         <li><a href="api/pyfileconf.mixins.html#module-pyfileconf.mixins.orderpref">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyfileconf.opts
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#module-pyfileconf.opts">module</a>
+</li>
+      </ul></li>
+      <li>
+    pyfileconf.opts.filelog
+
+      <ul>
+        <li><a href="api/pyfileconf.opts.html#module-pyfileconf.opts.filelog">module</a>
 </li>
       </ul></li>
       <li>
@@ -2350,6 +2440,12 @@
 </li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.stack.PyfileconfFrame">PyfileconfFrame (class in pyfileconf.pmcontext.stack)</a>
 </li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOption">PyfileconfOption (class in pyfileconf.opts)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions">PyfileconfOptions (class in pyfileconf.opts)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager">PyfileconfOptionsManager (class in pyfileconf.opts)</a>
+</li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.stack.PyfileconfStack">PyfileconfStack (class in pyfileconf.pmcontext.stack)</a>
 </li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.py.PythonFileParser">PythonFileParser (class in pyfileconf.io.file.load.parsers.py)</a>
@@ -2372,6 +2468,8 @@
 </li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.manager_utils.remove_default_plugins">remove_default_plugins() (in module pyfileconf.plugin.manager_utils)</a>
 </li>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.logger.remove_file_handler">remove_file_handler() (in module pyfileconf.logger.logger)</a>
+</li>
       <li><a href="api/pyfileconf.html#pyfileconf.main.report_runner_exceptions">report_runner_exceptions() (in module pyfileconf.main)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.reset">reset() (pyfileconf.batch.BatchUpdater method)</a>
@@ -2379,17 +2477,25 @@
       <ul>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.reset">(pyfileconf.main.PipelineManager method)</a>
 </li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOption.reset">(pyfileconf.opts.PyfileconfOption method)</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.reset">(pyfileconf.opts.PyfileconfOptionsManager method)</a>
+</li>
         <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.main.PyFileConfContext.reset">(pyfileconf.pmcontext.main.PyFileConfContext method)</a>
 </li>
       </ul></li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.reset_option">reset_option() (pyfileconf.opts.PyfileconfOptionsManager method)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.reset_options">reset_options() (pyfileconf.opts.PyfileconfOptionsManager method)</a>
+</li>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.manager_utils.reset_plugins">reset_plugins() (in module pyfileconf.plugin.manager_utils)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.hookspecs.pyfileconf_post_run.params.results">results (pyfileconf.plugin.hookspecs.pyfileconf_post_run parameter)</a>
 </li>
       <li><a href="api/pyfileconf.data.logic.merge.html#pyfileconf.data.logic.merge.right_merge_df">right_merge_df() (in module pyfileconf.data.logic.merge)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.actions.PyfileconfActions.RUN">RUN (pyfileconf.pmcontext.actions.PyfileconfActions attribute)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.run">run() (pyfileconf.iterate.IterativeRunner method)</a>
@@ -2468,6 +2574,10 @@
 </li>
       <li><a href="api/pyfileconf.selector.models.html#pyfileconf.selector.models.selector.Selector">Selector (class in pyfileconf.selector.models.selector)</a>
 </li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.set_option">set_option() (pyfileconf.opts.PyfileconfOptionsManager method)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.set_options">set_options() (pyfileconf.opts.PyfileconfOptionsManager method)</a>
+</li>
       <li><a href="api/pyfileconf.data.models.html#pyfileconf.data.models.config.SpecificClassConfig">SpecificClassConfig (class in pyfileconf.data.models.config)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.interfaces.SpecificClassConfigDict">SpecificClassConfigDict (class in pyfileconf.interfaces)</a>
@@ -2482,7 +2592,9 @@
 </li>
       <li><a href="api/pyfileconf.pmcontext.html#pyfileconf.pmcontext.tracing.StackTracker">StackTracker (class in pyfileconf.pmcontext.tracing)</a>
 </li>
-      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.stdout_also_logged">stdout_also_logged() (in module pyfileconf.logger)</a>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.bind_stdout.stdout_also_logged">stdout_also_logged() (in module pyfileconf.logger.bind_stdout)</a>
+</li>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.bind_stdout.StdoutLogger">StdoutLogger (class in pyfileconf.logger.bind_stdout)</a>
 </li>
       <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.strip_manager_from_iv">strip_manager_from_iv (pyfileconf.batch.BatchUpdater attribute)</a>
 
@@ -2519,6 +2631,8 @@
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update">(pyfileconf.main.PipelineManager method)</a>
 </li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptions.update">(pyfileconf.opts.PyfileconfOptions method)</a>
+</li>
       </ul></li>
       <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update_batch">update_batch() (pyfileconf.main.PipelineManager method)</a>
 </li>
@@ -2528,6 +2642,8 @@
         <li><a href="api/pyfileconf.html#pyfileconf.batch.BatchUpdater.update.params.updates">(pyfileconf.batch.BatchUpdater.update parameter)</a>
 </li>
         <li><a href="api/pyfileconf.html#pyfileconf.main.PipelineManager.update_batch.params.updates">(pyfileconf.main.PipelineManager.update_batch parameter)</a>
+</li>
+        <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.set_options.params.updates">(pyfileconf.opts.PyfileconfOptionsManager.set_options parameter)</a>
 </li>
         <li><a href="api/pyfileconf.plugin.html#pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed.params.updates">(pyfileconf.plugin.default_hooks.pyfileconf_post_config_changed parameter)</a>
 </li>
@@ -2546,6 +2662,10 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOptionsManager.set_option.params.value">value (pyfileconf.opts.PyfileconfOptionsManager.set_option parameter)</a>
+</li>
+      <li><a href="api/pyfileconf.opts.html#pyfileconf.opts.PyfileconfOption.value">value() (pyfileconf.opts.PyfileconfOption property)</a>
+</li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor.visit_AnnAssign">visit_AnnAssign() (pyfileconf.io.file.load.parsers.assign.AssignmentByVarnameExtractor method)</a>
 
       <ul>
@@ -2564,10 +2684,10 @@
         <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor.visit_ClassDef">(pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionOrClassInitByNameExtractor method)</a>
 </li>
       </ul></li>
-      <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_Dict">visit_Dict() (pyfileconf.io.file.load.parsers.collections.AstDictListConverter method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.collections.AstDictListConverter.visit_Dict">visit_Dict() (pyfileconf.io.file.load.parsers.collections.AstDictListConverter method)</a>
+</li>
       <li><a href="api/pyfileconf.io.file.load.parsers.html#pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor.visit_FunctionDef">visit_FunctionDef() (pyfileconf.io.file.load.parsers.funcdef.FunctionDefinitionByNameExtractor method)</a>
 
       <ul>
@@ -2598,7 +2718,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.Logger.write">write() (pyfileconf.logger.Logger method)</a>
+      <li><a href="api/pyfileconf.logger.html#pyfileconf.logger.bind_stdout.StdoutLogger.write">write() (pyfileconf.logger.bind_stdout.StdoutLogger method)</a>
 </li>
   </ul></td>
 </tr></table>

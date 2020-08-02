@@ -5,3 +5,23 @@ pyfileconf.logger package
    :members:
    :undoc-members:
    :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.logger.bind\_stdout module
+-------------------------------------
+
+.. automodule:: pyfileconf.logger.bind_stdout
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyfileconf.logger.logger module
+-------------------------------
+
+.. automodule:: pyfileconf.logger.logger
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

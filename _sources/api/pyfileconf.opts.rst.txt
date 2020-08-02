@@ -1,0 +1,19 @@
+pyfileconf.opts package
+=======================
+
+.. automodule:: pyfileconf.opts
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+pyfileconf.opts.filelog module
+------------------------------
+
+.. automodule:: pyfileconf.opts.filelog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
