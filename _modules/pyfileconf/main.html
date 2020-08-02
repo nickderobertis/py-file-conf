@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.main &mdash; pyfileconf 0.15.0 documentation</title>
+  <title>pyfileconf.main &mdash; pyfileconf 0.15.1 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.15.0
+                0.15.1
               </div>
             
           
@@ -442,8 +442,10 @@
 <span class="sd">        :param section_path_str_or_view:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Resetting config for </span><span class="si">{</span><span class="n">section_path_str_or_view</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">section_path_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_path_str_from_section_path_str_or_view</span><span class="p">(</span><span class="n">section_path_str_or_view</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="n">allow_create</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished resetting config for </span><span class="si">{</span><span class="n">section_path_str_or_view</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.reload"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -456,13 +458,16 @@
 <span class="sd">        Returns: None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Reloading </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_wipe_loaded_modules</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished reloading </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.load"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrapper to track imported modules so that can reimport them upon reloading</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running load for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span> <span class="o">=</span> <span class="n">ImportTracker</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -474,7 +479,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># modules have been wiped, must be sure they won&#39;t be wiped again</span>
             <span class="k">raise</span> <span class="n">e</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_import_tracker</span><span class="o">.</span><span class="n">imported_modules</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished running load for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.update"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -532,6 +538,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.selector.models.itemview</span> <span class="kn">import</span> <span class="n">is_item_view</span>
 
+        <span class="n">all_updates</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">d_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d_</span><span class="p">)</span>
+        <span class="n">all_updates</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Updating </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1"> with config: </span><span class="si">{</span><span class="n">all_updates</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">section_path_str</span><span class="p">:</span>
             <span class="c1"># If any of the updates are putting an ItemView as the value, then</span>
             <span class="c1"># record that this config is dependent on the config referenced</span>
@@ -545,6 +557,7 @@
                     <span class="n">context</span><span class="o">.</span><span class="n">add_config_dependency</span><span class="p">(</span><span class="n">full_sp</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d_</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">,</span> <span class="n">pyfileconf_persist</span><span class="o">=</span><span class="n">pyfileconf_persist</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished updating </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1"> with config: </span><span class="si">{</span><span class="n">all_updates</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PipelineManager.refresh"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -554,7 +567,9 @@
 <span class="sd">        :param section_path_str: section path of item to be refreshed</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Refreshing config for </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished refreshing config for </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.create"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_path_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">func_or_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -564,6 +579,7 @@
 <span class="sd">        :param section_path_str: section path at which the config should be stored</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Creating config for </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">section_path</span> <span class="o">=</span> <span class="n">SectionPath</span><span class="p">(</span><span class="n">section_path_str</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">section_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">specific_class_names</span><span class="p">:</span>
@@ -603,7 +619,8 @@
 
         <span class="n">registrar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">set_section_path_str</span><span class="p">,</span> <span class="n">registrar_obj</span><span class="p">)</span>
         <span class="n">registrar</span><span class="o">.</span><span class="n">scaffold_config_for</span><span class="p">(</span><span class="n">scaffold_path_str</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">full_sp</span><span class="o">.</span><span class="n">path_str</span><span class="p">,</span> <span class="n">allow_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished creating config for </span><span class="si">{</span><span class="n">section_path_str</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PipelineManager.get_manager_by_filepath"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.main.PipelineManager.get_manager_by_filepath">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_manager_by_filepath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;PipelineManager&#39;</span><span class="p">:</span>

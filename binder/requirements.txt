@@ -1,9 +1,9 @@
-pluggy
-black
-pd_utils
-pandas
-pyfileconf
 IPython
 astor
-mixins
 datacode
+pandas
+pluggy
+pyfileconf
+pd_utils
+mixins
+black

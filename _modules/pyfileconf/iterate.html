@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf.iterate &mdash; pyfileconf 0.15.0 documentation</title>
+  <title>pyfileconf.iterate &mdash; pyfileconf 0.15.1 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.15.0
+                0.15.1
               </div>
             
           
@@ -170,6 +170,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterator</span>
 
 <span class="kn">from</span> <span class="nn">pyfileconf.basemodels.config</span> <span class="kn">import</span> <span class="n">ConfigBase</span>
+<span class="kn">from</span> <span class="nn">pyfileconf.logger.logger</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.plugin</span> <span class="kn">import</span> <span class="n">manager</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.runner.models.interfaces</span> <span class="kn">import</span> <span class="n">RunnerArgs</span><span class="p">,</span> <span class="n">IterativeResults</span><span class="p">,</span> <span class="n">IterativeResult</span>
 <span class="kn">from</span> <span class="nn">pyfileconf.sectionpath.sectionpath</span> <span class="kn">import</span> <span class="n">SectionPath</span>
@@ -221,14 +222,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_defaults</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="IterativeRunner.get_cases"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.get_cases">[docs]</a>    <span class="k">def</span> <span class="nf">get_cases</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Determining cases for IterativeRunner&#39;</span><span class="p">)</span>
         <span class="n">cases_lol</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span>
             <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]]</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_iter_get_cases</span><span class="p">(</span><span class="n">config_updates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config_updates</span><span class="p">,</span> <span class="n">runner</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">cases</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">cases_lol</span><span class="p">))</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">plm</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">pyfileconf_iter_modify_cases</span><span class="p">(</span><span class="n">cases</span><span class="o">=</span><span class="n">cases</span><span class="p">,</span> <span class="n">runner</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{</span><span class="n">cases</span><span class="si">}</span><span class="s1"> for IterativeRunner.cases&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cases</span></div>
 
 <div class="viewcode-block" id="IterativeRunner.get_defaults"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.get_defaults">[docs]</a>    <span class="k">def</span> <span class="nf">get_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Determining defaults for IterativeRunner&#39;</span><span class="p">)</span>
         <span class="kn">from</span> <span class="nn">pyfileconf</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;cases&#39;</span><span class="p">):</span>
@@ -245,6 +249,7 @@
             <span class="n">config</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">relative_section_path_str</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">defaults</span><span class="p">[</span><span class="n">sp_str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">config</span><span class="p">}</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Got </span><span class="si">{</span><span class="n">defaults</span><span class="si">}</span><span class="s1"> for IterativeRunner.defaults&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">defaults</span></div>
 
     <span class="k">def</span> <span class="nf">_fill_case_with_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">case</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">...</span><span class="p">]:</span>
@@ -268,16 +273,18 @@
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pyfileconf.main</span> <span class="kn">import</span> <span class="n">PipelineManager</span>
-
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_items</span><span class="si">}</span><span class="s1"> with cases&#39;</span><span class="p">)</span>
         <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_case</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">collect_results</span><span class="p">:</span>
                 <span class="n">in_out_tup</span> <span class="o">=</span> <span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
                 <span class="n">all_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">in_out_tup</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Finished running </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_items</span><span class="si">}</span><span class="s1"> with cases </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">all_results</span></div>
 
 <div class="viewcode-block" id="IterativeRunner.run_gen"><a class="viewcode-back" href="../../api/pyfileconf.html#pyfileconf.iterate.IterativeRunner.run_gen">[docs]</a>    <span class="k">def</span> <span class="nf">run_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">IterativeResult</span><span class="p">]:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_items</span><span class="si">}</span><span class="s1"> with cases&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cases</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_case</span><span class="p">(</span><span class="n">case</span><span class="p">)</span>
             <span class="n">in_out_tup</span> <span class="o">=</span> <span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
