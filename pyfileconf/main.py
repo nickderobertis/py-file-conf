@@ -24,6 +24,7 @@ from pyfileconf.imports.logic.load.name import get_module_and_name_imported_from
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
 from pyfileconf.imports.models.statements.obj import ObjectImportStatement
 from pyfileconf.iterate import IterativeRunner
+from pyfileconf.logger.logger import logger
 from pyfileconf.logic.combine import \
     combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item
 from pyfileconf.pipelines.models.collection import PipelineCollection
@@ -44,9 +45,10 @@ from pyfileconf.imports.models.tracker import ImportTracker
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedException, \
     NoPipelineManagerForFilepathException, NoPipelineManagerForSectionPathException
-from pyfileconf.logger import stdout_also_logged
+from pyfileconf.logger.bind_stdout import stdout_also_logged
 from pyfileconf.interfaces import SpecificClassConfigDict
 from pyfileconf import context
+from pyfileconf.opts import options
 
 
 class PipelineManager:
@@ -58,7 +60,6 @@ class PipelineManager:
                  name: str= 'project',
                  specific_class_config_dicts: Optional[List[SpecificClassConfigDict]] = None,
                  auto_pdb: Union[bool, Callable] = False, force_continue: bool = False,
-                 log_folder: Optional[str] = None,
                  default_config_folder_name: str = 'defaults'):
 
         if specific_class_config_dicts is None:
@@ -72,7 +73,6 @@ class PipelineManager:
         self.name = name
         self.auto_pdb = auto_pdb
         self.force_continue = force_continue
-        self.log_folder = log_folder
 
         self._registrars: Optional[Sequence[Registrar]] = None
         self._general_registrar: Optional[PipelineRegistrar] = None
@@ -153,8 +153,8 @@ class PipelineManager:
             str_or_list_only, additional_items
         )
 
-        if self.log_folder is not None:
-            with stdout_also_logged(self.log_folder):
+        if options.log_stdout:
+            with stdout_also_logged():
                 return self._run_depending_on_settings(str_or_list_only)
         else:
             return self._run_depending_on_settings(str_or_list_only)
@@ -230,6 +230,7 @@ class PipelineManager:
 
         exceptions: List[RunnerException] = []
         results = []
+
         for section_path_str in section_path_str_or_list:
             result, successful = _try_except_run_func_except_user_interrupts(
                 self.runner.run,
@@ -237,6 +238,7 @@ class PipelineManager:
                 try_func_kwargs=dict(
                     section_path_str_or_list=section_path_str
                 ),
+                print_traceback=False
             )
             if successful:
                 results.append(result)
@@ -248,11 +250,14 @@ class PipelineManager:
                     trace_back=tb
                 )
                 exceptions.append(re)
-                print(re)
-
+                logger.error(re)
         report_runner_exceptions(exceptions)
 
         if strip_list_at_end:
+            if len(results) == 0:
+                return []
+            elif len(results) > 1:
+                raise ValueError('should not have multiple results')
             return results[0]
         else:
             return results
@@ -576,14 +581,14 @@ class PipelineManager:
 
     def _create_project_if_needed(self):
         if self._need_to_create_project():
-            create_project(self.folder, self.log_folder, self.specific_class_config_dicts)
+            create_project(self.folder, options.log_folder, self.specific_class_config_dicts)
 
     def _need_to_create_project(self) -> bool:
         return any([
             not os.path.exists(self.folder),
             not os.path.exists(self.pipeline_dict_path),
             not os.path.exists(self.default_config_path),
-            self.log_folder is not None and not os.path.exists(self.log_folder),
+            options.log_folder is not None and not os.path.exists(options.log_folder),
             *[
                 not os.path.exists(path) for path in
                 [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
@@ -643,7 +648,7 @@ def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func:
         quit()
     except Exception as e:
         if print_traceback:
-            traceback.print_exc()
+            logger.error(traceback.format_exc())
         if except_func_kwargs is None:
             except_result = except_func(e)
         else:
@@ -672,14 +677,16 @@ class RunnerException(Exception):
 
         return output_str
 
-def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
-    print('\n\n')
-    for runner_exception in runner_exceptions:
-        print(runner_exception)
-        print('\n\n')
 
+def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
     if len(runner_exceptions) == 0:
-        print('Everything ran successfully, no exceptions to report.\n\n')
+        logger.info('\n\nEverything ran successfully, no exceptions to report.\n\n')
+        return
+
+    sp_strs = ', '.join([str(exc.section_path_str) for exc in runner_exceptions])
+    full_exc_str = f'Exception summary for running {sp_strs} (exceptions were also shown when raised):\n'
+    full_exc_str += '\n\n'.join([str(exc) for exc in runner_exceptions])
+    logger.error(full_exc_str)
 
 
 def create_project(path: str, logs_path: str,
@@ -692,7 +699,7 @@ def create_project(path: str, logs_path: str,
 
     if not os.path.exists(defaults_path):
         os.makedirs(defaults_path)
-    if not os.path.exists(logs_path):
+    if logs_path is not None and not os.path.exists(logs_path):
         os.makedirs(logs_path)
     if not os.path.exists(pipeline_path):
         with open(pipeline_path, 'w') as f:

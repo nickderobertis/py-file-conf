@@ -113,7 +113,7 @@ class TestPipelineManagerLoad(PipelineManagerLoadTestBase):
         iv = sel.test_pipeline_manager
 
     def test_create_project_with_pm(self):
-        delete_project(BASE_GENERATED_DIR, self.logs_path, FULL_CLASS_DICT_LIST)
+        delete_project(BASE_GENERATED_DIR, self.logs_folder, FULL_CLASS_DICT_LIST)
         pipeline_manager = self.create_pm(
             specific_class_config_dicts=FULL_CLASS_DICT_LIST
         )

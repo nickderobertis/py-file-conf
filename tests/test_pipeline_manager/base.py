@@ -5,6 +5,7 @@ from unittest import TestCase
 from weakref import WeakValueDictionary
 
 from pyfileconf import PipelineManager
+import pyfileconf
 from pyfileconf.main import create_project
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf import context
@@ -80,12 +81,13 @@ class PipelineManagerTestBase(TestCase):
     second_example_class_dict_paths = []
     for name in example_class_file_names:
         second_example_class_dict_paths.append(os.path.join(second_pm_folder, name))
-    logs_path = os.path.join(pm_folder, 'MyLogs')
+    logs_folder = os.path.join(pm_folder, 'MyLogs')
+    logs_path = os.path.join(logs_folder, 'pyfileconf.log')
     all_paths = (
         defaults_path,
         pm_folder,
         *example_class_dict_paths,
-        logs_path
+        logs_folder
     )
     test_name = 'test_pipeline_manager'
     second_test_name = 'test_pipeline_manager2'
@@ -128,20 +130,22 @@ class PipelineManagerTestBase(TestCase):
     }
 
     def setup_method(self, method):
-        create_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
-        create_project(self.second_pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
+        create_project(self.pm_folder, self.logs_folder, FULL_CLASS_DICT_LIST)
+        create_project(self.second_pm_folder, self.logs_folder, FULL_CLASS_DICT_LIST)
 
     def teardown_method(self, method):
-        delete_project(self.pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
-        delete_project(self.second_pm_folder, self.logs_path, FULL_CLASS_DICT_LIST)
+        delete_project(self.pm_folder, self.logs_folder, FULL_CLASS_DICT_LIST)
+        delete_project(self.second_pm_folder, self.logs_folder, FULL_CLASS_DICT_LIST)
         self.reset_pm_class()
         self.reset_example_class()
+        pyfileconf.options.reset()
 
-    def create_pm(self, **kwargs):
+    def create_pm(self, include_logs: bool = True, **kwargs):
+        if include_logs:
+            pyfileconf.options.set_option('log_folder', self.logs_folder)
         all_kwargs = dict(
             folder=self.pm_folder,
             name=self.test_name,
-            log_folder=self.logs_path,
             default_config_folder_name=self.defaults_folder_name,
         )
         all_kwargs.update(**kwargs)

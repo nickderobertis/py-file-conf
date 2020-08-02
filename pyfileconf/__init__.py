@@ -13,3 +13,4 @@ from pyfileconf.iterate import IterativeRunner
 from pyfileconf.batch import BatchUpdater
 from pyfileconf.plugin.manager_utils import reset_plugins, remove_default_plugins
 from pyfileconf.selector.models.itemview import is_item_view
+from pyfileconf.opts import options_interface as options
