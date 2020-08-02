@@ -24,6 +24,7 @@ from pyfileconf.imports.logic.load.name import get_module_and_name_imported_from
 from pyfileconf.imports.models.statements.container import ImportStatementContainer
 from pyfileconf.imports.models.statements.obj import ObjectImportStatement
 from pyfileconf.iterate import IterativeRunner
+from pyfileconf.logger.logger import logger
 from pyfileconf.logic.combine import \
     combine_items_into_list_whether_they_are_lists_or_not_then_extract_from_list_if_only_one_item
 from pyfileconf.pipelines.models.collection import PipelineCollection
@@ -229,6 +230,7 @@ class PipelineManager:
 
         exceptions: List[RunnerException] = []
         results = []
+
         for section_path_str in section_path_str_or_list:
             result, successful = _try_except_run_func_except_user_interrupts(
                 self.runner.run,
@@ -236,6 +238,7 @@ class PipelineManager:
                 try_func_kwargs=dict(
                     section_path_str_or_list=section_path_str
                 ),
+                print_traceback=False
             )
             if successful:
                 results.append(result)
@@ -247,11 +250,14 @@ class PipelineManager:
                     trace_back=tb
                 )
                 exceptions.append(re)
-                print(re)
-
+                logger.error(re)
         report_runner_exceptions(exceptions)
 
         if strip_list_at_end:
+            if len(results) == 0:
+                return []
+            elif len(results) > 1:
+                raise ValueError('should not have multiple results')
             return results[0]
         else:
             return results
@@ -642,7 +648,7 @@ def _try_except_run_func_except_user_interrupts(try_func: Callable, except_func:
         quit()
     except Exception as e:
         if print_traceback:
-            traceback.print_exc()
+            logger.error(traceback.format_exc())
         if except_func_kwargs is None:
             except_result = except_func(e)
         else:
@@ -671,14 +677,16 @@ class RunnerException(Exception):
 
         return output_str
 
-def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
-    print('\n\n')
-    for runner_exception in runner_exceptions:
-        print(runner_exception)
-        print('\n\n')
 
+def report_runner_exceptions(runner_exceptions: List[RunnerException]) -> None:
     if len(runner_exceptions) == 0:
-        print('Everything ran successfully, no exceptions to report.\n\n')
+        logger.info('\n\nEverything ran successfully, no exceptions to report.\n\n')
+        return
+
+    sp_strs = ', '.join([str(exc.section_path_str) for exc in runner_exceptions])
+    full_exc_str = f'Exception summary for running {sp_strs} (exceptions were also shown when raised):\n'
+    full_exc_str += '\n\n'.join([str(exc) for exc in runner_exceptions])
+    logger.error(full_exc_str)
 
 
 def create_project(path: str, logs_path: str,

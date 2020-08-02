@@ -17,7 +17,8 @@ class StdoutLogger(object):
         self.terminal = sys.stdout
 
     def write(self, message):
-        logger.info(message)
+        if message != '\n':
+            logger.info(message)
 
     def flush(self):
         #this flush method is needed for python 3 compatibility.

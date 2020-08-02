@@ -31,6 +31,9 @@ def a_function(a: ExampleClass, b: List[str]) -> Tuple[ExampleClass, List[str]]:
     """
     An example function
     """
+    print(f'print')
+    if b == 'raise_error':
+        raise ValueError('error was supposed to be raised')
     return a, b
 
 

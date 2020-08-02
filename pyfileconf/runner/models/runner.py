@@ -10,6 +10,7 @@ from pyfileconf.config.logic.apply import apply_config
 from pyfileconf.config.models.manager import ConfigManager, ActiveFunctionConfig
 from pyfileconf.data.models.collection import SpecificClassCollection
 from pyfileconf.exceptions.config import ConfigManagerNotLoadedException
+from pyfileconf.logger.logger import logger
 from pyfileconf.pipelines.models.registrar import PipelineRegistrar, PipelineCollection
 from pyfileconf.logic.get import _get_public_name_or_special_name
 from pyfileconf.plugin import manager
@@ -186,9 +187,9 @@ class Runner(ReprMixin):
             _, config_dict = self._get_func_and_config(section_path_str)
             func = self._get_one_func_with_config(section_path_str)
 
-            print(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            logger.info(f'Running function {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = func()
-            print(f'Result:\n{result}\n')
+            logger.info(f'Result:\n{result}\n')
         self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
@@ -197,9 +198,9 @@ class Runner(ReprMixin):
             klass, config_dict = self._get_func_and_config(section_path_str)
             obj = self._get_one_obj_with_config(section_path_str)
 
-            print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            logger.info(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = obj()
-            print(f'Result:\n{result}\n')
+            logger.info(f'Result:\n{result}\n')
         self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 
@@ -211,9 +212,9 @@ class Runner(ReprMixin):
             execute_attr = registrar.execute_attr
             func = getattr(obj, execute_attr)
 
-            print(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
+            logger.info(f'Running class {section_path_str}({dict_as_function_kwarg_str(config_dict)})')
             result = func()
-            print(f'Result:\n{result}\n')
+            logger.info(f'Result:\n{result}\n')
         self._add_to_config_dependencies_if_necessary(section_path_str)
         return result
 

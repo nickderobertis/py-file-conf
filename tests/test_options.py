@@ -6,6 +6,7 @@ import pyfileconf
 from pyfileconf import Selector, PipelineManager
 from pyfileconf.logger.logger import logger
 from pyfileconf.opts import options
+from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.selector.models.itemview import ItemView
 
 from tests.test_pipeline_manager.base import PipelineManagerTestBase
@@ -149,10 +150,10 @@ class TestLogOptions(OptionsTest):
 
     def test_log_stdout_no_file(self):
         pm, iv, _ = self.create_pm_with_function_and_run()
-        assert len(self.mock_logs.messages['info']) == 0
+        assert len(self.mock_logs.messages['info']) == 2  # one log to run function, one log for result
         pyfileconf.options.set_option('log_stdout', True)
         pm.run(iv)
-        assert len(self.mock_logs.messages['info']) > 0
+        assert len(self.mock_logs.messages['info']) == 5  # one log from function print in addition to two normal logs
 
     def test_log_file(self):
         logger.info('woo')
@@ -165,3 +166,27 @@ class TestLogOptions(OptionsTest):
         with open(self.logs_path, 'r') as f:
             contents = f.read()
             assert contents == '[pyfileconf INFO]: woo2\n'
+
+    def test_log_stdout_file(self):
+        pm, iv, _ = self.create_pm_with_function_and_run()
+        assert len(self.mock_logs.messages['info']) == 2  # one log to run function, one log for result
+        assert not os.path.exists(self.logs_path)
+        pyfileconf.options.set_options([('log_stdout', True), ('log_folder', self.logs_folder)])
+        pm.run(iv)
+        assert len(self.mock_logs.messages['info']) == 5  # one log from function print in addition to two normal logs
+        assert os.path.exists(self.logs_path)
+        with open(self.logs_path, 'r') as f:
+            contents = f.read()
+            assert contents == '[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = None\n)\n[pyfileconf INFO]: print\n[pyfileconf INFO]: Result:\n(None, None)\n\n'
+        pm.update(
+            section_path_str=SectionPath('.'.join(iv.section_path_str.split('.')[1:])).path_str,
+            b='raise_error'
+        )
+        pm.force_continue = True
+        assert len(self.mock_logs.messages['error']) == 0
+        pm.run(iv)
+        assert len(self.mock_logs.messages['error']) == 2  # one for error at original time, one for error summary
+        with open(self.logs_path, 'r') as f:
+            contents = f.read()
+            assert contents == '[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = None\n)\n[pyfileconf INFO]: print\n[pyfileconf INFO]: Result:\n(None, None)\n\n[pyfileconf INFO]: Running function stuff.a_function(\n\ta = None,\n\tb = r\'raise_error\'\n)\n[pyfileconf INFO]: print\n[pyfileconf ERROR]: Error while running stuff.a_function:\n\nTraceback (most recent call last):\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/main.py", line 646, in _try_except_run_func_except_user_interrupts\n    return try_func(**try_func_kwargs), True\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/runner/models/runner.py", line 112, in run\n    result = self._run(section_path_str_or_list)\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/runner/models/runner.py", line 146, in _run\n    return self._run_one_func(section_path_str)\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/runner/models/runner.py", line 191, in _run_one_func\n    result = func()\n  File "/home/nick/Dropbox/Python/py-file-conf/tests/input_files/amodule.py", line 25, in wrapper\n    return f(a, b)\n  File "/home/nick/Dropbox/Python/py-file-conf/tests/input_files/amodule.py", line 36, in a_function\n    raise ValueError(\'error was supposed to be raised\')\nValueError: error was supposed to be raised\n\n[pyfileconf ERROR]: Exception summary for running stuff.a_function (exceptions were also shown when raised):\nError while running stuff.a_function:\n\nTraceback (most recent call last):\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/main.py", line 646, in _try_except_run_func_except_user_interrupts\n    return try_func(**try_func_kwargs), True\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/runner/models/runner.py", line 112, in run\n    result = self._run(section_path_str_or_list)\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/runner/models/runner.py", line 146, in _run\n    return self._run_one_func(section_path_str)\n  File "/home/nick/Dropbox/Python/py-file-conf/pyfileconf/runner/models/runner.py", line 191, in _run_one_func\n    result = func()\n  File "/home/nick/Dropbox/Python/py-file-conf/tests/input_files/amodule.py", line 25, in wrapper\n    return f(a, b)\n  File "/home/nick/Dropbox/Python/py-file-conf/tests/input_files/amodule.py", line 36, in a_function\n    raise ValueError(\'error was supposed to be raised\')\nValueError: error was supposed to be raised\n\n'
+
