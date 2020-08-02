@@ -219,6 +219,7 @@ class Runner(ReprMixin):
         return result
 
     def get(self, section_path_str: str):
+        logger.debug(f'Getting {section_path_str} in runner')
         func_or_collection = self._get_func_or_collection(section_path_str)
         if isinstance(func_or_collection, Collection):
             return self._get_section(section_path_str)

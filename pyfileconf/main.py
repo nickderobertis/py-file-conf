@@ -276,8 +276,10 @@ class PipelineManager:
         :param section_path_str_or_view:
         :return:
         """
+        logger.info(f'Resetting config for {section_path_str_or_view}')
         section_path_str = self._get_section_path_str_from_section_path_str_or_view(section_path_str_or_view)
         self.runner.reset(section_path_str, allow_create=allow_create)
+        logger.debug(f'Finished resetting config for {section_path_str_or_view}')
 
     def reload(self) -> None:
         """
@@ -290,13 +292,16 @@ class PipelineManager:
         Returns: None
 
         """
+        logger.info(f'Reloading {self.name}')
         self._wipe_loaded_modules()
         self.load()
+        logger.debug(f'Finished reloading {self.name}')
 
     def load(self) -> None:
         """
         Wrapper to track imported modules so that can reimport them upon reloading
         """
+        logger.debug(f'Running load for {self.name}')
         self._import_tracker = ImportTracker()
 
         try:
@@ -309,6 +314,7 @@ class PipelineManager:
             raise e
 
         self._loaded_modules = self._import_tracker.imported_modules
+        logger.debug(f'Finished running load for {self.name}')
 
     def update(self, d_: dict=None, section_path_str: str=None, pyfileconf_persist: bool = True, **kwargs):
         """
@@ -366,6 +372,12 @@ class PipelineManager:
         """
         from pyfileconf.selector.models.itemview import is_item_view
 
+        all_updates = {}
+        if d_ is not None:
+            all_updates.update(d_)
+        all_updates.update(kwargs)
+        logger.info(f'Updating {section_path_str} with config: {all_updates}')
+
         if section_path_str:
             # If any of the updates are putting an ItemView as the value, then
             # record that this config is dependent on the config referenced
@@ -379,6 +391,7 @@ class PipelineManager:
                     context.add_config_dependency(full_sp, value)
 
         self.runner.update(d_, section_path_str, pyfileconf_persist=pyfileconf_persist, **kwargs)
+        logger.debug(f'Finished updating {section_path_str} with config: {all_updates}')
 
     def refresh(self, section_path_str: str):
         """
@@ -388,7 +401,9 @@ class PipelineManager:
         :param section_path_str: section path of item to be refreshed
         :return:
         """
+        logger.info(f'Refreshing config for {section_path_str}')
         self.runner.refresh(section_path_str)
+        logger.debug(f'Finished refreshing config for {section_path_str}')
 
     def create(self, section_path_str: str, func_or_class: Optional[Union[Callable, Type]] = None):
         """
@@ -398,6 +413,7 @@ class PipelineManager:
         :param section_path_str: section path at which the config should be stored
         :return:
         """
+        logger.info(f'Creating config for {section_path_str}')
         section_path = SectionPath(section_path_str)
 
         if section_path[0] in self.specific_class_names:
@@ -438,6 +454,7 @@ class PipelineManager:
         registrar.set(set_section_path_str, registrar_obj)
         registrar.scaffold_config_for(scaffold_path_str)
         self.reset(full_sp.path_str, allow_create=True)
+        logger.debug(f'Finished creating config for {section_path_str}')
 
     @classmethod
     def get_manager_by_filepath(cls, filepath: str) -> 'PipelineManager':
