@@ -44,9 +44,10 @@ from pyfileconf.imports.models.tracker import ImportTracker
 from pyfileconf.sectionpath.sectionpath import SectionPath
 from pyfileconf.exceptions.pipelinemanager import PipelineManagerNotLoadedException, \
     NoPipelineManagerForFilepathException, NoPipelineManagerForSectionPathException
-from pyfileconf.logger import stdout_also_logged
+from pyfileconf.logger.bind_stdout import stdout_also_logged
 from pyfileconf.interfaces import SpecificClassConfigDict
 from pyfileconf import context
+from pyfileconf.opts import options
 
 
 class PipelineManager:
@@ -58,7 +59,6 @@ class PipelineManager:
                  name: str= 'project',
                  specific_class_config_dicts: Optional[List[SpecificClassConfigDict]] = None,
                  auto_pdb: Union[bool, Callable] = False, force_continue: bool = False,
-                 log_folder: Optional[str] = None,
                  default_config_folder_name: str = 'defaults'):
 
         if specific_class_config_dicts is None:
@@ -72,7 +72,6 @@ class PipelineManager:
         self.name = name
         self.auto_pdb = auto_pdb
         self.force_continue = force_continue
-        self.log_folder = log_folder
 
         self._registrars: Optional[Sequence[Registrar]] = None
         self._general_registrar: Optional[PipelineRegistrar] = None
@@ -153,8 +152,8 @@ class PipelineManager:
             str_or_list_only, additional_items
         )
 
-        if self.log_folder is not None:
-            with stdout_also_logged(self.log_folder):
+        if options.log_stdout:
+            with stdout_also_logged():
                 return self._run_depending_on_settings(str_or_list_only)
         else:
             return self._run_depending_on_settings(str_or_list_only)
@@ -576,14 +575,14 @@ class PipelineManager:
 
     def _create_project_if_needed(self):
         if self._need_to_create_project():
-            create_project(self.folder, self.log_folder, self.specific_class_config_dicts)
+            create_project(self.folder, options.log_folder, self.specific_class_config_dicts)
 
     def _need_to_create_project(self) -> bool:
         return any([
             not os.path.exists(self.folder),
             not os.path.exists(self.pipeline_dict_path),
             not os.path.exists(self.default_config_path),
-            self.log_folder is not None and not os.path.exists(self.log_folder),
+            options.log_folder is not None and not os.path.exists(options.log_folder),
             *[
                 not os.path.exists(path) for path in
                 [os.path.join(self.folder, f'{name}_dict.py') for name in self.specific_class_names]
@@ -692,7 +691,7 @@ def create_project(path: str, logs_path: str,
 
     if not os.path.exists(defaults_path):
         os.makedirs(defaults_path)
-    if not os.path.exists(logs_path):
+    if logs_path is not None and not os.path.exists(logs_path):
         os.makedirs(logs_path)
     if not os.path.exists(pipeline_path):
         with open(pipeline_path, 'w') as f:

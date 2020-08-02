@@ -1,16 +1,46 @@
-from typing import Any, Tuple, Dict, Type, Iterable, List
+"""
+Options system for pyfileconf
+
+To add a new option, the attribute and type hint to PyfileconfOptions,
+add it to PyfileconfOptions.option_attrs,
+add it to init and initialize it with the default,
+and add a param docstring for it to PyfileconfOptionsManager.
+
+Optionally, functions can be registered in PyfileconfOptions.option_callbacks
+to perform an action upon setting or resetting the option. The callbacks
+should accept the name of the option as the first argument and the value
+being set as the second argument.
+"""
+
+from typing import Any, Tuple, Dict, Type, Iterable, List, Optional, Callable
 
 from pyfileconf.logger.logger import logger
+from pyfileconf.opts.filelog import add_file_handler_if_log_folder_exists_else_remove_handler
 
 
 class PyfileconfOptions:
     log_stdout: bool
+    log_folder: Optional[str]
+    log_file_rollover_freq: str
+    log_file_num_keep: int
+
     option_attrs: Tuple[str, ...] = (
         'log_stdout',
+        'log_folder',
+        'log_file_rollover_freq',
+        'log_file_num_keep',
     )
 
-    def __init__(self, log_stdout: bool = False):
+    option_callbacks: Dict[str, Callable[[str, Any], None]] = {
+        'log_folder': add_file_handler_if_log_folder_exists_else_remove_handler
+    }
+
+    def __init__(self, log_stdout: bool = False, log_folder: Optional[str] = None,
+                 log_file_rollover_freq: str = 'D', log_file_num_keep: int = 0):
         self.log_stdout = log_stdout
+        self.log_folder = log_folder
+        self.log_file_rollover_freq = log_file_rollover_freq
+        self.log_file_num_keep = log_file_num_keep
 
     def update(self, opts: 'PyfileconfOptions'):
         for attr in self.option_attrs:
@@ -24,8 +54,15 @@ options = PyfileconfOptions()
 
 class PyfileconfOption:
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, callback: Optional[Callable[[str, Any], None]] = None):
+        if callback is None:
+            try:
+                callback = PyfileconfOptions.option_callbacks[name]
+            except KeyError:
+                pass
+
         self.name = name
+        self.callback = callback
 
     @property
     def value(self) -> Any:
@@ -33,7 +70,10 @@ class PyfileconfOption:
 
     @value.setter
     def value(self, val: Any):
+        orig_value = getattr(options, self.name)
         setattr(options, self.name, val)
+        if self.callback is not None and orig_value != val:
+            self.callback(self.name, val)
 
     @property
     def default_value(self) -> Any:
@@ -41,7 +81,7 @@ class PyfileconfOption:
 
     def reset(self):
         logger.debug(f"Resetting option {self.name}")
-        setattr(options, self.name, self.default_value)
+        self.value = self.default_value
 
     def __repr__(self):
         return f'<PyfileconfOption(name={self.name}, value={self.value}, ' \
@@ -96,8 +136,16 @@ class PyfileconfOptionsManager:
 
     :Available Options:
 
-    :param log_stdout: Boolean for whether to capture stdout and log it in the
+    :param log_stdout: Whether to capture stdout and log it in the
         pyfileconf logger
+    :type log_stdout: bool
+    :param log_folder: The folder in which logs should be stored
+    :type log_folder: Optional[str]
+    :param log_file_rollover_freq: How often to roll over to a new
+        log file, see :py:class:`logging.handlers.TimedRotatingFileHandler`
+        when option
+    :param log_file_num_keep: Number of log files to keep, see
+        :py:class:`logging.handlers.TimedRotatingFileHandler` backupCount option
 
     """
     def __init__(self):
@@ -122,7 +170,9 @@ class PyfileconfOptionsManager:
         :return:
         """
         logger.debug(f"Resetting pyfileconf options")
-        options.update(DEFAULT_OPTIONS)
+        for attr in options.option_attrs:
+            opt = getattr(self, attr)
+            opt.reset()
 
     def set_option(self, attr: str, value: Any):
         """
