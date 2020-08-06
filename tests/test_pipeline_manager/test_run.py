@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Any, Dict, Tuple
 
 from pyfileconf import Selector, PipelineManager
 from pyfileconf.iterate import IterativeRunner
@@ -443,3 +444,35 @@ class TestPipelineManagerRunIter(PipelineManagerTestBase):
         assert result == [((cd,), (iv2, None))]
         assert iv2.a == expected_a_result
         assert context.config_dependencies == self.expect_pm_1_a_function_depends_on_pm_2_specific_class
+
+    def test_run_iter_function_should_run_func(self):
+        class TempIterativeRunner(IterativeRunner):
+            def should_run(self, case: Tuple[Dict[str, Any], ...]) -> bool:
+                for conf_dict in case:
+                    if conf_dict['b'] == 10:
+                        return True
+                return False
+
+        cd = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=10,
+            a=2
+        )
+        cd2 = dict(
+            section_path_str='test_pipeline_manager.stuff.a_function',
+            b=20
+        )
+        config_dicts = [cd, cd2]
+        expect_results = [((cd,), (2, 10))]
+        self.write_a_function_to_pipeline_dict_file()
+        pipeline_manager = self.create_pm()
+        pipeline_manager.load()
+        sel = Selector()
+        iv = sel.test_pipeline_manager.stuff.a_function
+        runner = TempIterativeRunner([iv], config_dicts)
+        result = runner.run()
+        assert result == expect_results
+        for res, expect_res in zip(runner.run_gen(), expect_results):
+            assert res == expect_res
+        result = runner.run(collect_results=False)
+        assert result == []
