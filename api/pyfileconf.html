@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyfileconf package &mdash; pyfileconf 0.15.1 documentation</title>
+  <title>pyfileconf package &mdash; pyfileconf 0.15.2 documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.15.1
+                0.15.2
               </div>
             
           
@@ -771,6 +771,25 @@ if results are stored in some other way</p>
 <dt id="pyfileconf.iterate.IterativeRunner.run_items">
 <code class="sig-name descname">run_items</code><em class="property">: List<span class="p">[</span>SectionPath<span class="p">]</span></em><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.run_items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt id="pyfileconf.iterate.IterativeRunner.should_run">
+<code class="sig-name descname">should_run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">case</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyfileconf/iterate.html#IterativeRunner.should_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyfileconf.iterate.IterativeRunner.should_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook which can be overriden in subclass to determine whether
+case should be run</p>
+<p>The default hook always returns True, the case should be run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><span class="target" id="pyfileconf.iterate.IterativeRunner.should_run.params.case"></span><strong>case</strong><a class="paramlink headerlink reference internal" href="#pyfileconf.iterate.IterativeRunner.should_run.params.case">¶</a> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], …]) – Tuple of config dicts being updated</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
