@@ -110,6 +110,8 @@ class IterativeRunner:
         logger.info(f'Running {self.run_items} with cases')
         all_results = []
         for case in self.cases:
+            if not self.should_run(case):
+                continue
             result = self._run_case(case)
             if collect_results:
                 in_out_tup = (case, result)
@@ -120,6 +122,8 @@ class IterativeRunner:
     def run_gen(self) -> Iterator[IterativeResult]:
         logger.info(f'Running {self.run_items} with cases')
         for case in self.cases:
+            if not self.should_run(case):
+                continue
             result = self._run_case(case)
             in_out_tup = (case, result)
             yield in_out_tup
@@ -146,6 +150,18 @@ class IterativeRunner:
             return results[0]
 
         return results
+
+    def should_run(self, case: Tuple[Dict[str, Any], ...]) -> bool:
+        """
+        Hook which can be overriden in subclass to determine whether
+        case should be run
+
+        The default hook always returns True, the case should be run.
+
+        :param case: Tuple of config dicts being updated
+        :return:
+        """
+        return True
 
 
 def get_config_product(
